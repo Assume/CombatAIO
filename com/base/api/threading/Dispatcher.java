@@ -1,5 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import org.tribot.script.Script;
+
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class Dispatcher implements Runnable {
@@ -12,7 +14,7 @@ public class Dispatcher implements Runnable {
 
 	private CombatThread combat_thread;
 
-	public Dispatcher() {
+	private Dispatcher() {
 		this.combat_thread = new CombatThread();
 	}
 
@@ -20,6 +22,8 @@ public class Dispatcher implements Runnable {
 		switch (type) {
 		case CURRENT_TARGET:
 			return combat_thread.get();
+		case MINIMUM_LOOT_VALUE:
+
 		}
 		return null;
 
@@ -27,7 +31,10 @@ public class Dispatcher implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		// dispatch initital needed threads
+		// while(MainScriptClassHere.isRunning())
+		/*
+		 * check threads for issues and redispatch if needed
+		 */
 	}
 }
