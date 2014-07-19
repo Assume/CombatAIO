@@ -3,7 +3,8 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
-import scripts.CombatAIO.com.base.api.threading.types.RSNPCValue;
+import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
 
 public class CombatThread implements Runnable, Pauseable {
 
@@ -26,15 +27,15 @@ public class CombatThread implements Runnable, Pauseable {
 		this.pause();
 	}
 
-	public Object getCurrentTarget() {
+	public Value getCurrentTarget() {
 		return new RSNPCValue(current_target);
 	}
 
-	public Object getTotalKills() {
+	public Value getTotalKills() {
 		return kill_tracker.getTotalKills();
 	}
 
-	public Object getNextTarget() {
+	public Value getNextTarget() {
 		return null;
 	}
 

@@ -1,8 +1,9 @@
 package scripts.CombatAIO.com.base.api.threading.types;
 
-public abstract class Value {
+
+public abstract class Value<T> {
 	
-	public abstract Object get();
+	public abstract T get();
 	
 
 }

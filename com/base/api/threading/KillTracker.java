@@ -2,7 +2,8 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.threading.types.IntegerValue;
+import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 
 public class KillTracker implements Runnable {
 
@@ -16,10 +17,11 @@ public class KillTracker implements Runnable {
 	}
 
 	protected void setTarget() {
+		//TODO
 		this.target = target;
 	}
 
-	public Object getTotalKills() {
+	public Value getTotalKills() {
 		return new IntegerValue(kills);
 	}
 

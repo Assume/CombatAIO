@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class Dispatcher implements Runnable {
@@ -18,7 +19,7 @@ public class Dispatcher implements Runnable {
 		this.looting_thread = new LootingThread();
 	}
 
-	public Object get(ValueType type) {
+	public Value<?> get(ValueType type, String...extra_paramaters) {
 		switch (type) {
 		case CURRENT_TARGET:
 			return combat_thread.getCurrentTarget();
@@ -26,6 +27,14 @@ public class Dispatcher implements Runnable {
 
 		case TOTAL_KILLS:
 			return combat_thread.getTotalKills();
+		case TOTAL_LOOT_VALUE:
+			return looting_thread.getTotalLootValue();
+		case LOOT_ITEM:
+			return looting_thread.getLootItem(extra_paramaters);
+		case ITEM_PRICE:
+			return looting_thread.getItemPrice(extra_paramaters);
+		case AMOUNT_LOOTED_OF_ITEM:
+			return looting_thread.getAmountLooted(extra_paramaters);
 
 		}
 		return null;

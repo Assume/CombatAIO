@@ -1,11 +1,15 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
+
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 final class MonsterPaintHandler implements PaintHandler {
 
@@ -36,8 +40,7 @@ final class MonsterPaintHandler implements PaintHandler {
 	}
 
 	private RSNPC getCurrentMonster() {
-		// TODO grab it from the Disptachet and the combat thread
-		return null;
+		return (RSNPC) Dispatcher.get().get(ValueType.CURRENT_TARGET).get();
 	}
 
 	private RSNPC[] getPossibleMonsters() {
@@ -53,6 +56,18 @@ final class MonsterPaintHandler implements PaintHandler {
 	private RSNPC[] getInvalidMonsters() {
 		// TODO get from this.paintable_monsters
 		return null;
+	}
+
+	@Override
+	public boolean isInClick(Point p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onClick(Point p) {
+		// TODO calls isInClick
+
 	}
 
 }

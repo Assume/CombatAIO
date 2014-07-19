@@ -22,19 +22,21 @@ public class TotalPaintHandler {
 	}
 
 	public void onClick(Point p) {
-
+		this.monster_paint_handler.onClick(p);
+		this.loot_paint_handler.onClick(p);
 	}
 
 	public void updateAll() {
-
+		this.monster_paint_handler.update();
+		this.loot_paint_handler.update();
 	}
 
 	public void updateMonsters() {
-
+		this.monster_paint_handler.update();
 	}
 
 	public void updateLoot() {
-
+		this.loot_paint_handler.update();
 	}
 
 }
