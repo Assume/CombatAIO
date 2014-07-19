@@ -1,7 +1,5 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import org.tribot.script.Script;
-
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class Dispatcher implements Runnable {
@@ -21,7 +19,7 @@ public class Dispatcher implements Runnable {
 	public Object get(ValueType type) {
 		switch (type) {
 		case CURRENT_TARGET:
-			return combat_thread.get();
+			return combat_thread.getCurrentTarget();
 		case MINIMUM_LOOT_VALUE:
 
 		}
