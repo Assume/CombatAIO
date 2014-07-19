@@ -11,9 +11,11 @@ public class Dispatcher implements Runnable {
 	}
 
 	private CombatThread combat_thread;
+	private LootingThread looting_thread;
 
 	private Dispatcher() {
 		this.combat_thread = new CombatThread();
+		this.looting_thread = new LootingThread();
 	}
 
 	public Object get(ValueType type) {
@@ -21,6 +23,9 @@ public class Dispatcher implements Runnable {
 		case CURRENT_TARGET:
 			return combat_thread.getCurrentTarget();
 		case MINIMUM_LOOT_VALUE:
+
+		case TOTAL_KILLS:
+			return combat_thread.getTotalKills();
 
 		}
 		return null;

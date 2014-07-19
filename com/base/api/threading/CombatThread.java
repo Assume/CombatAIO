@@ -2,23 +2,23 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.threading.types.Getter;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.RSNPCValue;
 
-public class CombatThread extends Getter implements Runnable, Pauseable {
+public class CombatThread implements Runnable, Pauseable {
 
 	private String[] npc_names;
 	private RSNPC current_target;
+	private KillTracker kill_tracker;
 
 	public CombatThread(String... npc_names) {
 		this.npc_names = npc_names;
+		this.kill_tracker = null; // TODO fix later
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		// TODO
 	}
 
 	@Override
@@ -28,6 +28,10 @@ public class CombatThread extends Getter implements Runnable, Pauseable {
 
 	public Object getCurrentTarget() {
 		return new RSNPCValue(current_target);
+	}
+
+	public Object getTotalKills() {
+		return kill_tracker.getTotalKills();
 	}
 
 	public Object getNextTarget() {
