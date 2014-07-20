@@ -45,9 +45,9 @@ public class testClick extends Script implements Painting {
 	@Override
 	public void run() {
 		while (true) {
-			RSNPC[] birds = NPCs.findNearest("Goblin");
+			RSNPC[] birds = NPCs.findNearest("Crimson swift");
 			if (birds.length > 0) {
-				Clicking.focus(birds[0], "Attack Goblin", true);
+				Clicking.focus(birds[0], "Examine Crimson swift", true);
 			}
 			General.sleep(200,300);
 		}
