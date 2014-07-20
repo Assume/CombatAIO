@@ -66,7 +66,6 @@ public class Clicking {
 	}
 
 	public static Point[] standardDeviation(Point[] p) {
-		long startTime = System.currentTimeMillis();
 		int meanX = 0, meanY = 0;
 		for (int i = 0; i < p.length; i++) {
 			meanX += p[i].getX();

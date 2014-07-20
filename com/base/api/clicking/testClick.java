@@ -43,17 +43,20 @@ public class testClick extends Script implements Painting {
 
 	@Override
 	public void run() {
-		int suc = 0;
-		int fail = 0;
+		int attempts = 0;
+		int success = 0;
 		while (true) {
-			RSNPC[] birds = NPCs.findNearest("Goblin");
+			attempts += 1;
+			RSNPC[] birds = NPCs.findNearest("Crimson swift");
+
 			if (birds.length > 0) {
-				fail++;
-				if (Clicking.click(birds[0], "Attack Goblin"))
-					suc++;
-				System.out.println(" " + suc + " / " + fail);
+				if (Clicking.focus(birds[0], "Examine Crimson swift", true)) {
+					success++;
+				}
+				;
 			}
-			General.sleep(200, 300);
+			System.out.println("Click Success Rate: (" + success + "/"
+					+ attempts + ")");
 		}
 	}
 }
