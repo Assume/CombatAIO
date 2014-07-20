@@ -2,13 +2,18 @@ package scripts.CombatAIO.com.base.api.clicking;
 
 import java.awt.Point;
 import java.util.ArrayList;
+
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
+import org.tribot.api2007.types.RSModel;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSObject;
 
 public class Clicking {
-	private void focus(RSNPC p) {
-		//TODO
+	private void focus(RSObject n) {
+		if (n.isOnScreen()) {
+			advancedClick(n.getModel());
+		}
 	}
 	
 	public boolean click(Positionable p) {
@@ -16,13 +21,13 @@ public class Clicking {
 		return false;
 	}
 	
-	private boolean advancedClick(Point[] p) {
+	private boolean advancedClick(RSModel m) {
 		//TODO
 		return false;
 	}
 	
 	public static Point[] standardDeviation(Point[] p) {
-		General.println("Unfiltered Length: " + p.length);
+		long startTime = System.currentTimeMillis();
 		int meanX = 0, meanY = 0;
 		for (int i = 0; i < p.length; i++) {
 			meanX += p[i].getX();
@@ -43,7 +48,6 @@ public class Clicking {
 		}
 		stdX = (int) Math.sqrt(stdX / squaredXDifferences.size());
 		stdY = (int) Math.sqrt(stdY / squaredYDifferences.size());
-		General.println("Mean X: " + meanX + " STD X: " + stdX + " Mean Y: " + meanY + " STD Y: " + stdY);
 		ArrayList<Point> finalPoints = new ArrayList<Point>();
 		for (int i = 0; i < p.length; i++) {
 			int xVal = (int) p[i].getX();
@@ -55,7 +59,7 @@ public class Clicking {
 		}
 		Point[] pFinal = new Point[finalPoints.size()];
 		pFinal = finalPoints.toArray(pFinal);
-		General.println("Filtered Length: " + pFinal.length);
+		System.out.println(System.currentTimeMillis() - startTime);
 		return pFinal;
 	}
 }
