@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.script.Script;
@@ -47,7 +46,7 @@ public class testClick extends Script implements Painting {
 		while (true) {
 			RSNPC[] birds = NPCs.findNearest("Goblin");
 			if (birds.length > 0) {
-				Clicking.focus(birds[0], "Attack Goblin", true);
+				System.out.println(Clicking.click(birds[0], "Attack Goblin"));
 			}
 			General.sleep(200,300);
 		}

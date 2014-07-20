@@ -8,7 +8,7 @@ import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.types.RSModel;
 
-public class MouseMovementThread implements Runnable {
+public class MouseMovementThread extends Thread {
 
 	private RSModel model;
 	private boolean clicked = false;
@@ -17,6 +17,13 @@ public class MouseMovementThread implements Runnable {
 	public MouseMovementThread(RSModel model, String action) {
 		this.model = model;
 		this.action = action;
+	}
+
+	public boolean execute() {
+		start();
+		while (isAlive())
+			General.sleep(50);
+		return clicked;
 	}
 
 	@Override
@@ -47,14 +54,16 @@ public class MouseMovementThread implements Runnable {
 			General.sleep(50, 150);
 			if (Game.getUptext().contains(action)) {
 				Mouse.click(1);
+				this.clicked = true;
 				return;
 			}
 		}
 		if (model.getEnclosedArea().contains(Mouse.getPos())) {
 			Mouse.click(3);
 			if (ChooseOption.isOptionValid(action)) {
-				ChooseOption.select(action);
+				this.clicked = ChooseOption.select(action);
 			} else {
+				this.clicked = false;
 				ChooseOption.close();
 			}
 		}
