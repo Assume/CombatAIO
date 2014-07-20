@@ -5,7 +5,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
+import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
+import org.tribot.api.input.Mouse;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.script.Script;
@@ -48,11 +50,13 @@ public class testClick extends Script implements Painting {
 		while (true) {
 			attempts += 1;
 			RSNPC[] birds = NPCs.findNearest("Crimson swift");
-
 			if (birds.length > 0) {
-				if (Clicking.focus(birds[0], "Examine Crimson swift", true)) {
+				/*if (DynamicClicking.clickRSNPC(birds[0], "Examine Crimson swift")) {
 					success++;
-				};
+				};*/
+				if (Clicking.focus(birds[0], "Examine Crimson swift", false)) {
+					success++;
+				}
 			}
 			System.out.println("Click Success Rate: (" + success + "/"
 					+ attempts + ")");
