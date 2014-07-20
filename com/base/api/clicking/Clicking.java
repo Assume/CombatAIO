@@ -4,16 +4,62 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import org.tribot.api.General;
+import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
+import org.tribot.api2007.Banking;
+import org.tribot.api2007.Camera;
+import org.tribot.api2007.ChooseOption;
+import org.tribot.api2007.Game;
+import org.tribot.api2007.Objects;
+import org.tribot.api2007.PathFinding;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSModel;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 
 public class Clicking {
-	private void focus(RSObject n) {
-		if (n.isOnScreen()) {
-			advancedClick(n.getModel());
+	private boolean focus(RSNPC n, String action, boolean checkReachable) {
+		if (n == null || n.getModel() == null) {
+			return false;
 		}
+		if (checkReachable && !PathFinding.canReach(n, true))
+			return false;
+		if (!n.isOnScreen()
+				&& Player.getPosition().distanceTo(n) > 1) {
+			RSTile tile = n.getPosition();
+			Walking.setControlClick(true);
+			Walking.blindWalkTo(tile);
+			General.sleep(250, 350);
+			while (Player.isMoving() && !n.isOnScreen()) {
+				turnTo(tile);
+			}
+			if (!n.isOnScreen()) {
+				Camera.turnToTile(n);
+			}
+		}
+		if (!n.isOnScreen()) {
+			return false;
+		}
+		if (n.getModel() != null) {
+			return advancedClick(n.getModel(), action);
+		}
+		return false;
+	}
+
+	private static void turnTo(final Positionable loc) {
+		if (loc == null) {
+			return;
+		}
+		final int cAngle = Camera.getCameraRotation();
+		final int angle = 180 + Camera.getTileAngle(loc);
+		final int dir = cAngle - angle;
+		if (Math.abs(dir) <= 190 && Math.abs(dir) >= 180) {
+			return;
+		}
+		Camera.setCameraRotation(Camera.getCameraRotation()
+				+ ((dir > 0 ^ Math.abs(dir) > 180) ? 10 : -10));
 	}
 	
 	public boolean click(Positionable p) {
@@ -59,7 +105,7 @@ public class Clicking {
 		}
 		Point[] pFinal = new Point[finalPoints.size()];
 		pFinal = finalPoints.toArray(pFinal);
-		System.out.println(System.currentTimeMillis() - startTime);
+		System.out.println((System.currentTimeMillis() - startTime);
 		return pFinal;
 	}
 }
