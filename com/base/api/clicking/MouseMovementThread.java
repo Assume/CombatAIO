@@ -20,9 +20,12 @@ public class MouseMovementThread extends Thread {
 	}
 
 	public boolean execute() {
+		int initial_speed = Mouse.getSpeed();
+		Mouse.setSpeed(initial_speed + 2);
 		start();
 		while (isAlive())
-			General.sleep(50);
+			General.sleep(100);
+		Mouse.setSpeed(initial_speed);
 		return clicked;
 	}
 
@@ -44,6 +47,7 @@ public class MouseMovementThread extends Thread {
 		else {
 			if (attempt > 10)
 				return false;
+			Mouse.setSpeed(Mouse.getSpeed() + 2);
 			focus(++attempt);
 		}
 		return clicked;

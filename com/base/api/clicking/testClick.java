@@ -22,8 +22,8 @@ public class testClick extends Script implements Painting {
 			int[] yPoints = new int[points.length];
 
 			for (int i = 0; i < points.length; i++) {
-				xPoints[i] = (int)points[i].getX();
-				yPoints[i] = (int)points[i].getY();
+				xPoints[i] = (int) points[i].getX();
+				yPoints[i] = (int) points[i].getY();
 			}
 			g.setColor(Color.BLUE);
 			g.drawPolygon(new Polygon(xPoints, yPoints, points.length));
@@ -33,8 +33,8 @@ public class testClick extends Script implements Painting {
 			int[] yPoints = new int[stdPoints.length];
 
 			for (int i = 0; i < stdPoints.length; i++) {
-				xPoints[i] = (int)stdPoints[i].getX();
-				yPoints[i] = (int)stdPoints[i].getY();
+				xPoints[i] = (int) stdPoints[i].getX();
+				yPoints[i] = (int) stdPoints[i].getY();
 			}
 			g.setColor(Color.RED);
 			g.drawPolygon(new Polygon(xPoints, yPoints, stdPoints.length));
@@ -43,12 +43,17 @@ public class testClick extends Script implements Painting {
 
 	@Override
 	public void run() {
+		int suc = 0;
+		int fail = 0;
 		while (true) {
 			RSNPC[] birds = NPCs.findNearest("Goblin");
 			if (birds.length > 0) {
-				System.out.println(Clicking.click(birds[0], "Attack Goblin"));
+				fail++;
+				if (Clicking.click(birds[0], "Attack Goblin"))
+					suc++;
+				System.out.println(" " + suc + " / " + fail);
 			}
-			General.sleep(200,300);
+			General.sleep(200, 300);
 		}
 	}
 }
