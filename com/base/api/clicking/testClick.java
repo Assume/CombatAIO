@@ -5,9 +5,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import org.tribot.api.DynamicClicking;
-import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.script.Script;
