@@ -56,17 +56,13 @@ public class Clicking {
 				+ ((dir > 0 ^ Math.abs(dir) > 180) ? 10 : -10));
 	}
 
-	public static boolean click(RSNPC npc) {
-		// TODO
-		return false;
+	public static boolean click(RSNPC npc, String action) {
+		return focus(npc, action, false);
 	}
 
 	private static boolean advancedClick(RSModel m, String action) {
-		Thread test = new Thread(new MouseMovementThread(m, action));
-		test.start();
-		while (test.isAlive())
-			General.sleep(50);
-		return true;
+		MouseMovementThread thread = new MouseMovementThread(m, action);
+		return thread.execute();
 	}
 
 	public static Point[] standardDeviation(Point[] p) {
