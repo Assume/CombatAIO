@@ -34,15 +34,9 @@ final class LootPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public boolean isInClick(Point p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void onClick(Point p) {
 		//TODO
-		/* for each RSGroundItem in this.paintable_
+		/* for each RSGroundItem in this.paintable_items check if isInClick, if so call onClick
 		*/
 	}
 

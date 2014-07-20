@@ -16,8 +16,8 @@ public class KillTracker implements Runnable {
 
 	}
 
-	protected void setTarget() {
-		//TODO
+	protected void setTarget(RSNPC target) {
+		// TODO
 		this.target = target;
 	}
 

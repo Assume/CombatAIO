@@ -19,7 +19,7 @@ public class Dispatcher implements Runnable {
 		this.looting_thread = new LootingThread();
 	}
 
-	public Value<?> get(ValueType type, String...extra_paramaters) {
+	public Value<?> get(ValueType type, String... extra_paramaters) {
 		switch (type) {
 		case CURRENT_TARGET:
 			return combat_thread.getCurrentTarget();
@@ -35,7 +35,6 @@ public class Dispatcher implements Runnable {
 			return looting_thread.getItemPrice(extra_paramaters);
 		case AMOUNT_LOOTED_OF_ITEM:
 			return looting_thread.getAmountLooted(extra_paramaters);
-
 		}
 		return null;
 
