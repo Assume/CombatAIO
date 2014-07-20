@@ -8,7 +8,5 @@ public interface PaintHandler {
 
 	public void draw();
 
-	public boolean isInClick(Point p);
-
 	public void onClick(Point p);
 }

@@ -3,12 +3,13 @@ package scripts.CombatAIO.com.base.api.threading;
 import java.util.ArrayList;
 import java.util.List;
 
+import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
-public class LootingThread implements Runnable {
+public class LootingThread implements Runnable, Dispatchable {
 
 	private List<LootItem> items_known;
 

@@ -59,14 +59,12 @@ final class MonsterPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public boolean isInClick(Point p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void onClick(Point p) {
-		// TODO calls isInClick
+		// TODO
+		/*
+		 * for each RSNPC in this.paintable_items check if isInClick, if
+		 * so call onClick
+		 */
 
 	}
 
