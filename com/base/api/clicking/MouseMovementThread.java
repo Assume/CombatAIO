@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.api.clicking;
 
 import java.awt.Point;
 
-import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.ChooseOption;
@@ -41,9 +40,8 @@ public class MouseMovementThread extends Thread {
 				.getVisiblePoints());
 		if (points.length == 0)
 			return false;
-		// Point click = points[General.random(0, points.length)];
-		// Mouse.move(click);
-		DynamicClicking.clickRSModel(model, 0);
+		Point click = points[General.random(0, points.length)];
+		Mouse.move(click);
 		if (canClick())
 			click();
 		else {
@@ -59,6 +57,7 @@ public class MouseMovementThread extends Thread {
 		if (Game.getUptext().contains(action)) {
 			General.sleep(50, 150);
 			if (Game.getUptext().contains(action)) {
+				Mouse.click(1);
 				this.clicked = true;
 				return;
 			}
