@@ -16,7 +16,7 @@ public class testClick extends Script implements Painting {
 
 	@Override
 	public void onPaint(Graphics g) {
-		if (points != null && points.length > 0) {
+		/*if (points != null && points.length > 0) {
 			int[] xPoints = new int[points.length];
 			int[] yPoints = new int[points.length];
 
@@ -37,7 +37,7 @@ public class testClick extends Script implements Painting {
 			}
 			g.setColor(Color.RED);
 			g.drawPolygon(new Polygon(xPoints, yPoints, stdPoints.length));
-		}
+		}*/
 	}
 
 	@Override
@@ -45,13 +45,17 @@ public class testClick extends Script implements Painting {
 		int attempts = 0;
 		int success = 0;
 		while (true) {
-			attempts += 1;
 			RSNPC[] birds = NPCs.findNearest("Crimson swift");
 			if (birds.length > 0) {
-				/*if (DynamicClicking.clickRSNPC(birds[0], "Examine Crimson swift")) {
-					success++;
-				};*/
-				if (Clicking.focus(birds[0], "Examine Crimson swift", false)) {
+				/*if (birds[0].isOnScreen()) {
+					attempts ++;
+					if (DynamicClicking.clickRSNPC(birds[0], "Examine Crimson swift")) {
+						success++;
+					};
+				} else {
+					General.sleep(30,50);
+				}*/
+				if (Clicking.click(birds[0], "Examine Crimson swift")) {
 					success++;
 				}
 			}
