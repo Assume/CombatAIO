@@ -5,30 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Banking;
 import org.tribot.api2007.Camera;
-import org.tribot.api2007.ChooseOption;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Objects;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSModel;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 
 public class Clicking {
-	private boolean focus(RSNPC n, String action, boolean checkReachable) {
+	public static boolean focus(RSNPC n, String action, boolean checkReachable) {
 		if (n == null || n.getModel() == null) {
 			return false;
 		}
 		if (checkReachable && !PathFinding.canReach(n, true))
 			return false;
-		if (!n.isOnScreen()
-				&& Player.getPosition().distanceTo(n) > 1) {
+		if (!n.isOnScreen() && Player.getPosition().distanceTo(n) > 1) {
 			RSTile tile = n.getPosition();
 			Walking.setControlClick(true);
 			Walking.blindWalkTo(tile);
@@ -63,13 +56,16 @@ public class Clicking {
 				+ ((dir > 0 ^ Math.abs(dir) > 180) ? 10 : -10));
 	}
 
-	public boolean click(Positionable p) {
+	public static boolean click(RSNPC npc) {
 		// TODO
 		return false;
 	}
 
-	private boolean advancedClick(RSModel m, String action) {
-		new Thread(new MouseMovementThread(m, action)).start();
+	private static boolean advancedClick(RSModel m, String action) {
+		Thread test = new Thread(new MouseMovementThread(m, action));
+		test.start();
+		while (test.isAlive())
+			General.sleep(50);
 		return true;
 	}
 
