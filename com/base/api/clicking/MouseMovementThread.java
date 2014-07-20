@@ -44,8 +44,11 @@ public class MouseMovementThread implements Runnable {
 
 	private void click() {
 		if (Game.getUptext().contains(action)) {
-			Mouse.click(1);
-			return;
+			General.sleep(50, 150);
+			if (Game.getUptext().contains(action)) {
+				Mouse.click(1);
+				return;
+			}
 		}
 		if (model.getEnclosedArea().contains(Mouse.getPos())) {
 			Mouse.click(3);
