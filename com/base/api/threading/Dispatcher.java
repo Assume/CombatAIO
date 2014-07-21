@@ -42,10 +42,12 @@ public class Dispatcher implements Runnable {
 
 	@Override
 	public void run() {
-		// dispatch initital needed threads
-		// while(MainScriptClassHere.isRunning())
 		/*
-		 * check threads for issues and redispatch if needed
+		 * dispatch initital needed threads
+		 * while(MainScriptClassHere.isRunning())
+		 * 
+		 * check threads for issues and redispatch if needed check for
+		 * conditions requiring the pausing of thread - enum system for this
 		 */
 	}
 }

@@ -1,8 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 
-public class CombatCalculationThread implements Runnable, Pauseable {
+public class CombatCalculationThread implements Runnable {
 
 	private CombatThread combat_thread;
 
@@ -13,15 +12,8 @@ public class CombatCalculationThread implements Runnable, Pauseable {
 	@Override
 	public void run() {
 		/*
-		 * while(true) calculate
-		 * this.combat_thread.setMonsters(calculated_monsters);
+		 * only runs once this.combat_thread.setMonsters(calculated_monsters);
 		 */
-	}
-
-	@Override
-	public void pause() {
-		this.pause();
-
 	}
 
 }

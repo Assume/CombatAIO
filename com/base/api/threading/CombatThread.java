@@ -27,7 +27,7 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 	@Override
 	public void run() {
 		/*
-		 * while(true) check x,y,z variables dispatch calculation threads when
+		 * while(true) check x,y,z variables dispatch calculation threads when (ie on near death)
 		 * needed
 		 */
 	}
