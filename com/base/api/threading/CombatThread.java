@@ -17,6 +17,7 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 	private Positionable home_tile;
 	private KillTracker kill_tracker;
 	private int combat_distance;
+	private RSNPC[] possible_monsters;
 
 	public CombatThread(String... npc_names) {
 		this.npc_names = npc_names;
@@ -34,6 +35,10 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 	@Override
 	public void pause() {
 		this.pause();
+	}
+
+	protected void setMonsters(RSNPC[] possible_monsters) {
+		this.possible_monsters = possible_monsters;
 	}
 
 	public boolean shouldLoot() {
