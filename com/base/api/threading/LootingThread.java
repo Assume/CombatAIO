@@ -12,9 +12,11 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 public class LootingThread implements Runnable, Dispatchable {
 
 	private List<LootItem> items_known;
+	private CombatThread combat_thread;
 
-	public LootingThread() {
+	public LootingThread(CombatThread combat_thread) {
 		this.items_known = new ArrayList<LootItem>();
+		this.combat_thread = combat_thread;
 	}
 
 	public IntegerValue getTotalLootValue() {
@@ -26,7 +28,12 @@ public class LootingThread implements Runnable, Dispatchable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		/*
+		 * while(true)
+		 *  if(this.combat_thread.canLoot())
+		 *  loot();
+		 * 
+		 */
 
 	}
 

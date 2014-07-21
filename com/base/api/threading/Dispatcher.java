@@ -16,7 +16,7 @@ public class Dispatcher implements Runnable {
 
 	private Dispatcher() {
 		this.combat_thread = new CombatThread();
-		this.looting_thread = new LootingThread();
+		this.looting_thread = new LootingThread(this.combat_thread);
 	}
 
 	public Value<?> get(ValueType type, String... extra_paramaters) {

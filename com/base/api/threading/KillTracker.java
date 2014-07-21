@@ -21,7 +21,7 @@ public class KillTracker implements Runnable {
 		this.target = target;
 	}
 
-	public Value getTotalKills() {
+	public Value<?> getTotalKills() {
 		return new IntegerValue(kills);
 	}
 

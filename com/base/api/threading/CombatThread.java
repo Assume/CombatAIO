@@ -25,12 +25,20 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 
 	@Override
 	public void run() {
-		// TODO
+		/*
+		 * while(true) check x,y,z variables dispatch calculation threads when
+		 * needed
+		 */
 	}
 
 	@Override
 	public void pause() {
 		this.pause();
+	}
+
+	public boolean shouldLoot() {
+		// TODO
+		return false;
 	}
 
 	public Value<?> getCurrentTarget() {
