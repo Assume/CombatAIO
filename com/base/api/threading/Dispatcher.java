@@ -18,6 +18,7 @@ public class Dispatcher implements Runnable {
 
 	private CombatThread combat_thread;
 	private LootingThread looting_thread;
+	private EatThread eat_thread;
 	private BaseCombat main_class;
 
 	private Dispatcher(BaseCombat main_class) {
@@ -42,6 +43,8 @@ public class Dispatcher implements Runnable {
 			return looting_thread.getItemPrice(extra_paramaters);
 		case AMOUNT_LOOTED_OF_ITEM:
 			return looting_thread.getAmountLooted(extra_paramaters);
+		case FOOD_NAME:
+			return eat_thread.getFoodName();
 		}
 		return null;
 
