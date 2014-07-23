@@ -69,7 +69,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	public Value<?> getCombatDistance() {
 		return new IntegerValue(this.combat_distance);
 	}
-
+	
 	public Value<?> getTotalKills() {
 		return kill_tracker.getTotalKills();
 	}

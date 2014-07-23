@@ -1,5 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.main.BaseCombat;
@@ -45,9 +47,25 @@ public class Dispatcher implements Runnable {
 			return looting_thread.getAmountLooted(extra_paramaters);
 		case FOOD_NAME:
 			return eat_thread.getFoodName();
+		case MONSTER_NAMES:
+			return this.combat_thread.getMonsterNames();
 		}
 		return null;
 
+	}
+
+	@SuppressWarnings("deprecation")
+	public void pause(PauseType pause_type) {
+		for (Threadable x : Threadable.getThreadables())
+			if (x.hasPauseType(pause_type))
+				x.suspend();
+	}
+
+	@SuppressWarnings("deprecation")
+	public void unpause(PauseType pause_type) {
+		for (Threadable x : Threadable.getThreadables())
+			if (x.hasPauseType(pause_type))
+				x.resume();
 	}
 
 	@Override
@@ -64,4 +82,9 @@ public class Dispatcher implements Runnable {
 		 * conditions requiring the pausing of thread - enum system for this
 		 */
 	}
+
+	public boolean isRunning() {
+		return this.main_class.isRunning();
+	}
+
 }
