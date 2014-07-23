@@ -1,12 +1,23 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import java.util.List;
+
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 
-public class KillTracker implements Runnable, Pauseable {
+public class KillTracker extends Threadable implements Runnable {
+
+	public KillTracker() {
+		this(null);
+	}
+
+	private KillTracker(List<PauseType> pause_types) {
+		super(pause_types);
+	}
 
 	private int kills;
 	private RSNPC target;
@@ -26,9 +37,8 @@ public class KillTracker implements Runnable, Pauseable {
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
+	public boolean hasPauseType(PauseType type) {
+		return false;
 	}
 
 }

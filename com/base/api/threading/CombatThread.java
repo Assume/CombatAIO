@@ -6,9 +6,9 @@ import java.util.List;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.BooleanValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
@@ -16,7 +16,7 @@ import scripts.CombatAIO.com.base.api.threading.types.subtype.PositionableValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringArrayValue;
 
-public class CombatThread implements Runnable, Pauseable, Dispatchable {
+public class CombatThread extends Threadable implements Runnable, Pauseable {
 
 	private String[] npc_names;
 	private RSNPC current_target;
@@ -24,15 +24,20 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 	private KillTracker kill_tracker;
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
-	private List<PauseType> pause_types;
 	private String[] monster_names;
 	private boolean isRanging;
 
 	public CombatThread(String... npc_names) {
+		this(Arrays.asList(new PauseType[] {
+				PauseType.NON_ESSENTIAL_TO_BANKING,
+				PauseType.COULD_INTERFERE_WITH_LOOTING,
+				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.npc_names = npc_names;
 		this.kill_tracker = null; // TODO fix later
-		this.pause_types = Arrays
-				.asList(new PauseType[] { PauseType.NON_ESSENTIAL_TO_BANKING });
+	}
+
+	private CombatThread(List<PauseType> pause_types) {
+		super(pause_types);
 	}
 
 	@Override
@@ -43,17 +48,13 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 		 */
 	}
 
-	@Override
-	public void pause() {
-		this.pause();
-	}
-
 	protected void setMonsters(RSNPC[] possible_monsters) {
 		this.possible_monsters = possible_monsters;
 	}
 
 	public boolean shouldLoot() {
-		// TODO
+		// TODO this returns true if the LootThread should execute it's loot
+		// cycle and pause the combat cycle
 		return false;
 	}
 

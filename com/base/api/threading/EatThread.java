@@ -1,19 +1,24 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
+import java.util.List;
+
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
 
-public class EatThread implements Runnable, Pauseable, Dispatchable {
+public class EatThread extends Threadable implements Runnable {
+
+	public EatThread() {
+		this(null);
+	}
+
+	private EatThread(List<PauseType> pause_types) {
+		super(pause_types);
+		// TODO Auto-generated constructor stub
+	}
 
 	private String food_name;
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void run() {
@@ -25,6 +30,11 @@ public class EatThread implements Runnable, Pauseable, Dispatchable {
 
 	public Value<?> getFoodName() {
 		return new StringValue(this.food_name);
+	}
+
+	@Override
+	public boolean hasPauseType(PauseType type) {
+		return false;
 	}
 
 }

@@ -4,24 +4,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
-public class LootingThread implements Runnable, Dispatchable {
+public class LootingThread extends Threadable implements Pauseable {
 
 	private List<LootItem> items_known;
 	private CombatThread combat_thread;
-	private List<PauseType> pause_types;
 
 	public LootingThread(CombatThread combat_thread) {
+		this(Arrays.asList(new PauseType[] {
+				PauseType.NON_ESSENTIAL_TO_BANKING,
+				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new ArrayList<LootItem>();
 		this.combat_thread = combat_thread;
-		this.pause_types = Arrays
-				.asList(new PauseType[] { PauseType.NON_ESSENTIAL_TO_BANKING });
+	}
+
+	private LootingThread(List<PauseType> pause_types) {
+		super(pause_types);
 	}
 
 	public IntegerValue getTotalLootValue() {

@@ -14,8 +14,7 @@ public class PositionableValue extends Value<Positionable> {
 
 	@Override
 	public Positionable get() {
-		// TODO Auto-generated method stub
-		return null;
+		return value;
 	}
 
 }
