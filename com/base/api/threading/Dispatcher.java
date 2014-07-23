@@ -2,19 +2,26 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.main.BaseCombat;
 
 public class Dispatcher implements Runnable {
 
 	private static Dispatcher dispatcher;
 
+	public static void create(BaseCombat main_class) {
+		dispatcher = new Dispatcher(main_class);
+	}
+
 	public static Dispatcher get() {
-		return dispatcher == null ? new Dispatcher() : dispatcher;
+		return dispatcher;
 	}
 
 	private CombatThread combat_thread;
 	private LootingThread looting_thread;
+	private BaseCombat main_class;
 
-	private Dispatcher() {
+	private Dispatcher(BaseCombat main_class) {
+		this.main_class = main_class;
 		this.combat_thread = new CombatThread();
 		this.looting_thread = new LootingThread(this.combat_thread);
 	}
@@ -42,9 +49,13 @@ public class Dispatcher implements Runnable {
 
 	@Override
 	public void run() {
+
+		while (this.main_class.isRunning()) {
+
+		}
+
 		/*
-		 * dispatch initital needed threads
-		 * while(MainScriptClassHere.isRunning())
+		 * dispatch initital needed threads while(BaseCombat.isRunning())
 		 * 
 		 * check threads for issues and redispatch if needed check for
 		 * conditions requiring the pausing of thread - enum system for this

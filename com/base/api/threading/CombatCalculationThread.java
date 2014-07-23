@@ -1,6 +1,5 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-
 public class CombatCalculationThread implements Runnable {
 
 	private CombatThread combat_thread;

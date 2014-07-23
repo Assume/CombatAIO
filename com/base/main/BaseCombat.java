@@ -13,11 +13,17 @@ import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 public class BaseCombat extends Script implements Painting, MouseActions {
 
 	private TotalPaintHandler paint_handler;
+	private boolean run;
+
+	public boolean isRunning() {
+		return this.run;
+	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		// TODO set values for TotalPaintHandler (this.paint_handler) here after GUI done and what not
+		// TODO set values for TotalPaintHandler (this.paint_handler) here after
+		// GUI done and what not
 	}
 
 	@Override

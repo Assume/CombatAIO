@@ -1,9 +1,11 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
@@ -13,10 +15,13 @@ public class LootingThread implements Runnable, Dispatchable {
 
 	private List<LootItem> items_known;
 	private CombatThread combat_thread;
+	private List<PauseType> pause_types;
 
 	public LootingThread(CombatThread combat_thread) {
 		this.items_known = new ArrayList<LootItem>();
 		this.combat_thread = combat_thread;
+		this.pause_types = Arrays
+				.asList(new PauseType[] { PauseType.NON_ESSENTIAL_TO_BANKING });
 	}
 
 	public IntegerValue getTotalLootValue() {
@@ -29,10 +34,7 @@ public class LootingThread implements Runnable, Dispatchable {
 	@Override
 	public void run() {
 		/*
-		 * while(true)
-		 *  if(this.combat_thread.canLoot())
-		 *  loot();
-		 * 
+		 * while(true) if(this.combat_thread.canLoot()) loot();
 		 */
 
 	}
