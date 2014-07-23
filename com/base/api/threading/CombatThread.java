@@ -10,9 +10,11 @@ import scripts.CombatAIO.com.base.api.threading.types.Dispatchable;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.BooleanValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.PositionableValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.StringArrayValue;
 
 public class CombatThread implements Runnable, Pauseable, Dispatchable {
 
@@ -23,6 +25,8 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
 	private List<PauseType> pause_types;
+	private String[] monster_names;
+	private boolean isRanging;
 
 	public CombatThread(String... npc_names) {
 		this.npc_names = npc_names;
@@ -73,4 +77,11 @@ public class CombatThread implements Runnable, Pauseable, Dispatchable {
 		return null;
 	}
 
+	public Value<?> getMonsterNames() {
+		return new StringArrayValue(this.monster_names);
+	}
+
+	public Value<?> isRanging() {
+		return new BooleanValue(this.isRanging);
+	}
 }
