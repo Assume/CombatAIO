@@ -2,7 +2,7 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.types.enums.MonsterRequiringCustomPathing;
+import scripts.CombatAIO.com.base.api.types.enums.CustomPaths;
 
 public class BankingThread implements Runnable {
 
@@ -17,7 +17,7 @@ public class BankingThread implements Runnable {
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 				String[] monster_names = (String[]) Dispatcher.get()
 						.get(ValueType.MONSTER_NAMES).get();
-				MonsterRequiringCustomPathing modified_path = getModifiedPath(monster_names);
+				CustomPaths modified_path = getModifiedPath(monster_names);
 				if (modified_path != null)
 					;
 				// TODO make it so it grabs the first modified area to pass to
@@ -26,11 +26,11 @@ public class BankingThread implements Runnable {
 		}
 	}
 
-	private MonsterRequiringCustomPathing getModifiedPath(String[] names) {
+	private CustomPaths getModifiedPath(String[] names) {
 		if (names == null || names.length == 0)
 			return null;
 		else
-			return MonsterRequiringCustomPathing.getCustomPath(names[0]);
+			return CustomPaths.getCustomPath(names[0]);
 	}
 
 	private boolean shouldBank() {
