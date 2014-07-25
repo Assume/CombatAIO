@@ -1,12 +1,13 @@
 package scripts.CombatAIO.com.base.api.types.enums;
 
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
 public enum CustomMovement {
 
-	BASIC(null, null, null) {
+	BASIC_ONE(null, null) {
 
 		@Override
 		protected boolean leave_alone() {
@@ -17,21 +18,17 @@ public enum CustomMovement {
 	};
 
 	private RSArea activation_location;
-	private RSArea deactivation_location;
 	private RSTile next_webwalking_location;
 
-	CustomMovement(RSArea activation_location, RSArea deactivation_location,
-			RSTile next_webwalking_location) {
+	CustomMovement(RSArea activation_location, RSTile next_webwalking_location) {
 
 	}
 
 	protected abstract boolean leave_alone();
 
-	public boolean execute() {
-		if (this.leave_alone()) {
-
-		}
-		return false;
+	public Positionable execute() {
+		this.leave_alone();
+		return this.next_webwalking_location;
 	}
 
 	public boolean shouldExecute() {

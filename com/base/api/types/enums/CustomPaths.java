@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.types.enums;
 
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSArea;
 
 public enum CustomPaths {
@@ -55,4 +56,15 @@ public enum CustomPaths {
 		return null;
 	}
 
+	public boolean hasIndicesLeft(MovementType type) {
+		CustomMovement[] movement = type.equals(MovementType.TO_BANK) ? this.to_bank
+				: this.to_monster;
+		return this.current_index < movement.length;
+	}
+
+	public Positionable getDestination(MovementType type) {
+		RSArea[] area = type.equals(MovementType.TO_BANK) ? this.activation_area_to_bank
+				: this.activation_area_to_monster;
+		return area[this.current_index].getRandomTile();
+	}
 }

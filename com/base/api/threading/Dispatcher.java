@@ -49,6 +49,10 @@ public class Dispatcher implements Runnable {
 			return eat_thread.getFoodName();
 		case MONSTER_NAMES:
 			return this.combat_thread.getMonsterNames();
+		case FIRST_MONSTER_NAME:
+			return this.combat_thread.getFirstMonsterName();
+		case HOME_TILE:
+			return this.combat_thread.getHomeTile();
 		}
 		return null;
 

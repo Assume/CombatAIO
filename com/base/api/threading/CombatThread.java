@@ -15,6 +15,7 @@ import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.PositionableValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringArrayValue;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
 
 public class CombatThread extends Threadable implements Runnable, Pauseable {
 
@@ -69,7 +70,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	public Value<?> getCombatDistance() {
 		return new IntegerValue(this.combat_distance);
 	}
-	
+
 	public Value<?> getTotalKills() {
 		return kill_tracker.getTotalKills();
 	}
@@ -84,5 +85,11 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 
 	public Value<?> isRanging() {
 		return new BooleanValue(this.isRanging);
+	}
+
+	public Value<?> getFirstMonsterName() {
+		if (this.monster_names.length == 0)
+			return null;
+		return new StringValue(this.monster_names[0]);
 	}
 }
