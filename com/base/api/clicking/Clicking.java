@@ -19,7 +19,7 @@ import org.tribot.api2007.types.RSTile;
 
 public class Clicking {
 	private static long lastBusyTime;
-	private static ABCUtil abc_util;
+	private static ABCUtil abc_util = new ABCUtil();
 
 	private static boolean focus(RSNPC n, String action, boolean checkReachable) {
 		if (n == null || n.getModel() == null) {
