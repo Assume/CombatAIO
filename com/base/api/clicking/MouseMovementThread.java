@@ -72,7 +72,7 @@ public class MouseMovementThread extends Thread {
 			General.sleep(50, 150);
 			if (Game.getUptext().toLowerCase().contains(action.toLowerCase())) {
 				Mouse.click(1);
-				if (Timing.waitCrosshair(600)==2) {
+				if (Timing.waitCrosshair(General.random(600, 800))==2) {
 					this.clicked = true;
 				}
 				return;

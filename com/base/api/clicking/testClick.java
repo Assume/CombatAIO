@@ -56,7 +56,7 @@ public class testClick extends Script implements Painting {
 					General.sleep(30,50);
 				}*/
 				attempts++;
-				if (Clicking.click(birds[0], "Examine Crimson swift", false)) {
+				if (Clicking.ABCLClick(birds[0], "Examine Crimson swift", false, false, false)) {
 					success++;
 				}
 			}

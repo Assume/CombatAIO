@@ -18,38 +18,11 @@ import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 
 public class Clicking {
-	private static long lastBusyTime;
+	private static long lastBusyTime = System.currentTimeMillis();
 	private static ABCUtil abc_util = new ABCUtil();
 
-	private static boolean focus(RSNPC n, String action, boolean checkReachable) {
-		if (n == null || n.getModel() == null) {
-			return false;
-		}
-		if (checkReachable && !PathFinding.canReach(n, true))
-			return false;
-		if (!n.isOnScreen() && Player.getPosition().distanceTo(n) > 1) {
-			RSTile tile = n.getPosition();
-			Walking.setControlClick(true);
-			Walking.blindWalkTo(tile);
-			General.sleep(250, 350);
-			while (Player.isMoving() && !n.isOnScreen()) {
-				turnTo(tile);
-			}
-			if (!n.isOnScreen()) {
-				Camera.turnToTile(n);
-			}
-		}
-		if (!n.isOnScreen()) {
-			return false;
-		}
-		if (n.getModel() != null) {
-			return advancedClick(n.getModel(), action);
-		}
-		return false;
-	}
-
-	private static boolean focus(RSObject n, String action,
-			boolean checkReachable) {
+	private static boolean focus(RSNPC n, String action,
+			boolean checkReachable, boolean safeClick) {
 		if (n == null || n.getModel() == null) {
 			return false;
 		}
@@ -73,8 +46,9 @@ public class Clicking {
 			return false;
 		}
 		if (n.getModel() != null) {
-			if (action.toLowerCase().contains("hammer")) {
-				while (Player.isMoving())General.sleep(30,50);
+			if (safeClick) {
+				while (Player.isMoving())
+					General.sleep(30, 50);
 			}
 			if (advancedClick(n.getModel(), action)) {
 				for (int i = 0; !Player.isMoving()
@@ -82,7 +56,50 @@ public class Clicking {
 					General.sleep(25, 35);
 				}
 				while (Player.isMoving()) {
-					General.sleep(30,70);
+					General.sleep(30, 70);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean focus(RSObject n, String action,
+			boolean checkReachable, boolean safeClick) {
+		if (n == null || n.getModel() == null) {
+			return false;
+		}
+		if (checkReachable && !PathFinding.canReach(n, true))
+			return false;
+		if (!n.isOnScreen() && Player.getPosition().distanceTo(n) > 1) {
+			RSTile tile = n.getPosition();
+			Walking.setControlClick(true);
+			Walking.blindWalkTo(tile);
+			for (int i = 0; !Player.isMoving() && i < 10; i++) {
+				General.sleep(25, 35);
+			}
+			while (Player.isMoving() && !n.isOnScreen()) {
+				turnTo(tile);
+			}
+			if (!n.isOnScreen()) {
+				Camera.turnToTile(n);
+			}
+		}
+		if (!n.isOnScreen()) {
+			return false;
+		}
+		if (n.getModel() != null) {
+			if (safeClick) {
+				while (Player.isMoving())
+					General.sleep(30, 50);
+			}
+			if (advancedClick(n.getModel(), action)) {
+				for (int i = 0; !Player.isMoving()
+						&& Player.getAnimation() == -1 && i < 10; i++) {
+					General.sleep(25, 35);
+				}
+				while (Player.isMoving()) {
+					General.sleep(30, 70);
 				}
 				return true;
 			}
@@ -105,25 +122,28 @@ public class Clicking {
 						: General.random(-5, -20)));
 	}
 
-	public static boolean click(RSNPC npc, String action, Boolean checkReachable) {
-		return focus(npc, action, checkReachable);
+	public static boolean click(RSNPC npc, String action,
+			boolean checkReachable, boolean safeClick) {
+		return focus(npc, action, checkReachable, safeClick);
 	}
 
 	public static boolean click(RSObject obj, String action,
-			Boolean checkReachable) {
-		return focus(obj, action, checkReachable);
+			boolean checkReachable, boolean safeClick) {
+		return focus(obj, action, checkReachable, safeClick);
 	}
-	
-	public static boolean ABCLClick(RSObject obj, String option, boolean checkReachable, boolean combat) {
+
+	public static boolean ABCLClick(RSObject obj, String option,
+			boolean checkReachable, boolean safeClick, boolean combat) {
 		waitNewOrSwitchDelay(lastBusyTime, combat);
 		lastBusyTime = System.currentTimeMillis();
-		return click(obj, option, checkReachable);
+		return click(obj, option, checkReachable, safeClick);
 	}
-	
-	public static boolean ABCLClick(RSNPC npc, String option, boolean checkReachable, boolean combat) {
+
+	public static boolean ABCLClick(RSNPC npc, String option,
+			boolean checkReachable, boolean safeClick, boolean combat) {
 		waitNewOrSwitchDelay(lastBusyTime, combat);
 		lastBusyTime = System.currentTimeMillis();
-		return click(npc, option, checkReachable);
+		return click(npc, option, checkReachable, safeClick);
 	}
 
 	public static void waitNewOrSwitchDelay(final long last_busy_time,
@@ -163,7 +183,7 @@ public class Clicking {
 			meanX += p[i].getX();
 			meanY += p[i].getY();
 		}
-		if (p.length > 0) { 
+		if (p.length > 0) {
 			meanX /= p.length;
 			meanY /= p.length;
 		}
