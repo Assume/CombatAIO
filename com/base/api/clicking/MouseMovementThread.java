@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.clicking;
 import java.awt.Point;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Game;
@@ -36,29 +37,44 @@ public class MouseMovementThread extends Thread {
 	}
 
 	private boolean focus(int attempt) {
-		Point[] points = Clicking.standardDeviation(this.model
-				.getVisiblePoints());
-		if (points.length == 0)
-			return false;
-		Point click = points[General.random(0, points.length)];
-		Mouse.move(click);
-		if (canClick())
-			click();
-		else {
-			if (attempt > 10)
+		Point[] visible = this.model.getVisiblePoints();
+		if (visible.length > 0) {
+			Point[] points = Clicking.standardDeviation(visible);
+			if (points == null || points.length == 0)
 				return false;
-			Mouse.setSpeed(Mouse.getSpeed() + 2);
-			focus(++attempt);
+			Point click = points[General.random(0, points.length - 1)];
+			if (canClick()) {
+				click();
+			} else {
+				Mouse.move(click);
+				for (int fSafe = 0; fSafe < 20
+						&& !Game.getUptext().toLowerCase()
+								.contains(action.toLowerCase()); fSafe++)
+					General.sleep(10, 15);
+				if (canClick())
+					click();
+				else {
+					if (attempt > 10)
+						return false;
+					Mouse.setSpeed(Mouse.getSpeed() + 2);
+					focus(++attempt);
+				}
+			}
+			return clicked;
+		} else {
+			General.println("no visible points");
+			return false;
 		}
-		return clicked;
 	}
 
 	private void click() {
-		if (Game.getUptext().contains(action)) {
+		if (Game.getUptext().toLowerCase().contains(action.toLowerCase())) {
 			General.sleep(50, 150);
-			if (Game.getUptext().contains(action)) {
+			if (Game.getUptext().toLowerCase().contains(action.toLowerCase())) {
 				Mouse.click(1);
-				this.clicked = true;
+				if (Timing.waitCrosshair(600)==2) {
+					this.clicked = true;
+				}
 				return;
 			}
 		}
@@ -74,7 +90,7 @@ public class MouseMovementThread extends Thread {
 	}
 
 	private boolean canClick() {
-		if (Game.getUptext().contains(action))
+		if (Game.getUptext().toLowerCase().contains(action.toLowerCase()))
 			return true;
 		else
 			return model.getEnclosedArea().contains(Mouse.getPos());
