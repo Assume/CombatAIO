@@ -9,6 +9,7 @@ import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class BaseCombat extends Script implements Painting, MouseActions {
 
@@ -24,6 +25,7 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 		// TODO Auto-generated method stub
 		// TODO set values for TotalPaintHandler (this.paint_handler) here after
 		// GUI done and what not
+		Dispatcher.create(this);
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 
 	@Override
 	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
-		// TODO Auto-generated method stub
+		this.paint_handler.onClick(arg0);
 
 	}
 

@@ -26,15 +26,22 @@ public class Dispatcher implements Runnable {
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
 		this.combat_thread = new CombatThread();
-		this.looting_thread = new LootingThread(this.combat_thread);
+		this.looting_thread = new LootingThread();
 	}
 
+	/*
+	 * @param type the type of value you are looking for
+	 * 
+	 * @param extra_paramaters extra information that is required
+	 * 
+	 * @return the value requested, null if no value exists
+	 */
 	public Value<?> get(ValueType type, String... extra_paramaters) {
 		switch (type) {
 		case CURRENT_TARGET:
 			return combat_thread.getCurrentTarget();
 		case MINIMUM_LOOT_VALUE:
-
+			return null;
 		case TOTAL_KILLS:
 			return combat_thread.getTotalKills();
 		case TOTAL_LOOT_VALUE:
@@ -76,7 +83,7 @@ public class Dispatcher implements Runnable {
 	public void run() {
 
 		while (this.main_class.isRunning()) {
-
+			
 		}
 
 		/*

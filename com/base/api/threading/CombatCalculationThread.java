@@ -1,7 +1,6 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.NPCs;

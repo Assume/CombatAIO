@@ -1,8 +1,9 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
@@ -14,15 +15,13 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 
 public class LootingThread extends Threadable implements Pauseable {
 
-	private List<LootItem> items_known;
-	private CombatThread combat_thread;
+	private Map<String, LootItem> items_known;
 
-	public LootingThread(CombatThread combat_thread) {
+	public LootingThread() {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
-		this.items_known = new ArrayList<LootItem>();
-		this.combat_thread = combat_thread;
+		this.items_known = new HashMap<String, LootItem>();
 	}
 
 	private LootingThread(List<PauseType> pause_types) {
@@ -31,26 +30,26 @@ public class LootingThread extends Threadable implements Pauseable {
 
 	public IntegerValue getTotalLootValue() {
 		int tot = 0;
-		for (LootItem x : this.items_known)
+		for (LootItem x : this.items_known.values())
 			tot += (x.getAmountLooted() * x.getPrice());
 		return new IntegerValue(tot);
 	}
 
 	@Override
 	public void run() {
-		/*
-		 * while(true) if(this.combat_thread.canLoot()) loot();
-		 */
 
 	}
 
 	private LootItem get(String name) {
-		for (LootItem x : this.items_known)
-			if (x.getName().equalsIgnoreCase(name))
-				return x;
-		return null;
+		return this.items_known.get(name);
 	}
 
+	/*
+	 * @param extra_paramaters pass the name of the item whose object is wanted
+	 * 
+	 * @return the requested item in LootItemValue form, contains a null object
+	 * if none exists
+	 */
 	public Value<LootItem> getLootItem(String[] extra_paramaters) {
 		if (extra_paramaters.length == 0)
 			return new LootItemValue(null);
@@ -58,6 +57,12 @@ public class LootingThread extends Threadable implements Pauseable {
 			return new LootItemValue(get(extra_paramaters[0]));
 	}
 
+	/*
+	 * @param extra_paramaters pass the name of the item whose value is wanted
+	 * 
+	 * @return the value of the of the item in in IntegerValue form, contains 0
+	 * if none exists
+	 */
 	public Value<Integer> getItemPrice(String... extra_paramaters) {
 		if (extra_paramaters.length == 0)
 			return new IntegerValue(0);
@@ -70,6 +75,12 @@ public class LootingThread extends Threadable implements Pauseable {
 		}
 	}
 
+	/*
+	 * @param extra_paramaters pass the name of the item whose value is wanted
+	 * 
+	 * @return the number looted of the item requested in IntegerValue form,
+	 * contains 0 if none exists
+	 */
 	public Value<Integer> getAmountLooted(String[] extra_paramaters) {
 		if (extra_paramaters.length == 0)
 			return new IntegerValue(0);

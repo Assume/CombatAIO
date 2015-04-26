@@ -21,6 +21,8 @@ public enum CustomMovement {
 	private RSTile next_webwalking_location;
 
 	CustomMovement(RSArea activation_location, RSTile next_webwalking_location) {
+		this.activation_location = activation_location;
+		this.next_webwalking_location = next_webwalking_location;
 
 	}
 

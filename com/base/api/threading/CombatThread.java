@@ -53,12 +53,6 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 		this.possible_monsters = possible_monsters;
 	}
 
-	public boolean shouldLoot() {
-		// TODO this returns true if the LootThread should execute it's loot
-		// cycle and pause the combat cycle
-		return false;
-	}
-
 	public Value<?> getCurrentTarget() {
 		return new RSNPCValue(current_target);
 	}
