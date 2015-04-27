@@ -7,6 +7,7 @@ import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
+import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WebWalking;
 
@@ -48,6 +49,7 @@ public class BankingThread extends Threadable {
 	}
 
 	private void bank() {
+		Camera.setCameraRotation(Camera.getCameraRotation());
 		WebWalking.walkToBank();
 		openBank();
 		handleBankWindow();
