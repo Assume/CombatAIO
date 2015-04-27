@@ -23,21 +23,25 @@ public class EatThread extends Threadable implements Runnable {
 		super(pause_types);
 	}
 
-	private String food_name;
+	private String food_name = "Lobster";
 
 	private static int TEMP_EAT_AT_PERCENT = 50;
 
 	@Override
 	public void run() {
 		while (true) {
-			if ((SKILLS.HITPOINTS.getCurrentLevel() / SKILLS.HITPOINTS
-					.getActualLevel()) < TEMP_EAT_AT_PERCENT) {
+			if (getHPPercent() < TEMP_EAT_AT_PERCENT) {
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
-			General.sleep(250);
+			General.sleep(500);
 		}
+	}
+
+	private double getHPPercent() {
+		return (SKILLS.HITPOINTS.getCurrentLevel() / SKILLS.HITPOINTS
+				.getActualLevel()) * 100;
 	}
 
 	private void eat() {

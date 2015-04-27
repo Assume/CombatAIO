@@ -7,8 +7,10 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
+import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
+import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
@@ -30,7 +32,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
 	private String[] monster_names;
-	private boolean isRanging;
+	private boolean isRanging = false;
 	private CombatCalculationThread calculation_thread;
 
 	public CombatThread(CombatCalculationThread calculation_thread,
@@ -43,6 +45,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 		this.possible_monsters = new RSNPC[0];
 		this.kill_tracker = new KillTracker(this);
 		this.calculation_thread = calculation_thread;
+		this.home_tile = Player.getPosition();
 	}
 
 	private CombatThread(List<PauseType> pause_types) {
@@ -64,6 +67,8 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void fight(RSNPC[] monsters) {
+		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
+			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
 			return;
 		if (getAverageDistance(monsters) <= 3)

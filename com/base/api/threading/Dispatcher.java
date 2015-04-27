@@ -29,14 +29,17 @@ public class Dispatcher implements Runnable {
 	private LootingThread looting_thread;
 	private Thread combat_calculation_thread;
 	private CombatCalculationThread calculation;
+	private BankingThread banking_thread;
 	private EatThread eat_thread;
 	private BaseCombat main_class;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
 		this.combat_thread = new CombatThread(this.calculation,
-				new String[] { "Goblin" });
+				new String[] { "Cow" });
+		this.banking_thread = new BankingThread();
 		this.looting_thread = new LootingThread();
+		this.eat_thread = new EatThread();
 		this.combat_calculation_thread = new Thread(
 				this.calculation = new CombatCalculationThread(combat_thread));
 	}
@@ -99,8 +102,10 @@ public class Dispatcher implements Runnable {
 		this.combat_thread.start();
 		this.looting_thread.start();
 		this.combat_calculation_thread.start();
+		this.banking_thread.start();
+		this.eat_thread.start();
 		while (this.main_class.isRunning()) {
-			General.sleep(250);
+			General.sleep(500);
 		}
 
 		/*

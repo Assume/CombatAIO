@@ -40,6 +40,7 @@ public class LootingThread extends Threadable implements Pauseable {
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new HashMap<String, LootItem>();
 		items_known.put("Coins", new LootItem("Coins"));
+		items_known.put("Cowhide", new LootItem("Cowhide"));
 	}
 
 	private LootingThread(List<PauseType> pause_types) {
@@ -68,7 +69,8 @@ public class LootingThread extends Threadable implements Pauseable {
 				General.sleep(500);
 				continue;
 			}
-			while (target.getHealth() == 0 && target.isInCombat())
+			while (target.isValid() && target.getHealth() == 0
+					&& target.isInCombat())
 				General.sleep(50);
 			General.sleep(150);
 			RSGroundItem[] items = GroundItems.find(getAllItemsName());
@@ -77,6 +79,7 @@ public class LootingThread extends Threadable implements Pauseable {
 				loot(items);
 			}
 			Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
+			General.sleep(400);
 		}
 	}
 
