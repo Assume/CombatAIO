@@ -3,6 +3,11 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api.General;
 import org.tribot.api2007.Walking;
 
+import scripts.CombatAIO.com.base.api.threading.threads.Banker;
+import scripts.CombatAIO.com.base.api.threading.threads.TargetCalculator;
+import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
+import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
+import scripts.CombatAIO.com.base.api.threading.threads.Looter;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -25,23 +30,23 @@ public class Dispatcher implements Runnable {
 		new Thread(get()).start();
 	}
 
-	private CombatThread combat_thread;
-	private LootingThread looting_thread;
+	private CombatTask combat_thread;
+	private Looter looting_thread;
 	private Thread combat_calculation_thread;
-	private CombatCalculationThread calculation;
-	private BankingThread banking_thread;
-	private EatThread eat_thread;
+	private TargetCalculator calculation;
+	private Banker banking_thread;
+	private ConsumptionTask eat_thread;
 	private BaseCombat main_class;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatThread(this.calculation,
+		this.combat_thread = new CombatTask(this.calculation,
 				new String[] { "Cow" });
-		this.banking_thread = new BankingThread();
-		this.looting_thread = new LootingThread();
-		this.eat_thread = new EatThread();
+		this.banking_thread = new Banker();
+		this.looting_thread = new Looter();
+		this.eat_thread = new ConsumptionTask();
 		this.combat_calculation_thread = new Thread(
-				this.calculation = new CombatCalculationThread(combat_thread));
+				this.calculation = new TargetCalculator(combat_thread));
 	}
 
 	/*

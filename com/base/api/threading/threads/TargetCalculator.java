@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,14 @@ import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.util.DPathNavigator;
 
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
-public class CombatCalculationThread implements Runnable {
+public class TargetCalculator implements Runnable {
 
-	private CombatThread combat_thread;
+	private CombatTask combat_thread;
 
-	public CombatCalculationThread(CombatThread combat_thread) {
+	public TargetCalculator(CombatTask combat_thread) {
 		this.combat_thread = combat_thread;
 	}
 

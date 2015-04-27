@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.List;
 
@@ -7,19 +7,20 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSItem;
 
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
 
-public class EatThread extends Threadable implements Runnable {
+public class ConsumptionTask extends Threadable implements Runnable {
 
-	public EatThread() {
+	public ConsumptionTask() {
 		this(null);
 	}
 
-	private EatThread(List<PauseType> pause_types) {
+	private ConsumptionTask(List<PauseType> pause_types) {
 		super(pause_types);
 	}
 
@@ -52,9 +53,14 @@ public class EatThread extends Threadable implements Runnable {
 		}
 
 	}
+	
 
 	public Value<?> getFoodName() {
 		return new StringValue(this.food_name);
+	}
+
+	public void setFoodName(String name) {
+		this.food_name = name;
 	}
 
 	@Override

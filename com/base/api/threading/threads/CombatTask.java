@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
@@ -24,7 +25,7 @@ import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringArrayValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
 
-public class CombatThread extends Threadable implements Runnable, Pauseable {
+public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	private RSNPC current_target;
 	private Positionable home_tile;
@@ -33,9 +34,9 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	private RSNPC[] possible_monsters;
 	private String[] monster_names;
 	private boolean isRanging = false;
-	private CombatCalculationThread calculation_thread;
+	private TargetCalculator calculation_thread;
 
-	public CombatThread(CombatCalculationThread calculation_thread,
+	public CombatTask(TargetCalculator calculation_thread,
 			String... monster_names) {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
@@ -48,7 +49,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 		this.home_tile = Player.getPosition();
 	}
 
-	private CombatThread(List<PauseType> pause_types) {
+	private CombatTask(List<PauseType> pause_types) {
 		super(pause_types);
 	}
 

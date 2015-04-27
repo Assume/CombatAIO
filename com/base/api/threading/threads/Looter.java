@@ -1,4 +1,35 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.tribot.api.Clicking;
+import org.tribot.api.General;
+import org.tribot.api.Timing;
+import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.Camera;
+import org.tribot.api2007.GroundItems;
+import org.tribot.api2007.Inventory;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSGroundItem;
+import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
+import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSTile;
+
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
+import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
+import scripts.CombatAIO.com.base.api.types.LootItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +61,11 @@ import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
-public class LootingThread extends Threadable implements Pauseable {
+public class Looter extends Threadable implements Pauseable {
 
 	private Map<String, LootItem> items_known;
 
-	public LootingThread() {
+	public Looter() {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
@@ -43,7 +74,7 @@ public class LootingThread extends Threadable implements Pauseable {
 		items_known.put("Cowhide", new LootItem("Cowhide"));
 	}
 
-	private LootingThread(List<PauseType> pause_types) {
+	private Looter(List<PauseType> pause_types) {
 		super(pause_types);
 	}
 

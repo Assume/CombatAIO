@@ -1,8 +1,9 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
 
 import org.tribot.api.General;
 import org.tribot.api2007.types.RSNPC;
 
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -11,12 +12,12 @@ import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 
 public class KillTracker extends Threadable implements Runnable {
 
-	public KillTracker(CombatThread combat_thread) {
+	public KillTracker(CombatTask combat_thread) {
 		super(null);
 		this.combat_thread = combat_thread;
 	}
 
-	private CombatThread combat_thread;
+	private CombatTask combat_thread;
 	private int kills;
 
 	@Override

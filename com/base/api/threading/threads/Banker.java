@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.List;
 
@@ -11,19 +11,19 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WebWalking;
 
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.CustomPaths;
 
+public class Banker extends Threadable {
 
-public class BankingThread extends Threadable {
-
-	public BankingThread() {
+	public Banker() {
 		this(null);
 	}
 
-	private BankingThread(List<PauseType> pause_types) {
+	private Banker(List<PauseType> pause_types) {
 		super(pause_types);
 	}
 
