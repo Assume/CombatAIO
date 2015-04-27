@@ -21,7 +21,6 @@ public class EatThread extends Threadable implements Runnable {
 
 	private EatThread(List<PauseType> pause_types) {
 		super(pause_types);
-		// TODO Auto-generated constructor stub
 	}
 
 	private String food_name;

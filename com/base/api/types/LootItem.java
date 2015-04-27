@@ -16,7 +16,7 @@ public class LootItem {
 		if (this.price == -1)
 			return price;
 		if (this.price == 0) {
-			// disptach zybez thread and return 0
+			// disptach zybez thread and return value
 		}
 		return price;
 	}

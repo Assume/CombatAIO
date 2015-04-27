@@ -27,9 +27,10 @@ public class KillTracker extends Threadable implements Runnable {
 			if (target != null && target.getHealth() == 0
 					&& target.isInCombat()) {
 				kills++;
-				combat_thread.resetTarget();
 				General.sleep(1000);
+				combat_thread.resetTarget();
 				System.out.println("new kill, total kills: " + kills);
+
 			}
 			General.sleep(500);
 		}

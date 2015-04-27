@@ -1,6 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import org.tribot.api.General;
+import org.tribot.api2007.Walking;
 
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
@@ -94,6 +95,7 @@ public class Dispatcher implements Runnable {
 
 	@Override
 	public void run() {
+		Walking.setControlClick(true);
 		this.combat_thread.start();
 		this.looting_thread.start();
 		this.combat_calculation_thread.start();
