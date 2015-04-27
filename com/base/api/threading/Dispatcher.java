@@ -27,15 +27,17 @@ public class Dispatcher implements Runnable {
 	private CombatThread combat_thread;
 	private LootingThread looting_thread;
 	private Thread combat_calculation_thread;
+	private CombatCalculationThread calculation;
 	private EatThread eat_thread;
 	private BaseCombat main_class;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatThread(new String[] { "Goblin" });
+		this.combat_thread = new CombatThread(this.calculation,
+				new String[] { "Goblin" });
 		this.looting_thread = new LootingThread();
 		this.combat_calculation_thread = new Thread(
-				new CombatCalculationThread(combat_thread));
+				this.calculation = new CombatCalculationThread(combat_thread));
 	}
 
 	/*

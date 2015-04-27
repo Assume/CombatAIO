@@ -27,9 +27,13 @@ public class CombatCalculationThread implements Runnable {
 			if (npc == null || !(npc instanceof RSNPC)
 					|| !isAttackable((RSNPC) npc))
 				combat_thread.setMonsters(getMonsters());
-			General.sleep(300);
+			General.sleep(600);
 		}
 
+	}
+
+	public void forceCalcuation() {
+		combat_thread.setMonsters(getMonsters());
 	}
 
 	private RSNPC[] getMonsters() {

@@ -1,34 +1,38 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import java.util.List;
-
+import org.tribot.api.General;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 
 public class KillTracker extends Threadable implements Runnable {
 
-	public KillTracker() {
-		this(null);
+	public KillTracker(CombatThread combat_thread) {
+		super(null);
+		this.combat_thread = combat_thread;
 	}
 
-	private KillTracker(List<PauseType> pause_types) {
-		super(pause_types);
-	}
-
+	private CombatThread combat_thread;
 	private int kills;
-	private RSNPC target;
 
 	@Override
 	public void run() {
-		/*
-		 * while(true) RSNPC temp = Disptacher.get(ValueType.CURRENT_TARGET);
-		 * if(temp != target) // checking same instance \\ target = temp track
-		 * temp
-		 */
+		while (true) {
+			RSNPC target = (RSNPC) Dispatcher.get()
+					.get(ValueType.CURRENT_TARGET, null).getValue();
+			if (target != null && target.getHealth() == 0
+					&& target.isInCombat()) {
+				kills++;
+				combat_thread.resetTarget();
+				General.sleep(1000);
+				System.out.println("new kill, total kills: " + kills);
+			}
+			General.sleep(500);
+		}
 
 	}
 

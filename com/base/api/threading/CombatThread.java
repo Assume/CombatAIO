@@ -31,15 +31,18 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	private RSNPC[] possible_monsters;
 	private String[] monster_names;
 	private boolean isRanging;
+	private CombatCalculationThread calculation_thread;
 
-	public CombatThread(String... monster_names) {
+	public CombatThread(CombatCalculationThread calculation_thread,
+			String... monster_names) {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_LOOTING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.monster_names = monster_names;
 		this.possible_monsters = new RSNPC[0];
-		this.kill_tracker = null;
+		this.kill_tracker = new KillTracker(this);
+		this.calculation_thread = calculation_thread;
 	}
 
 	private CombatThread(List<PauseType> pause_types) {
@@ -48,6 +51,7 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 
 	@Override
 	public void run() {
+		this.kill_tracker.start();
 		while (Dispatcher.get().isRunning()) {
 			if (!Player.getRSPlayer().isInCombat()
 					&& Player.getRSPlayer().getInteractingCharacter() == null)
@@ -82,9 +86,14 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void attackTarget(RSNPC target) {
-		if (target.isInCombat() && !target.isInteractingWithMe())
+		if (target == null
+				|| (target.isInCombat() && !target.isInteractingWithMe()))
 			return;
 		Clicking.click("Attack " + target.getName(), target);
+		int distance = Player.getPosition().distanceTo(target);
+		int sleep_time = General.random((int) ((distance / 3.5) * 1000),
+				(int) ((distance / 2.5) * 1000));
+		General.sleep(sleep_time);
 	}
 
 	private int getAverageDistance(RSNPC[] npcs) {
@@ -130,5 +139,10 @@ public class CombatThread extends Threadable implements Runnable, Pauseable {
 		if (this.monster_names.length == 0)
 			return null;
 		return new StringValue(this.monster_names[0]);
+	}
+
+	public void resetTarget() {
+		this.current_target = null;
+
 	}
 }
