@@ -13,7 +13,7 @@ public class RSNPCArrayValue extends Value<RSNPC[]> {
 	}
 
 	@Override
-	public RSNPC[] get() {
+	public RSNPC[] getValue() {
 		return value;
 	}
 }

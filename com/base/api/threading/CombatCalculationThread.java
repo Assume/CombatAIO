@@ -1,13 +1,16 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.tribot.api.interfaces.Positionable;
+import org.tribot.api.General;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSTile;
+
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class CombatCalculationThread implements Runnable {
 
@@ -19,75 +22,56 @@ public class CombatCalculationThread implements Runnable {
 
 	@Override
 	public void run() {
-		if (agressiveNPC().length > 0) {
-			this.combat_thread.setMonsters(closestNPC(combatFilter(rangeFilter())));
-		} else {
-			this.combat_thread.setMonsters(closestNPC(agressiveNPC()));
+		while (true) {
+			RSCharacter npc = Player.getRSPlayer().getInteractingCharacter();
+			if (npc == null || !(npc instanceof RSNPC)
+					|| !isAttackable((RSNPC) npc))
+				combat_thread.setMonsters(getMonsters());
+			General.sleep(300);
 		}
+
 	}
 
-	private void setMonster() {
-		//TODO?
+	private RSNPC[] getMonsters() {
+		RSNPC[] npcs = filter_one(NPCs.find((String[]) Dispatcher.get()
+				.get(ValueType.MONSTER_NAMES, null).getValue()));
+		return filter_two(npcs);
 	}
 
-	private RSNPC[] closestNPC(RSNPC[] a) {
-		//TODO SORT
-		return a;
-	}
-
-	private ArrayList<RSNPC> rangeFilter() {
-		ArrayList<RSNPC> ourNPCs = new ArrayList<RSNPC>();
-		for (RSNPC n : NPCs.find((String[]) combat_thread.getMonsterNames().get())) {
-			RSTile loc = n.getPosition();
-			if (loc.distanceTo((Positionable) combat_thread.getHomeTile().get()) < (Integer) combat_thread
-					.getCombatDistance().get()) {
-				if (!(Boolean) combat_thread.isRanging().get()
-						&& PathFinding.canReach((Positionable) loc, false)) {
-					ourNPCs.add(n);
-				} else if (!(Boolean) combat_thread.isRanging().get()) {
-					ourNPCs.add(n);
+	private RSNPC[] filter_one(RSNPC[] npcs) {
+		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
+		for (RSNPC x : npcs) {
+			if (x.isInteractingWithMe())
+				return new RSNPC[] { x };
+			if (!x.isInCombat()) {
+				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING, null)
+						.getValue()) {
+					possible_npcs.add(x);
+					continue;
 				}
+				if (Player.getPosition().distanceTo(x) <= 12
+						&& PathFinding.canReach(x, false))
+					possible_npcs.add(x);
 			}
 		}
-		return ourNPCs;
+		return NPCs.sortByDistance(Player.getPosition(),
+				possible_npcs.toArray(new RSNPC[possible_npcs.size()]));
 	}
 
-	private RSNPC[] combatFilter(ArrayList<RSNPC> npcs) {
-		ArrayList<RSNPC> ourNPCs = new ArrayList<RSNPC>();
-		for (RSNPC n : npcs) {
-			if (!n.isInCombat())
-				ourNPCs.add(n);
-
+	private RSNPC[] filter_two(RSNPC[] npcs) {
+		List<RSNPC> list = new ArrayList<RSNPC>();
+		for (RSNPC x : npcs) {
+			int distance = Player.getPosition().distanceTo(x);
+			if (distance <= 3)
+				list.add(x);
 		}
-		RSNPC[] NPCs = new RSNPC[ourNPCs.size()];
-		NPCs = ourNPCs.toArray(NPCs);
-		return NPCs;
-	}
-
-	private RSNPC[] agressiveNPC() {
-		ArrayList<RSNPC> ourNPCs = new ArrayList<RSNPC>();
-		for (RSNPC n : NPCs.getAll()) {
-			if ((Boolean) combat_thread.isRanging().get()) {
-				if (n.isInteractingWithMe()
-						&& Player.getRSPlayer().getInteractingCharacter() == null
-						&& isAttackable(n)) {
-					ourNPCs.add(n);
-				}
-			} else {
-				if (n.isInteractingWithMe()
-						&& Player.getRSPlayer().getInteractingCharacter() == null
-						&& PathFinding.canReach((Positionable) n.getPosition(),
-								false) && isAttackable(n)) {
-					ourNPCs.add(n);
-				}
-			}
-		}
-		RSNPC[] NPCs = new RSNPC[ourNPCs.size()];
-		NPCs = ourNPCs.toArray(NPCs);
-		return NPCs;
+		if (list.size() > 1)
+			return list.toArray(new RSNPC[list.size()]);
+		else
+			return npcs;
 	}
 
 	private boolean isAttackable(RSNPC npc) {
-		return (npc.getCombatLevel() > 0);
+		return npc.getCombatLevel() > 0;
 	}
 }

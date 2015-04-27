@@ -11,7 +11,7 @@ public class BooleanValue extends Value<Boolean> {
 	}
 
 	@Override
-	public Boolean get() {
+	public Boolean getValue() {
 		return value;
 	}
 }

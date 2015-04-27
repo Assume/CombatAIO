@@ -15,13 +15,13 @@ public class CWalking {
 
 	public static void walk(MovementType type) {
 		CustomPaths path = CustomPaths.getCustomPath((String) Dispatcher.get()
-				.get(ValueType.FIRST_MONSTER_NAME).get());
+				.get(ValueType.FIRST_MONSTER_NAME).getValue());
 		if (path == null) {
 			if (type.equals(MovementType.TO_BANK))
 				WebWalking.walkToBank();
 			else
 				WebWalking.walkTo((Positionable) Dispatcher.get()
-						.get(ValueType.HOME_TILE).get());
+						.get(ValueType.HOME_TILE).getValue());
 			return;
 		}
 		while (path.hasIndicesLeft(type)) {

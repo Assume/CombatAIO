@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.threading;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.CustomPaths;
+import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class BankingThread implements Runnable {
 
@@ -16,10 +17,11 @@ public class BankingThread implements Runnable {
 			if (this.shouldBank()) {
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 				String[] monster_names = (String[]) Dispatcher.get()
-						.get(ValueType.MONSTER_NAMES).get();
+						.get(ValueType.MONSTER_NAMES).getValue();
 				CustomPaths modified_path = getModifiedPath(monster_names);
 				if (modified_path != null)
 					;
+				modified_path.getWebWalkingDeactivationArea(MovementType.TO_BANK);
 				// TODO make it so it grabs the first modified area to pass to
 				// webwalking
 			}

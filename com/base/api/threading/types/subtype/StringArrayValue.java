@@ -11,7 +11,7 @@ public class StringArrayValue extends Value<String[]> {
 	}
 
 	@Override
-	public String[] get() {
+	public String[] getValue() {
 		return value;
 	}
 }

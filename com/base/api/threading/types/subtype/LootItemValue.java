@@ -12,7 +12,7 @@ public class LootItemValue extends Value<LootItem> {
 	}
 
 	@Override
-	public LootItem get() {
+	public LootItem getValue() {
 		return item;
 	}
 }

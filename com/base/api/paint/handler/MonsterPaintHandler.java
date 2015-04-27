@@ -40,7 +40,7 @@ final class MonsterPaintHandler implements PaintHandler {
 	}
 
 	private RSNPC getCurrentMonster() {
-		return (RSNPC) Dispatcher.get().get(ValueType.CURRENT_TARGET).get();
+		return (RSNPC) Dispatcher.get().get(ValueType.CURRENT_TARGET).getValue();
 	}
 
 	private RSNPC[] getPossibleMonsters() {

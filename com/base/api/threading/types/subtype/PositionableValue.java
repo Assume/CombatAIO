@@ -13,7 +13,7 @@ public class PositionableValue extends Value<Positionable> {
 	}
 
 	@Override
-	public Positionable get() {
+	public Positionable getValue() {
 		return value;
 	}
 

@@ -1,5 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import org.tribot.api.General;
+
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -18,15 +20,22 @@ public class Dispatcher implements Runnable {
 		return dispatcher;
 	}
 
+	public static void start() {
+		new Thread(get()).start();
+	}
+
 	private CombatThread combat_thread;
 	private LootingThread looting_thread;
+	private Thread combat_calculation_thread;
 	private EatThread eat_thread;
 	private BaseCombat main_class;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatThread();
+		this.combat_thread = new CombatThread(new String[] { "Goblin" });
 		this.looting_thread = new LootingThread();
+		this.combat_calculation_thread = new Thread(
+				new CombatCalculationThread(combat_thread));
 	}
 
 	/*
@@ -60,6 +69,8 @@ public class Dispatcher implements Runnable {
 			return this.combat_thread.getFirstMonsterName();
 		case HOME_TILE:
 			return this.combat_thread.getHomeTile();
+		case IS_RANGING:
+			return this.combat_thread.isRanging();
 		}
 		return null;
 
@@ -81,9 +92,11 @@ public class Dispatcher implements Runnable {
 
 	@Override
 	public void run() {
-
+		this.combat_thread.start();
+		this.looting_thread.start();
+		this.combat_calculation_thread.start();
 		while (this.main_class.isRunning()) {
-			
+			General.sleep(250);
 		}
 
 		/*
