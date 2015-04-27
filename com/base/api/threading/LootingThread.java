@@ -69,21 +69,26 @@ public class LootingThread extends Threadable implements Pauseable {
 				General.sleep(500);
 				continue;
 			}
-			while (target.isValid() && target.getHealth() == 0
-					&& target.isInCombat())
-				General.sleep(50);
-			General.sleep(150);
-			RSGroundItem[] items = GroundItems.find(getAllItemsName());
-			if (items.length > 0) {
-				items = GroundItems.sortByDistance(Player.getPosition(), items);
-				loot(items);
-			}
+
+			loot(target);
 			Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			General.sleep(400);
 		}
 	}
 
-	private void loot(RSGroundItem[] items) {
+	private void waitForLoot(RSNPC target) {
+		while (target.isValid() && target.getHealth() == 0
+				&& target.isInCombat())
+			General.sleep(50);
+		General.sleep(150);
+	}
+
+	private void loot(RSNPC target) {
+		waitForLoot(target);
+		RSGroundItem[] items = GroundItems.find(getAllItemsName());
+		if (items.length == 0)
+			return;
+		items = GroundItems.sortByDistance(Player.getPosition(), items);
 		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING, null)
 				.getValue())
 			items = removeLongRangeItems(items);

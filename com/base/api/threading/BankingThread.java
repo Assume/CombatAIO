@@ -16,6 +16,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.CustomPaths;
 
+
 public class BankingThread extends Threadable {
 
 	public BankingThread() {
