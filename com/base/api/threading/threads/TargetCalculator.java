@@ -1,6 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.tribot.api.General;
@@ -11,14 +12,22 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
-public class TargetCalculator implements Runnable {
+public class TargetCalculator extends Threadable {
 
 	private CombatTask combat_thread;
 
 	public TargetCalculator(CombatTask combat_thread) {
+		this(Arrays
+				.asList(new PauseType[] { PauseType.NON_ESSENTIAL_TO_BANKING }));
 		this.combat_thread = combat_thread;
+	}
+
+	private TargetCalculator(List<PauseType> pause_types) {
+		super(pause_types);
 	}
 
 	@Override

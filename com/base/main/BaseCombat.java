@@ -26,6 +26,7 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 		// TODO Auto-generated method stub
 		// TODO set values for TotalPaintHandler (this.paint_handler) here after
 		// GUI done and what not
+		General.useAntiBanCompliance(true);
 		Dispatcher.create(this);
 		Dispatcher.start();
 		while (true)
@@ -40,7 +41,7 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 
 	@Override
 	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
-	//	this.paint_handler.onClick(arg0);
+		// this.paint_handler.onClick(arg0);
 
 	}
 

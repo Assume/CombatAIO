@@ -125,29 +125,42 @@ public class Looter extends Threadable implements Pauseable {
 			items = removeLongRangeItems(items);
 		if (items.length == 0)
 			return;
+		loot(items);
+	}
+
+	private void loot(RSGroundItem[] items) {
 		for (RSGroundItem x : items) {
-			final int total_items_in_inventory = getTotalInventoryCount();
 			if (!x.isOnScreen())
 				Camera.turnToTile(x.getPosition());
 			RSItemDefinition def = x.getDefinition();
-			if (def != null)
-				Clicking.click("Take " + def.getName(), x);
-			else
+			if (def == null)
 				continue;
+			String name = def.getName();
+			final int total_item_in_inventory = getInventoryCountOfItem(name);
+			final int total_items_in_inventory = getTotalInventoryCount();
+			Clicking.click("Take " + name, x);
 			Timing.waitCondition(new Condition() {
 				@Override
 				public boolean active() {
 					return getTotalInventoryCount() != total_items_in_inventory;
 				}
 			}, General.random(2000, 3000));
-
-			LootItem update = items_known.get(def.getName());
-			update.incrementAmountLooted(getTotalInventoryCount()
-					- total_items_in_inventory);
-			System.out.println("looted: " + def.getName()
+			General.sleep(150, 300);
+			LootItem update = items_known.get(name);
+			update.incrementAmountLooted(getInventoryCountOfItem(name)
+					- total_item_in_inventory);
+			System.out.println("looted: " + name
 					+ " total amount of that looted = "
 					+ update.getAmountLooted());
 		}
+	}
+
+	private int getInventoryCountOfItem(String name) {
+		int tot = 0;
+		RSItem[] items = Inventory.find(name);
+		for (RSItem x : items)
+			tot += x.getStack();
+		return tot;
 	}
 
 	private int getTotalInventoryCount() {

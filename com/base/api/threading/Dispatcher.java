@@ -32,7 +32,6 @@ public class Dispatcher implements Runnable {
 
 	private CombatTask combat_thread;
 	private Looter looting_thread;
-	private Thread combat_calculation_thread;
 	private TargetCalculator calculation;
 	private Banker banking_thread;
 	private ConsumptionTask eat_thread;
@@ -45,8 +44,7 @@ public class Dispatcher implements Runnable {
 		this.banking_thread = new Banker();
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
-		this.combat_calculation_thread = new Thread(
-				this.calculation = new TargetCalculator(combat_thread));
+		this.calculation = new TargetCalculator(this.combat_thread);
 	}
 
 	/*
@@ -106,7 +104,7 @@ public class Dispatcher implements Runnable {
 		Walking.setControlClick(true);
 		this.combat_thread.start();
 		this.looting_thread.start();
-		this.combat_calculation_thread.start();
+		this.calculation.start();
 		this.banking_thread.start();
 		this.eat_thread.start();
 		while (this.main_class.isRunning()) {

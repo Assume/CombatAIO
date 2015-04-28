@@ -50,6 +50,8 @@ public enum CustomPaths {
 
 	public static CustomPaths getCustomPath(String monster_name) {
 		for (CustomPaths x : CustomPaths.values()) {
+			if (x.name == null)
+				return null;
 			if (x.name.equalsIgnoreCase(monster_name))
 				return x;
 		}
