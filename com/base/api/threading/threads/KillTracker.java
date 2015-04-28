@@ -24,7 +24,7 @@ public class KillTracker extends Threadable implements Runnable {
 	public void run() {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
-					.get(ValueType.CURRENT_TARGET, null).getValue();
+					.get(ValueType.CURRENT_TARGET).getValue();
 			if (target != null && target.getHealth() == 0
 					&& target.isInCombat()) {
 				kills++;

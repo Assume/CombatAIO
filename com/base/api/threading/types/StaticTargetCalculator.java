@@ -21,9 +21,13 @@ public class StaticTargetCalculator {
 			combat_thread.setMonsters(getMonsters());
 	}
 
+	public static RSNPC[] getPaintableMonsters() {
+		return getMonsters();
+	}
+
 	private static RSNPC[] getMonsters() {
 		RSNPC[] npcs = filter_one(NPCs.find((String[]) Dispatcher.get()
-				.get(ValueType.MONSTER_NAMES, null).getValue()));
+				.get(ValueType.MONSTER_NAMES).getValue()));
 		return filter_two(npcs);
 	}
 
@@ -33,7 +37,7 @@ public class StaticTargetCalculator {
 			if (x.isInteractingWithMe())
 				return new RSNPC[] { x };
 			if (!x.isInCombat()) {
-				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING, null)
+				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
 						.getValue()) {
 					possible_npcs.add(x);
 					continue;

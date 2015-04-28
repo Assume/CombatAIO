@@ -10,13 +10,15 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 final class MonsterPaintHandler implements PaintHandler {
 
 	private String[] monster_names;
 	private Graphics2D graphics;
-	private List<RSNPC> paintable_monsters;
+	private RSNPC[] paintable_monsters;
+	private RSNPC current_target;
 
 	public MonsterPaintHandler(String[] monster_names, Graphics2D graphics) {
 		this.monster_names = monster_names;
@@ -25,46 +27,25 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		this.paintable_monsters = new ArrayList<RSNPC>();
-		for (RSNPC p : NPCs.find(monster_names))
-			if (p.isValid() && p.isOnScreen())
-				paintable_monsters.add(p);
+		this.paintable_monsters = StaticTargetCalculator.getPaintableMonsters();
+		this.current_target = (RSNPC) Dispatcher.get()
+				.get(ValueType.CURRENT_TARGET).getValue();
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		/*
-		 * @TODO split into 4 categories: current monster, next monster,
-		 * possible monsters, not possible monster - 4 different colors paint
-		 * the tiles they are on (outline)
-		 */
 	}
 
 	private RSNPC getCurrentMonster() {
-		return (RSNPC) Dispatcher.get().get(ValueType.CURRENT_TARGET).getValue();
-	}
-
-	private RSNPC[] getPossibleMonsters() {
-		// TODO grab it from this.paintable_monsters
-		return null;
-	}
-
-	private RSNPC getNextMonster() {
-		// TODO optional
-		return null;
-	}
-
-	private RSNPC[] getInvalidMonsters() {
-		// TODO get from this.paintable_monsters
-		return null;
+		return this.current_target;
 	}
 
 	@Override
 	public void onClick(Point p) {
 		// TODO
 		/*
-		 * for each RSNPC in this.paintable_items check if isInClick, if
-		 * so call onClick
+		 * for each RSNPC in this.paintable_items check if isInClick, if so call
+		 * onClick
 		 */
 
 	}

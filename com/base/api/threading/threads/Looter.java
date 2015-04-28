@@ -89,7 +89,7 @@ public class Looter extends Threadable implements Pauseable {
 	public void run() {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
-					.get(ValueType.CURRENT_TARGET, null).getValue();
+					.get(ValueType.CURRENT_TARGET).getValue();
 			if (target == null) {
 				General.sleep(800);
 				continue;
@@ -120,8 +120,7 @@ public class Looter extends Threadable implements Pauseable {
 		if (items.length == 0)
 			return;
 		items = GroundItems.sortByDistance(Player.getPosition(), items);
-		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING, null)
-				.getValue())
+		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue())
 			items = removeLongRangeItems(items);
 		if (items.length == 0)
 			return;
@@ -160,7 +159,7 @@ public class Looter extends Threadable implements Pauseable {
 
 	private boolean eatForSpace() {
 		RSItem[] food = Inventory.find((String) Dispatcher.get()
-				.get(ValueType.FOOD_NAME, null).getValue());
+				.get(ValueType.FOOD_NAME).getValue());
 		if (food.length > 0) {
 			food[0].click("Eat");
 			return true;

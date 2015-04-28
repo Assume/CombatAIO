@@ -47,13 +47,12 @@ public class ConsumptionTask extends Threadable implements Runnable {
 
 	private void eat() {
 		RSItem[] food = Inventory.find((String) Dispatcher.get()
-				.get(ValueType.FOOD_NAME, null).getValue());
+				.get(ValueType.FOOD_NAME).getValue());
 		if (food.length > 0) {
 			food[0].click("Eat");
 		}
 
 	}
-	
 
 	public Value<?> getFoodName() {
 		return new StringValue(this.food_name);

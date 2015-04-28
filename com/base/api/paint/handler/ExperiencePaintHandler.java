@@ -43,7 +43,7 @@ public class ExperiencePaintHandler implements PaintHandler {
 				g.drawString(
 						toString(
 								(Long) Dispatcher.get()
-										.get(ValueType.RUN_TIME, null)
+										.get(ValueType.RUN_TIME)
 										.getValue(), skill), 11, 359 + 15 * i);
 				i++;
 			}

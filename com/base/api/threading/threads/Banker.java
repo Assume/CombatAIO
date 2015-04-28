@@ -42,9 +42,8 @@ public class Banker {
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private static void handleBankWindow() {
 		Banking.depositAll();
-		Banking.withdraw(10,
-				(String) Dispatcher.get().get(ValueType.FOOD_NAME, null)
-						.getValue());
+		Banking.withdraw(10, (String) Dispatcher.get().get(ValueType.FOOD_NAME)
+				.getValue());
 		Banking.close();
 	}
 
@@ -71,7 +70,7 @@ public class Banker {
 	}
 
 	public static boolean shouldBank() {
-		String name = (String) Dispatcher.get().get(ValueType.FOOD_NAME, null)
+		String name = (String) Dispatcher.get().get(ValueType.FOOD_NAME)
 				.getValue();
 		return Inventory.isFull()
 				|| (name != null && Inventory.find(name).length == 0);
