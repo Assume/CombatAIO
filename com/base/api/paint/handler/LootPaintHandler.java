@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -28,16 +29,18 @@ final class LootPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(Graphics g) {
 		// TODO draw items + amount - grab from this.paintable_items
 
 	}
 
 	@Override
 	public void onClick(Point p) {
-		//TODO
-		/* for each RSGroundItem in this.paintable_items check if isInClick, if so call onClick
-		*/
+		// TODO
+		/*
+		 * for each RSGroundItem in this.paintable_items check if isInClick, if
+		 * so call onClick
+		 */
 	}
 
 }

@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ final class MonsterPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(Graphics g) {
 		/*
 		 * @TODO split into 4 categories: current monster, next monster,
 		 * possible monsters, not possible monster - 4 different colors paint

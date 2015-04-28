@@ -19,6 +19,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.BooleanValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 import scripts.CombatAIO.com.base.api.threading.types.subtype.PositionableValue;
@@ -57,6 +58,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	@Override
 	public void run() {
 		this.kill_tracker.start();
+		SkillData.initiate();
 		while (Dispatcher.get().isRunning()) {
 			if (Banker.shouldBank())
 				Banker.bank();

@@ -1,6 +1,5 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import org.tribot.api.General;
 import org.tribot.api2007.Walking;
 
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -12,6 +11,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.threading.types.subtype.LongValue;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 
 public class Dispatcher {
@@ -86,6 +86,8 @@ public class Dispatcher {
 			return this.combat_thread.getHomeTile();
 		case IS_RANGING:
 			return this.combat_thread.isRanging();
+		case RUN_TIME:
+			return new LongValue(this.main_class.getRunningTime());
 		}
 		return null;
 
@@ -125,7 +127,8 @@ public class Dispatcher {
 	}
 
 	public void checkThreads() {
-		// TODO Auto-generated method stub
+		if (!this.combat_thread.isAlive())
+			System.out.println("nope");
 
 	}
 
