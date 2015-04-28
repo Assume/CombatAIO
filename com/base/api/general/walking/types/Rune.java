@@ -2,7 +2,7 @@ package scripts.CombatAIO.com.base.api.general.walking.types;
 
 public enum Rune {
 	// TODO add rune ids
-	LAW(0), WATER(0), EARTH(0), FIRE(0), AIR(0);
+	FIRE(554), WATER(555), AIR(556), EARTH(557), LAW(563);
 
 	private int id;
 

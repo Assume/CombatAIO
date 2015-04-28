@@ -13,9 +13,9 @@ import org.tribot.api2007.types.RSTile;
 
 public enum Teleport {
 	// TODO add tab ids
-	VARROCK_TELEPORT(0, "Varrock Teleport", 25, null, Rune.FIRE), LUMBRIDGE_TELEPORT(
-			0, "Lumbridge Teleport", 31, null, Rune.EARTH), FALADOR_TELEPORT(0,
-			"Falador Teleport", 37, null, Rune.WATER), CAMELOT_TELEPORT(0,
+	VARROCK_TELEPORT(8007, "Varrock Teleport", 25, null, Rune.FIRE), LUMBRIDGE_TELEPORT(
+			8008, "Lumbridge Teleport", 31, null, Rune.EARTH), FALADOR_TELEPORT(8009,
+			"Falador Teleport", 37, null, Rune.WATER), CAMELOT_TELEPORT(810,
 			"Camelot Teleport", 45, null, Rune.AIR);
 
 	private int tab_id;
