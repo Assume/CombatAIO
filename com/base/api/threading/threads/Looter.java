@@ -130,6 +130,9 @@ public class Looter extends Threadable implements Pauseable {
 
 	private void loot(RSGroundItem[] items) {
 		for (RSGroundItem x : items) {
+			if (Inventory.isFull())
+				if (!eatForSpace())
+					break;
 			if (!x.isOnScreen())
 				Camera.turnToTile(x.getPosition());
 			RSItemDefinition def = x.getDefinition();
@@ -153,6 +156,16 @@ public class Looter extends Threadable implements Pauseable {
 					+ " total amount of that looted = "
 					+ update.getAmountLooted());
 		}
+	}
+
+	private boolean eatForSpace() {
+		RSItem[] food = Inventory.find((String) Dispatcher.get()
+				.get(ValueType.FOOD_NAME, null).getValue());
+		if (food.length > 0) {
+			food[0].click("Eat");
+			return true;
+		}
+		return false;
 	}
 
 	private int getInventoryCountOfItem(String name) {

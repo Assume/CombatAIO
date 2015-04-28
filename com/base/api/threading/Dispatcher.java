@@ -3,18 +3,18 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api.General;
 import org.tribot.api2007.Walking;
 
-import scripts.CombatAIO.com.base.api.threading.threads.Banker;
-import scripts.CombatAIO.com.base.api.threading.threads.TargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
+import scripts.CombatAIO.com.base.api.threading.threads.KillTracker;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
+import scripts.CombatAIO.com.base.api.threading.threads.TargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 
-public class Dispatcher implements Runnable {
+public class Dispatcher {
 
 	private static Dispatcher dispatcher;
 
@@ -26,25 +26,31 @@ public class Dispatcher implements Runnable {
 		return dispatcher;
 	}
 
-	public static void start() {
-		new Thread(get()).start();
+	private boolean started = false;
+
+	public void start() {
+		if (!started) {
+			run();
+			started = true;
+		}
 	}
 
 	private CombatTask combat_thread;
 	private Looter looting_thread;
 	private TargetCalculator calculation;
-	private Banker banking_thread;
 	private ConsumptionTask eat_thread;
 	private BaseCombat main_class;
+	private KillTracker kill_tracker;
+	private int total_kills;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
 		this.combat_thread = new CombatTask(this.calculation,
 				new String[] { "Cow" });
-		this.banking_thread = new Banker();
+		// this.banking_thread = new Banker();
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
-		this.calculation = new TargetCalculator(this.combat_thread);
+		// this.calculation = new TargetCalculator(this.combat_thread);
 	}
 
 	/*
@@ -99,18 +105,13 @@ public class Dispatcher implements Runnable {
 				x.resume();
 	}
 
-	@Override
-	public void run() {
+	private void run() {
 		Walking.setControlClick(true);
 		this.combat_thread.start();
 		this.looting_thread.start();
-		this.calculation.start();
-		this.banking_thread.start();
+		// this.calculation.start();
+		// this.banking_thread.start();
 		this.eat_thread.start();
-		while (this.main_class.isRunning()) {
-			General.sleep(500);
-		}
-
 		/*
 		 * dispatch initital needed threads while(BaseCombat.isRunning())
 		 * 
@@ -121,6 +122,11 @@ public class Dispatcher implements Runnable {
 
 	public boolean isRunning() {
 		return this.main_class.isRunning();
+	}
+
+	public void checkThreads() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

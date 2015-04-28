@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
-import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
-import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
@@ -16,6 +14,7 @@ import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
@@ -59,6 +58,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void run() {
 		this.kill_tracker.start();
 		while (Dispatcher.get().isRunning()) {
+			if (Banker.shouldBank())
+				Banker.bank();
 			if (!Player.getRSPlayer().isInCombat()
 					&& Player.getRSPlayer().getInteractingCharacter() == null)
 				this.current_target = null;
@@ -70,6 +71,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void fight(RSNPC[] monsters) {
+		StaticTargetCalculator.set(this);
 		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
@@ -111,7 +113,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return total / npcs.length;
 	}
 
-	protected void setMonsters(RSNPC[] possible_monsters) {
+	public void setMonsters(RSNPC[] possible_monsters) {
 		this.possible_monsters = possible_monsters;
 	}
 

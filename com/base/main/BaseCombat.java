@@ -28,9 +28,12 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 		// GUI done and what not
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this);
-		Dispatcher.start();
-		while (true)
+		Dispatcher.get().start();
+		while (true) {
 			General.sleep(300);
+			Dispatcher.get().checkThreads();
+		}
+
 	}
 
 	@Override

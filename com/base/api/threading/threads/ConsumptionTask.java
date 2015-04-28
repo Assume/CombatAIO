@@ -24,7 +24,7 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		super(pause_types);
 	}
 
-	private String food_name = "Lobster";
+	private String food_name = null;
 
 	private static int TEMP_EAT_AT_PERCENT = 50;
 
