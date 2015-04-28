@@ -5,6 +5,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Magic;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSTile;
 
 public enum Teleport {
 	// TODO add tab ids
@@ -16,11 +17,11 @@ public enum Teleport {
 	private int tab_id;
 	private String spell_name;
 	private int level_requirement;
-	private Positionable spell_location_result;
+	private RSTile spell_location_result;
 	private Rune secondary_rune;
 
 	Teleport(int tab_id, String spell_name, int level_requirement,
-			Positionable spell_location_result, Rune secondary_rune) {
+			RSTile spell_location_result, Rune secondary_rune) {
 		this.tab_id = tab_id;
 		this.spell_name = spell_name;
 		this.level_requirement = level_requirement;
@@ -69,7 +70,7 @@ public enum Teleport {
 		return this.level_requirement;
 	}
 
-	public Positionable getSpellLocationResult() {
+	public RSTile getSpellLocationResult() {
 		return this.spell_location_result;
 	}
 
@@ -77,4 +78,16 @@ public enum Teleport {
 		return this.secondary_rune;
 	}
 
+	public static Teleport getTeleportNearestTo(Positionable pos) {
+		Teleport nearest = null;
+		int distance = Integer.MAX_VALUE;
+		for (Teleport x : Teleport.values()) {
+			int test_distance = x.getSpellLocationResult().distanceTo(pos);
+			if (test_distance < distance) {
+				nearest = x;
+				distance = test_distance;
+			}
+		}
+		return nearest;
+	}
 }
