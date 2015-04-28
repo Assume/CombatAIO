@@ -1,8 +1,12 @@
 package scripts.CombatAIO.com.base.api.general.walking.types;
 
+import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
+import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Magic;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
@@ -31,13 +35,22 @@ public enum Teleport {
 	}
 
 	// TODO ADD SLEEPS
-	public void teleport() {
+	public boolean teleport() {
 		RSItem[] teleport_tab = Inventory.find(tab_id);
 		if (teleport_tab.length > 0)
 			teleport_tab[0].click("Break");
 		else {
 			Magic.selectSpell(this.getSpellName());
 		}
+		Timing.waitCondition(new Condition() {
+
+			@Override
+			public boolean active() {
+				return Player.getPosition()
+						.distanceTo(getSpellLocationResult()) < 25;
+			}
+		}, General.random(4000, 5000));
+		return Player.getPosition().distanceTo(getSpellLocationResult()) < 25;
 	}
 
 	public boolean canTeleport() {
