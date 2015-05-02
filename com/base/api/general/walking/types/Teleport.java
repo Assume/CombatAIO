@@ -11,6 +11,8 @@ import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Rune;
+
 public enum Teleport {
 	// TODO add tab ids
 	VARROCK_TELEPORT(8007, "Varrock Teleport", 25, null, Rune.FIRE), LUMBRIDGE_TELEPORT(
@@ -59,9 +61,9 @@ public enum Teleport {
 	}
 
 	private boolean hasAllRequiredRunes() {
-		RSItem[] air = Inventory.find(Rune.AIR.getID());
-		RSItem[] law = Inventory.find(Rune.LAW.getID());
-		RSItem[] secondary = Inventory.find(getSecondaryRune().getID());
+		RSItem[] air = Inventory.find(Rune.AIR.getId());
+		RSItem[] law = Inventory.find(Rune.LAW.getId());
+		RSItem[] secondary = Inventory.find(getSecondaryRune().getId());
 		int airs_required = this == CAMELOT_TELEPORT ? 5 : 3;
 		if (air.length == 0 || air[0].getStack() < airs_required)
 			return false;
