@@ -2,24 +2,24 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions
 
 import org.tribot.api.General;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.MonitorMain;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
+
 
 public class DSleep implements DAction {
 
 	private long time;
 
 	public DSleep(long time) {
-		this.time = time;
+		long ten_percent = time / 10;
+		this.time = General.random((int) (time - ten_percent),
+				(int) (time + ten_percent));
 	}
 
 	private static final long serialVersionUID = 6575519298039578691L;
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
 		General.sleep(time);
-		MonitorMain.unpause();
 	}
 
 	@Override

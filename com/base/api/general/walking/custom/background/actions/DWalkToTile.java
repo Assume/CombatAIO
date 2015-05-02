@@ -3,8 +3,7 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.MonitorMain;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
 
 public class DWalkToTile implements DAction {
 
@@ -19,9 +18,7 @@ public class DWalkToTile implements DAction {
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
 		WebWalking.walkTo(new RSTile(x, y));
-		MonitorMain.unpause();
 	}
 
 	@Override

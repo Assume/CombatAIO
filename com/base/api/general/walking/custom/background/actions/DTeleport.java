@@ -1,8 +1,7 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.MonitorMain;
-import scripts.priv.drennon.background.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
 
 public class DTeleport implements DAction {
 
@@ -16,9 +15,7 @@ public class DTeleport implements DAction {
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
 		spell.select();
-		MonitorMain.unpause();
 	}
 
 	@Override

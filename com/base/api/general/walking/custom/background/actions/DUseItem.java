@@ -3,8 +3,8 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.MonitorMain;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
+
 
 public class DUseItem implements DAction {
 
@@ -20,12 +20,10 @@ public class DUseItem implements DAction {
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
 		RSItem[] items = Inventory.find(id);
 		if (items.length == 0)
 			return;
 		items[0].click(action);
-		MonitorMain.unpause();
 	}
 
 	@Override

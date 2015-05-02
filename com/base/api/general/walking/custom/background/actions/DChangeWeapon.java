@@ -1,8 +1,7 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.Equipment;
-import scripts.priv.drennon.background.MonitorMain;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.Equipment;
 
 public class DChangeWeapon implements DAction {
 
@@ -16,14 +15,12 @@ public class DChangeWeapon implements DAction {
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
 		Equipment.equip(id);
-		MonitorMain.unpause();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "change weapon to "+id;
+		return "change weapon to " + id;
 	}
 
 }

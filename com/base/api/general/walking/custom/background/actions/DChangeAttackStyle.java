@@ -2,8 +2,8 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions
 
 import org.tribot.api2007.Combat;
 
-import scripts.priv.drennon.background.DAction;
-import scripts.priv.drennon.background.MonitorMain;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
+
 
 public class DChangeAttackStyle implements DAction {
 
@@ -17,9 +17,9 @@ public class DChangeAttackStyle implements DAction {
 
 	@Override
 	public void execute() {
-		MonitorMain.pause();
+
 		Combat.selectAttackAction(style);
-		MonitorMain.unpause();
+
 	}
 
 	@Override

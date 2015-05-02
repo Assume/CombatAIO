@@ -2,9 +2,9 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.conditi
 
 import org.tribot.api2007.Player;
 
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.DCondition;
 
 
-import scripts.priv.drennon.background.DCondition;
 
 public class DNotInArea implements DCondition {
 
