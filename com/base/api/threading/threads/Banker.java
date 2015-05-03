@@ -10,7 +10,6 @@ import org.tribot.api2007.Inventory;
 import scripts.CombatAIO.com.base.api.general.walking.CWalking;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.types.enums.CustomPaths;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class Banker {
@@ -60,13 +59,6 @@ public class Banker {
 			return;
 		}
 		General.sleep(250, 800);
-	}
-
-	private static CustomPaths getModifiedPath(String[] names) {
-		if (names == null || names.length == 0)
-			return null;
-		else
-			return CustomPaths.getCustomPath(names[0]);
 	}
 
 	public static boolean shouldBank() {

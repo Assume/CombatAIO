@@ -18,7 +18,7 @@ public class RSArea implements Serializable {
 		this.plane = plane;
 	}
 
-	public RSArea(final RSTile[] tiles) {
+	public RSArea(final RSTile... tiles) {
 		this(tiles, 0);
 	}
 
