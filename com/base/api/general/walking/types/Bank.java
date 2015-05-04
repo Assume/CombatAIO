@@ -66,7 +66,7 @@ public enum Bank {
 
 	public static Bank getNearestBank() {
 		int distance = Integer.MAX_VALUE;
-		Bank nearest;
+		Bank nearest = null;
 		RSTile pos = Player.getPosition();
 		for (Bank bank : Bank.values()) {
 			int temp = pos.distanceTo(bank.getTile());
