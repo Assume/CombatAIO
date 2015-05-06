@@ -3,8 +3,8 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 import java.util.List;
 
 import org.tribot.api.General;
+import org.tribot.api2007.Combat;
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
@@ -23,25 +23,20 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		super(pause_types);
 	}
 
-	private String food_name = null;
+	private String food_name = "Salmon";
 
 	private static int TEMP_EAT_AT_PERCENT = 50;
 
 	@Override
 	public void run() {
 		while (true) {
-			if (getHPPercent() < TEMP_EAT_AT_PERCENT) {
+			if (Combat.getHPRatio() < TEMP_EAT_AT_PERCENT) {
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			General.sleep(500);
 		}
-	}
-
-	private double getHPPercent() {
-		return (SKILLS.HITPOINTS.getCurrentLevel() / SKILLS.HITPOINTS
-				.getActualLevel()) * 100;
 	}
 
 	private void eat() {

@@ -64,8 +64,11 @@ public class Banker {
 	public static boolean shouldBank() {
 		String name = (String) Dispatcher.get().get(ValueType.FOOD_NAME)
 				.getValue();
+		int food_length = Inventory.find(name).length;
+		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
+				&& food_length > 0)
+			return false;
 		return Inventory.isFull()
 				|| (name != null && Inventory.find(name).length == 0);
 	}
-
 }

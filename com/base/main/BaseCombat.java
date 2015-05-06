@@ -6,12 +6,13 @@ import java.awt.Point;
 
 import org.tribot.api.General;
 import org.tribot.script.Script;
+import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-
+@ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MouseActions {
 
 	private TotalPaintHandler paint_handler;

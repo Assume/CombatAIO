@@ -32,6 +32,7 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 public class Looter extends Threadable implements Pauseable {
 
 	private Map<String, LootItem> items_known;
+	private boolean eat_for_space = true;
 
 	public Looter() {
 		this(Arrays.asList(new PauseType[] {
@@ -114,7 +115,7 @@ public class Looter extends Threadable implements Pauseable {
 					return getTotalInventoryCount() != total_items_in_inventory;
 				}
 			}, General.random(2000, 3000));
-			General.sleep(150, 300);
+			General.sleep(250, 450);
 			LootItem update = items_known.get(name);
 			update.incrementAmountLooted(getInventoryCountOfItem(name)
 					- total_item_in_inventory);
@@ -128,7 +129,14 @@ public class Looter extends Threadable implements Pauseable {
 		RSItem[] food = Inventory.find((String) Dispatcher.get()
 				.get(ValueType.FOOD_NAME).getValue());
 		if (food.length > 0) {
+			final int total_items_in_inventory = getTotalInventoryCount();
 			food[0].click("Eat");
+			Timing.waitCondition(new Condition() {
+				@Override
+				public boolean active() {
+					return getTotalInventoryCount() != total_items_in_inventory;
+				}
+			}, General.random(1200, 2000));
 			return true;
 		}
 		return false;
@@ -217,6 +225,10 @@ public class Looter extends Threadable implements Pauseable {
 			else
 				return new Value<Integer>(got.getAmountLooted());
 		}
+	}
+
+	public Value<Boolean> shouldEatForSpace() {
+		return new Value<Boolean>(this.eat_for_space);
 	}
 
 }

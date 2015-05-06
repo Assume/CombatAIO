@@ -62,4 +62,10 @@ public enum Prayer {
 		}
 	}
 
+	public static Prayer parse(String eval) {
+		for (Prayer p : values())
+			if (eval.equalsIgnoreCase(p.toString()))
+				return p;
+		return null;
+	}
 }

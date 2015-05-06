@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
-import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
@@ -13,6 +12,7 @@ import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
@@ -28,7 +28,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	private RSNPC current_target;
-	private Positionable home_tile;
+	private RSTile home_tile;
 	private KillTracker kill_tracker;
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
@@ -65,19 +65,18 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			if (!Player.getRSPlayer().isInCombat()
 					&& Player.getRSPlayer().getInteractingCharacter() == null)
 				this.current_target = null;
-			if (current_target == null)
+			if (current_target == null) {
+				StaticTargetCalculator.set(this);
 				fight(this.possible_monsters);
-			else {
+			} else {
 				if (this.flicker)
 					flicker(this.flicker_prayer);
 				General.sleep(300);
 			}
-
 		}
 	}
 
 	private void fight(RSNPC[] monsters) {
-		StaticTargetCalculator.set(this);
 		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
@@ -135,8 +134,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return new Value<RSNPC>(current_target);
 	}
 
-	public Value<Positionable> getHomeTile() {
-		return new Value<Positionable>(home_tile);
+	public Value<RSTile> getHomeTile() {
+		return new Value<RSTile>(home_tile);
 	}
 
 	public Value<Integer> getCombatDistance() {
@@ -178,7 +177,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return new Value<Prayer>(this.prayer);
 	}
 
-	public void setHomeTile(Positionable value) {
+	public void setHomeTile(RSTile value) {
 		this.home_tile = value;
 
 	}

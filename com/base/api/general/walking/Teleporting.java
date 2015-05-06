@@ -8,6 +8,8 @@ public class Teleporting {
 
 	public static boolean attemptToTeleport(RSTile pos) {
 		Teleport t = Teleport.getTeleportNearestTo(pos);
+		if (t == null)
+			return false;
 		if (t.canTeleport())
 			return t.teleport();
 		return false;

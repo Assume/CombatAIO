@@ -13,10 +13,10 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.bo
 
 public enum Teleport {
 
-	VARROCK_TELEPORT(8007, null, NormalSpell.VARROCK_TELEPORT), LUMBRIDGE_TELEPORT(
-			8008, null, NormalSpell.LUMBRIDGE_TELEPORT), FALADOR_TELEPORT(8009,
-			null, NormalSpell.FALADOR_TELEPORT), CAMELOT_TELEPORT(810, null,
-			NormalSpell.CAMELOT_TELEPORT);
+	VARROCK_TELEPORT(8007, new RSTile(3212, 3428), NormalSpell.VARROCK_TELEPORT), LUMBRIDGE_TELEPORT(
+			8008, new RSTile(3221, 3219), NormalSpell.LUMBRIDGE_TELEPORT), FALADOR_TELEPORT(
+			8009, new RSTile(2965, 3381), NormalSpell.FALADOR_TELEPORT), CAMELOT_TELEPORT(
+			810, new RSTile(2757, 3477), NormalSpell.CAMELOT_TELEPORT);
 
 	private int tab_id;
 	private RSTile spell_location_result;
@@ -72,6 +72,7 @@ public enum Teleport {
 		Teleport nearest = null;
 		int distance = Integer.MAX_VALUE;
 		for (Teleport x : Teleport.values()) {
+
 			int test_distance = x.getSpellLocationResult().distanceTo(pos);
 			if (test_distance < distance) {
 				nearest = x;
