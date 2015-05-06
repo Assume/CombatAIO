@@ -1,9 +1,15 @@
 package scripts.CombatAIO.com.base.api.threading.types;
 
+public class Value<T> {
 
-public abstract class Value<T> {
-	
-	public abstract T getValue();
-	
+	private T t;
+
+	public Value(T t) {
+		this.t = t;
+	}
+
+	public T getValue() {
+		return t;
+	}
 
 }

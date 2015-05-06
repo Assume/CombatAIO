@@ -27,7 +27,7 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 		// TODO set values for TotalPaintHandler (this.paint_handler) here after
 		// GUI done and what not
 		General.useAntiBanCompliance(true);
-		Dispatcher.create(this);
+		Dispatcher.create(this, 0);
 		Dispatcher.get().start();
 		while (true) {
 			General.sleep(300);

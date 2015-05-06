@@ -3,10 +3,6 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background.bgui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -14,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -21,24 +18,29 @@ import javax.swing.border.EmptyBorder;
 
 import org.tribot.util.Util;
 
+import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DCondition;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DFullHolder;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DHolder;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.actions.DActionMaker;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.DConditionMaker;
-
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.RSArea;
+import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class BMainGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private RSArea area;
+	private MovementType type;
 
 	private static final String PATH = Util.getAppDataDirectory()
-			+ File.separator + "drennon_background" + File.separator + "NAME"
-			+ ".dat";
+			+ File.separator + "base_aio" + File.separator + "NAME" + ".dat";
 
-	public BMainGui() {
+	public BMainGui(final MovementType type, final RSArea area) {
+		this.type = type;
+		this.area = area;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 568);
 		contentPane = new JPanel();
@@ -84,20 +86,22 @@ public class BMainGui extends JFrame {
 		JLabel lblConditions = new JLabel("Conditions");
 		lblConditions.setBounds(324, 254, 77, 14);
 		contentPane.add(lblConditions);
-//TODO
-		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(DConditionMaker.values());
+		// TODO
+		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(
+				DConditionMaker.values());
 		comboBoxConditions.setBounds(324, 443, 150, 20);
 		contentPane.add(comboBoxConditions);
-//TODO
-		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(DActionMaker.values());
+		// TODO
+		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(
+				DActionMaker.values());
 		comboBoxActions.setBounds(10, 443, 150, 20);
 		contentPane.add(comboBoxActions);
 
 		JButton btnAddAction = new JButton("Add");
 		btnAddAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DAction ac = (DAction) ((DActionMaker) comboBoxActions.getSelectedItem())
-						.make();
+				DAction ac = (DAction) ((DActionMaker) comboBoxActions
+						.getSelectedItem()).make();
 				action_list_model.addElement(ac);
 			}
 		});
@@ -146,39 +150,15 @@ public class BMainGui extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 
-		JButton btnSave = new JButton("Save");
+		JButton btnSave = new JButton("Done");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!new File(Util.getAppDataDirectory() + File.separator
-						+ "drennon_background").exists())
-					new File(Util.getAppDataDirectory() + File.separator
-							+ "drennon_background").mkdirs();
-				try {
-
-					DHolder[] holders = new DHolder[complete_list_model.size()];
-					complete_list_model.copyInto(holders);
-
-					DFullHolder dfh = new DFullHolder(holders);
-
-					FileOutputStream fos = new FileOutputStream(new File(PATH
-							.replaceAll("NAME", textField.getText())));
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(dfh);
-					fos.flush();
-					fos.close();
-					oos.flush();
-					oos.close();
-					complete_list_model.clear();
-					action_list_model.clear();
-					condition_list_model.clear();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+				DHolder[] holders = new DHolder[complete_list_model.size()];
+				complete_list_model.copyInto(holders);
+				DFullHolder dfh = new DFullHolder(holders);
+				String name = JOptionPane
+						.showInputDialog("Enter name for this custom action");
+				WalkingManager.addMovement(type, dfh, area, name);
 			}
 		});
 		btnSave.setBounds(365, 495, 89, 23);
@@ -207,7 +187,7 @@ public class BMainGui extends JFrame {
 		});
 		button.setBounds(484, 468, 130, 23);
 		contentPane.add(button);
-		
+
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,3 +201,20 @@ public class BMainGui extends JFrame {
 		contentPane.add(btnRemove);
 	}
 }
+
+/*
+ * if (!new File(Util.getAppDataDirectory() + File.separator +
+ * "base_aio").exists()) new File(Util.getAppDataDirectory() + File.separator +
+ * "base_aio").mkdirs(); try {
+ * 
+ * DHolder[] holders = new DHolder[complete_list_model.size()];
+ * complete_list_model.copyInto(holders); DFullHolder dfh = new
+ * DFullHolder(holders); FileOutputStream fos = new FileOutputStream(new
+ * File(PATH .replaceAll("NAME", textField.getText()))); ObjectOutputStream oos
+ * = new ObjectOutputStream(fos); oos.writeObject(dfh); fos.flush();
+ * fos.close(); oos.flush(); oos.close(); complete_list_model.clear();
+ * action_list_model.clear(); condition_list_model.clear(); } catch
+ * (FileNotFoundException e1) { // TODO Auto-generated catch block
+ * e1.printStackTrace(); } catch (IOException e1) { // TODO Auto-generated catch
+ * block e1.printStackTrace(); }
+ */

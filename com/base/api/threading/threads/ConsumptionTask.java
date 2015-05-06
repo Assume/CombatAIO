@@ -12,7 +12,6 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
 
 public class ConsumptionTask extends Threadable implements Runnable {
 
@@ -54,8 +53,8 @@ public class ConsumptionTask extends Threadable implements Runnable {
 
 	}
 
-	public Value<?> getFoodName() {
-		return new StringValue(this.food_name);
+	public Value<String> getFoodName() {
+		return new Value<String>(this.food_name);
 	}
 
 	public void setFoodName(String name) {

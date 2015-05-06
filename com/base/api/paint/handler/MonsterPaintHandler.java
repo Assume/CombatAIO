@@ -10,7 +10,7 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.StaticTargetCalculator;
+import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 final class MonsterPaintHandler implements PaintHandler {

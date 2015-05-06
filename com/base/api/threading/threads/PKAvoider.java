@@ -8,6 +8,7 @@ import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSPlayer;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 

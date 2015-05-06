@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.threading.helper;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;

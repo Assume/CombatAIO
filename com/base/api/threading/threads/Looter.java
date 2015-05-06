@@ -27,38 +27,6 @@ import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
-import scripts.CombatAIO.com.base.api.types.LootItem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.tribot.api.Clicking;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api.types.generic.Condition;
-import org.tribot.api2007.Camera;
-import org.tribot.api2007.GroundItems;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSGroundItem;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSItemDefinition;
-import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSTile;
-
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.LootItemValue;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
 public class Looter extends Threadable implements Pauseable {
@@ -78,11 +46,11 @@ public class Looter extends Threadable implements Pauseable {
 		super(pause_types);
 	}
 
-	public IntegerValue getTotalLootValue() {
+	public Value<Integer> getTotalLootValue() {
 		int tot = 0;
 		for (LootItem x : this.items_known.values())
 			tot += (x.getAmountLooted() * x.getPrice());
-		return new IntegerValue(tot);
+		return new Value<Integer>(tot);
 	}
 
 	@Override
@@ -100,7 +68,6 @@ public class Looter extends Threadable implements Pauseable {
 				General.sleep(500);
 				continue;
 			}
-
 			loot(target);
 			Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			General.sleep(400);
@@ -194,10 +161,6 @@ public class Looter extends Threadable implements Pauseable {
 
 	}
 
-	private LootItem get(String name) {
-		return this.items_known.get(name);
-	}
-
 	private String[] getAllItemsName() {
 		Set<String> key_set = this.items_known.keySet();
 		return key_set.toArray(new String[key_set.size()]);
@@ -211,9 +174,13 @@ public class Looter extends Threadable implements Pauseable {
 	 */
 	public Value<LootItem> getLootItem(String[] extra_paramaters) {
 		if (extra_paramaters.length == 0)
-			return new LootItemValue(null);
+			return new Value<LootItem>(null);
 		else
-			return new LootItemValue(get(extra_paramaters[0]));
+			return new Value<LootItem>(get(extra_paramaters[0]));
+	}
+
+	private LootItem get(String name) {
+		return this.items_known.get(name);
 	}
 
 	/*
@@ -224,13 +191,13 @@ public class Looter extends Threadable implements Pauseable {
 	 */
 	public Value<Integer> getItemPrice(String... extra_paramaters) {
 		if (extra_paramaters.length == 0)
-			return new IntegerValue(0);
+			return new Value<Integer>(0);
 		else {
 			LootItem got = get(extra_paramaters[0]);
 			if (got == null)
-				return new IntegerValue(0);
+				return new Value<Integer>(0);
 			else
-				return new IntegerValue(got.getPrice());
+				return new Value<Integer>(got.getPrice());
 		}
 	}
 
@@ -242,13 +209,13 @@ public class Looter extends Threadable implements Pauseable {
 	 */
 	public Value<Integer> getAmountLooted(String[] extra_paramaters) {
 		if (extra_paramaters.length == 0)
-			return new IntegerValue(0);
+			return new Value<Integer>(0);
 		else {
 			LootItem got = get(extra_paramaters[0]);
 			if (got == null)
-				return new IntegerValue(0);
+				return new Value<Integer>(0);
 			else
-				return new IntegerValue(got.getAmountLooted());
+				return new Value<Integer>(got.getAmountLooted());
 		}
 	}
 

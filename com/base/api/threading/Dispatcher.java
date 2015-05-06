@@ -1,25 +1,33 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Walking;
+import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
-import scripts.CombatAIO.com.base.api.threading.threads.KillTracker;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
 import scripts.CombatAIO.com.base.api.threading.threads.TargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.LongValue;
+import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.main.BaseCombat;
+import scripts.xml.XMLReader;
+import scripts.xml.XMLWriter;
+import scripts.xml.XMLWriter.XMLLoader;
+import scripts.xml.XMLable;
 
-public class Dispatcher {
+public class Dispatcher implements XMLable {
 
 	private static Dispatcher dispatcher;
 
-	public static void create(BaseCombat main_class) {
-		dispatcher = new Dispatcher(main_class);
+	public static void create(BaseCombat main_class, long hash_id) {
+		dispatcher = new Dispatcher(main_class, hash_id);
 	}
 
 	public static Dispatcher get() {
@@ -40,17 +48,15 @@ public class Dispatcher {
 	private TargetCalculator calculation;
 	private ConsumptionTask eat_thread;
 	private BaseCombat main_class;
-	private KillTracker kill_tracker;
-	private int total_kills;
+	private long hash_id;
 
-	private Dispatcher(BaseCombat main_class) {
+	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
 		this.combat_thread = new CombatTask(this.calculation,
 				new String[] { "Cow" });
-		// this.banking_thread = new Banker();
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
-		// this.calculation = new TargetCalculator(this.combat_thread);
+		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 	}
 
 	/*
@@ -87,9 +93,33 @@ public class Dispatcher {
 		case IS_RANGING:
 			return this.combat_thread.isRanging();
 		case RUN_TIME:
-			return new LongValue(this.main_class.getRunningTime());
+			return new Value<Long>(this.main_class.getRunningTime());
+		case FLICKER_PRAYER:
+			return this.combat_thread.getPrayer();
+		default:
+			break;
 		}
 		return null;
+	}
+
+	public void set(ValueType type, Value<?> val) {
+		switch (type) {
+		case MINIMUM_LOOT_VALUE:
+			// TODO
+			break;
+		case FOOD_NAME:
+			eat_thread.setFoodName((String) val.getValue());
+		case MONSTER_NAMES:
+			this.combat_thread.setMonsterNames((String[]) val.getValue());
+		case HOME_TILE:
+			this.combat_thread.setHomeTile((Positionable) val.getValue());
+		case IS_RANGING:
+			this.combat_thread.setRanging((Boolean) val.getValue());
+		case FLICKER_PRAYER:
+			this.combat_thread.setPrayer((Prayer) val.getValue());
+		default:
+			break;
+		}
 
 	}
 
@@ -130,6 +160,59 @@ public class Dispatcher {
 		if (!this.combat_thread.isAlive())
 			System.out.println("nope");
 
+	}
+
+	@Override
+	public Element toXML(XMLWriter writer, Element parent, Object... data) {
+		writer.append(parent, "hash_id", this.hash_id);
+		writer.append(parent, "food_name",
+				(String) this.get(ValueType.FOOD_NAME).getValue());
+		writer.appendArray(
+				parent,
+				"monster_names",
+				(ArrayList<String>) Arrays.asList((String[]) this.get(
+						ValueType.MONSTER_NAMES).getValue()),
+				getStringXMLLoader());
+		writer.append(parent, "prayer", this.get(ValueType.FLICKER_PRAYER)
+				.getValue().toString());
+		return parent;
+	}
+
+	private XMLLoader getStringXMLLoader() {
+		return new XMLLoader<String>() {
+			@Override
+			public <T> XMLable toXMLable(final T t) {
+				return new XMLable() {
+					@Override
+					public Element toXML(XMLWriter writer, Element parent,
+							Object... data) {
+						String s = (String) t;
+						writer.append(parent, "monster_name", s);
+						return parent;
+					}
+
+					@Override
+					public void fromXML(XMLReader reader, String path,
+							Object... data) {
+					}
+
+					@Override
+					public String getXMLName() {
+						return "";
+					}
+				};
+			}
+		};
+	}
+
+	@Override
+	public void fromXML(XMLReader reader, String path, Object... data) {
+
+	}
+
+	@Override
+	public String getXMLName() {
+		return "all_generic_values";
 	}
 
 }

@@ -9,23 +9,21 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.StaticTargetCalculator;
+import scripts.CombatAIO.com.base.api.threading.helper.Banker;
+import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.BooleanValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.PositionableValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.RSNPCValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.StringArrayValue;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.StringValue;
+import scripts.CombatAIO.com.base.api.types.enums.Prayer;
+import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 
 public class CombatTask extends Threadable implements Runnable, Pauseable {
 
@@ -36,7 +34,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private RSNPC[] possible_monsters;
 	private String[] monster_names;
 	private boolean isRanging = false;
-	private TargetCalculator calculation_thread;
+	private Prayer prayer;
+	private boolean flicker;
+	private Prayer flicker_prayer;
+	private Weapon weapon = Weapon.ABYSSAL_WHIP;
 
 	public CombatTask(TargetCalculator calculation_thread,
 			String... monster_names) {
@@ -47,7 +48,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		this.monster_names = monster_names;
 		this.possible_monsters = new RSNPC[0];
 		this.kill_tracker = new KillTracker(this);
-		this.calculation_thread = calculation_thread;
 		this.home_tile = Player.getPosition();
 	}
 
@@ -67,8 +67,12 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				this.current_target = null;
 			if (current_target == null)
 				fight(this.possible_monsters);
-			else
+			else {
+				if (this.flicker)
+					flicker(this.flicker_prayer);
 				General.sleep(300);
+			}
+
 		}
 	}
 
@@ -115,23 +119,31 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return total / npcs.length;
 	}
 
+	private void flicker(Prayer prayer) {
+		if (Player.getAnimation() == this.weapon.getAnimationID()
+				&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0) {
+			General.sleep(this.weapon.getAttackSpeed());
+			prayer.flicker();
+		}
+	}
+
 	public void setMonsters(RSNPC[] possible_monsters) {
 		this.possible_monsters = possible_monsters;
 	}
 
-	public Value<?> getCurrentTarget() {
-		return new RSNPCValue(current_target);
+	public Value<RSNPC> getCurrentTarget() {
+		return new Value<RSNPC>(current_target);
 	}
 
-	public Value<?> getHomeTile() {
-		return new PositionableValue(home_tile);
+	public Value<Positionable> getHomeTile() {
+		return new Value<Positionable>(home_tile);
 	}
 
-	public Value<?> getCombatDistance() {
-		return new IntegerValue(this.combat_distance);
+	public Value<Integer> getCombatDistance() {
+		return new Value<Integer>(this.combat_distance);
 	}
 
-	public Value<?> getTotalKills() {
+	public Value<Integer> getTotalKills() {
 		return kill_tracker.getTotalKills();
 	}
 
@@ -139,22 +151,44 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return null;
 	}
 
-	public Value<?> getMonsterNames() {
-		return new StringArrayValue(this.monster_names);
+	public void setMonsterNames(String... names) {
+		this.monster_names = names;
 	}
 
-	public Value<?> isRanging() {
-		return new BooleanValue(this.isRanging);
+	public Value<String[]> getMonsterNames() {
+		return new Value<String[]>(this.monster_names);
 	}
 
-	public Value<?> getFirstMonsterName() {
+	public Value<Boolean> isRanging() {
+		return new Value<Boolean>(this.isRanging);
+	}
+
+	public Value<String> getFirstMonsterName() {
 		if (this.monster_names.length == 0)
 			return null;
-		return new StringValue(this.monster_names[0]);
+		return new Value<String>(this.monster_names[0]);
 	}
 
 	public void resetTarget() {
 		this.current_target = null;
+
+	}
+
+	public Value<Prayer> getPrayer() {
+		return new Value<Prayer>(this.prayer);
+	}
+
+	public void setHomeTile(Positionable value) {
+		this.home_tile = value;
+
+	}
+
+	public void setRanging(Boolean value) {
+		this.isRanging = value.booleanValue();
+	}
+
+	public void setPrayer(Prayer value) {
+		this.prayer = value;
 
 	}
 }

@@ -9,7 +9,6 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.threading.types.subtype.IntegerValue;
 
 public class KillTracker extends Threadable implements Runnable {
 	// TODO FIGURE OUT
@@ -45,8 +44,8 @@ public class KillTracker extends Threadable implements Runnable {
 
 	}
 
-	public Value<?> getTotalKills() {
-		return new IntegerValue(kills);
+	public Value<Integer> getTotalKills() {
+		return new Value<Integer>(kills);
 	}
 
 	@Override

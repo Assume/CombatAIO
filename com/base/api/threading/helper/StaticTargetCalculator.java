@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.types;
+package scripts.CombatAIO.com.base.api.threading.helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class StaticTargetCalculator {
 
