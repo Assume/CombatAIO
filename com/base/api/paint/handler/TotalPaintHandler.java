@@ -22,7 +22,6 @@ public class TotalPaintHandler {
 	public void setValues(final String[] monster_ids, final String... loot_ids) {
 		this.monster_paint_handler = new MonsterPaintHandler(monster_ids,
 				this.graphics);
-		this.loot_paint_handler = new LootPaintHandler(loot_ids, this.graphics);
 	}
 
 	public void onClick(Point p) {
@@ -45,7 +44,7 @@ public class TotalPaintHandler {
 
 	public void draw(Graphics arg0) {
 		// this.monster_paint_handler.draw(arg0);
-		// this.loot_paint_handler.draw(arg0);
+		this.loot_paint_handler.draw(arg0);
 		this.experience_paint_handler.draw(arg0);
 	}
 
