@@ -2,6 +2,7 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +190,11 @@ public class Looter extends Threadable implements Pauseable {
 
 	private LootItem get(String name) {
 		return this.items_known.get(name);
+	}
+
+	public Value<String[]> getAllLootableItemNames() {
+		Set<String> temp = this.items_known.keySet();
+		return new Value<String[]>(temp.toArray(new String[temp.size()]));
 	}
 
 	/*
