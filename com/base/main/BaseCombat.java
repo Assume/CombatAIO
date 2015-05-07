@@ -3,21 +3,28 @@ package scripts.CombatAIO.com.base.main;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.HashMap;
 
 import org.tribot.api.General;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
+import org.tribot.script.interfaces.Arguments;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
-public class BaseCombat extends Script implements Painting, MouseActions {
+public class BaseCombat extends Script implements Painting, MouseActions,
+		Arguments {
 
 	private TotalPaintHandler paint_handler;
 	private boolean run = true;
+	private String temp_monster_name;
+	private String temp_food_name;
 
 	public boolean isRunning() {
 		return this.run;
@@ -30,6 +37,10 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 		// GUI done and what not
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this, 0);
+		Dispatcher.get().set(ValueType.FOOD_NAME,
+				new Value<String>(this.temp_food_name));
+		Dispatcher.get().set(ValueType.MONSTER_NAMES,
+				new Value<String[]>(new String[] { this.temp_monster_name }));
 		Dispatcher.get().start();
 		while (true) {
 			General.sleep(300);
@@ -66,6 +77,14 @@ public class BaseCombat extends Script implements Painting, MouseActions {
 	@Override
 	public void mouseReleased(Point arg0, int arg1, boolean arg2) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void passArguments(HashMap<String, String> arg0) {
+		String stuff = arg0.get("custom_input");
+		this.temp_monster_name = stuff.split(",")[0].replace(",", "");
+		this.temp_food_name = stuff.split(",")[1].replace(",", "");
 
 	}
 

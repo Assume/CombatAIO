@@ -54,8 +54,7 @@ public class Dispatcher implements XMLable {
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatTask(this.calculation,
-				new String[] { "Cow" });
+		this.combat_thread = new CombatTask(this.calculation);
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
@@ -148,18 +147,10 @@ public class Dispatcher implements XMLable {
 		Walking.setControlClick(true);
 		this.combat_thread.start();
 		this.looting_thread.start();
-		// this.calculation.start();
-		// this.banking_thread.start();
 		this.eat_thread.start();
 		if (this.eat_thread.isUsingBonesToPeaches()) {
 			this.looting_thread.addPossibleLootItem("Bones");
 		}
-		/*
-		 * dispatch initital needed threads while(BaseCombat.isRunning())
-		 * 
-		 * check threads for issues and redispatch if needed check for
-		 * conditions requiring the pausing of thread - enum system for this
-		 */
 	}
 
 	public boolean isRunning() {

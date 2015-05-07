@@ -23,8 +23,8 @@ public class JeweleryTeleport {
 		return this.teleport;
 	}
 
-	public void operate() {
-		this.jewelery.operate(this);
+	public boolean operate() {
+		return this.jewelery.operate(this);
 	}
 
 }

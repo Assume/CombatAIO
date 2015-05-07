@@ -39,13 +39,11 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Prayer flicker_prayer;
 	private Weapon weapon = Weapon.ABYSSAL_WHIP;
 
-	public CombatTask(TargetCalculator calculation_thread,
-			String... monster_names) {
+	public CombatTask(TargetCalculator calculation_thread) {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_LOOTING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
-		this.monster_names = monster_names;
 		this.possible_monsters = new RSNPC[0];
 		this.kill_tracker = new KillTracker(this);
 		this.home_tile = Player.getPosition();
