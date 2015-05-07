@@ -44,7 +44,7 @@ public class TotalPaintHandler {
 
 	public void draw(Graphics arg0) {
 		// this.monster_paint_handler.draw(arg0);
-		this.loot_paint_handler.draw(arg0);
+		//this.loot_paint_handler.draw(arg0);
 		this.experience_paint_handler.draw(arg0);
 	}
 
