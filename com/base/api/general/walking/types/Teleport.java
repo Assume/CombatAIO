@@ -59,7 +59,6 @@ public enum Teleport {
 		Teleport nearest = null;
 		int distance = Integer.MAX_VALUE;
 		for (Teleport x : Teleport.values()) {
-
 			int test_distance = x.getSpellLocationResult().distanceTo(pos);
 			if (test_distance < distance) {
 				nearest = x;
