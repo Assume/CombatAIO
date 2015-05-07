@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
+import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
@@ -55,7 +56,7 @@ public class StaticTargetCalculator {
 				DPathNavigator test = new DPathNavigator();
 				test.overrideDoorCache(true, new RSObject[] {});
 				if (Player.getPosition().distanceTo(x) <= 12
-						&& test.findPath(x.getPosition()).length != 0)
+						&& PathFinding.canReach(x, false))
 					possible_npcs.add(x);
 			}
 		}
