@@ -65,7 +65,8 @@ public class Looter extends Threadable implements Pauseable {
 				General.sleep(800);
 				continue;
 			}
-			if (target.getHealth() == 0 && target.isInCombat())
+			if (target.getHealth() == 0 && target.isInCombat()
+					&& this.items_known.size() > 0)
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			else {
 				General.sleep(500);
@@ -78,6 +79,8 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void waitForLoot(RSNPC target) {
+		if (this.items_known.size() == 0)
+			return;
 		while (target.isValid() && target.getHealth() == 0
 				&& target.isInCombat())
 			General.sleep(50);

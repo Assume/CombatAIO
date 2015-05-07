@@ -46,8 +46,8 @@ public class ConsumptionTask extends Threadable implements Runnable {
 				.get(ValueType.FOOD_NAME).getValue());
 		if (food.length > 0) {
 			food[0].click("Eat");
+			Dispatcher.get().attackTarget();
 		}
-
 	}
 
 	public boolean isUsingBonesToPeaches() {

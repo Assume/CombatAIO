@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.HashMap;
 
 import org.tribot.api.General;
+import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Arguments;
@@ -45,6 +46,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		while (true) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
+			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
 		}
 
 	}

@@ -64,6 +64,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 					&& Player.getRSPlayer().getInteractingCharacter() == null)
 				this.current_target = null;
 			if (current_target == null) {
+				General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+						.next());
+				Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+						.reset();
 				StaticTargetCalculator.set(this);
 				fight(this.possible_monsters);
 			} else {
@@ -96,6 +100,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			Walking.walkTo(target);
 		while (Player.isMoving())
 			General.sleep(50);
+	}
+
+	public void attackCurrentTarget() {
+		if (this.current_target != null) {
+			Clicking.click("Attack " + this.current_target.getName(),
+					this.current_target);
+		}
 	}
 
 	private void attackTarget(RSNPC target) {

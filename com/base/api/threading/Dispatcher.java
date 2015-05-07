@@ -255,4 +255,8 @@ public class Dispatcher implements XMLable {
 		return this.abc_util;
 	}
 
+	public void attackTarget() {
+		this.combat_thread.attackCurrentTarget();
+	}
+
 }
