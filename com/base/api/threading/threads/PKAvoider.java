@@ -30,7 +30,7 @@ public class PKAvoider extends Threadable {
 		while (Dispatcher.get().isRunning()) {
 			if (this.isBeingAttackedByPlayer()) {
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-				Banker.bank();
+				Banker.bank(true);
 				if (this.hop_on_attack)
 					WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);

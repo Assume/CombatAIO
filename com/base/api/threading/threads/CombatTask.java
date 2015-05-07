@@ -61,7 +61,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		SkillData.initiate();
 		while (Dispatcher.get().isRunning()) {
 			if (Banker.shouldBank())
-				Banker.bank();
+				Banker.bank(false);
 			if (!Player.getRSPlayer().isInCombat()
 					&& Player.getRSPlayer().getInteractingCharacter() == null)
 				this.current_target = null;

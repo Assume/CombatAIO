@@ -6,6 +6,7 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.WorldHopper;
 
 import scripts.CombatAIO.com.base.api.general.walking.CWalking;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
@@ -29,24 +30,26 @@ public class Banker {
 	 * General.sleep(2000); } }
 	 */
 
-	public static void bank() {
+	public static void bank(boolean world_hop) {
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
 		CWalking.walk(MovementType.TO_BANK);
-		openBank();
-		handleBankWindow();
+		openBank(world_hop);
+		handleBankWindow(world_hop);
+		if (world_hop)
+			WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 		CWalking.walk(MovementType.TO_MONSTER);
 	}
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
-	private static void handleBankWindow() {
+	private static void handleBankWindow(boolean world_hop) {
 		Banking.depositAll();
 		Banking.withdraw(10, (String) Dispatcher.get().get(ValueType.FOOD_NAME)
 				.getValue());
 		Banking.close();
 	}
 
-	private static void openBank() {
+	private static void openBank(boolean world_hop) {
 		Banking.openBank();
 		Timing.waitCondition(new Condition() {
 			@Override
@@ -55,7 +58,7 @@ public class Banker {
 			}
 		}, 3000);
 		if (!Banking.isBankScreenOpen()) {
-			bank();
+			bank(world_hop);
 			return;
 		}
 		General.sleep(250, 800);
