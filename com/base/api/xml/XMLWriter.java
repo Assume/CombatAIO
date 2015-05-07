@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.main;
+package scripts.CombatAIO.com.base.api.xml;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.tribot.api.General;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import scripts.CombatAIO.com.base.api.xml.SigmaXMLException;
 
 /**
  * 

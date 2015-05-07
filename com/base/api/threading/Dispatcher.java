@@ -17,11 +17,11 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
+import scripts.CombatAIO.com.base.api.xml.XMLReader;
+import scripts.CombatAIO.com.base.api.xml.XMLWriter;
+import scripts.CombatAIO.com.base.api.xml.XMLable;
+import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
 import scripts.CombatAIO.com.base.main.BaseCombat;
-import scripts.CombatAIO.com.base.main.XMLReader;
-import scripts.CombatAIO.com.base.main.XMLWriter;
-import scripts.CombatAIO.com.base.main.XMLable;
-import scripts.CombatAIO.com.base.main.XMLWriter.XMLLoader;
 
 public class Dispatcher implements XMLable {
 

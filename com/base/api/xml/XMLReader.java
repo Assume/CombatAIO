@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.main;
+package scripts.CombatAIO.com.base.api.xml;
 
 import java.io.File;
 import java.io.IOException;
