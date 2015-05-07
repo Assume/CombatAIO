@@ -51,19 +51,6 @@ public enum Teleport {
 						.hasRequiredRunes());
 	}
 
-	/*
-	 * private boolean hasAllRequiredRunes() { RSItem[] air =
-	 * Inventory.find(Rune.AIR.getId()); RSItem[] law =
-	 * Inventory.find(Rune.LAW.getId()); RSItem[] secondary =
-	 * Inventory.find(getSecondaryRune().getId()); int airs_required = this ==
-	 * CAMELOT_TELEPORT ? 5 : 3; if (air.length == 0 || air[0].getStack() <
-	 * airs_required) return false; if (law.length == 0) return false; if (this
-	 * == CAMELOT_TELEPORT) return true; if (secondary.length == 0) return
-	 * false; return true;
-	 * 
-	 * }
-	 */
-
 	public RSTile getSpellLocationResult() {
 		return this.spell_location_result;
 	}

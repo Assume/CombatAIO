@@ -4,7 +4,6 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.DFullHol
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.RSArea;
 
 public class CustomMovement {
-
 	private RSArea activation_area;
 	private DFullHolder holder;
 	private String name;

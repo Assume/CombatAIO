@@ -100,44 +100,50 @@ public enum NormalSpell implements Serializable {
 			"Trollheim Teleport", 61, new Rune[] { Rune.LAW, Rune.FIRE },
 			new int[] { 2, 2 }, SpellType.TELEPORT),
 
-	/*
-	 * //TELEOTHER SPELLS TELE_OTHER_LUMBRIDGE("Teleother Lumbridge", 74, new
-	 * Rune[]{Rune.SOUL, Rune.LAW, Rune.EARTH}, new int[]{1, 1, 1},
-	 * SpellType.TELE_OTHER), TELE_OTHER_FALADOR("Teleother Falador", 82, new
-	 * Rune[]{Rune.SOUL, Rune.LAW, Rune.WATER}, new int[]{1, 1, 1},
-	 * SpellType.TELE_OTHER), TELE_OTHER_CAMELOT("Teleother Camelot", 74, new
-	 * Rune[]{Rune.SOUL, Rune.LAW}, new int[]{2, 1}, SpellType.TELE_OTHER),
-	 * 
-	 * //TELEKINETIC GRAB TELEKINETIC_GRAB("Telekinetic Grab", 31, new
-	 * Rune[]{Rune.LAW, Rune.AIR}, new int[]{1, 1}, SpellType.TELEKINETIC_GRAB),
-	 * 
-	 * //ALCHEMY SPELLS LOW_ALCHEMY("Low Level Alchemy", 21, new
-	 * Rune[]{Rune.NATURE, Rune.FIRE}, new int[]{1, 3}, SpellType.ALCHEMY),
-	 * HIGH_ALCHEMY("High Level Alchemy", 55, new Rune[]{Rune.NATURE,
-	 * Rune.FIRE}, new int[]{1, 5}, SpellType.ALCHEMY),
-	 * 
-	 * //BONE SPELLS BONES_TO_BANANAS("Bones to Bananas", 15, new
-	 * Rune[]{Rune.NATURE, Rune.EARTH, Rune.WATER}, new int[]{1, 2, 2},
-	 * SpellType.BONES_TO_FRUIT), BONES_TO_PEACHES("Bones to Peaches", 60, new
-	 * Rune[]{Rune.NATURE, Rune.EARTH, Rune.WATER}, new int[]{2, 4, 4},
-	 * SpellType.BONES_TO_FRUIT),
-	 * 
-	 * //SUPERHEAT SUPERHEAT_ITEM("Superheat Item", 43, new Rune[]{Rune.NATURE,
-	 * Rune.FIRE}, new int[]{1, 4}, SpellType.SUPERHEAT_ITEM),
-	 * 
-	 * //ENCHANTMENT SPELLS ENCHANT_LEVEL_ONE("Lvl-1 Enchant", 7, new
-	 * Rune[]{Rune.COSMIC, Rune.WATER}, new int[]{1, 1}, SpellType.ENCHANTMENT),
-	 * ENCHANT_LEVEL_TWO("Lvl-2 Enchant", 27, new Rune[]{Rune.COSMIC, Rune.AIR},
-	 * new int[]{1, 3}, SpellType.ENCHANTMENT),
-	 * ENCHANT_LEVEL_THREE("Lvl-3 Enchant", 49, new Rune[]{Rune.COSMIC,
-	 * Rune.FIRE}, new int[]{1, 5}, SpellType.ENCHANTMENT),
-	 * ENCHANT_LEVEL_FOUR("Lvl-4 Enchant", 57, new Rune[]{Rune.COSMIC,
-	 * Rune.EARTH}, new int[]{1, 10}, SpellType.ENCHANTMENT),
-	 * ENCHANT_LEVEL_FIVE("Lvl-5 Enchant", 68, new Rune[]{Rune.COSMIC,
-	 * Rune.EARTH, Rune.WATER}, new int[]{1, 15, 15}, SpellType.ENCHANTMENT),
-	 * ENCHANT_LEVEL_SIX("Lvl-6 Enchant", 87, new Rune[]{Rune.COSMIC, Rune.FIRE,
-	 * Rune.EARTH}, new int[]{1, 20, 20}, SpellType.ENCHANTMENT)
-	 */;
+	// TELEOTHER SPELLS
+	TELE_OTHER_LUMBRIDGE("Teleother Lumbridge", 74, new Rune[] { Rune.SOUL,
+			Rune.LAW, Rune.EARTH }, new int[] { 1, 1, 1 }, SpellType.TELE_OTHER), TELE_OTHER_FALADOR(
+			"Teleother Falador", 82, new Rune[] { Rune.SOUL, Rune.LAW,
+					Rune.WATER }, new int[] { 1, 1, 1 }, SpellType.TELE_OTHER), TELE_OTHER_CAMELOT(
+			"Teleother Camelot", 74, new Rune[] { Rune.SOUL, Rune.LAW },
+			new int[] { 2, 1 }, SpellType.TELE_OTHER),
+
+	// TELEKINETIC GRAB
+	TELEKINETIC_GRAB("Telekinetic Grab", 31, new Rune[] { Rune.LAW, Rune.AIR },
+			new int[] { 1, 1 }, SpellType.TELEKINETIC_GRAB),
+
+	// ALCHEMY SPELLS
+	LOW_ALCHEMY("Low Level Alchemy", 21, new Rune[] { Rune.NATURE, Rune.FIRE },
+			new int[] { 1, 3 }, SpellType.ALCHEMY), HIGH_ALCHEMY(
+			"High Level Alchemy", 55, new Rune[] { Rune.NATURE, Rune.FIRE },
+			new int[] { 1, 5 }, SpellType.ALCHEMY),
+
+	// BONE SPELLS
+	BONES_TO_BANANAS("Bones to Bananas", 15, new Rune[] { Rune.NATURE,
+			Rune.EARTH, Rune.WATER }, new int[] { 1, 2, 2 },
+			SpellType.BONES_TO_FRUIT), BONES_TO_PEACHES("Bones to Peaches", 60,
+			new Rune[] { Rune.NATURE, Rune.EARTH, Rune.WATER }, new int[] { 2,
+					4, 4 }, SpellType.BONES_TO_FRUIT),
+
+	// SUPERHEAT
+	SUPERHEAT_ITEM("Superheat Item", 43, new Rune[] { Rune.NATURE, Rune.FIRE },
+			new int[] { 1, 4 }, SpellType.SUPERHEAT_ITEM),
+
+	// ENCHANTMENT SPELLS
+	ENCHANT_LEVEL_ONE("Lvl-1 Enchant", 7,
+			new Rune[] { Rune.COSMIC, Rune.WATER }, new int[] { 1, 1 },
+			SpellType.ENCHANTMENT), ENCHANT_LEVEL_TWO("Lvl-2 Enchant", 27,
+			new Rune[] { Rune.COSMIC, Rune.AIR }, new int[] { 1, 3 },
+			SpellType.ENCHANTMENT), ENCHANT_LEVEL_THREE("Lvl-3 Enchant", 49,
+			new Rune[] { Rune.COSMIC, Rune.FIRE }, new int[] { 1, 5 },
+			SpellType.ENCHANTMENT), ENCHANT_LEVEL_FOUR("Lvl-4 Enchant", 57,
+			new Rune[] { Rune.COSMIC, Rune.EARTH }, new int[] { 1, 10 },
+			SpellType.ENCHANTMENT), ENCHANT_LEVEL_FIVE("Lvl-5 Enchant", 68,
+			new Rune[] { Rune.COSMIC, Rune.EARTH, Rune.WATER }, new int[] { 1,
+					15, 15 }, SpellType.ENCHANTMENT), ENCHANT_LEVEL_SIX(
+			"Lvl-6 Enchant", 87, new Rune[] { Rune.COSMIC, Rune.FIRE,
+					Rune.EARTH }, new int[] { 1, 20, 20 },
+			SpellType.ENCHANTMENT);
 
 	public static final int NORMAL_BOOK_MASTER_INDEX = 192;
 
@@ -236,6 +242,10 @@ public enum NormalSpell implements Serializable {
 	 * 
 	 * @return True if the player has the required level, false otherwise.
 	 */
+	public final boolean canCast() {
+		return this.hasRequiredLevel() && this.hasRequiredRunes();
+	}
+
 	public final boolean hasRequiredLevel() {
 		return SKILLS.MAGIC.getActualLevel() >= getRequiredLevel();
 	}

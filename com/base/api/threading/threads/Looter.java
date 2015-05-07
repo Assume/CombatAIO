@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +54,10 @@ public class Looter extends Threadable implements Pauseable {
 		return new Value<Integer>(tot);
 	}
 
+	public void addPossibleLootItem(String name) {
+		this.items_known.put(name, new LootItem(name));
+	}
+
 	@Override
 	public void run() {
 		while (true) {
@@ -99,8 +102,10 @@ public class Looter extends Threadable implements Pauseable {
 	private void loot(RSGroundItem[] items) {
 		for (RSGroundItem x : items) {
 			if (Inventory.isFull())
-				if (!eatForSpace())
+				if (!eatForSpace(x))
 					break;
+			if (Inventory.isFull())
+				continue;
 			if (!x.isOnScreen())
 				Camera.turnToTile(x.getPosition());
 			RSItemDefinition def = x.getDefinition();
@@ -126,7 +131,13 @@ public class Looter extends Threadable implements Pauseable {
 		}
 	}
 
-	private boolean eatForSpace() {
+	private boolean eatForSpace(RSGroundItem x) {
+		if ((Boolean) Dispatcher.get().get(ValueType.IS_BONES_TO_PEACHES)
+				.getValue()) {
+			RSItemDefinition def = x.getDefinition();
+			if (def.getName().equalsIgnoreCase("bones"))
+				return true;
+		}
 		RSItem[] food = Inventory.find((String) Dispatcher.get()
 				.get(ValueType.FOOD_NAME).getValue());
 		if (food.length > 0) {
