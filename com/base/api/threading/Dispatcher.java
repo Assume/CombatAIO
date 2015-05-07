@@ -115,14 +115,19 @@ public class Dispatcher implements XMLable {
 			break;
 		case FOOD_NAME:
 			eat_thread.setFoodName((String) val.getValue());
+			break;
 		case MONSTER_NAMES:
 			this.combat_thread.setMonsterNames((String[]) val.getValue());
+			break;
 		case HOME_TILE:
 			this.combat_thread.setHomeTile((RSTile) val.getValue());
+			break;
 		case IS_RANGING:
 			this.combat_thread.setRanging((Boolean) val.getValue());
+			break;
 		case FLICKER_PRAYER:
 			this.combat_thread.setPrayer((Prayer) val.getValue());
+			break;
 		default:
 			break;
 		}
