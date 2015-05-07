@@ -6,13 +6,14 @@ import java.util.List;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api2007.Camera;
+import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
-import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
@@ -39,7 +40,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Prayer flicker_prayer;
 	private Weapon weapon = Weapon.ABYSSAL_WHIP;
 
-	public CombatTask(TargetCalculator calculation_thread) {
+	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_LOOTING,
@@ -71,6 +72,9 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				StaticTargetCalculator.set(this);
 				fight(this.possible_monsters);
 			} else {
+				if (Combat.getAttackingEntities().length == 0
+						&& this.current_target != null)
+					StaticTargetCalculator.set(this);
 				if (this.flicker)
 					flicker(this.flicker_prayer);
 				General.sleep(300);
@@ -97,7 +101,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (!target.isOnScreen())
 			Camera.turnToTile(target);
 		if (Player.getPosition().distanceTo(target) > 7 && !target.isOnScreen())
-			Walking.walkTo(target);
+			new DPathNavigator().traverse(target);
 		while (Player.isMoving())
 			General.sleep(50);
 	}
@@ -113,6 +117,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (target == null
 				|| (target.isInCombat() && !target.isInteractingWithMe()))
 			return;
+
 		Clicking.click("Attack " + target.getName(), target);
 		int distance = Player.getPosition().distanceTo(target);
 		int sleep_time = General.random((int) ((distance / 3.5) * 1000),

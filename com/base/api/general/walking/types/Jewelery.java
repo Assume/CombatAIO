@@ -2,10 +2,10 @@ package scripts.CombatAIO.com.base.api.general.walking.types;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.rs3.NPCChat;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
@@ -34,21 +34,27 @@ public enum Jewelery {
 		return Equipment.find(ids).length > 0 || Inventory.find(ids).length > 0;
 	}
 
+	private boolean isEquipped() {
+		return Equipment.find(ids).length > 0;
+	}
+
 	public boolean operate(final JeweleryTeleport teleport) {
 		RSItem item = getJewelery();
 		if (item == null)
 			return false;
-		item.click("Operate");
+		if (isEquipped())
+			item.click(teleport.getTeleportLocation().getTeleportCode());
+		else
+			item.click("Rub");
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
-				return NPCChat.isOpen();
+				return NPCChat.getOptions() != null;
 			}
 		}, General.random(1000, 1500));
 		NPCChat.selectOption(teleport.getTeleportLocation().getTeleportCode(),
 				false);
 		Timing.waitCondition(new Condition() {
-
 			@Override
 			public boolean active() {
 				return Player.getPosition().distanceTo(

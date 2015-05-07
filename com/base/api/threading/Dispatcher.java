@@ -2,6 +2,7 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
@@ -11,7 +12,6 @@ import org.w3c.dom.Element;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
-import scripts.CombatAIO.com.base.api.threading.threads.TargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -19,8 +19,8 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.xml.XMLReader;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter;
-import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
+import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 
 public class Dispatcher implements XMLable {
@@ -46,7 +46,6 @@ public class Dispatcher implements XMLable {
 
 	private CombatTask combat_thread;
 	private Looter looting_thread;
-	private TargetCalculator calculation;
 	private ConsumptionTask eat_thread;
 	private BaseCombat main_class;
 	private long hash_id;
@@ -54,7 +53,7 @@ public class Dispatcher implements XMLable {
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatTask(this.calculation);
+		this.combat_thread = new CombatTask();
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
@@ -153,18 +152,21 @@ public class Dispatcher implements XMLable {
 		this.combat_thread.start();
 		this.looting_thread.start();
 		this.eat_thread.start();
-		if (this.eat_thread.isUsingBonesToPeaches()) {
+		if (this.eat_thread.isUsingBonesToPeaches())
 			this.looting_thread.addPossibleLootItem("Bones");
-		}
 	}
 
 	public boolean isRunning() {
 		return this.main_class.isRunning();
 	}
 
+	private boolean stopped;
+
 	public void checkThreads() {
-		if (!this.combat_thread.isAlive())
-			System.out.println("nope");
+		if (!this.combat_thread.isAlive() && !stopped) {
+			System.out.println("combat stopped at" + new Date().toString());
+			stopped = true;
+		}
 
 	}
 

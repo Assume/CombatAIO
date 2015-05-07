@@ -47,6 +47,9 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
+			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.ATTACK);
+			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.DEFENCE);
+			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.HITPOINTS);
 		}
 
 	}

@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.threading.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
@@ -16,7 +17,14 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 public class StaticTargetCalculator {
 
 	public static void set(CombatTask combat_thread) {
-		RSCharacter npc = Player.getRSPlayer().getInteractingCharacter();
+		RSCharacter[] entities = Combat.getAttackingEntities();
+		if (entities.length > 0) {
+			if (entities[0] instanceof RSNPC) {
+				combat_thread.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
+				return;
+			}
+		}
+		RSCharacter npc = Combat.getTargetEntity();
 		if (npc == null || !(npc instanceof RSNPC)
 				|| !isAttackable((RSNPC) npc))
 			combat_thread.setMonsters(getMonsters());
