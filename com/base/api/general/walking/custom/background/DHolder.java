@@ -2,8 +2,6 @@ package scripts.CombatAIO.com.base.api.general.walking.custom.background;
 
 import java.io.Serializable;
 
-import scripts.priv.drennon.background.actions.DKillLine;
-
 public class DHolder implements Serializable {
 
 	/**
@@ -42,13 +40,6 @@ public class DHolder implements Serializable {
 			line.append(ac.toString() + " ");
 		return line.toString();
 
-	}
-
-	public boolean hasKillLine() {
-		for (DAction a : actions)
-			if (a instanceof DKillLine)
-				return true;
-		return false;
 	}
 
 }

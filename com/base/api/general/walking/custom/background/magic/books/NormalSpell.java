@@ -12,9 +12,10 @@ import org.tribot.api2007.Magic;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSInterface;
 
-import scripts.priv.drennon.background.magic.Rune;
-import scripts.priv.drennon.background.magic.SpellType;
-import scripts.priv.drennon.background.magic.Staff;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Rune;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.SpellType;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Staff;
+
 
 /**
  * Constants that represent spells from the normal magic book.
