@@ -3,8 +3,9 @@ package scripts.CombatAIO.com.base.api.threading;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.tribot.api.interfaces.Positionable;
+import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
+import org.tribot.api2007.types.RSTile;
 import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -49,6 +50,7 @@ public class Dispatcher implements XMLable {
 	private ConsumptionTask eat_thread;
 	private BaseCombat main_class;
 	private long hash_id;
+	private ABCUtil abc_util;
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
@@ -57,6 +59,7 @@ public class Dispatcher implements XMLable {
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
+		this.abc_util = new ABCUtil();
 	}
 
 	/*
@@ -96,8 +99,12 @@ public class Dispatcher implements XMLable {
 			return new Value<Long>(this.main_class.getRunningTime());
 		case FLICKER_PRAYER:
 			return this.combat_thread.getPrayer();
-		default:
-			break;
+		case EAT_FOR_SPACE:
+			return this.looting_thread.shouldEatForSpace();
+		case LOOT_ITEM_NAMES:
+			return this.looting_thread.getAllLootableItemNames();
+		case IS_BONES_TO_PEACHES:
+			return new Value<Boolean>(this.eat_thread.isUsingBonesToPeaches());
 		}
 		return null;
 	}
@@ -112,7 +119,7 @@ public class Dispatcher implements XMLable {
 		case MONSTER_NAMES:
 			this.combat_thread.setMonsterNames((String[]) val.getValue());
 		case HOME_TILE:
-			this.combat_thread.setHomeTile((Positionable) val.getValue());
+			this.combat_thread.setHomeTile((RSTile) val.getValue());
 		case IS_RANGING:
 			this.combat_thread.setRanging((Boolean) val.getValue());
 		case FLICKER_PRAYER:
@@ -144,6 +151,9 @@ public class Dispatcher implements XMLable {
 		// this.calculation.start();
 		// this.banking_thread.start();
 		this.eat_thread.start();
+		if (this.eat_thread.isUsingBonesToPeaches()) {
+			this.looting_thread.addPossibleLootItem("Bones");
+		}
 		/*
 		 * dispatch initital needed threads while(BaseCombat.isRunning())
 		 * 
@@ -175,10 +185,13 @@ public class Dispatcher implements XMLable {
 				getStringXMLLoader());
 		writer.append(parent, "prayer", this.get(ValueType.FLICKER_PRAYER)
 				.getValue().toString());
+		writer.append(parent, "home_tile",
+				((RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue())
+						.toString());
 		return parent;
 	}
 
-	private XMLLoader getStringXMLLoader() {
+	private XMLLoader<String> getStringXMLLoader() {
 		return new XMLLoader<String>() {
 			@Override
 			public <T> XMLable toXMLable(final T t) {
@@ -207,12 +220,43 @@ public class Dispatcher implements XMLable {
 
 	@Override
 	public void fromXML(XMLReader reader, String path, Object... data) {
-
+		this.hash_id = reader.evalLong("hash_id", path);
+		Dispatcher.get().set(ValueType.FOOD_NAME,
+				new Value<String>(reader.eval("food_name", path)));
+		ArrayList<String> elements = reader.evalArray(path,
+				"monster_names/monster_name", "monster_names");
+		Dispatcher.get().set(
+				ValueType.MONSTER_NAMES,
+				new Value<String[]>(
+						elements.toArray(new String[elements.size()])));
+		Dispatcher.get().set(ValueType.FLICKER_PRAYER,
+				new Value<Prayer>(Prayer.parse(reader.eval("prayer", path))));
+		Dispatcher.get().set(ValueType.HOME_TILE,
+				new Value<RSTile>(parseRSTile(reader.eval("home_tile", path))));
 	}
 
 	@Override
 	public String getXMLName() {
 		return "all_generic_values";
+	}
+
+	private RSTile parseRSTile(String tile) {
+		String[] val = tile.split(",");
+		if (val.length == 0)
+			return null;
+		int x = Integer.parseInt(removeNonNumber(val[0]));
+		int y = Integer.parseInt(removeNonNumber(val[1]));
+		int z = Integer.parseInt(removeNonNumber(val[2]));
+		return new RSTile(x, y, z);
+
+	}
+
+	private String removeNonNumber(String x) {
+		return x.replaceAll("[^0-9]", "");
+	}
+
+	public ABCUtil getABCUtil() {
+		return this.abc_util;
 	}
 
 }
