@@ -175,18 +175,22 @@ public class Dispatcher implements XMLable {
 		writer.append(parent, "hash_id", this.hash_id);
 		writer.append(parent, "food_name",
 				(String) this.get(ValueType.FOOD_NAME).getValue());
-		writer.appendArray(
-				parent,
-				"monster_names",
-				(ArrayList<String>) Arrays.asList((String[]) this.get(
-						ValueType.MONSTER_NAMES).getValue()),
-				getStringXMLLoader());
+		writer.appendArray(parent, "monster_names",
+				stringArrayToList((String[]) this.get(ValueType.MONSTER_NAMES)
+						.getValue()), getStringXMLLoader());
 		writer.append(parent, "prayer", this.get(ValueType.FLICKER_PRAYER)
 				.getValue().toString());
 		writer.append(parent, "home_tile",
 				((RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue())
 						.toString());
 		return parent;
+	}
+
+	private ArrayList<String> stringArrayToList(String[] strings) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (String x : strings)
+			list.add(x);
+		return list;
 	}
 
 	private XMLLoader<String> getStringXMLLoader() {
