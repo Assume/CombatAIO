@@ -18,10 +18,10 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.main.BaseCombat;
-import scripts.xml.XMLReader;
-import scripts.xml.XMLWriter;
-import scripts.xml.XMLWriter.XMLLoader;
-import scripts.xml.XMLable;
+import scripts.CombatAIO.com.base.main.XMLReader;
+import scripts.CombatAIO.com.base.main.XMLWriter;
+import scripts.CombatAIO.com.base.main.XMLable;
+import scripts.CombatAIO.com.base.main.XMLWriter.XMLLoader;
 
 public class Dispatcher implements XMLable {
 
