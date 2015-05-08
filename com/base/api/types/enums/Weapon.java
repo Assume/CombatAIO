@@ -2,7 +2,7 @@ package scripts.CombatAIO.com.base.api.types.enums;
 
 public enum Weapon {
 
-	ABYSSAL_WHIP(1800, 1658);
+	ABYSSAL_WHIP(1800, 1658), DRAGON_SCIMITAR(2400, -1);
 
 	private long attack_speed_ms;
 	private int animation_id;
