@@ -20,7 +20,6 @@ import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.xml.XMLReader;
-import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MouseActions,
@@ -30,6 +29,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	private boolean run = true;
 	private String temp_monster_name;
 	private String temp_food_name;
+	private String temp_loot_item;
 
 	public boolean isRunning() {
 		return this.run;
@@ -53,11 +53,12 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 
 		Dispatcher.get().set(ValueType.MONSTER_NAMES,
 				new Value<String[]>(new String[] { this.temp_monster_name }));
+		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES, new Value<String[]>(new String[]{this.temp_loot_item}));
 		Dispatcher.get().start();
-		//XMLWriter writer = new XMLWriter(Dispatcher.get());
-		//writer.save(new File(Util.getAppDataDirectory() + File.separator
-		//		+ "base_aio" + File.separator + "test.dat"), false,
-			//	Dispatcher.get());
+		// XMLWriter writer = new XMLWriter(Dispatcher.get());
+		// writer.save(new File(Util.getAppDataDirectory() + File.separator
+		// + "base_aio" + File.separator + "test.dat"), false,
+		// Dispatcher.get());
 		while (true) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
@@ -102,11 +103,16 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 
 	@Override
 	public void passArguments(HashMap<String, String> arg0) {
-		String stuff = arg0.get("custom_input");
-		if (stuff == null)
-			return;
-		this.temp_monster_name = stuff.split(",")[0].replace(",", "");
-		this.temp_food_name = stuff.split(",")[1].replace(",", "");
+		try {
+			String stuff = arg0.get("custom_input");
+			if (stuff == null)
+				return;
+			this.temp_monster_name = stuff.split(",")[0].replace(",", "");
+			this.temp_food_name = stuff.split(",")[1].replace(",", "");
+			this.temp_loot_item = stuff.split(",")[2].replace(",", "");
+		} catch (Exception e) {
+
+		}
 
 	}
 

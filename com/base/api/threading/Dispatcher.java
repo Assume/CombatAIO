@@ -127,6 +127,8 @@ public class Dispatcher implements XMLable {
 		case FLICKER_PRAYER:
 			this.combat_thread.setPrayer((Prayer) val.getValue());
 			break;
+		case LOOT_ITEM_NAMES:
+			this.looting_thread.addPossibleLootItem((String[]) val.getValue());
 		default:
 			break;
 		}

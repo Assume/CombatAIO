@@ -7,8 +7,10 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Players;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSPlayer;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -37,6 +39,19 @@ public class StaticTargetCalculator {
 		return getMonsters();
 	}
 
+	private static boolean isBeingSplashed(RSNPC n) {
+		RSPlayer[] players = Players.getAll();
+		if (players.length == 0)
+			return false;
+		for (RSPlayer x : players) {
+			RSCharacter y = x.getInteractingCharacter();
+			if (y instanceof RSNPC && (RSNPC) y == n && !n.isInCombat())
+				return true;
+		}
+
+		return false;
+	}
+
 	private static RSNPC[] getMonsters() {
 		RSNPC[] npcs = filter_one(NPCs.find((String[]) Dispatcher.get()
 				.get(ValueType.MONSTER_NAMES).getValue()));
@@ -49,7 +64,7 @@ public class StaticTargetCalculator {
 			if (x.isInteractingWithMe())
 				if (PathFinding.canReach(x, false))
 					return new RSNPC[] { x };
-			if (!x.isInCombat()) {
+			if (!x.isInCombat() && !isBeingSplashed(x)) {
 				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
 						.getValue()) {
 					possible_npcs.add(x);
