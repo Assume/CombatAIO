@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
@@ -53,9 +54,10 @@ public class ExperiencePaintHandler implements PaintHandler {
 		return (skill.toString() + " | "
 				+ (skill.getLevelsGained() + skill.getStartingLevel()) + "("
 				+ skill.getLevelsGained() + ") | "
-				+ skill.getExperienceGained() + " XP | "
-				+ getExperiencePerHour(runtime, skill) + "XP/HR | TTL: " + getFormattedTime(getTimeToLevel(
-					runtime, skill)));
+				+ formatNumber(skill.getExperienceGained()) + " XP | "
+				+ formatNumber(getExperiencePerHour(runtime, skill))
+				+ " XP/HR | TTL: " + getFormattedTime(getTimeToLevel(runtime,
+					skill)));
 	}
 
 	private int getExperiencePerHour(long runtime, SkillData skill) {
@@ -65,6 +67,19 @@ public class ExperiencePaintHandler implements PaintHandler {
 	private long getTimeToLevel(long runtime, SkillData skill) {
 		return (long) ((skill.getExperienceToNextLevel() * 3600000.0) / getExperiencePerHour(
 				runtime, skill));
+	}
+
+	private String formatNumber(int num) {
+		DecimalFormat df = new DecimalFormat("0");
+		double i = num;
+		if (i >= 1000000)
+			if (i % 1000000 == 0)
+				return df.format(i / 1000000) + "M";
+			else
+				return (i / 1000000) + "M";
+		if (i >= 1000)
+			return df.format((i / 1000)) + "k";
+		return "" + num;
 	}
 
 	private String getFormattedTime(long time) {
