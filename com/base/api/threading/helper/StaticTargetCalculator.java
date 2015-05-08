@@ -9,8 +9,6 @@ import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -22,8 +20,11 @@ public class StaticTargetCalculator {
 		RSCharacter[] entities = Combat.getAttackingEntities();
 		if (entities.length > 0) {
 			if (entities[0] instanceof RSNPC) {
-				combat_thread.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
-				return;
+				if (PathFinding.canReach(entities[0], false)) {
+					combat_thread
+							.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
+					return;
+				}
 			}
 		}
 		RSCharacter npc = Combat.getTargetEntity();
@@ -46,15 +47,14 @@ public class StaticTargetCalculator {
 		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
 		for (RSNPC x : npcs) {
 			if (x.isInteractingWithMe())
-				return new RSNPC[] { x };
+				if (PathFinding.canReach(x, false))
+					return new RSNPC[] { x };
 			if (!x.isInCombat()) {
 				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
 						.getValue()) {
 					possible_npcs.add(x);
 					continue;
 				}
-				DPathNavigator test = new DPathNavigator();
-				test.overrideDoorCache(true, new RSObject[] {});
 				if (Player.getPosition().distanceTo(x) <= 12
 						&& PathFinding.canReach(x, false))
 					possible_npcs.add(x);
