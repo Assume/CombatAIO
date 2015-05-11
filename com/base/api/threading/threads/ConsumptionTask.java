@@ -25,6 +25,7 @@ public class ConsumptionTask extends Threadable implements Runnable {
 	}
 
 	private String food_name = "Salmon";
+	private boolean is_eating;
 
 	@Override
 	public void run() {
@@ -32,10 +33,12 @@ public class ConsumptionTask extends Threadable implements Runnable {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
 					.next()) {
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
+				this.is_eating = true;
 				eat();
 				executeBonesToPeaches();
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
+				this.is_eating = false;
 			}
 			General.sleep(500);
 		}
@@ -81,6 +84,10 @@ public class ConsumptionTask extends Threadable implements Runnable {
 	@Override
 	public boolean hasPauseType(PauseType type) {
 		return false;
+	}
+
+	public boolean isEating() {
+		return this.is_eating;
 	}
 
 }

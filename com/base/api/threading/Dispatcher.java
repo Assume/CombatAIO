@@ -273,4 +273,8 @@ public class Dispatcher implements XMLable {
 		return dispatcher != null;
 	}
 
+	public boolean isEating() {
+		return this.eat_thread.isEating();
+	}
+
 }
