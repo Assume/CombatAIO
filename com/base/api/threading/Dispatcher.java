@@ -152,6 +152,7 @@ public class Dispatcher implements XMLable {
 	private void run() {
 		Walking.setControlClick(true);
 		this.combat_thread.start();
+		this.combat_thread.initiate();
 		this.looting_thread.start();
 		this.eat_thread.start();
 		if (this.eat_thread.isUsingBonesToPeaches())
@@ -265,6 +266,10 @@ public class Dispatcher implements XMLable {
 
 	public void attackTarget() {
 		this.combat_thread.attackCurrentTarget();
+	}
+
+	public static boolean hasBeenInitialized() {
+		return dispatcher != null;
 	}
 
 }

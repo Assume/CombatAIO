@@ -54,35 +54,45 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		super(pause_types);
 	}
 
-	@Override
-	public void run() {
+	public void initiate() {
 		this.kill_tracker.start();
 		SkillData.initiate();
-		while (Dispatcher.get().isRunning()) {
-			if (Banker.shouldBank())
-				Banker.bank(false);
-			if (!Player.getRSPlayer().isInCombat()
-					&& Player.getRSPlayer().getInteractingCharacter() == null)
-				this.current_target = null;
-			if (current_target == null) {
-				General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-						.next());
-				Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-						.reset();
+	}
+
+	public void fight() {
+		System.out.println("In start of method fight");
+		if (Banker.shouldBank())
+			Banker.bank(false);
+		if (!Player.getRSPlayer().isInCombat()
+				&& Player.getRSPlayer().getInteractingCharacter() == null)
+			this.current_target = null;
+		if (current_target == null) {
+			General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+					.next());
+			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+					.reset();
+			StaticTargetCalculator.set(this);
+			fight(this.possible_monsters);
+		} else {
+			if (Combat.getAttackingEntities().length == 0
+					&& this.current_target != null)
 				StaticTargetCalculator.set(this);
-				fight(this.possible_monsters);
-			} else {
-				if (Combat.getAttackingEntities().length == 0
-						&& this.current_target != null)
-					StaticTargetCalculator.set(this);
-				if (this.flicker)
-					flicker(this.flicker_prayer);
-				General.sleep(300);
-			}
+			if (this.flicker)
+				flicker(this.flicker_prayer);
+			General.sleep(300);
+		}
+	}
+
+	@Override
+	public void run() {
+		while (Dispatcher.get().isRunning()) {
+			fight();
 		}
 	}
 
 	private void fight(RSNPC[] monsters) {
+		System.out.println("In method fight, total possible targets, "
+				+ monsters.length);
 		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
@@ -92,6 +102,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 					monsters.length - 1)];
 		else
 			this.current_target = monsters[0];
+		System.out.println("In method fight, target has been found: "
+				+ this.current_target);
 		moveToTarget(this.current_target);
 		attackTarget(this.current_target);
 

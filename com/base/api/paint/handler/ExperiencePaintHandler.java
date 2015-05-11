@@ -22,6 +22,8 @@ public class ExperiencePaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g) {
+		if(!Dispatcher.hasBeenInitialized())
+			return;
 		g.setFont(font1);
 		int i = 0;
 		for (final SkillData skill : SkillData.values()) {
