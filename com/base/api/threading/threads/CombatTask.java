@@ -60,7 +60,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void fight() {
-		System.out.println("In start of method fight");
 		if (Banker.shouldBank())
 			Banker.bank(false);
 		if (!Player.getRSPlayer().isInCombat()
@@ -91,8 +90,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void fight(RSNPC[] monsters) {
-		System.out.println("In method fight, total possible targets, "
-				+ monsters.length);
 		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
@@ -102,8 +99,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 					monsters.length - 1)];
 		else
 			this.current_target = monsters[0];
-		System.out.println("In method fight, target has been found: "
-				+ this.current_target);
 		moveToTarget(this.current_target);
 		attackTarget(this.current_target);
 

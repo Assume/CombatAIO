@@ -50,7 +50,8 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 				new Value<String>(this.temp_food_name));
 		Dispatcher.get().set(ValueType.MONSTER_NAMES,
 				new Value<String[]>(new String[] { this.temp_monster_name }));
-		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES, new Value<String[]>(new String[]{this.temp_loot_item}));
+		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
+				new Value<String[]>(new String[] { this.temp_loot_item }));
 		Dispatcher.get().start();
 		// XMLWriter writer = new XMLWriter(Dispatcher.get());
 		// writer.save(new File(Util.getAppDataDirectory() + File.separator

@@ -166,6 +166,7 @@ public class Dispatcher implements XMLable {
 	private boolean stopped;
 
 	public void checkThreads() {
+		System.out.println(this.combat_thread.getState());
 		if (!this.combat_thread.isAlive() && !stopped) {
 			System.out.println("combat stopped at" + new Date().toString());
 			stopped = true;
