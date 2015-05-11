@@ -54,7 +54,8 @@ public class Looter extends Threadable implements Pauseable {
 
 	public void addPossibleLootItem(String... name) {
 		for (String x : name)
-			this.items_known.put(x, new LootItem(x));
+			if (x != null)
+				this.items_known.put(x, new LootItem(x));
 	}
 
 	@Override
