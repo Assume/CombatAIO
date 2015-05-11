@@ -3,7 +3,6 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 import java.util.List;
 
 import org.tribot.api2007.Combat;
-import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSPlayer;
 
@@ -30,9 +29,7 @@ public class PKAvoider extends Threadable {
 		while (Dispatcher.get().isRunning()) {
 			if (this.isBeingAttackedByPlayer()) {
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-				Banker.bank(true);
-				if (this.hop_on_attack)
-					WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
+				Banker.bank(this.hop_on_attack);
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
 		}

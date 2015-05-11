@@ -21,8 +21,7 @@ public class Teleporting {
 			return t.teleport();
 		else {
 			if (jt.canTeleport()) {
-				jt.operate();
-				return true;
+				return jt.operate();
 			} else if (t.canTeleport())
 				return t.teleport();
 		}
