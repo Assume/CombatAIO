@@ -18,6 +18,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class StaticTargetCalculator {
 
+	
 	public static void set(CombatTask combat_thread) {
 		RSCharacter[] entities = Combat.getAttackingEntities();
 		if (entities.length > 0) {
@@ -48,7 +49,6 @@ public class StaticTargetCalculator {
 			if (y instanceof RSNPC && (RSNPC) y == n && !n.isInCombat())
 				return true;
 		}
-
 		return false;
 	}
 
@@ -94,5 +94,9 @@ public class StaticTargetCalculator {
 
 	private static boolean isAttackable(RSNPC npc) {
 		return npc.getCombatLevel() > 0;
+	}
+
+	public static boolean verifyTarget(RSNPC current_target) {
+		return !current_target.isInCombat() && !isBeingSplashed(current_target);
 	}
 }

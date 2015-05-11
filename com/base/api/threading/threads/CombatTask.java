@@ -99,6 +99,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 					monsters.length - 1)];
 		else
 			this.current_target = monsters[0];
+		if (!StaticTargetCalculator.verifyTarget(this.current_target))
+			return;
 		moveToTarget(this.current_target);
 		attackTarget(this.current_target);
 
