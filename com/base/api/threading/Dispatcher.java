@@ -138,15 +138,21 @@ public class Dispatcher implements XMLable {
 	@SuppressWarnings("deprecation")
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
-			if (x.hasPauseType(pause_type))
+			if (x.hasPauseType(pause_type)) {
+				x.setPaused(true);
 				x.suspend();
+			}
+
 	}
 
 	@SuppressWarnings("deprecation")
 	public void unpause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
-			if (x.hasPauseType(pause_type))
+			if (x.hasPauseType(pause_type)) {
+				x.setPaused(false);
 				x.resume();
+			}
+
 	}
 
 	private void run() {
@@ -166,11 +172,8 @@ public class Dispatcher implements XMLable {
 	private boolean stopped;
 
 	public void checkThreads() {
-		System.out.println(this.combat_thread.getState());
-		if (!this.combat_thread.isAlive() && !stopped) {
-			System.out.println("combat stopped at" + new Date().toString());
-			stopped = true;
-		}
+		System.out.println(this.combat_thread.isPaused());
+		
 
 	}
 

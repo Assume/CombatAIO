@@ -60,59 +60,82 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void fight() {
-		if (Banker.shouldBank())
-			Banker.bank(false);
-		if (!Player.getRSPlayer().isInCombat()
-				&& Player.getRSPlayer().getInteractingCharacter() == null)
-			this.current_target = null;
-		if (current_target == null) {
-			General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-					.next());
-			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-					.reset();
-			StaticTargetCalculator.set(this);
-			fight(this.possible_monsters);
-		} else {
-			if (Combat.getAttackingEntities().length == 0
-					&& this.current_target != null)
+		try {
+			if (Banker.shouldBank())
+				Banker.bank(false);
+			if (!Player.getRSPlayer().isInCombat()
+					&& Player.getRSPlayer().getInteractingCharacter() == null)
+				this.current_target = null;
+			if (current_target == null) {
+				General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+						.next());
+				Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+						.reset();
 				StaticTargetCalculator.set(this);
-			if (this.flicker)
-				flicker(this.flicker_prayer);
-			General.sleep(300);
+				fight(this.possible_monsters);
+			} else {
+				System.out.println("in else");
+				if (Combat.getAttackingEntities().length == 0
+						&& this.current_target != null)
+					StaticTargetCalculator.set(this);
+				if (this.flicker)
+					flicker(this.flicker_prayer);
+				General.sleep(300);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	@Override
 	public void run() {
-		while (Dispatcher.get().isRunning()) {
-			fight();
+		try {
+			while (Dispatcher.get().isRunning()) {
+				System.out.println("In run");
+				fight();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		System.out.println("leaving");
 	}
 
 	private void fight(RSNPC[] monsters) {
-		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
-			WebWalking.walkTo(this.home_tile);
-		if (monsters.length == 0)
-			return;
-		if (getAverageDistance(monsters) <= 3)
-			this.current_target = monsters[General.random(0,
-					monsters.length - 1)];
-		else
-			this.current_target = monsters[0];
-		if (!StaticTargetCalculator.verifyTarget(this.current_target))
-			return;
-		moveToTarget(this.current_target);
-		attackTarget(this.current_target);
+		try {
+			if (monsters.length == 0
+					&& NPCs.find(this.monster_names).length >= 0)
+				WebWalking.walkTo(this.home_tile);
+			if (monsters.length == 0)
+				return;
+			if (getAverageDistance(monsters) <= 3)
+				this.current_target = monsters[General.random(0,
+						monsters.length - 1)];
+			else
+				this.current_target = monsters[0];
+			if (!StaticTargetCalculator.verifyTarget(this.current_target))
+				return;
+			moveToTarget(this.current_target);
+			attackTarget(this.current_target);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	private void moveToTarget(RSNPC target) {
-		if (!target.isOnScreen())
-			Camera.turnToTile(target);
-		if (Player.getPosition().distanceTo(target) > 7 && !target.isOnScreen())
-			new DPathNavigator().traverse(target);
-		while (Player.isMoving())
-			General.sleep(50);
+		try {
+			if (!target.isOnScreen())
+				Camera.turnToTile(target);
+			if (Player.getPosition().distanceTo(target) > 7 && !target.isOnScreen())
+				new DPathNavigator().traverse(target);
+			while (Player.isMoving())
+				General.sleep(50);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void attackCurrentTarget() {
@@ -123,15 +146,19 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void attackTarget(RSNPC target) {
-		if (target == null
-				|| (target.isInCombat() && !target.isInteractingWithMe()))
-			return;
-
-		Clicking.click("Attack " + target.getName(), target);
-		int distance = Player.getPosition().distanceTo(target);
-		int sleep_time = General.random((int) ((distance / 3.5) * 1000),
-				(int) ((distance / 2.5) * 1000));
-		General.sleep(sleep_time);
+		try {
+			if (target == null
+					|| (target.isInCombat() && !target.isInteractingWithMe()))
+				return;
+			Clicking.click("Attack " + target.getName(), target);
+			int distance = Player.getPosition().distanceTo(target);
+			int sleep_time = General.random((int) ((distance / 3.5) * 1000),
+					(int) ((distance / 2.5) * 1000));
+			General.sleep(sleep_time);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private int getAverageDistance(RSNPC[] npcs) {
@@ -142,10 +169,15 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void flicker(Prayer prayer) {
-		if (Player.getAnimation() == this.weapon.getAnimationID()
-				&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0) {
-			General.sleep(this.weapon.getAttackSpeed());
-			prayer.flicker();
+		try {
+			if (Player.getAnimation() == this.weapon.getAnimationID()
+					&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0) {
+				General.sleep(this.weapon.getAttackSpeed());
+				prayer.flicker();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

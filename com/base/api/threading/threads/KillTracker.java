@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 
 import org.tribot.api.General;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
@@ -12,7 +11,6 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class KillTracker extends Threadable implements Runnable {
 	// TODO FIGURE OUT
-	private static final int WILDERNESS_START_Y_VALUE = 0;
 
 	public KillTracker(CombatTask combat_thread) {
 		super(null);
@@ -25,10 +23,6 @@ public class KillTracker extends Threadable implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			RSTile home_tile = (RSTile) Dispatcher.get()
-					.get(ValueType.HOME_TILE).getValue();
-			if (home_tile.getY() < WILDERNESS_START_Y_VALUE)
-				break;
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
 			if (target != null && target.getHealth() == 0
