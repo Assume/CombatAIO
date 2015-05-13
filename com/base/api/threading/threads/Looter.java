@@ -68,15 +68,17 @@ public class Looter extends Threadable implements Pauseable {
 				continue;
 			}
 			if (target.getHealth() == 0 && target.isInCombat()
-					&& this.items_known.size() > 0)
+					&& this.items_known.size() > 0) {
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
-			else {
+				loot(target);
+				Dispatcher.get()
+						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
+				General.sleep(400);
+			} else {
 				General.sleep(500);
 				continue;
 			}
-			loot(target);
-			Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
-			General.sleep(400);
+
 		}
 	}
 
