@@ -74,11 +74,8 @@ public class Looter extends Threadable implements Pauseable {
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				General.sleep(400);
-			} else {
+			} else
 				General.sleep(500);
-				continue;
-			}
-
 		}
 	}
 
