@@ -2,6 +2,10 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.tribot.api2007.types.RSNPC;
 
@@ -14,11 +18,11 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	private RSNPC[] paintable_monsters;
 	private RSNPC current_target;
+	private MonsterDisplay current_target_display;
+	private Map<RSNPC, MonsterDisplay> map;
 
 	public MonsterPaintHandler() {
-		this.paintable_monsters = new RSNPC[0];
-		this.current_target = (RSNPC) Dispatcher.get()
-				.get(ValueType.CURRENT_TARGET).getValue();
+		this.map = new ConcurrentHashMap<RSNPC, MonsterDisplay>();
 	}
 
 	@Override
@@ -26,13 +30,32 @@ final class MonsterPaintHandler implements PaintHandler {
 		this.paintable_monsters = StaticTargetCalculator.getPaintableMonsters();
 		this.current_target = (RSNPC) Dispatcher.get()
 				.get(ValueType.CURRENT_TARGET).getValue();
+		this.updateList();
+		if (this.current_target_display == null)
+			this.current_target_display = new MonsterDisplay(
+					this.current_target, true);
+		else if (this.current_target_display.get() != this.current_target)
+			this.current_target_display = new MonsterDisplay(
+					this.current_target, true);
+
+	}
+
+	private void updateList() {
+		List<RSNPC> temp = Arrays.asList(this.paintable_monsters);
+		for (RSNPC x : this.paintable_monsters)
+			if (!map.containsKey(x))
+				map.put(x, new MonsterDisplay(x, false));
+		for (RSNPC y : this.map.keySet())
+			if (!temp.contains(y))
+				map.remove(y);
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		new MonsterDisplay(this.current_target, true).draw(g);
-		for (RSNPC x : paintable_monsters)
-			new MonsterDisplay(x, false).draw(g);
+		if (this.current_target_display != null)
+			this.current_target_display.draw(g);
+		for (RSNPC x : this.map.keySet())
+			map.get(x).draw(g);
 	}
 
 	@Override

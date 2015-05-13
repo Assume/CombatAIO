@@ -18,11 +18,10 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class StaticTargetCalculator {
 
-	
 	public static void set(CombatTask combat_thread) {
 		RSCharacter[] entities = Combat.getAttackingEntities();
 		if (entities.length > 0) {
-			if (entities[0] instanceof RSNPC) {
+			if (entities[0] instanceof RSNPC && ((RSNPC) entities[0]).isValid()) {
 				if (PathFinding.canReach(entities[0], false)) {
 					combat_thread
 							.setMonsters(new RSNPC[] { (RSNPC) entities[0] });

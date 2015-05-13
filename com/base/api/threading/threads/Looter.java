@@ -39,7 +39,6 @@ public class Looter extends Threadable implements Pauseable {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new HashMap<String, LootItem>();
-		this.addPossibleLootItem("Coins");
 	}
 
 	private Looter(List<PauseType> pause_types) {
