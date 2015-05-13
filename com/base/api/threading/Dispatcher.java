@@ -172,8 +172,6 @@ public class Dispatcher implements XMLable {
 	private boolean stopped;
 
 	public void checkThreads() {
-		System.out.println(this.combat_thread.isPaused());
-		
 
 	}
 

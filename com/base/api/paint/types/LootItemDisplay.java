@@ -1,6 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.types;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Point;
 
 import org.tribot.api2007.types.RSGroundItem;
@@ -14,7 +14,7 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 	}
 
 	@Override
-	protected void draw(Graphics2D g) {
+	protected void draw(Graphics g) {
 		// TODO check if display is open (if we use that on RSGroundItem
 		// otherwise override isOpen to always return false)
 		// 

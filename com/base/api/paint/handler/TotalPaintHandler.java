@@ -1,7 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 
 public class TotalPaintHandler {
@@ -12,16 +11,14 @@ public class TotalPaintHandler {
 
 	private ExperiencePaintHandler experience_paint_handler;
 
-	private Graphics2D graphics;
-
-	public TotalPaintHandler(Graphics2D graphics) {
-		this.graphics = graphics;
+	public TotalPaintHandler() {
 		this.experience_paint_handler = new ExperiencePaintHandler();
+		this.monster_paint_handler = new MonsterPaintHandler();
+		this.loot_paint_handler = new LootPaintHandler();
 	}
 
 	public void setValues(final String[] monster_ids, final String... loot_ids) {
-		this.monster_paint_handler = new MonsterPaintHandler(monster_ids,
-				this.graphics);
+		this.monster_paint_handler = new MonsterPaintHandler();
 	}
 
 	public void onClick(Point p) {
@@ -43,8 +40,9 @@ public class TotalPaintHandler {
 	}
 
 	public void draw(Graphics arg0) {
-		// this.monster_paint_handler.draw(arg0);
-		//this.loot_paint_handler.draw(arg0);
+		updateAll();
+		this.monster_paint_handler.draw(arg0);
+		// this.loot_paint_handler.draw(arg0);
 		this.experience_paint_handler.draw(arg0);
 	}
 

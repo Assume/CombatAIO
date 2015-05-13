@@ -1,25 +1,34 @@
 package scripts.CombatAIO.com.base.api.paint.types;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 
+import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.paint.handler.Paintable;
 
 public class MonsterDisplay extends Paintable<RSNPC> {
 
-	public MonsterDisplay(RSNPC t) {
+	private boolean target;
+
+	public MonsterDisplay(RSNPC t, boolean target) {
 		super(t);
-		// TODO Auto-generated constructor stub
+		this.target = target;
 	}
 
 	@Override
-	protected void draw(Graphics2D g) {
-		// TODO check if display is open (if we use that on RSNPC
-		// otherwise override isOpen to always return false)
-		//
-
+	public void draw(Graphics g) {
+		Color c = Color.BLACK;
+		if (this.target)
+			c = Color.RED;
+		g.setColor(c);
+		if (super.get() != null) {
+			g.drawPolygon(Projection.getTileBoundsPoly(super.get(), 0));
+			g.drawString("HP: " + super.get().getHealth(), super.get()
+					.getLocalX(), super.get().getLocalY());
+		}
 	}
 
 	@Override

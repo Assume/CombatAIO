@@ -71,7 +71,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	@Override
 	public void onPaint(Graphics arg0) {
 		if (this.paint_handler == null)
-			this.paint_handler = new TotalPaintHandler((Graphics2D) arg0);
+			this.paint_handler = new TotalPaintHandler();
 		this.paint_handler.draw(arg0);
 	}
 

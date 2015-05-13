@@ -1,6 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Point;
 
 public abstract class Paintable<T> {
@@ -13,7 +13,7 @@ public abstract class Paintable<T> {
 		this.isOpen = false;
 	}
 
-	protected abstract void draw(Graphics2D g);
+	protected abstract void draw(Graphics g);
 
 	protected abstract void onClick();
 

@@ -1,25 +1,24 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 
 import org.tribot.api2007.types.RSNPC;
 
+import scripts.CombatAIO.com.base.api.paint.types.MonsterDisplay;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 final class MonsterPaintHandler implements PaintHandler {
 
-	private String[] monster_names;
-	private Graphics2D graphics;
 	private RSNPC[] paintable_monsters;
 	private RSNPC current_target;
 
-	public MonsterPaintHandler(String[] monster_names, Graphics2D graphics) {
-		this.monster_names = monster_names;
-		this.graphics = graphics;
+	public MonsterPaintHandler() {
+		this.paintable_monsters = new RSNPC[0];
+		this.current_target = (RSNPC) Dispatcher.get()
+				.get(ValueType.CURRENT_TARGET).getValue();
 	}
 
 	@Override
@@ -31,10 +30,9 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g) {
-	}
-
-	private RSNPC getCurrentMonster() {
-		return this.current_target;
+		new MonsterDisplay(this.current_target, true).draw(g);
+		for (RSNPC x : paintable_monsters)
+			new MonsterDisplay(x, false).draw(g);
 	}
 
 	@Override
