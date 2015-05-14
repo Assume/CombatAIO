@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.paint.types;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
@@ -25,7 +26,9 @@ public class MonsterDisplay extends Paintable<RSNPC> {
 			c = Color.RED;
 		g.setColor(c);
 		if (super.get() != null) {
-			g.drawPolygon(Projection.getTileBoundsPoly(super.get(), 0));
+			Polygon x = Projection.getTileBoundsPoly(super.get(), 0);
+			if (x != null)
+				g.drawPolygon(x);
 			g.drawString("HP: " + super.get().getHealth(), super.get()
 					.getLocalX(), super.get().getLocalY());
 		}

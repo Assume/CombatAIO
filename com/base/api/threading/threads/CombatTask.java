@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
@@ -73,9 +74,11 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			StaticTargetCalculator.set(this);
 			fight(this.possible_monsters);
 		} else {
-			if (Combat.getAttackingEntities().length == 0
-					&& this.current_target != null)
+			if ((Combat.getAttackingEntities().length == 0 || !Player
+					.getRSPlayer().isInCombat()) && this.current_target != null) {
 				StaticTargetCalculator.set(this);
+				fight(this.possible_monsters);
+			}
 			if (this.flicker)
 				flicker(this.flicker_prayer);
 			General.sleep(300);
