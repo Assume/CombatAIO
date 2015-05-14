@@ -43,7 +43,8 @@ public class Banker {
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private static void handleBankWindow(boolean world_hop) {
-		Banking.depositAll();
+		if (Inventory.getAll().length > 0)
+			Banking.depositAll();
 		Banking.withdraw(25, (String) Dispatcher.get().get(ValueType.FOOD_NAME)
 				.getValue());
 		Banking.close();

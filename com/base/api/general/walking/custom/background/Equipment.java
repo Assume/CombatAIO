@@ -1,10 +1,5 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
 import org.tribot.api2007.GameTab;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
@@ -26,15 +21,8 @@ public class Equipment {
 	public static void equip(int... id) {
 		GameTab.TABS.INVENTORY.open();
 		RSItem[] items = Inventory.find(id);
-		if (items.length > 0) {
-			Rectangle rec = items[0].getArea();
-			Point p = new Point((int) rec.getCenterX() + General.random(0, 4),
-					(int) rec.getCenterY() + General.random(0, 4));
-			Mouse.move(p);
-			Mouse.click(1);
+		if (items.length > 0)
 			items[0].click("W");
-		}
-
 	}
 
 	public static int getEquipmentID(Gear spot) {
