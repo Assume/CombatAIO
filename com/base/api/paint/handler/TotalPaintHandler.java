@@ -1,7 +1,11 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
@@ -39,7 +43,27 @@ public class TotalPaintHandler {
 		this.loot_paint_handler.update();
 	}
 
+	private String getFormattedTime(long time) {
+		long seconds = 0;
+		long minutes = 0;
+		long hours = 0;
+		seconds = time / 1000;
+		if (seconds >= 60) {
+			minutes = seconds / 60;
+			seconds -= (minutes * 60);
+		}
+		if (minutes >= 60) {
+			hours = minutes / 60;
+			minutes -= (hours * 60);
+		}
+		return (hours + ":" + minutes + ":" + seconds);
+	}
+
 	public void draw(Graphics arg0) {
+		arg0.setColor(Color.BLACK);
+		arg0.drawString(
+				getFormattedTime((Long) Dispatcher.get()
+						.get(ValueType.RUN_TIME).getValue()), 432, 473);
 		updateAll();
 		this.monster_paint_handler.draw(arg0);
 		// this.loot_paint_handler.draw(arg0);

@@ -22,10 +22,13 @@ public class ExperiencePaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g) {
-		if(!Dispatcher.hasBeenInitialized())
+		if (!Dispatcher.hasBeenInitialized())
 			return;
 		g.setFont(font1);
 		int i = 0;
+		g.setColor(Color.WHITE);
+		g.fillRect(8, 348, 242,
+				(13 * (getSkillsWithExperienceGained() - 1)) + 15);
 		for (final SkillData skill : SkillData.values()) {
 			if (skill.getExperienceGained() > 0) {
 				// Bar
@@ -50,6 +53,14 @@ public class ExperiencePaintHandler implements PaintHandler {
 			}
 		}
 
+	}
+
+	private int getSkillsWithExperienceGained() {
+		int i = 0;
+		for (final SkillData skill : SkillData.values())
+			if (skill.getExperienceGained() > 0)
+				i++;
+		return i;
 	}
 
 	private String toString(Long runtime, SkillData skill) {
