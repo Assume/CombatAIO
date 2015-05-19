@@ -5,8 +5,9 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.file.FileVisitResult;
-import static java.nio.file.FileVisitResult.CONTINUE;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +29,7 @@ public class FileUtil {
 	 *         directory.
 	 */
 	public static File getDir() {
-		return new File(Util.getWorkingDirectory() + "/Sigma/");
+		return new File(fixFilePath(Util.getWorkingDirectory() + "/Base/"));
 	}
 
 	/**
@@ -53,7 +54,6 @@ public class FileUtil {
 
 	/**
 	 * Returns a File located in the TRiBot directory folder.
-	 * <p>
 	 * 
 	 * @param checkExists
 	 *            True if the method will return null if the file doesn't exist,
@@ -77,7 +77,8 @@ public class FileUtil {
 				restOfPath += dirPart + "/";
 			}
 		}
-		restOfPath += fileName + "." + extension;
+		restOfPath += fixFilePath(fileName + (extension.equals("/") ? "" : ".")
+				+ extension);
 		File file = new File(triFolder, restOfPath);
 		return !checkExists || file.exists() ? file : null;
 	}
@@ -85,7 +86,6 @@ public class FileUtil {
 	/**
 	 * Returns the directory located in the TRiBot directory folder represented
 	 * by the specified directory path.
-	 * <p>
 	 * 
 	 * @param checkExists
 	 *            Whether or not the method will return null if the specified
@@ -113,10 +113,9 @@ public class FileUtil {
 	/**
 	 * Creates a file will the specified name, extension, and directory path. If
 	 * any parts of the directory path do not exist, they will be created.
-	 * <p>
+	 * 
 	 * Will return true if the specified file exists at the end of execution
 	 * (regardless if it had already existed), and false otherwise.
-	 * <p>
 	 * 
 	 * @param shouldWipe
 	 *            Determines whether the method should wipe the existing
@@ -153,10 +152,9 @@ public class FileUtil {
 
 	/**
 	 * Creates a directory based on the specified directory path.
-	 * <p>
+	 * 
 	 * Will return true if the specified directory exists at the end of
 	 * execution (regardless if it had already existed), and false otherwise.
-	 * <p>
 	 * 
 	 * @param dirPath
 	 *            The directory path that the file will take.
@@ -178,11 +176,10 @@ public class FileUtil {
 
 	/**
 	 * Deletes a directory based on the specified directory path.
-	 * <p>
+	 * 
 	 * Will return false if the specified directory exists at the end of
 	 * execution (regardless if it didn't exist to begin with), and true
 	 * otherwise.
-	 * <p>
 	 * 
 	 * @param dirPath
 	 *            The directory path that the file will take.
@@ -197,11 +194,10 @@ public class FileUtil {
 
 	/**
 	 * Deletes a directory based on the specified directory path.
-	 * <p>
+	 * 
 	 * Will return false if the specified directory exists at the end of
 	 * execution (regardless if it didn't exist to begin with), and true
 	 * otherwise.
-	 * <p>
 	 * 
 	 * @param directory
 	 *            The directory that is to be deleted.
@@ -221,7 +217,7 @@ public class FileUtil {
 						BasicFileAttributes attrs) throws IOException {
 					System.out.println("Deleting file: " + file);
 					Files.delete(file);
-					return CONTINUE;
+					return FileVisitResult.CONTINUE;
 				}
 
 				@Override
@@ -230,7 +226,7 @@ public class FileUtil {
 					System.out.println("Deleting dir: " + dir);
 					if (exc == null) {
 						Files.delete(dir);
-						return CONTINUE;
+						return FileVisitResult.CONTINUE;
 					} else {
 						throw exc;
 					}
@@ -245,7 +241,6 @@ public class FileUtil {
 
 	/**
 	 * Returns the contents of the specified text file.
-	 * <p>
 	 * 
 	 * @param fileName
 	 *            The name of the file that is being read.
@@ -263,7 +258,6 @@ public class FileUtil {
 
 	/**
 	 * Returns the contents of the specified text file.
-	 * <p>
 	 * 
 	 * @param fileName
 	 *            The name of the file that is being read.
@@ -277,7 +271,6 @@ public class FileUtil {
 
 	/**
 	 * Returns the contents of the specified text file.
-	 * <p>
 	 * 
 	 * @param file
 	 *            The file that is being read from.
@@ -330,7 +323,6 @@ public class FileUtil {
 
 	/**
 	 * Writes the specified text to the specified file.
-	 * <p>
 	 * 
 	 * @param text
 	 *            The text that is being written to the file.
@@ -349,7 +341,6 @@ public class FileUtil {
 
 	/**
 	 * Writes the specified text to the specified file.
-	 * <p>
 	 * 
 	 * @param text
 	 *            The text that is being written to the file.
@@ -372,7 +363,6 @@ public class FileUtil {
 
 	/**
 	 * Writes the specified text to the specified file.
-	 * <p>
 	 * 
 	 * @param text
 	 *            The text that is being written to the file.
@@ -385,10 +375,14 @@ public class FileUtil {
 	 */
 	public static boolean writeTextFileContents(String text, File file,
 			boolean overwrite) {
-		FileWriter writer = null;
+		Writer writer = null;
 		if (file != null) {
 			try {
-				writer = new FileWriter(file.getAbsolutePath(), !overwrite);
+				if (overwrite) {
+					writer = new PrintWriter(file);
+				} else {
+					writer = new FileWriter(file.getAbsolutePath(), true);
+				}
 				writer.write(text);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -435,5 +429,9 @@ public class FileUtil {
 				}
 			});
 		}
+	}
+
+	public static String fixFilePath(String filePath) {
+		return filePath.replace("/", File.separator);
 	}
 }

@@ -75,7 +75,7 @@ public class Items07 {
 		synchronized (LOCK) {
 			if (getDumpFile() == null) {
 				Downloader.download(dump_url, Util.getWorkingDirectory()
-						.getAbsolutePath() + "/Sigma", "item_dump.txt");
+						.getAbsolutePath() + "/Base", "item_dump.txt");
 			}
 		}
 	}
