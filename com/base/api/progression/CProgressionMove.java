@@ -1,17 +1,28 @@
 package scripts.CombatAIO.com.base.api.progression;
 
-public abstract class CProgressionMove {
+import scripts.CombatAIO.com.base.api.progression.conditions.CCurrentLevel;
+
+public class CProgressionMove {
+
+	private CProgressionCondition con;
 
 	private CProgressionAction action;
 
-	public CProgressionMove(CProgressionAction action) {
+	public CProgressionMove(CProgressionCondition con, CProgressionAction action) {
+		this.con = con;
 		this.action = action;
 	}
 
-	public abstract boolean shouldProgress();
+	public boolean shouldProgress() {
+		return con.shouldProgress();
+	}
 
 	public void execute() {
 		this.action.execute();
+	}
+
+	public boolean removable() {
+		return con instanceof CCurrentLevel;
 	}
 
 }

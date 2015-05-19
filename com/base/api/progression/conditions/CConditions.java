@@ -5,20 +5,20 @@ import javax.swing.JOptionPane;
 
 import org.tribot.api2007.Skills.SKILLS;
 
-import scripts.CombatAIO.com.base.api.progression.CProgressionMove;
+import scripts.CombatAIO.com.base.api.progression.CProgressionCondition;
 
 public enum CConditions {
 
 	TIME_ELAPSED {
 		@Override
-		CProgressionMove make() {
+		CProgressionCondition make() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 	},
 	CURRENT_LEVEL {
 		@Override
-		CProgressionMove make() {
+		CProgressionCondition make() {
 			JComboBox<SKILLS> jcb = new JComboBox<SKILLS>(new SKILLS[] {
 					SKILLS.ATTACK, SKILLS.STRENGTH, SKILLS.HITPOINTS,
 					SKILLS.RANGED, SKILLS.HITPOINTS });
@@ -31,6 +31,6 @@ public enum CConditions {
 		}
 	};
 
-	abstract CProgressionMove make();
+	abstract CProgressionCondition make();
 
 }

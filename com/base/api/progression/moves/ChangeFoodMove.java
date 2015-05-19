@@ -16,7 +16,6 @@ public class ChangeFoodMove extends CProgressionAction {
 	@Override
 	public void execute() {
 		Dispatcher.get().set(ValueType.FOOD_NAME, new Value<String>(food_name));
-
 	}
 
 }
