@@ -7,7 +7,6 @@ import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSPlayer;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 
@@ -29,7 +28,7 @@ public class PKAvoider extends Threadable {
 		while (Dispatcher.get().isRunning()) {
 			if (this.isBeingAttackedByPlayer()) {
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-				Banker.bank(this.hop_on_attack);
+				Dispatcher.get().bank(this.hop_on_attack);
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
 		}

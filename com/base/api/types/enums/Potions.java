@@ -27,6 +27,14 @@ public enum Potions {
 		this.ids = ids;
 	}
 
+	public static boolean isPotionId(int id) {
+		int[] ids = combineIDs(Potions.values());
+		for (int x : ids)
+			if (x == id)
+				return true;
+		return false;
+	}
+
 	public SKILLS getSkill() {
 		return skill;
 	}
@@ -62,5 +70,13 @@ public enum Potions {
 		if (SKILLS.PRAYER.getCurrentLevel() < 5)
 			potions.add(PRAYER);
 		return potions.toArray(new Potions[potions.size()]);
+	}
+
+	public static int[] getAllIds(int id) {
+		for (Potions x : values())
+			for (int y : x.ids)
+				if (y == id)
+					return x.getPotionsIDs();
+		return new int[0];
 	}
 }

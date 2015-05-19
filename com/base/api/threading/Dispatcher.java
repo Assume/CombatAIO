@@ -8,6 +8,7 @@ import org.tribot.api2007.types.RSTile;
 import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
+import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
@@ -51,6 +52,7 @@ public class Dispatcher implements XMLable {
 	private long hash_id;
 	private ABCUtil abc_util;
 	private CProgressionHandler handler;
+	private Banker banker;
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
@@ -60,6 +62,7 @@ public class Dispatcher implements XMLable {
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
+		this.banker = new Banker();
 	}
 
 	/*
@@ -274,5 +277,8 @@ public class Dispatcher implements XMLable {
 		return dispatcher != null;
 	}
 
+	public void bank(boolean world_hop) {
+		this.banker.bank(world_hop);
+	}
 
 }
