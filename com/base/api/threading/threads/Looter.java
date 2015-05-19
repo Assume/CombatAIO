@@ -35,12 +35,14 @@ public class Looter extends Threadable implements Pauseable {
 	private Map<String, LootItem> items_known;
 	private boolean eat_for_space = true;
 	private boolean wait_for_loot;
+	private boolean loot_in_combat;
 
 	public Looter() {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new HashMap<String, LootItem>();
+		this.addPossibleLootItem("Clue scroll");
 	}
 
 	private Looter(List<PauseType> pause_types) {
@@ -249,6 +251,22 @@ public class Looter extends Threadable implements Pauseable {
 
 	public Value<Boolean> shouldEatForSpace() {
 		return new Value<Boolean>(this.eat_for_space);
+	}
+
+	public void setLootInCombat(boolean active) {
+		this.loot_in_combat = active;
+	}
+
+	public boolean lootInCombat() {
+		return this.lootInCombat();
+	}
+
+	public boolean waitForLoot() {
+		return this.wait_for_loot;
+	}
+
+	public void setWaitForLoot(boolean active) {
+		this.wait_for_loot = active;
 	}
 
 }

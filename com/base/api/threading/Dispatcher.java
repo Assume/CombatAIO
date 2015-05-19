@@ -108,6 +108,12 @@ public class Dispatcher implements XMLable {
 			return this.looting_thread.getAllLootableItemNames();
 		case IS_BONES_TO_PEACHES:
 			return new Value<Boolean>(this.eat_thread.isUsingBonesToPeaches());
+		case LOOT_IN_COMBAT:
+			return new Value<Boolean>(this.looting_thread.lootInCombat());
+		case WAIT_FOR_LOOT:
+			return new Value<Boolean>(this.looting_thread.waitForLoot());
+		default:
+			break;
 		}
 		return null;
 	}
@@ -134,6 +140,13 @@ public class Dispatcher implements XMLable {
 			break;
 		case LOOT_ITEM_NAMES:
 			this.looting_thread.addPossibleLootItem((String[]) val.getValue());
+			break;
+		case LOOT_IN_COMBAT:
+			this.looting_thread.setLootInCombat((Boolean) val.getValue());
+			break;
+		case WAIT_FOR_LOOT:
+			this.looting_thread.setWaitForLoot((Boolean) val.getValue());
+			break;
 		default:
 			break;
 		}
