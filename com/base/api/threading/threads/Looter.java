@@ -34,6 +34,7 @@ public class Looter extends Threadable implements Pauseable {
 
 	private Map<String, LootItem> items_known;
 	private boolean eat_for_space = true;
+	private boolean wait_for_loot;
 
 	public Looter() {
 		this(Arrays.asList(new PauseType[] {
@@ -81,8 +82,6 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void waitForLoot(RSNPC target) {
-		if (this.items_known.size() == 0)
-			return;
 		while (target.isValid() && target.getHealth() == 0
 				&& target.isInCombat())
 			General.sleep(50);
@@ -90,7 +89,8 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void loot(RSNPC target) {
-		waitForLoot(target);
+		if (this.wait_for_loot)
+			waitForLoot(target);
 		RSGroundItem[] items = GroundItems.find(getAllItemsName());
 		if (items.length == 0)
 			return;
@@ -141,7 +141,7 @@ public class Looter extends Threadable implements Pauseable {
 			if (def.getName().equalsIgnoreCase("bones"))
 				return true;
 		}
-		RSItem[] food = Inventory.find(((Food)Dispatcher.get()
+		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
 				.get(ValueType.FOOD).getValue()).getId());
 		if (food.length > 0) {
 			final int total_items_in_inventory = getTotalInventoryCount();
