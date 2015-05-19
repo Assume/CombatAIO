@@ -28,6 +28,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 
 public class Looter extends Threadable implements Pauseable {
 
@@ -140,8 +141,8 @@ public class Looter extends Threadable implements Pauseable {
 			if (def.getName().equalsIgnoreCase("bones"))
 				return true;
 		}
-		RSItem[] food = Inventory.find((String) Dispatcher.get()
-				.get(ValueType.FOOD_NAME).getValue());
+		RSItem[] food = Inventory.find(((Food)Dispatcher.get()
+				.get(ValueType.FOOD).getValue()).getId());
 		if (food.length > 0) {
 			final int total_items_in_inventory = getTotalInventoryCount();
 			food[0].click("Eat");

@@ -1,8 +1,6 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
@@ -17,6 +15,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.xml.XMLReader;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter;
@@ -86,8 +85,8 @@ public class Dispatcher implements XMLable {
 			return looting_thread.getItemPrice(extra_paramaters);
 		case AMOUNT_LOOTED_OF_ITEM:
 			return looting_thread.getAmountLooted(extra_paramaters);
-		case FOOD_NAME:
-			return eat_thread.getFoodName();
+		case FOOD:
+			return eat_thread.getFood();
 		case MONSTER_NAMES:
 			return this.combat_thread.getMonsterNames();
 		case FIRST_MONSTER_NAME:
@@ -115,8 +114,8 @@ public class Dispatcher implements XMLable {
 		case MINIMUM_LOOT_VALUE:
 			// TODO
 			break;
-		case FOOD_NAME:
-			eat_thread.setFoodName((String) val.getValue());
+		case FOOD:
+			eat_thread.setFood((Food) val.getValue());
 			break;
 		case MONSTER_NAMES:
 			this.combat_thread.setMonsterNames((String[]) val.getValue());
@@ -183,8 +182,6 @@ public class Dispatcher implements XMLable {
 	@Override
 	public Element toXML(XMLWriter writer, Element parent, Object... data) {
 		writer.append(parent, "hash_id", this.hash_id);
-		writer.append(parent, "food_name",
-				(String) this.get(ValueType.FOOD_NAME).getValue());
 		writer.appendArray(parent, "monster_names",
 				stringArrayToList((String[]) this.get(ValueType.MONSTER_NAMES)
 						.getValue()), getStringXMLLoader());
@@ -233,8 +230,6 @@ public class Dispatcher implements XMLable {
 	@Override
 	public void fromXML(XMLReader reader, String path, Object... data) {
 		this.hash_id = reader.evalLong("hash_id", path);
-		Dispatcher.get().set(ValueType.FOOD_NAME,
-				new Value<String>(reader.eval("food_name", path)));
 		ArrayList<String> elements = reader.evalArray(path,
 				"monster_names/monster_name", "monster_names");
 		Dispatcher.get().set(
@@ -279,8 +274,5 @@ public class Dispatcher implements XMLable {
 		return dispatcher != null;
 	}
 
-	public boolean isEating() {
-		return this.eat_thread.isEating();
-	}
 
 }

@@ -4,18 +4,19 @@ import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 
 public class ChangeFoodMove extends CProgressionAction {
 
-	private String food_name;
+	private Food food;
 
-	public ChangeFoodMove(String name) {
-		this.food_name = name;
+	public ChangeFoodMove(Food food) {
+		this.food = food;
 	}
 
 	@Override
 	public void execute() {
-		Dispatcher.get().set(ValueType.FOOD_NAME, new Value<String>(food_name));
+		Dispatcher.get().set(ValueType.FOOD, new Value<Food>(food));
 	}
 
 }

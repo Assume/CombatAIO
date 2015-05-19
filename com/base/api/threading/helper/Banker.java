@@ -11,6 +11,7 @@ import org.tribot.api2007.WorldHopper;
 import scripts.CombatAIO.com.base.api.general.walking.CWalking;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class Banker {
@@ -45,8 +46,8 @@ public class Banker {
 	private static void handleBankWindow(boolean world_hop) {
 		if (Inventory.getAll().length > 0)
 			Banking.depositAll();
-		Banking.withdraw(25, (String) Dispatcher.get().get(ValueType.FOOD_NAME)
-				.getValue());
+		Banking.withdraw(25, ((Food) Dispatcher.get().get(ValueType.FOOD)
+				.getValue()).getId());
 		Banking.close();
 	}
 
@@ -66,13 +67,13 @@ public class Banker {
 	}
 
 	public static boolean shouldBank() {
-		String name = (String) Dispatcher.get().get(ValueType.FOOD_NAME)
-				.getValue();
-		int food_length = Inventory.find(name).length;
+		int id = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
+				.getId();
+		int food_length = Inventory.find(id).length;
 		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
 				&& food_length > 0)
 			return false;
 		return Inventory.isFull()
-				|| (name != null && Inventory.find(name).length == 0);
+				|| (id != -1 && Inventory.find(id).length == 0);
 	}
 }

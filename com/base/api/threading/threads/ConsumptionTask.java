@@ -13,6 +13,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 
 public class ConsumptionTask extends Threadable implements Runnable {
 
@@ -24,8 +25,7 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		super(pause_types);
 	}
 
-	private String food_name = "Salmon";
-	private boolean is_eating;
+	private Food food = null;
 
 	@Override
 	public void run() {
@@ -33,20 +33,18 @@ public class ConsumptionTask extends Threadable implements Runnable {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
 					.next()) {
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
-				this.is_eating = true;
 				eat();
 				executeBonesToPeaches();
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
-				this.is_eating = false;
 			}
 			General.sleep(500);
 		}
 	}
 
 	private void eat() {
-		RSItem[] food = Inventory.find((String) Dispatcher.get()
-				.get(ValueType.FOOD_NAME).getValue());
+		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
+				.get(ValueType.FOOD).getValue()).getId());
 		if (food.length > 0) {
 			food[0].click("Eat");
 			Dispatcher.get().attackTarget();
@@ -54,11 +52,11 @@ public class ConsumptionTask extends Threadable implements Runnable {
 	}
 
 	public boolean isUsingBonesToPeaches() {
-		return "peach".equalsIgnoreCase(this.food_name);
+		return this.food == Food.BonesToPeaches;
 	}
 
 	private void executeBonesToPeaches() {
-		if (food_name.equalsIgnoreCase("peach")) {
+		if (food == Food.BonesToPeaches) {
 			RSItem[] food = Inventory.find("Peach");
 			if (food.length < 3) {
 				RSItem[] bones = Inventory.find("Bones");
@@ -73,21 +71,17 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		}
 	}
 
-	public Value<String> getFoodName() {
-		return new Value<String>(this.food_name);
+	public Value<Food> getFood() {
+		return new Value<Food>(food);
 	}
 
-	public void setFoodName(String name) {
-		this.food_name = name;
+	public void setFood(Food food) {
+		this.food = food;
 	}
 
 	@Override
 	public boolean hasPauseType(PauseType type) {
 		return false;
-	}
-
-	public boolean isEating() {
-		return this.is_eating;
 	}
 
 }
