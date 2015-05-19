@@ -3,7 +3,6 @@ package scripts.CombatAIO.com.base.main.gui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -15,8 +14,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-
-import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -47,7 +44,7 @@ public class TemporaryGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public TemporaryGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 495);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -82,10 +79,18 @@ public class TemporaryGUI extends JFrame {
 		contentPane.add(chckbxNewCheckBox);
 
 		JButton btnBankSetup = new JButton("Bank setup");
+		btnBankSetup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnBankSetup.setBounds(312, 191, 89, 23);
 		contentPane.add(btnBankSetup);
 
 		JButton btnLootSetup = new JButton("Loot setup");
+		btnLootSetup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnLootSetup.setBounds(312, 225, 89, 23);
 		contentPane.add(btnLootSetup);
 
