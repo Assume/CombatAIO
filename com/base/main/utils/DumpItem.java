@@ -1,6 +1,7 @@
 package scripts.CombatAIO.com.base.main.utils;
 
-import scripts.starfox.interfaces.ui.Listable;
+import scripts.CombatAIO.com.base.main.gui.elements.Listable;
+
 
 /**
  *

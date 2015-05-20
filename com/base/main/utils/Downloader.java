@@ -11,7 +11,6 @@ import java.net.URL;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import scripts.starfox.api.ErrorReporting;
 
 /**
  * The Downloader class provides methods for downloading files and registering files to the native environment.
@@ -39,10 +38,10 @@ public class Downloader {
                 Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (MalformedURLException | FileSystemException ex) {
-            ErrorReporting.report(ex);
+
             return;
         } catch (IOException ex) {
-            ErrorReporting.report(ex);
+        
         }
         if (file != null && file.exists() && file.isFile()) {
             System.out.println("Successfully downloaded file from: " + fileUrl);
@@ -66,7 +65,7 @@ public class Downloader {
             }
             ge.registerFont(font);
         } catch (IOException | FontFormatException e) {
-            ErrorReporting.report(e);
+           
         }
     }
 }

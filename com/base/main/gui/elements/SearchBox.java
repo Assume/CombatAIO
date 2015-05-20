@@ -18,8 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
-import scripts.starfox.interfaces.ui.Listable;
-
 
 /**
  * @author Nolan

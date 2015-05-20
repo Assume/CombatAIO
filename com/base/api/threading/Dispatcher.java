@@ -2,6 +2,7 @@ package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
 
+import org.tribot.api.General;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
@@ -23,6 +24,7 @@ import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
 import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.main.BaseCombat;
+import scripts.CombatAIO.com.base.main.gui.TemporaryGUI;
 
 public class Dispatcher implements XMLable {
 
@@ -39,6 +41,10 @@ public class Dispatcher implements XMLable {
 	private boolean started = false;
 
 	public void start() {
+		TemporaryGUI gui = new TemporaryGUI();
+		gui.setVisible(true);
+		while (gui.isVisible())
+			General.sleep(300);
 		if (!started) {
 			run();
 			started = true;

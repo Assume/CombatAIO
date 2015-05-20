@@ -4,12 +4,18 @@ public class LootItem {
 
 	private int price;
 	private int amount_looted;
+	private boolean alch;
 	private String name;
 
 	public LootItem(String name) {
+		this(name, false);
+	}
+
+	public LootItem(String name, boolean alch) {
 		this.price = 0;
 		this.amount_looted = 0;
 		this.name = name;
+		this.alch = alch;
 	}
 
 	public int getPrice() {

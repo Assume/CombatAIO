@@ -77,7 +77,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			if ((Combat.getAttackingEntities().length == 0 || !Player
 					.getRSPlayer().isInCombat()) && this.current_target != null) {
 				StaticTargetCalculator.set(this);
-				fight(this.possible_monsters);
 			}
 			if (this.flicker)
 				flicker(this.flicker_prayer);
@@ -89,7 +88,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void run() {
 		while (Dispatcher.get().isRunning())
 			fight();
-
 	}
 
 	private void fight(RSNPC[] monsters) {

@@ -64,8 +64,8 @@ public class TotalPaintHandler {
 		arg0.drawString(
 				getFormattedTime((Long) Dispatcher.get()
 						.get(ValueType.RUN_TIME).getValue()), 432, 473);
-		updateAll();
-		this.monster_paint_handler.draw(arg0);
+		//updateAll();
+		// this.monster_paint_handler.draw(arg0);
 		// this.loot_paint_handler.draw(arg0);
 		this.experience_paint_handler.draw(arg0);
 	}
