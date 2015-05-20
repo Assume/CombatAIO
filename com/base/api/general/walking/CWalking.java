@@ -14,17 +14,18 @@ import scripts.CombatAIO.com.base.api.general.walking.types.Teleport;
 
 public class CWalking {
 
-	public static void walk(MovementType type) {
+	public static JeweleryTeleport walk(MovementType type) {
+		JeweleryTeleport teleported = null;
 		RSTile end_tile = (type == MovementType.TO_BANK ? Bank.getNearestBank()
 				.getTile() : (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
 				.getValue());
 		if (isFasterToTeleport(end_tile))
-			Teleporting.attemptToTeleport(end_tile);
+			teleported = Teleporting.attemptToTeleport(end_tile);
 		if (type.equals(MovementType.TO_BANK))
 			WebWalking.walkToBank();
 		else
 			WebWalking.walkTo(end_tile);
-		return;
+		return teleported;
 	}
 
 	private static boolean isFasterToTeleport(RSTile end_tile) {

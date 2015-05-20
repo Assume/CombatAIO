@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.main.gui;
+package scripts.CombatAIO.com.base.main.gui.elements;
 
 import java.awt.Color;
 import java.awt.Component;

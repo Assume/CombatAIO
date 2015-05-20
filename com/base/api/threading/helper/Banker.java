@@ -8,11 +8,15 @@ import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Camera;
+import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.CombatAIO.com.base.api.general.walking.CWalking;
+import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
+import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.BankItem;
@@ -48,23 +52,29 @@ public class Banker {
 	public void bank(boolean world_hop) {
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
-		CWalking.walk(MovementType.TO_BANK);
+		JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
+		if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
+			checkAndRemoveGlory();
 		openBank(world_hop);
-		handleBankWindow(world_hop);
+		handleBankWindow(world_hop, teleport);
 		if (world_hop)
 			WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 		CWalking.walk(MovementType.TO_MONSTER);
 	}
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
-	private void handleBankWindow(boolean world_hop) {
+	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
 		if (Inventory.getAll().length > 0)
 			Banking.depositAll();
-		withdraw();
+		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
+				.getJewelery());
 		Banking.close();
+		if (withdraw_jewelery)
+			scripts.CombatAIO.com.base.api.general.walking.custom.background.Equipment
+					.equip(teleport.getJewelery().getIDs());
 	}
 
-	private void withdraw() {
+	private boolean withdraw(Jewelery jewelery) {
 		Banking.withdraw(this.food_amount,
 				((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
 						.getId());
@@ -73,6 +83,11 @@ public class Banker {
 				withdrawYofX(x.getAmount(), Potions.getAllIds(x.getId()));
 			Banking.withdraw(x.getAmount(), x.getId());
 		}
+		if (jewelery != null && needToWithdrawJewelery(jewelery)) {
+			withdrawYofX(1, jewelery.getIDs());
+			return true;
+		}
+		return false;
 	}
 
 	private static void withdrawYofX(int amount, int... ids) {
@@ -99,6 +114,29 @@ public class Banker {
 			return;
 		}
 		General.sleep(250, 800);
+	}
+
+	private boolean checkAndRemoveGlory() {
+		RSItem[] equipment = Equipment.find(SLOTS.AMULET);
+		if (equipment.length > 0)
+			if (equipment[0].getID() == 1704) {
+				Equipment.remove(SLOTS.AMULET);
+				return true;
+			}
+		return false;
+	}
+
+	private boolean needToWithdrawJewelery(Jewelery teleport) {
+		switch (teleport) {
+		case GLORY:
+			return Equipment.find(teleport.getIDs()).length == 0;
+		case RING_OF_DUELING:
+		case GAMES_NECKLACE:
+			return Equipment.find(teleport.getIDs()).length == 0
+					&& Inventory.find(teleport.getIDs()).length == 0;
+		}
+		return false;
+
 	}
 
 	public static boolean shouldBank() {

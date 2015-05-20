@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.main.gui;
+package scripts.CombatAIO.com.base.main.gui.elements;
 
 import javax.swing.JComboBox;
 import javax.swing.plaf.basic.BasicComboBoxEditor;

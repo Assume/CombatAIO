@@ -18,7 +18,7 @@ public enum Jewelery {
 			JEWELERY_TELEPORT_LOCATIONS.CASTLE_WARS), GAMES_NECKLACE(new int[] {
 			3853, 3855, 3857, 3859, 3861, 3863, 3865, 3867 },
 			JEWELERY_TELEPORT_LOCATIONS.BARBARIAN_OUTPOST), GLORY(new int[] {
-			1706, 1708, 1710, 1712 }, JEWELERY_TELEPORT_LOCATIONS.EDGEVILLE,
+			1712, 1710, 1708, 1706 }, JEWELERY_TELEPORT_LOCATIONS.EDGEVILLE,
 			JEWELERY_TELEPORT_LOCATIONS.DRAYNOR_VILLAGE,
 			JEWELERY_TELEPORT_LOCATIONS.KARAMJA);
 
@@ -96,5 +96,9 @@ public enum Jewelery {
 		}
 		return new JeweleryTeleport(nearest_jewelery, nearest_teleport);
 
+	}
+
+	public int[] getIDs() {
+		return this.ids;
 	}
 }

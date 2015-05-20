@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.main.gui;
+package scripts.CombatAIO.com.base.main.gui.elements;
 
 /**
  * @author Starfox

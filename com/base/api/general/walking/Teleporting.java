@@ -8,24 +8,24 @@ import scripts.CombatAIO.com.base.api.general.walking.types.Teleport;
 
 public class Teleporting {
 
-	public static boolean attemptToTeleport(RSTile pos) {
+	public static JeweleryTeleport attemptToTeleport(RSTile pos) {
 		Teleport t = Teleport.getTeleportNearestTo(pos);
 		JeweleryTeleport jt = Jewelery.getNearestJewleryTeleport(pos);
 		if (t == null && jt == null)
-			return false;
+			return null;
 		if (!t.canTeleport() && !jt.canTeleport())
-			return false;
+			return null;
 		if (t.getSpellLocationResult().distanceTo(pos) < jt
 				.getTeleportLocation().getTeleportTile().distanceTo(pos)
 				&& t.canTeleport())
-			return t.teleport();
+			return null;
 		else {
 			if (jt.canTeleport()) {
-				return jt.operate();
+				return jt;
 			} else if (t.canTeleport())
-				return t.teleport();
+				return null;
 		}
-		return false;
+		return null;
 	}
 
 }
