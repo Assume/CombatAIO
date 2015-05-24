@@ -201,6 +201,10 @@ public class Dispatcher implements XMLable {
 		this.handler.checkAndExecute();
 	}
 
+	public boolean hasStarted() {
+		return this.started;
+	}
+
 	@Override
 	public Element toXML(XMLWriter writer, Element parent, Object... data) {
 		writer.append(parent, "hash_id", this.hash_id);

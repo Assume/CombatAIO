@@ -124,7 +124,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void attackTarget(RSNPC target) {
-
 		if (target == null
 				|| (target.isInCombat() && !target.isInteractingWithMe()))
 			return;
