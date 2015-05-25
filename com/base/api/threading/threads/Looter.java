@@ -36,6 +36,7 @@ public class Looter extends Threadable implements Pauseable {
 	private boolean eat_for_space = true;
 	private boolean wait_for_loot;
 	private boolean loot_in_combat;
+	private RSNPC nil = null;
 
 	public Looter() {
 		this(Arrays.asList(new PauseType[] {
@@ -67,6 +68,8 @@ public class Looter extends Threadable implements Pauseable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
+			if (this.loot_in_combat && Player.getRSPlayer().isInCombat())
+				loot(nil);
 			if (target == null) {
 				General.sleep(800);
 				continue;
@@ -91,7 +94,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void loot(RSNPC target) {
-		if (this.wait_for_loot)
+		if (this.wait_for_loot && !this.loot_in_combat)
 			waitForLoot(target);
 		RSGroundItem[] items = GroundItems.find(getAllItemsName());
 		if (items.length == 0)

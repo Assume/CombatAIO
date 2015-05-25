@@ -23,6 +23,7 @@ import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
+import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 
 public class Banker {
 
@@ -65,7 +66,8 @@ public class Banker {
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
 		if (Inventory.getAll().length > 0)
-			Banking.depositAll();
+			Banking.depositAllExcept(((Weapon) (Dispatcher.get().get(
+					ValueType.SPECIAL_ATTACK_WEAPON).getValue())).toString());
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
 				.getJewelery());
 		Banking.close();

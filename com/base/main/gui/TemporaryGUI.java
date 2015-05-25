@@ -175,7 +175,7 @@ public class TemporaryGUI extends JFrame {
 		Dispatcher.get().set(ValueType.WAIT_FOR_LOOT,
 				new Value<Boolean>(check_box_wait_for_loot.isSelected()));
 		Dispatcher.get().set(ValueType.LOOT_IN_COMBAT,
-				new Value<Boolean>(check_box_wait_for_loot.isSelected()));
+				new Value<Boolean>(check_box_loot_in_combat.isSelected()));
 		Dispatcher.get().set(ValueType.MONSTER_NAMES, getMonsterNames());
 		Dispatcher.get().set(
 				ValueType.SPECIAL_ATTACK_WEAPON,

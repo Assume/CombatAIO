@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ final class LootPaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g) {
+		g.setColor(Color.BLUE);
 		Map<RSTile, List<RSGroundItem>> map = sort();
 		for (RSTile tile : map.keySet()) {
 			String[] unique_names = getUniqueNames(map.get(tile));

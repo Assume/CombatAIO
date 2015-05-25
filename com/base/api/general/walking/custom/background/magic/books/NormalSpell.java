@@ -17,11 +17,7 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Sp
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Staff;
 
 
-/**
- * Constants that represent spells from the normal magic book.
- * 
- * @author Starfox
- */
+
 public enum NormalSpell implements Serializable {
 
 	// COMBAT SPELLS
