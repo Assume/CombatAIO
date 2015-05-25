@@ -154,7 +154,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void useSpecialAttack() {
-		if (this.special_attack_weapon == null)
+		if (this.special_attack_weapon == Weapon.NONE)
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage())
 			this.special_attack_weapon.useSpecial();
