@@ -6,7 +6,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 
-public class Equipment {
+public class CEquipment {
 
 	public enum Gear {
 		HELM(0), CAPE(1), NECK(2), WEAPON(3), BODY(4), SHIELD(5), LEGS(7), GLOVES(
@@ -21,6 +21,13 @@ public class Equipment {
 	public static void equip(int... id) {
 		GameTab.TABS.INVENTORY.open();
 		RSItem[] items = Inventory.find(id);
+		if (items.length > 0)
+			items[0].click("W");
+	}
+
+	public static void equip(String... name) {
+		GameTab.TABS.INVENTORY.open();
+		RSItem[] items = Inventory.find(name);
 		if (items.length > 0)
 			items[0].click("W");
 	}

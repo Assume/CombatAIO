@@ -1,7 +1,7 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.Equipment;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
 
 public class DChangeWeapon implements DAction {
 
@@ -15,7 +15,7 @@ public class DChangeWeapon implements DAction {
 
 	@Override
 	public void execute() {
-		Equipment.equip(id);
+		CEquipment.equip(id);
 	}
 
 	@Override

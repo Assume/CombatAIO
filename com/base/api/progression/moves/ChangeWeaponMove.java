@@ -1,6 +1,6 @@
 package scripts.CombatAIO.com.base.api.progression.moves;
 
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.Equipment;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
 import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
 
 public class ChangeWeaponMove extends CProgressionAction {
@@ -13,7 +13,7 @@ public class ChangeWeaponMove extends CProgressionAction {
 
 	@Override
 	public void execute() {
-		Equipment.equip(id);
+		CEquipment.equip(id);
 	}
 
 }

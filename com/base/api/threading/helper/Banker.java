@@ -70,7 +70,7 @@ public class Banker {
 				.getJewelery());
 		Banking.close();
 		if (withdraw_jewelery)
-			scripts.CombatAIO.com.base.api.general.walking.custom.background.Equipment
+			scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment
 					.equip(teleport.getJewelery().getIDs());
 	}
 

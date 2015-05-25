@@ -81,6 +81,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			}
 			if (this.flicker)
 				flicker(this.flicker_prayer);
+			this.useSpecialAttack();
 			General.sleep(300);
 		}
 	}
@@ -161,10 +162,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	private int getSpecialPercent() {
 		return Game.getSetting(300) / 10;
-	}
-
-	private boolean isSpecialOn() {
-		return Game.getSetting(301) == 1;
 	}
 
 	public void setMonsters(RSNPC[] possible_monsters) {
