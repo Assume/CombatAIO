@@ -19,6 +19,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
+import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.xml.XMLReader;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
@@ -118,6 +119,8 @@ public class Dispatcher implements XMLable {
 			return new Value<Boolean>(this.looting_thread.lootInCombat());
 		case WAIT_FOR_LOOT:
 			return new Value<Boolean>(this.looting_thread.waitForLoot());
+		case BANKER:
+			return new Value<Banker>(this.banker);
 		default:
 			break;
 		}
@@ -152,6 +155,9 @@ public class Dispatcher implements XMLable {
 			break;
 		case WAIT_FOR_LOOT:
 			this.looting_thread.setWaitForLoot((Boolean) val.getValue());
+			break;
+		case SPECIAL_ATTACK_WEAPON:
+			this.combat_thread.setSpecialAttackWeapon((Weapon) val.getValue());
 			break;
 		default:
 			break;

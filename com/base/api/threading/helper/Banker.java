@@ -149,4 +149,9 @@ public class Banker {
 		return Inventory.isFull()
 				|| (id != -1 && Inventory.find(id).length == 0);
 	}
+
+	public void addBankItem(int id, int amount) {
+		this.list.add(new BankItem(id, amount));
+	}
+
 }

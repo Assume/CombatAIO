@@ -220,6 +220,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	}
 
+	public void setSpecialAttackWeapon(Weapon weapon) {
+		this.special_attack_weapon = weapon;
+	}
+
 	public void setRanging(Boolean value) {
 		this.isRanging = value.booleanValue();
 	}
