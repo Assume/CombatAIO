@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
-import org.tribot.api.Timing;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Game;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
@@ -39,7 +39,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Prayer prayer;
 	private boolean flicker;
 	private Prayer flicker_prayer;
-	private Weapon weapon = Weapon.ABYSSAL_WHIP;
+	private Weapon weapon = null;
+	private Weapon special_attack_weapon = null;
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -149,6 +150,21 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			General.sleep(this.weapon.getAttackSpeed());
 			prayer.flicker();
 		}
+	}
+
+	private void useSpecialAttack() {
+		if (this.special_attack_weapon == null)
+			return;
+		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage())
+			this.special_attack_weapon.useSpecial();
+	}
+
+	private int getSpecialPercent() {
+		return Game.getSetting(300) / 10;
+	}
+
+	private boolean isSpecialOn() {
+		return Game.getSetting(301) == 1;
 	}
 
 	public void setMonsters(RSNPC[] possible_monsters) {
