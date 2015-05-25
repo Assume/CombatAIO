@@ -32,7 +32,7 @@ public class TotalPaintHandler {
 
 	public void updateAll() {
 		this.monster_paint_handler.update();
-		this.loot_paint_handler.update();
+		//this.loot_paint_handler.update();
 	}
 
 	public void updateMonsters() {
@@ -66,7 +66,7 @@ public class TotalPaintHandler {
 						.get(ValueType.RUN_TIME).getValue()), 432, 473);
 		updateAll();
 		this.monster_paint_handler.draw(arg0);
-		this.loot_paint_handler.draw(arg0);
+		//this.loot_paint_handler.draw(arg0);
 		if (Dispatcher.get().hasStarted())
 			this.experience_paint_handler.draw(arg0);
 	}

@@ -36,7 +36,8 @@ public class StaticTargetCalculator {
 	}
 
 	public static RSNPC[] getPaintableMonsters() {
-		return getMonsters();
+		return (RSNPC[]) Dispatcher.get().get(ValueType.POSSIBLE_MONSTERS)
+				.getValue();
 	}
 
 	private static boolean isBeingSplashed(RSNPC n) {

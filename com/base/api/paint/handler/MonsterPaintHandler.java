@@ -27,16 +27,22 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		this.paintable_monsters = StaticTargetCalculator.getPaintableMonsters();
-		this.current_target = (RSNPC) Dispatcher.get()
-				.get(ValueType.CURRENT_TARGET).getValue();
-		this.updateList();
-		if (this.current_target_display == null)
-			this.current_target_display = new MonsterDisplay(
-					this.current_target, true);
-		else if (this.current_target_display.get() != this.current_target)
-			this.current_target_display = new MonsterDisplay(
-					this.current_target, true);
+		try {
+			this.paintable_monsters = StaticTargetCalculator
+					.getPaintableMonsters();
+			this.current_target = (RSNPC) Dispatcher.get()
+					.get(ValueType.CURRENT_TARGET).getValue();
+			this.updateList();
+			if (this.current_target_display == null)
+				this.current_target_display = new MonsterDisplay(
+						this.current_target, true);
+			else if (this.current_target_display.get() != this.current_target)
+				this.current_target_display = new MonsterDisplay(
+						this.current_target, true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

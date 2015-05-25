@@ -65,9 +65,10 @@ public class Banker {
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
+		String weapon = ((Weapon) (Dispatcher.get().get(
+				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).toString();
 		if (Inventory.getAll().length > 0)
-			Banking.depositAllExcept(((Weapon) (Dispatcher.get().get(
-					ValueType.SPECIAL_ATTACK_WEAPON).getValue())).toString());
+			Banking.depositAllExcept(weapon);
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
 				.getJewelery());
 		Banking.close();
@@ -110,7 +111,7 @@ public class Banker {
 			public boolean active() {
 				return Banking.isBankScreenOpen();
 			}
-		}, 3000);
+		}, 5000);
 		if (!Banking.isBankScreenOpen()) {
 			bank(world_hop);
 			return;

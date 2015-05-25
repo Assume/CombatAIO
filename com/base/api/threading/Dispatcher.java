@@ -121,6 +121,8 @@ public class Dispatcher implements XMLable {
 			return new Value<Boolean>(this.looting_thread.waitForLoot());
 		case BANKER:
 			return new Value<Banker>(this.banker);
+		case POSSIBLE_MONSTERS:
+			return this.combat_thread.getPossibleMonsters();
 		default:
 			break;
 		}

@@ -24,10 +24,15 @@ final class LootPaintHandler implements PaintHandler {
 	@Override
 	public void update() {
 		this.paintable_items = new ArrayList<RSGroundItem>();
-		for (RSGroundItem i : GroundItems.find((String[]) Dispatcher.get()
-				.get(ValueType.LOOT_ITEM_NAMES).getValue()))
-			if (i.isOnScreen())
-				paintable_items.add(i);
+		try {
+			RSGroundItem[] items = GroundItems.find((String[]) Dispatcher.get()
+					.get(ValueType.LOOT_ITEM_NAMES).getValue());
+			for (RSGroundItem i : items)
+				if (i.isOnScreen())
+					paintable_items.add(i);
+		} catch (Exception e) {
+			
+		}
 	}
 
 	@Override

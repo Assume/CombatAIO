@@ -217,7 +217,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void setHomeTile(RSTile value) {
 		this.home_tile = value;
+	}
 
+	public Value<RSNPC[]> getPossibleMonsters() {
+		return new Value<RSNPC[]>(this.possible_monsters);
 	}
 
 	public void setSpecialAttackWeapon(Weapon weapon) {
@@ -231,5 +234,9 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void setPrayer(Prayer value) {
 		this.prayer = value;
 
+	}
+
+	public Value<Weapon> getSpecialAttackWeapon() {
+		return new Value<Weapon>(this.special_attack_weapon);
 	}
 }
