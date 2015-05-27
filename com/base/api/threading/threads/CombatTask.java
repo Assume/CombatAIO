@@ -29,6 +29,7 @@ import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class CombatTask extends Threadable implements Runnable, Pauseable {
 
@@ -290,5 +291,18 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public Value<Weapon> getSpecialAttackWeapon() {
 		return new Value<Weapon>(this.special_attack_weapon);
+	}
+
+	public void setUseGuthans(boolean use_guthans) {
+		this.use_guthans = use_guthans;
+	}
+
+	public boolean getUseGuthans() {
+		return this.use_guthans;
+	}
+
+	public int[] getGuthansIDs() {
+		return GenericMethods.combineArrays(guthans_body_ids, guthans_helm_ids,
+				guthans_legs_ids, guthans_warspear_ids);
 	}
 }

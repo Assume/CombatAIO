@@ -125,6 +125,8 @@ public class Dispatcher implements XMLable {
 			return this.combat_thread.getPossibleMonsters();
 		case SPECIAL_ATTACK_WEAPON:
 			return this.combat_thread.getSpecialAttackWeapon();
+		case GUTHANS_IDS:
+			return new Value<int[]>(this.combat_thread.getGuthansIDs());
 		default:
 			break;
 		}
@@ -163,6 +165,8 @@ public class Dispatcher implements XMLable {
 		case SPECIAL_ATTACK_WEAPON:
 			this.combat_thread.setSpecialAttackWeapon((Weapon) val.getValue());
 			break;
+		case USE_GUTHANS:
+			this.combat_thread.setUseGuthans((Boolean) val.getValue());
 		default:
 			break;
 		}

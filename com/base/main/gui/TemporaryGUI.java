@@ -36,6 +36,7 @@ public class TemporaryGUI extends JFrame {
 	private JComboBox<Food> combo_box_food;
 	private JCheckBox check_box_loot_in_combat;
 	private JCheckBox check_box_wait_for_loot;
+	private JCheckBox check_box_guthans;
 	private JTable loot_table;
 	private JComboBox<Weapon> special_attack_combo_box;
 	private JTable bank_table;
@@ -167,6 +168,10 @@ public class TemporaryGUI extends JFrame {
 		new String[] { "Item ID", "Amount" }));
 		bank_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		scrollPane_2.setViewportView(bank_table);
+
+		check_box_guthans = new JCheckBox("Guthans");
+		check_box_guthans.setBounds(131, 88, 97, 23);
+		contentPane.add(check_box_guthans);
 	}
 
 	public void set() {
@@ -181,6 +186,8 @@ public class TemporaryGUI extends JFrame {
 				ValueType.SPECIAL_ATTACK_WEAPON,
 				new Value<Weapon>((Weapon) special_attack_combo_box
 						.getSelectedItem()));
+		Dispatcher.get().set(ValueType.USE_GUTHANS,
+				new Value<Boolean>(check_box_guthans.isSelected()));
 		setBankingList();
 		setLootingList();
 	}

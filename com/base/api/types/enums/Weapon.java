@@ -15,21 +15,25 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipme
 
 public enum Weapon {
 
-	NONE(-1, -1, 10000), ABYSSAL_WHIP(1800, 1658, 50), DRAGON_SCIMITAR(2400,
-			-1, 55), DRAGON_BATTLEAXE(-1, -1, 100), DRAGON_DAGGER(-1, -1, 25), MAGIC_SHORT_BOW(
-			-1, -1, 55), DRAGON_LONG_SWORD(-1, -1, 25), ARMADYL_GODSWORD(-1,
-			-1, 50), BANDSOS_GODSWORD(-1, -1, 100), SARADOMIN_GODSWORD(-1, -1,
-			50), ZAMORAK_GODSWORD(-1, -1, 60), DARK_BOW(-1, -1, 55), SARADOMIN_SWORD(
-			-1, -1, 100), EXCALIBUR(-1, -1, 100);
+	NONE(-1, -1, 10000, -1), ABYSSAL_WHIP(1800, 1658, 50, 4151), DRAGON_SCIMITAR(
+			2400, -1, 55, 4587), DRAGON_BATTLEAXE(-1, -1, 100, 1377), DRAGON_DAGGER(
+			-1, -1, 25, 1215), MAGIC_SHORT_BOW(-1, -1, 55, 861), DRAGON_LONGSWORD(
+			-1, -1, 25, 1305), ARMADYL_GODSWORD(-1, -1, 50, 11694), BANDOS_GODSWORD(
+			-1, -1, 100, 11696), SARADOMIN_GODSWORD(-1, -1, 50, 11698), ZAMORAK_GODSWORD(
+			-1, -1, 60, 11700), DARK_BOW(-1, -1, 55, 11235), SARADOMIN_SWORD(
+			-1, -1, 100, 11739), EXCALIBUR(-1, -1, 100, 35);
 
 	private long attack_speed_ms;
 	private int animation_id;
 	private int special_attack_usage;
+	private int id;
 
-	Weapon(long attack_speed_ms, int animation_id, int special_attack_usage) {
+	Weapon(long attack_speed_ms, int animation_id, int special_attack_usage,
+			int id) {
 		this.attack_speed_ms = attack_speed_ms;
 		this.animation_id = animation_id;
 		this.special_attack_usage = special_attack_usage;
+		this.id = id;
 	}
 
 	public int getAnimationID() {
@@ -96,4 +100,7 @@ public enum Weapon {
 
 	}
 
+	public int getID() {
+		return this.id;
+	}
 }

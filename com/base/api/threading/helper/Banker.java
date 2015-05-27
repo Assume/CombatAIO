@@ -24,6 +24,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class Banker {
 
@@ -65,10 +66,13 @@ public class Banker {
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
-		String weapon = ((Weapon) (Dispatcher.get().get(
-				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).toString();
+		int weapon = ((Weapon) (Dispatcher.get().get(
+				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getID();
 		if (Inventory.getAll().length > 0)
-			Banking.depositAllExcept(weapon);
+			Banking.depositAllExcept(GenericMethods.combineArrays(
+					new int[] { weapon },
+					(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
+							.getValue()));
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
 				.getJewelery());
 		Banking.close();
