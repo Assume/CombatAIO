@@ -123,6 +123,8 @@ public class Dispatcher implements XMLable {
 			return new Value<Banker>(this.banker);
 		case POSSIBLE_MONSTERS:
 			return this.combat_thread.getPossibleMonsters();
+		case SPECIAL_ATTACK_WEAPON:
+			return this.combat_thread.getSpecialAttackWeapon();
 		default:
 			break;
 		}

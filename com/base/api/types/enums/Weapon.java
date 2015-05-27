@@ -15,11 +15,12 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipme
 
 public enum Weapon {
 
-	ABYSSAL_WHIP(1800, 1658, 50), DRAGON_SCIMITAR(2400, -1, 55), DRAGON_BATTLEAXE(
-			-1, -1, 100), DRAGON_DAGGER(-1, -1, 25), MAGIC_SHORT_BOW(-1, -1, 55), DRAGON_LONG_SWORD(
-			-1, -1, 25), ARMADYL_GODSWORD(-1, -1, 50), BANDSOS_GODSWORD(-1, -1,
-			100), SARADOMIN_GODSWORD(-1, -1, 50), ZAMORAK_GODSWORD(-1, -1, 60), DARK_BOW(
-			-1, -1, 55), SARADOMIN_SWORD(-1, -1, 100), EXCALIBUR(-1, -1, 100);
+	NONE(-1, -1, 10000), ABYSSAL_WHIP(1800, 1658, 50), DRAGON_SCIMITAR(2400,
+			-1, 55), DRAGON_BATTLEAXE(-1, -1, 100), DRAGON_DAGGER(-1, -1, 25), MAGIC_SHORT_BOW(
+			-1, -1, 55), DRAGON_LONG_SWORD(-1, -1, 25), ARMADYL_GODSWORD(-1,
+			-1, 50), BANDSOS_GODSWORD(-1, -1, 100), SARADOMIN_GODSWORD(-1, -1,
+			50), ZAMORAK_GODSWORD(-1, -1, 60), DARK_BOW(-1, -1, 55), SARADOMIN_SWORD(
+			-1, -1, 100), EXCALIBUR(-1, -1, 100);
 
 	private long attack_speed_ms;
 	private int animation_id;

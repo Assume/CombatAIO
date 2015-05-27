@@ -39,8 +39,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Prayer prayer;
 	private boolean flicker;
 	private Prayer flicker_prayer;
-	private Weapon weapon = null;
-	private Weapon special_attack_weapon = null;
+	private Weapon weapon = Weapon.NONE;
+	private Weapon special_attack_weapon = Weapon.NONE;
+
+	private boolean use_guthans = false;
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -156,8 +158,16 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private void useSpecialAttack() {
 		if (this.special_attack_weapon == Weapon.NONE)
 			return;
-		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage())
+		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
+				&& getTargetHPPercent() >= 30)
 			this.special_attack_weapon.useSpecial();
+	}
+
+	private double getTargetHPPercent() {
+		if (this.current_target == null)
+			return -1;
+		return ((this.current_target.getHealth() / this.current_target
+				.getMaxHealth()) * 100);
 	}
 
 	private int getSpecialPercent() {
