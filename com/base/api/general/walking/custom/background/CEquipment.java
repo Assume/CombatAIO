@@ -63,4 +63,10 @@ public class CEquipment {
 		}
 		return false;
 	}
+
+	public static void equip(int[][] is) {
+		for (int i = 0; i < is.length; i++)
+			equip(is[i]);
+
+	}
 }

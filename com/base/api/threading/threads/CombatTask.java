@@ -8,6 +8,7 @@ import org.tribot.api.General;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Game;
+import org.tribot.api2007.Inventory;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
@@ -16,6 +17,7 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
@@ -24,10 +26,16 @@ import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
+import scripts.CombatAIO.com.base.api.types.ArmorHolder;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 
 public class CombatTask extends Threadable implements Runnable, Pauseable {
+
+	private static int[] guthans_helm_ids = { 4724, 4904, 4905, 4906, 4907 };
+	private static int[] guthans_legs_ids = { 4730, 4922, 4923, 4924, 4925 };
+	private static int[] guthans_body_ids = { 4728, 4916, 4917, 4918, 4919 };
+	private static int[] guthans_warspear_ids = { 4726, 4910, 4911, 4912, 4913 };
 
 	private RSNPC current_target;
 	private RSTile home_tile;
@@ -43,6 +51,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Weapon special_attack_weapon = Weapon.NONE;
 
 	private boolean use_guthans = false;
+	private ArmorHolder armor_holder;
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -52,6 +61,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		this.possible_monsters = new RSNPC[0];
 		this.kill_tracker = new KillTracker(this);
 		this.home_tile = Player.getPosition();
+		this.armor_holder = null;
 	}
 
 	private CombatTask(List<PauseType> pause_types) {
@@ -84,8 +94,40 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			if (this.flicker)
 				flicker(this.flicker_prayer);
 			this.useSpecialAttack();
+			if (this.use_guthans)
+				useGuthans();
 			General.sleep(300);
 		}
+	}
+
+	private void useGuthans() {
+		if (this.armor_holder == null && Combat.getHPRatio() <= 20
+				&& !isDegradedGuthansInInventory()) {
+			this.armor_holder = new ArmorHolder();
+			equipGuthans();
+			return;
+		}
+		if (this.armor_holder != null && Combat.getHPRatio() >= 80) {
+			this.armor_holder.equip();
+			this.armor_holder = null;
+		}
+	}
+
+	private void equipGuthans() {
+		CEquipment.equip(new int[][] { guthans_body_ids, guthans_helm_ids,
+				guthans_legs_ids, guthans_warspear_ids });
+	}
+
+	private boolean isGuthanDegraded() {
+		return !CEquipment.isEquiped(guthans_body_ids[4] + 1)
+				&& !CEquipment.isEquiped(guthans_helm_ids[4] + 1)
+				&& !CEquipment.isEquiped(guthans_legs_ids[4] + 1)
+				&& !CEquipment.isEquiped(guthans_warspear_ids[4] + 1);
+	}
+
+	private boolean isDegradedGuthansInInventory() {
+		return Inventory.find(guthans_body_ids[4] + 1, guthans_helm_ids[4] + 1,
+				guthans_legs_ids[4] + 1, guthans_warspear_ids[4] + 1).length > 0;
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.api.progression.conditions;
 
 import org.tribot.api2007.Skills.SKILLS;
 
-import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
 import scripts.CombatAIO.com.base.api.progression.CProgressionCondition;
 
 public class CCurrentLevel extends CProgressionCondition {
