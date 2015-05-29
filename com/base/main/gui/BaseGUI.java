@@ -264,7 +264,7 @@ public class BaseGUI extends JFrame {
 		btnLoad.setBounds(42, 235, 89, 23);
 		tab_one_panel.add(btnLoad);
 
-		JLabel lblWithdrawAmount = new JLabel("Withdraw amount");
+		JLabel lblWithdrawAmount = new JLabel("Amount");
 		lblWithdrawAmount.setBounds(10, 65, 89, 14);
 		tab_one_panel.add(lblWithdrawAmount);
 

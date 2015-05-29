@@ -47,11 +47,13 @@ final class LootPaintHandler implements PaintHandler {
 			 * tile.getY() + (i * 10)); }
 			 */
 			int space = 0;
-			g.setColor(Color.RED);
 			LootItem[] looted_items = (LootItem[]) Dispatcher.get()
 					.get(ValueType.ALL_LOOT_ITEMS).getValue();
 			for (LootItem y : looted_items) {
 				if (y.getAmountLooted() > 0) {
+					g.setColor(new Color(0, 0, 0, 110));
+					g.fillRect(475, 5+32*space-3, 35, 35);
+					g.setColor(Color.RED);
 					g.drawRect(475, 5 + 32 * space - 3, 35, 35);
 					g.drawImage(y.getIcon(), 479, 5 + 32 * space, null, null);
 					g.drawString(Integer.toString(y.getAmountLooted()), 479,
