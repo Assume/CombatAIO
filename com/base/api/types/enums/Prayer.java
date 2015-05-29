@@ -8,9 +8,9 @@ import org.tribot.api2007.Skills;
 
 public enum Prayer {
 
-	PIETY(PRAYERS.PIETY, "Piety", 70), CHIVALRY(PRAYERS.CHIVALRY, "Chivalry",
-			60), PROTECT_FROM_MELEE(PRAYERS.PROTECT_FROM_MELEE,
-			"Protect from Melee", 43), PROTECT_FROM_MISSILES(
+	NONE(null, null, 10000), PIETY(PRAYERS.PIETY, "Piety", 70), CHIVALRY(
+			PRAYERS.CHIVALRY, "Chivalry", 60), PROTECT_FROM_MELEE(
+			PRAYERS.PROTECT_FROM_MELEE, "Protect from Melee", 43), PROTECT_FROM_MISSILES(
 			PRAYERS.PROTECT_FROM_MISSILES, "Protect from Missiles", 40), PROTECT_FROM_MAGIC(
 			PRAYERS.PROTECT_FROM_MAGIC, "Protect from Magic", 37);
 

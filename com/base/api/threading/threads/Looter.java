@@ -2,10 +2,11 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -42,7 +43,7 @@ public class Looter extends Threadable implements Pauseable {
 		this(Arrays.asList(new PauseType[] {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
-		this.items_known = new HashMap<String, LootItem>();
+		this.items_known = new ConcurrentHashMap<String, LootItem>();
 		this.addPossibleLootItem("Clue scroll");
 	}
 
@@ -131,6 +132,8 @@ public class Looter extends Threadable implements Pauseable {
 			}, General.random(2000, 3000));
 			General.sleep(250, 450);
 			LootItem update = items_known.get(name);
+			if (update.getId() == -1)
+				update.setId(x.getID());
 			update.incrementAmountLooted(getInventoryCountOfItem(name)
 					- total_item_in_inventory);
 			System.out.println("looted: " + name
@@ -214,6 +217,11 @@ public class Looter extends Threadable implements Pauseable {
 	public Value<String[]> getAllLootableItemNames() {
 		Set<String> temp = this.items_known.keySet();
 		return new Value<String[]>(temp.toArray(new String[temp.size()]));
+	}
+
+	public Value<LootItem[]> getLootItems() {
+		Collection<LootItem> items = this.items_known.values();
+		return new Value<LootItem[]>(items.toArray(new LootItem[items.size()]));
 	}
 
 	/*

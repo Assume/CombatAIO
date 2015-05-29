@@ -1,21 +1,29 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
-	private static final String VERSION_NUMBER = "0.0.3_0";
+	private static final String VERSION_NUMBER = "0.0.3_5";
 
 	private MonsterPaintHandler monster_paint_handler;
 
 	private LootPaintHandler loot_paint_handler;
 
 	private ExperiencePaintHandler experience_paint_handler;
+
+	private final static Color color2 = new Color(0, 0, 0);
+	private final static BasicStroke stroke1 = new BasicStroke(1);
+	private final static Font font2 = new Font("Arial", 0, 11);
 
 	public TotalPaintHandler() {
 		this.experience_paint_handler = new ExperiencePaintHandler();
@@ -61,19 +69,79 @@ public class TotalPaintHandler {
 		return (hours + ":" + minutes + ":" + seconds);
 	}
 
+	private long last_update_time = System.currentTimeMillis();
+
 	public void draw(Graphics arg0) {
+		if (Dispatcher.get() == null)
+			return;
 		if (!Dispatcher.get().hasStarted())
 			return;
-		arg0.setColor(Color.BLACK);
-		arg0.drawString(
-				getFormattedTime((Long) Dispatcher.get()
-						.get(ValueType.RUN_TIME).getValue()), 432, 473);
-		arg0.drawString(VERSION_NUMBER, 410, 473);
-		// updateAll();
-		// this.monster_paint_handler.draw(arg0);
-		// this.loot_paint_handler.draw(arg0);
+		this.drawGenericPaint(arg0);
+		if (System.currentTimeMillis() - this.last_update_time >= 1000) {
+			updateAll();
+			this.last_update_time = System.currentTimeMillis();
+		}
+		this.monster_paint_handler.draw(arg0);
+		this.loot_paint_handler.draw(arg0);
 		if (Dispatcher.get().hasStarted())
 			this.experience_paint_handler.draw(arg0);
+	}
+
+	private String formatNumber(int num) {
+		DecimalFormat df = new DecimalFormat("0");
+		double i = num;
+		if (i >= 1000000)
+			if (i % 1000000 == 0)
+				return df.format(i / 1000000) + "M";
+			else
+				return (i / 1000000) + "M";
+		if (i >= 1000)
+			return df.format((i / 1000)) + "k";
+		return "" + num;
+	}
+
+	private void drawGenericPaint(Graphics g) {
+		long run_time = (Long) Dispatcher.get().get(ValueType.RUN_TIME)
+				.getValue();
+		int kill_count = (Integer) Dispatcher.get().get(ValueType.TOTAL_KILLS)
+				.getValue();
+		int total_profit = (Integer) Dispatcher.get()
+				.get(ValueType.TOTAL_LOOT_VALUE).getValue();
+
+		g.setColor(new Color(0, 0, 0, 175));
+		g.fillRect(255, 361, 240, 78);
+
+		String[] infoArray = {
+				"Runtime: " + getFormattedTime(run_time),
+				"Kills: " + kill_count + " ("
+						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
+				"Profit: "
+						+ formatNumber(total_profit)
+						+ " ("
+						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
+						+ "/HR)", "Version: " + VERSION_NUMBER };
+
+		g.setFont(font2);
+		int c = 0;
+		for (String s : infoArray) {
+			g.setColor(new Color(255, 255, 255, 150));
+			int length = stringLength(s, g);
+			g.fillRect(260, 366 + 17 * c, length + 20, 12);
+			g.setColor(color2);
+			((Graphics2D) g).setStroke(stroke1);
+			g.drawRect(260, 366 + 17 * c, length + 20, 12);
+			g.drawString(s, 270, 376 + 17 * c);
+			c++;
+		}
+	}
+
+	private static int stringLength(String s, Graphics g) {
+		int x = 0;
+		for (int c1 = 0; c1 < s.length(); c1++) {
+			char ch = s.charAt(c1);
+			x += g.getFontMetrics().charWidth(ch);
+		}
+		return x;
 	}
 
 }

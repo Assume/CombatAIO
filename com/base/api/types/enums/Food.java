@@ -18,4 +18,11 @@ public enum Food {
 		return this.id;
 	}
 
+	public static Food getFoodFromName(String name) {
+		for (Food x : Food.values())
+			if (x.toString().equalsIgnoreCase(name))
+				return x;
+		return null;
+	}
+
 }

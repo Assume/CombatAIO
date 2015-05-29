@@ -41,15 +41,8 @@ public class StaticTargetCalculator {
 	}
 
 	private static boolean isBeingSplashed(RSNPC n) {
-		RSPlayer[] players = Players.getAll();
-		if (players.length == 0)
-			return false;
-		for (RSPlayer x : players) {
-			RSCharacter y = x.getInteractingCharacter();
-			if (y instanceof RSNPC && (RSNPC) y == n && !n.isInCombat())
-				return true;
-		}
-		return false;
+		RSCharacter y = n.getInteractingCharacter();
+		return y != null;
 	}
 
 	private static RSNPC[] getMonsters() {

@@ -3,8 +3,10 @@ package scripts.CombatAIO.com.base.main.utils;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.FileVisitResult;
@@ -13,7 +15,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Properties;
 import java.util.Scanner;
+
 import org.tribot.util.Util;
 
 /**
@@ -171,6 +175,36 @@ public class FileUtil {
 			}
 		} else {
 			return false;
+		}
+	}
+
+	public static void saveProperties(String name, Properties prop,
+			String extension) {
+		File file = FileUtil.getSaveFile(name, extension, FileUtil.getDir().getPath());
+		OutputStream output = null;
+		try {
+			output = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			prop.store(output, null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			output.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			output.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

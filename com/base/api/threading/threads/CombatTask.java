@@ -47,7 +47,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private boolean isRanging = false;
 	private Prayer prayer;
 	private boolean flicker;
-	private Prayer flicker_prayer;
+	private Prayer flicker_prayer = Prayer.NONE;
 	private Weapon weapon = Weapon.NONE;
 	private Weapon special_attack_weapon = Weapon.NONE;
 

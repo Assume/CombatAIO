@@ -1,6 +1,9 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import org.tribot.api.General;
 import org.tribot.api.util.ABCUtil;
@@ -25,7 +28,8 @@ import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
 import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.main.BaseCombat;
-import scripts.CombatAIO.com.base.main.gui.TemporaryGUI;
+import scripts.CombatAIO.com.base.main.gui.BaseGUI;
+import scripts.CombatAIO.com.base.main.utils.FileUtil;
 
 public class Dispatcher implements XMLable {
 
@@ -42,7 +46,7 @@ public class Dispatcher implements XMLable {
 	private boolean started = false;
 
 	public void start() {
-		TemporaryGUI gui = new TemporaryGUI();
+		BaseGUI gui = new BaseGUI();
 		gui.setVisible(true);
 		while (gui.isVisible())
 			General.sleep(300);
@@ -127,6 +131,8 @@ public class Dispatcher implements XMLable {
 			return this.combat_thread.getSpecialAttackWeapon();
 		case GUTHANS_IDS:
 			return new Value<int[]>(this.combat_thread.getGuthansIDs());
+		case ALL_LOOT_ITEMS:
+			return this.looting_thread.getLootItems();
 		default:
 			break;
 		}
@@ -317,5 +323,36 @@ public class Dispatcher implements XMLable {
 	public void bank(boolean world_hop) {
 		this.banker.bank(world_hop);
 	}
+
+	public void save(String name) {
+		try {
+			Properties prop = new Properties();
+			prop.setProperty("food", dispatcher.get(ValueType.FOOD).getValue()
+					.toString());
+			prop.setProperty("ranging", dispatcher.get(ValueType.IS_RANGING)
+					.getValue().toString());
+			prop.setProperty("prayer", dispatcher.get(ValueType.FLICKER_PRAYER)
+					.getValue().toString());
+			prop.setProperty("loot_items",
+					((String[]) dispatcher.get(ValueType.LOOT_ITEM_NAMES)
+							.getValue()).toString());
+			prop.setProperty("loot_in_combat",
+					dispatcher.get(ValueType.LOOT_IN_COMBAT).getValue()
+							.toString());
+			prop.setProperty("wait_for_loot", dispatcher.get(ValueType.WAIT_FOR_LOOT).getValue().toString());
+			prop.setProperty("special_attack_weapon",
+					dispatcher.get(ValueType.SPECIAL_ATTACK_WEAPON).getValue()
+							.toString());
+			prop.setProperty("monster_names",
+					dispatcher.get(ValueType.MONSTER_NAMES).getValue()
+							.toString());
+			FileUtil.saveProperties(name, prop, "bset");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	
 
 }

@@ -40,7 +40,6 @@ final class MonsterPaintHandler implements PaintHandler {
 				this.current_target_display = new MonsterDisplay(
 						this.current_target, true);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

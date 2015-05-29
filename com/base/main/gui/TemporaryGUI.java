@@ -49,7 +49,7 @@ public class TemporaryGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		combo_box_food = new JComboBox<Food>(Food.values());
+		combo_box_food = new JComboBox<Food>();
 		combo_box_food.setBounds(131, 11, 142, 26);
 		contentPane.add(combo_box_food);
 
@@ -61,7 +61,7 @@ public class TemporaryGUI extends JFrame {
 		lblSpecialAttackWeapon.setBounds(10, 50, 122, 14);
 		contentPane.add(lblSpecialAttackWeapon);
 
-		special_attack_combo_box = new JComboBox<Weapon>(Weapon.values());
+		special_attack_combo_box = new JComboBox<Weapon>();
 		special_attack_combo_box.setBounds(131, 48, 142, 26);
 		contentPane.add(special_attack_combo_box);
 
