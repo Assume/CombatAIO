@@ -30,8 +30,6 @@ public class KillTracker extends Threadable implements Runnable {
 				kills++;
 				General.sleep(1000);
 				combat_thread.resetTarget();
-				System.out.println("new kill, total kills: " + kills);
-
 			}
 			General.sleep(500);
 		}

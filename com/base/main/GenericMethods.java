@@ -1,5 +1,7 @@
 package scripts.CombatAIO.com.base.main;
 
+import org.tribot.api.General;
+
 public class GenericMethods {
 
 	public static int[] combineArrays(int[]... ars) {
@@ -13,6 +15,13 @@ public class GenericMethods {
 				new_ar[overall++] = ars[i][x];
 		return new_ar;
 
+	}
+
+	public static void println(Object j) {
+		if (j == null)
+			return;
+		if (General.getTRiBotUsername().equalsIgnoreCase("assume"))
+			System.out.println(j.toString());
 	}
 
 }

@@ -15,6 +15,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class ConsumptionTask extends Threadable implements Runnable {
 
@@ -34,19 +35,19 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		while (true) {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
 					.next()) {
-				System.out.println("CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
+				GenericMethods.println("CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				executeBonesToPeaches();
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
-				System.out.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
+				GenericMethods.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			if (Potions.getPotionsRequired().length > 0) {
-				System.out.println("CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
+				GenericMethods.println("CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				drink();
-				System.out.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
+				GenericMethods.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			General.sleep(500);

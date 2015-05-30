@@ -69,10 +69,10 @@ public enum Potions {
 				}
 		}
 		if (Game.getSetting(102) > 0
-				&& Inventory.find(ANTI_POISON.getPotionsIDs()).length >= 0)
+				&& Inventory.find(ANTI_POISON.getPotionsIDs()).length > 0)
 			potions.add(ANTI_POISON);
 		if (SKILLS.PRAYER.getCurrentLevel() <= 5
-				&& Inventory.find(PRAYER.getPotionsIDs()).length >= 0)
+				&& Inventory.find(PRAYER.getPotionsIDs()).length > 0)
 			potions.add(PRAYER);
 		return potions.toArray(new Potions[potions.size()]);
 	}

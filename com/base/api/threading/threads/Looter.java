@@ -30,6 +30,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class Looter extends Threadable implements Pauseable {
 
@@ -70,18 +71,36 @@ public class Looter extends Threadable implements Pauseable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
-			if (this.loot_in_combat && Player.getRSPlayer().isInCombat())
+			if (this.loot_in_combat && Player.getRSPlayer().isInCombat()
+					&& this.lootIsOnGround()) {
+				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(nil);
+				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				Dispatcher.get()
+						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
+			}
+			if (this.lootIsOnGround()) {
+				if (!(Player.getRSPlayer().isInCombat() && !this.loot_in_combat)) {
+					GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+					Dispatcher.get().pause(
+							PauseType.COULD_INTERFERE_WITH_LOOTING);
+					loot(nil);
+					GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+					Dispatcher.get().unpause(
+							PauseType.COULD_INTERFERE_WITH_LOOTING);
+				}
+			}
 			if (target == null) {
 				General.sleep(800);
 				continue;
 			}
 			if (target.getHealth() == 0 && target.isInCombat()
-					&& this.items_known.size() > 0) {
-				System.out.println("LOOTING_THREAD IS CALLING PAUSE");
+					&& this.items_known.size() > 1) {
+				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(target);
-				System.out.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				General.sleep(400);
@@ -182,6 +201,11 @@ public class Looter extends Threadable implements Pauseable {
 		for (RSItem x : items)
 			tot += x.getStack();
 		return tot;
+	}
+
+	private boolean lootIsOnGround() {
+		RSGroundItem[] items = GroundItems.find(getAllItemsName());
+		return items.length > 0;
 	}
 
 	private RSGroundItem[] removeLongRangeItems(RSGroundItem[] items) {

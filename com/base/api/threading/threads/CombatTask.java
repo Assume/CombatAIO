@@ -84,7 +84,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (current_target == null) {
 			long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.next();
-			System.out.println(time);
+			GenericMethods.println(time);
 			General.sleep(time);
 			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.reset();
