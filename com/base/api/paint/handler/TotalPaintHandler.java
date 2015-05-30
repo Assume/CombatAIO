@@ -13,7 +13,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
-	private static final String VERSION_NUMBER = "0.0.4_3";
+	private static final String VERSION_NUMBER = "0.0.4_4";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -86,7 +86,7 @@ public class TotalPaintHandler {
 		}
 	}
 
-	private String formatNumber(int num) {
+	public static String formatNumber(int num) {
 		DecimalFormat df = new DecimalFormat("0");
 		double i = num;
 		if (i >= 1000000)

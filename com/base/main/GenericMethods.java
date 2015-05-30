@@ -1,19 +1,20 @@
 package scripts.CombatAIO.com.base.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tribot.api.General;
+
+import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class GenericMethods {
 
 	public static int[] combineArrays(int[]... ars) {
-		int tot = 0;
-		for (int i = 0; i < ars.length; i++)
-			tot += ars.length;
-		int[] new_ar = new int[tot];
-		int overall = 0;
+		List<Integer> ar = new ArrayList<Integer>();
 		for (int i = 0; i < ars.length; i++)
 			for (int x = 0; x < ars[i].length; x++)
-				new_ar[overall++] = ars[i][x];
-		return new_ar;
+				ar.add(ars[i][x]);
+		return ArrayUtil.toArrayInt(ar);
 
 	}
 

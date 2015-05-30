@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +39,17 @@ final class LootPaintHandler implements PaintHandler {
 			int space = 0;
 			LootItem[] looted_items = (LootItem[]) Dispatcher.get()
 					.get(ValueType.ALL_LOOT_ITEMS).getValue();
+			Arrays.sort(looted_items);
 			for (LootItem y : looted_items) {
 				if (y.getAmountLooted() > 0) {
 					g.setColor(new Color(0, 0, 0, 110));
-					g.fillRect(475, 5 + 32 * space - 3, 35, 35);
+					g.fillRect(475, 5 + 37 * space - 3, 35, 35);
 					g.setColor(Color.RED);
-					g.drawRect(475, 5 + 32 * space - 3, 35, 35);
-					g.drawImage(y.getIcon(), 479, 5 + 32 * space, null, null);
-					g.drawString(Integer.toString(y.getAmountLooted()), 479,
-							14 + 32 * space);
+					g.drawRect(475, 5 + 37 * space - 3, 35, 35);
+					g.drawImage(y.getIcon(), 479, 5 + 37 * space, null, null);
+					g.drawString(
+							TotalPaintHandler.formatNumber(y.getAmountLooted()),
+							479, 14 + 35 * space);
 					space++;
 				}
 			}

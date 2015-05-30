@@ -82,7 +82,8 @@ public class Looter extends Threadable implements Pauseable {
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
 			if (this.lootIsOnGround() && !Player.getRSPlayer().isInCombat()
-					&& !this.loot_in_combat) {
+					&& !this.loot_in_combat
+					&& Player.getRSPlayer().getInteractingCharacter() == null) {
 
 				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);

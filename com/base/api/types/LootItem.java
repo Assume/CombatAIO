@@ -13,7 +13,7 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
-public class LootItem {
+public class LootItem implements Comparable<LootItem> {
 
 	public static void main(String[] args) {
 		Image i = getIcon(314);
@@ -83,7 +83,7 @@ public class LootItem {
 			@Override
 			public void run() {
 				icon = getIcon(id);
-				if (price == Integer.MAX_VALUE)
+				if (price == 0)
 					price = getPrice(id);
 			}
 		}, 0);
@@ -131,5 +131,10 @@ public class LootItem {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public int compareTo(LootItem arg0) {
+		return this.getName().compareTo(arg0.getName());
 	}
 }

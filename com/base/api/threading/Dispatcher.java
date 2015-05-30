@@ -1,8 +1,6 @@
 package scripts.CombatAIO.com.base.api.threading;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import org.tribot.api.General;
@@ -17,6 +15,7 @@ import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
+import scripts.CombatAIO.com.base.api.threading.threads.PriceUpdater;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -66,12 +65,14 @@ public class Dispatcher implements XMLable {
 	private ABCUtil abc_util;
 	private CProgressionHandler handler;
 	private Banker banker;
+	private PriceUpdater price_updater_thread;
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
 		this.combat_thread = new CombatTask();
 		this.looting_thread = new Looter();
 		this.eat_thread = new ConsumptionTask();
+		this.price_updater_thread = new PriceUpdater();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
@@ -90,7 +91,7 @@ public class Dispatcher implements XMLable {
 		case CURRENT_TARGET:
 			return combat_thread.getCurrentTarget();
 		case MINIMUM_LOOT_VALUE:
-			return null;
+			return this.looting_thread.getMinimumLootValue();
 		case TOTAL_KILLS:
 			return combat_thread.getTotalKills();
 		case TOTAL_LOOT_VALUE:
@@ -144,7 +145,7 @@ public class Dispatcher implements XMLable {
 	public void set(ValueType type, Value<?> val) {
 		switch (type) {
 		case MINIMUM_LOOT_VALUE:
-			// TODO
+			this.looting_thread.setMinimumLootValue((Integer) val.getValue());
 			break;
 		case FOOD:
 			eat_thread.setFood((Food) val.getValue());
@@ -211,6 +212,7 @@ public class Dispatcher implements XMLable {
 		this.combat_thread.initiate();
 		this.looting_thread.start();
 		this.eat_thread.start();
+		this.price_updater_thread.start();
 		if (this.eat_thread.isUsingBonesToPeaches())
 			this.looting_thread.addPossibleLootItem("Bones");
 	}

@@ -18,6 +18,7 @@ import scripts.CombatAIO.com.base.api.general.walking.CWalking;
 import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
@@ -52,6 +53,7 @@ public class Banker {
 	 */
 
 	public void bank(boolean world_hop) {
+		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
 		JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
@@ -62,17 +64,25 @@ public class Banker {
 		if (world_hop)
 			WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 		CWalking.walk(MovementType.TO_MONSTER);
+		Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 	}
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
 		int weapon = ((Weapon) (Dispatcher.get().get(
 				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getID();
-		if (Inventory.getAll().length > 0)
-			Banking.depositAllExcept(GenericMethods.combineArrays(
-					new int[] { weapon },
-					(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
-							.getValue()));
+		if (Inventory.getAll().length > 0) {
+			if (weapon == -1
+					&& !((Boolean) Dispatcher.get().get(ValueType.USE_GUTHANS)
+							.getValue()))
+				Banking.depositAll();
+			else
+				Banking.depositAllExcept(GenericMethods.combineArrays(
+						new int[] { weapon },
+						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
+								.getValue()));
+		}
+
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
 				.getJewelery());
 		Banking.close();

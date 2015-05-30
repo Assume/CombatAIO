@@ -41,6 +41,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.utils.FileUtil;
+import javax.swing.JTextField;
 
 public class BaseGUI extends JFrame {
 
@@ -81,10 +82,11 @@ public class BaseGUI extends JFrame {
 	private JComboBox<Weapon> combo_box_special_attack;
 	private JComboBox<String> combo_box_settings;
 	private JLabel lblSpecialAttack;
+	private JTextField text_field_loot_over_x;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 485, 346);
+		setBounds(100, 100, 484, 370);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -166,6 +168,15 @@ public class BaseGUI extends JFrame {
 		lblBankItems = new JLabel("Bank items");
 		lblBankItems.setBounds(227, 11, 70, 14);
 		tab_two_panel.add(lblBankItems);
+
+		JLabel lblLootOverX = new JLabel("Loot over X");
+		lblLootOverX.setBounds(10, 268, 70, 14);
+		tab_two_panel.add(lblLootOverX);
+
+		text_field_loot_over_x = new JTextField();
+		text_field_loot_over_x.setBounds(87, 265, 105, 20);
+		tab_two_panel.add(text_field_loot_over_x);
+		text_field_loot_over_x.setColumns(10);
 		tabbedPane.addTab("Combat", tab_three_panel);
 		tab_three_panel.setLayout(null);
 		tabbedPane.addTab("Advanced", tab_four_panel);
@@ -371,6 +382,12 @@ public class BaseGUI extends JFrame {
 				new Value<Boolean>(chckbx_ranged.isSelected()));
 		Dispatcher.get().set(ValueType.FLICKER_PRAYER,
 				new Value<Prayer>((Prayer) combo_box_prayer.getSelectedItem()));
+		String loot_over_x = text_field_loot_over_x.getText();
+		if (loot_over_x != null && loot_over_x.length() != 0)
+			Dispatcher.get().set(
+					ValueType.MINIMUM_LOOT_VALUE,
+					new Value<Integer>(Integer.parseInt(loot_over_x.replaceAll(
+							"[^0-9]", ""))));
 		setBankingList();
 		setLootingList();
 	}
@@ -389,9 +406,11 @@ public class BaseGUI extends JFrame {
 		for (int i = 0; i < 28; i++) {
 			if (table_banking_items.getValueAt(i, 0) != null
 					&& table_banking_items.getValueAt(i, 1) != null)
-				b.addBankItem(Integer.parseInt(table_banking_items.getValueAt(
-						i, 0).toString().trim()), Integer.parseInt(table_banking_items
-						.getValueAt(i, 1).toString().trim()));
+				b.addBankItem(
+						Integer.parseInt(table_banking_items.getValueAt(i, 0)
+								.toString().trim()),
+						Integer.parseInt(table_banking_items.getValueAt(i, 1)
+								.toString().trim()));
 		}
 	}
 
