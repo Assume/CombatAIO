@@ -88,6 +88,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			StaticTargetCalculator.set(this);
 			fight(this.possible_monsters);
 		} else {
+			if (!this.current_target.isValid())
+				this.current_target = null;
 			if ((Combat.getAttackingEntities().length == 0 || !Player
 					.getRSPlayer().isInCombat()) && this.current_target != null) {
 				StaticTargetCalculator.set(this);
@@ -98,18 +100,20 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			if (this.use_guthans)
 				useGuthans();
 			General.sleep(300);
+
 		}
 	}
 
 	private void useGuthans() {
-		if (this.armor_holder == null && Combat.getHPRatio() <= 20
+		if (this.armor_holder == null && Combat.getHPRatio() <= 50
 				&& !isDegradedGuthansInInventory()) {
 			this.armor_holder = new ArmorHolder();
+			System.out.println(this.armor_holder);
 			equipGuthans();
 			return;
 		}
-		if (this.armor_holder != null && Combat.getHPRatio() >= 80) {
-			this.armor_holder.equip();
+		if (this.armor_holder != null && Combat.getHPRatio() >= 90) {
+			this.armor_holder.equip(0);
 			this.armor_holder = null;
 		}
 	}
@@ -209,8 +213,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private double getTargetHPPercent() {
 		if (this.current_target == null)
 			return -1;
-		return ((this.current_target.getHealth() / this.current_target
-				.getMaxHealth()) * 100);
+		int health = this.current_target.getMaxHealth();
+		if (health == 0)
+			return 0;
+		return ((this.current_target.getHealth() / health) * 100);
 	}
 
 	private int getSpecialPercent() {

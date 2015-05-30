@@ -27,21 +27,27 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		try {
-			this.paintable_monsters = StaticTargetCalculator
-					.getPaintableMonsters();
-			this.current_target = (RSNPC) Dispatcher.get()
-					.get(ValueType.CURRENT_TARGET).getValue();
-			this.updateList();
-			if (this.current_target_display == null)
-				this.current_target_display = new MonsterDisplay(
-						this.current_target, true);
-			else if (this.current_target_display.get() != this.current_target)
-				this.current_target_display = new MonsterDisplay(
-						this.current_target, true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.current_target = (RSNPC) Dispatcher.get()
+				.get(ValueType.CURRENT_TARGET).getValue();
+		if (this.current_target_display == null)
+			this.current_target_display = new MonsterDisplay(
+					this.current_target, true);
+		else if (this.current_target_display.get() != this.current_target)
+			this.current_target_display = new MonsterDisplay(
+					this.current_target, true);
+		/*
+		 * try { this.paintable_monsters = StaticTargetCalculator
+		 * .getPaintableMonsters();
+		 * 
+		 * 
+		 * this.updateList(); if (this.current_target_display == null)
+		 * this.current_target_display = new MonsterDisplay(
+		 * this.current_target, true); else if
+		 * (this.current_target_display.get() != this.current_target)
+		 * this.current_target_display = new MonsterDisplay(
+		 * this.current_target, true); } catch (Exception e) {
+		 * e.printStackTrace(); }
+		 */
 
 	}
 
@@ -57,11 +63,10 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g) {
-		for (RSNPC x : this.map.keySet()) {
-			MonsterDisplay temp = map.get(x);
-			if (temp != null)
-				temp.draw(g);
-		}
+		/*
+		 * for (RSNPC x : this.map.keySet()) { MonsterDisplay temp = map.get(x);
+		 * if (temp != null) temp.draw(g); }
+		 */
 		if (this.current_target_display != null)
 			this.current_target_display.draw(g);
 	}

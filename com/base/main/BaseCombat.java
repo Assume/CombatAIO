@@ -40,15 +40,25 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
+			updateAllPaint();
 		}
 
+	}
+
+	private void updateAllPaint() {
+		this.paint_handler.updateAll();
 	}
 
 	@Override
 	public void onPaint(Graphics arg0) {
 		if (this.paint_handler == null)
 			this.paint_handler = new TotalPaintHandler();
-		this.paint_handler.draw(arg0);
+		try {
+			this.paint_handler.draw(arg0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

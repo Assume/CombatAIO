@@ -14,6 +14,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
+import scripts.CombatAIO.com.base.api.types.enums.Potions;
 
 public class ConsumptionTask extends Threadable implements Runnable {
 
@@ -38,6 +39,11 @@ public class ConsumptionTask extends Threadable implements Runnable {
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
+			if (Potions.getPotionsRequired().length > 0) {
+				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
+				drink();
+				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
+			}
 			General.sleep(500);
 		}
 	}
@@ -48,6 +54,15 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		if (food.length > 0) {
 			food[0].click("Eat");
 			Dispatcher.get().attackTarget();
+		}
+	}
+
+	private void drink() {
+		Potions[] potions = Potions.getPotionsRequired();
+		for (Potions x : potions) {
+			RSItem[] pot = Inventory.find(x.getPotionsIDs());
+			if (pot.length > 0)
+				pot[0].click("Drink");
 		}
 	}
 

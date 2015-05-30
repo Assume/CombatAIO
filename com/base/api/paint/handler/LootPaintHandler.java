@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
@@ -23,16 +22,6 @@ final class LootPaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		this.paintable_items = new ArrayList<RSGroundItem>();
-		try {
-			RSGroundItem[] items = GroundItems.find((String[]) Dispatcher.get()
-					.get(ValueType.LOOT_ITEM_NAMES).getValue());
-			for (RSGroundItem i : items)
-				if (i.isOnScreen())
-					paintable_items.add(i);
-		} catch (Exception e) {
-
-		}
 	}
 
 	@Override
@@ -52,7 +41,7 @@ final class LootPaintHandler implements PaintHandler {
 			for (LootItem y : looted_items) {
 				if (y.getAmountLooted() > 0) {
 					g.setColor(new Color(0, 0, 0, 110));
-					g.fillRect(475, 5+32*space-3, 35, 35);
+					g.fillRect(475, 5 + 32 * space - 3, 35, 35);
 					g.setColor(Color.RED);
 					g.drawRect(475, 5 + 32 * space - 3, 35, 35);
 					g.drawImage(y.getIcon(), 479, 5 + 32 * space, null, null);

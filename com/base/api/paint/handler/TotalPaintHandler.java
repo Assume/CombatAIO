@@ -13,7 +13,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
-	private static final String VERSION_NUMBER = "0.0.3_5";
+	private static final String VERSION_NUMBER = "0.0.3_9";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -69,22 +69,21 @@ public class TotalPaintHandler {
 		return (hours + ":" + minutes + ":" + seconds);
 	}
 
-	private long last_update_time = System.currentTimeMillis();
-
 	public void draw(Graphics arg0) {
-		if (Dispatcher.get() == null)
-			return;
-		if (!Dispatcher.get().hasStarted())
-			return;
-		this.drawGenericPaint(arg0);
-		if (System.currentTimeMillis() - this.last_update_time >= 1000) {
-			updateAll();
-			this.last_update_time = System.currentTimeMillis();
+		try {
+			if (Dispatcher.get() == null)
+				return;
+			if (!Dispatcher.get().hasStarted())
+				return;
+			if (Dispatcher.get().hasStarted()) {
+				this.drawGenericPaint(arg0);
+				this.monster_paint_handler.draw(arg0);
+				// this.loot_paint_handler.draw(arg0);
+				this.experience_paint_handler.draw(arg0);
+			}
+		} catch (Exception e) {
+
 		}
-		this.monster_paint_handler.draw(arg0);
-		this.loot_paint_handler.draw(arg0);
-		if (Dispatcher.get().hasStarted())
-			this.experience_paint_handler.draw(arg0);
 	}
 
 	private String formatNumber(int num) {

@@ -379,7 +379,7 @@ public class BaseGUI extends JFrame {
 		List<String> temp = new ArrayList<String>();
 		for (int i = 0; i < 60 && table_loot.getValueAt(i, 0) != null; i++)
 			if (table_loot.getValueAt(i, 0) != null)
-				temp.add(table_loot.getValueAt(i, 0).toString());
+				temp.add(table_loot.getValueAt(i, 0).toString().trim());
 		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
 				new Value<String[]>(temp.toArray(new String[temp.size()])));
 	}
@@ -390,8 +390,8 @@ public class BaseGUI extends JFrame {
 			if (table_banking_items.getValueAt(i, 0) != null
 					&& table_banking_items.getValueAt(i, 1) != null)
 				b.addBankItem(Integer.parseInt(table_banking_items.getValueAt(
-						i, 0).toString()), Integer.parseInt(table_banking_items
-						.getValueAt(i, 1).toString()));
+						i, 0).toString().trim()), Integer.parseInt(table_banking_items
+						.getValueAt(i, 1).toString().trim()));
 		}
 	}
 

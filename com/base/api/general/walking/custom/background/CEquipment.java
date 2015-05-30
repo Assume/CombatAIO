@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background;
 
+import org.tribot.api.General;
 import org.tribot.api2007.GameTab;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
@@ -21,8 +22,11 @@ public class CEquipment {
 	public static void equip(int... id) {
 		GameTab.TABS.INVENTORY.open();
 		RSItem[] items = Inventory.find(id);
-		if (items.length > 0)
+		if (items.length > 0) {
 			items[0].click("W");
+			General.sleep(250, 500);
+		}
+
 	}
 
 	public static void equip(String... name) {

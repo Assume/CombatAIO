@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.tribot.api2007.Game;
+import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Skills.SKILLS;
 
 public enum Potions {
@@ -62,12 +63,16 @@ public enum Potions {
 		for (Potions x : Potions.values()) {
 			SKILLS skill = x.getSkill();
 			if (skill != null)
-				if (skill.getCurrentLevel() < (skill.getActualLevel() + 3))
-					potions.add(x);
+				if (skill.getCurrentLevel() < (skill.getActualLevel() + 3)) {
+					if (Inventory.find(x.getPotionsIDs()).length > 0)
+						potions.add(x);
+				}
 		}
-		if (Game.getSetting(102) > 0)
+		if (Game.getSetting(102) > 0
+				&& Inventory.find(ANTI_POISON.getPotionsIDs()).length >= 0)
 			potions.add(ANTI_POISON);
-		if (SKILLS.PRAYER.getCurrentLevel() < 5)
+		if (SKILLS.PRAYER.getCurrentLevel() <= 5
+				&& Inventory.find(PRAYER.getPotionsIDs()).length >= 0)
 			potions.add(PRAYER);
 		return potions.toArray(new Potions[potions.size()]);
 	}
