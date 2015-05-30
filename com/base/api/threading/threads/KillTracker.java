@@ -26,7 +26,7 @@ public class KillTracker extends Threadable implements Runnable {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
 			if (target != null && target.getHealth() == 0
-					&& target.isInCombat()) {
+					&& target.isInCombat() && target.isInteractingWithMe()) {
 				kills++;
 				General.sleep(1000);
 				combat_thread.resetTarget();

@@ -63,6 +63,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		this.kill_tracker = new KillTracker(this);
 		this.home_tile = Player.getPosition();
 		this.armor_holder = null;
+		super.setName("COMBAT_THREAD");
 	}
 
 	private CombatTask(List<PauseType> pause_types) {
@@ -81,18 +82,19 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
 		if (current_target == null) {
-			General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-					.next());
+			long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+					.next();
+			System.out.println(time);
+			General.sleep(time);
 			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.reset();
 			StaticTargetCalculator.set(this);
 			fight(this.possible_monsters);
 		} else {
-			if (!this.current_target.isValid())
+			if (!this.current_target.isValid()) {
 				this.current_target = null;
-			if ((Combat.getAttackingEntities().length == 0 || !Player
-					.getRSPlayer().isInCombat()) && this.current_target != null) {
 				StaticTargetCalculator.set(this);
+				fight(this.possible_monsters);
 			}
 			if (this.flicker)
 				flicker(this.flicker_prayer);
@@ -267,7 +269,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void resetTarget() {
 		this.current_target = null;
-
 	}
 
 	public Value<Prayer> getPrayer() {

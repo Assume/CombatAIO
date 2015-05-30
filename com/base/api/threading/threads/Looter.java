@@ -45,6 +45,7 @@ public class Looter extends Threadable implements Pauseable {
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new ConcurrentHashMap<String, LootItem>();
 		this.addPossibleLootItem("Clue scroll");
+		super.setName("LOOTING_THREAD");
 	}
 
 	private Looter(List<PauseType> pause_types) {
@@ -77,8 +78,10 @@ public class Looter extends Threadable implements Pauseable {
 			}
 			if (target.getHealth() == 0 && target.isInCombat()
 					&& this.items_known.size() > 0) {
+				System.out.println("LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(target);
+				System.out.println("LOOTING_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				General.sleep(400);

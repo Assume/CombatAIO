@@ -183,6 +183,7 @@ public class Dispatcher implements XMLable {
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
+				System.out.println(x.getName() + " "+x.getId());
 				x.setPaused(true);
 				x.suspend();
 			}
@@ -339,7 +340,9 @@ public class Dispatcher implements XMLable {
 			prop.setProperty("loot_in_combat",
 					dispatcher.get(ValueType.LOOT_IN_COMBAT).getValue()
 							.toString());
-			prop.setProperty("wait_for_loot", dispatcher.get(ValueType.WAIT_FOR_LOOT).getValue().toString());
+			prop.setProperty("wait_for_loot",
+					dispatcher.get(ValueType.WAIT_FOR_LOOT).getValue()
+							.toString());
 			prop.setProperty("special_attack_weapon",
 					dispatcher.get(ValueType.SPECIAL_ATTACK_WEAPON).getValue()
 							.toString());
@@ -352,7 +355,5 @@ public class Dispatcher implements XMLable {
 		}
 
 	}
-
-	
 
 }

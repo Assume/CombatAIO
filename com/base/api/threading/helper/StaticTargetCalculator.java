@@ -7,10 +7,8 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.Players;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSPlayer;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -23,9 +21,11 @@ public class StaticTargetCalculator {
 		if (entities.length > 0) {
 			if (entities[0] instanceof RSNPC && ((RSNPC) entities[0]).isValid()) {
 				if (PathFinding.canReach(entities[0], false)) {
-					combat_thread
-							.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
-					return;
+					if (((RSNPC) entities[0]).isValid()) {
+						combat_thread
+								.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
+						return;
+					}
 				}
 			}
 		}

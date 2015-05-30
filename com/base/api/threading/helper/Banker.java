@@ -149,6 +149,10 @@ public class Banker {
 	public static boolean shouldBank() {
 		int id = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
 				.getId();
+		if (id == -1 && Inventory.isFull())
+			return true;
+		if (id == -1)
+			return false;
 		int food_length = Inventory.find(id).length;
 		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
 				&& food_length > 0)

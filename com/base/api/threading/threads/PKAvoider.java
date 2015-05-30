@@ -17,6 +17,7 @@ public class PKAvoider extends Threadable {
 	public PKAvoider(boolean hop_on_attack) {
 		this(null);
 		this.hop_on_attack = hop_on_attack;
+		super.setName("PK_AVOIDER_THREAD");
 	}
 
 	private PKAvoider(List<PauseType> pause_types) {
@@ -27,8 +28,10 @@ public class PKAvoider extends Threadable {
 	public void run() {
 		while (Dispatcher.get().isRunning()) {
 			if (this.isBeingAttackedByPlayer()) {
+				System.out.println("PK_AVOIDER_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 				Dispatcher.get().bank(this.hop_on_attack);
+				System.out.println("PK_AVOIDER_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
 		}
