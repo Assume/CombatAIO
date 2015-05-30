@@ -39,6 +39,7 @@ public class Looter extends Threadable implements Pauseable {
 	private boolean wait_for_loot;
 	private boolean loot_in_combat;
 	private RSNPC nil = null;
+	private int minimum_price = Integer.MAX_VALUE;
 
 	public Looter() {
 		this(Arrays.asList(new PauseType[] {
@@ -80,16 +81,15 @@ public class Looter extends Threadable implements Pauseable {
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
-			if (this.lootIsOnGround()) {
-				if (!(Player.getRSPlayer().isInCombat() && !this.loot_in_combat)) {
-					GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
-					Dispatcher.get().pause(
-							PauseType.COULD_INTERFERE_WITH_LOOTING);
-					loot(nil);
-					GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
-					Dispatcher.get().unpause(
-							PauseType.COULD_INTERFERE_WITH_LOOTING);
-				}
+			if (this.lootIsOnGround() && !Player.getRSPlayer().isInCombat()
+					&& !this.loot_in_combat) {
+
+				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
+				loot(nil);
+				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				Dispatcher.get()
+						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
 			if (target == null) {
 				General.sleep(800);
@@ -117,7 +117,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void loot(RSNPC target) {
-		if (this.wait_for_loot && !this.loot_in_combat)
+		if (this.wait_for_loot && !this.loot_in_combat && target != null)
 			waitForLoot(target);
 		RSGroundItem[] items = GroundItems.find(getAllItemsName());
 		if (items.length == 0)
@@ -241,6 +241,14 @@ public class Looter extends Threadable implements Pauseable {
 		return this.items_known.get(name);
 	}
 
+	public void setMinimumLootValue(int value) {
+		this.minimum_price = value;
+	}
+
+	public Value<Integer> getMinimumLootValue() {
+		return new Value<Integer>(this.minimum_price);
+	}
+
 	public Value<String[]> getAllLootableItemNames() {
 		Set<String> temp = this.items_known.keySet();
 		return new Value<String[]>(temp.toArray(new String[temp.size()]));
@@ -305,6 +313,10 @@ public class Looter extends Threadable implements Pauseable {
 
 	public void setWaitForLoot(boolean active) {
 		this.wait_for_loot = active;
+	}
+
+	public void addLootItem(LootItem value) {
+		this.items_known.put(value.getName(), value);
 	}
 
 }

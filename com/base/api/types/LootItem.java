@@ -1,15 +1,13 @@
 package scripts.CombatAIO.com.base.api.types;
 
 import java.awt.Image;
-import java.io.Closeable;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
-import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -85,13 +83,45 @@ public class LootItem {
 			@Override
 			public void run() {
 				icon = getIcon(id);
+				if (price == Integer.MAX_VALUE)
+					price = getPrice(id);
 			}
 		}, 0);
 	}
-	
+
+	public static int getPrice(int id) {
+		try {
+			URL url = new URL(
+					"https://api.rsbuddy.com/grandExchange?a=guidePrice&i="
+							+ id);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestProperty("User-Agent",
+					"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1");
+			con.connect();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			List<String> list = new ArrayList<String>();
+			String ln;
+			while ((ln = br.readLine()) != null)
+				list.add(ln);
+
+			if (list.size() > 0) {
+				String[] work = list.get(0).split(",");
+				if (work.length > 0)
+					return Integer.parseInt(work[0].replaceAll("[^0-9]", ""));
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	private static Image getIcon(int id) {
 		try {
-			URL url = new URL("http://cdn.rsbuddy.com/items/"+id+".png");
+			URL url = new URL("http://cdn.rsbuddy.com/items/" + id + ".png");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("User-Agent",
 					"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1");

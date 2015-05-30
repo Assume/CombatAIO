@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
@@ -20,6 +21,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
@@ -162,6 +164,9 @@ public class Dispatcher implements XMLable {
 		case LOOT_ITEM_NAMES:
 			this.looting_thread.addPossibleLootItem((String[]) val.getValue());
 			break;
+		case LOOT_ITEM:
+			this.looting_thread.addLootItem((LootItem) val.getValue());
+			break;
 		case LOOT_IN_COMBAT:
 			this.looting_thread.setLootInCombat((Boolean) val.getValue());
 			break;
@@ -183,7 +188,7 @@ public class Dispatcher implements XMLable {
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
-				System.out.println(x.getName() + " "+x.getId());
+				System.out.println(x.getName() + " " + x.getId());
 				x.setPaused(true);
 				x.suspend();
 			}
@@ -220,6 +225,11 @@ public class Dispatcher implements XMLable {
 
 	public void checkThreads() {
 		this.handler.checkAndExecute();
+		if (this.combat_thread.isPaused()
+				&& Timing.timeFromMark(this.combat_thread.getPauseTime()) > 30000) {
+			this.combat_thread.resume();
+			this.combat_thread.setPaused(false);
+		}
 	}
 
 	public boolean hasStarted() {

@@ -12,6 +12,7 @@ public abstract class Threadable extends Thread implements Pauseable {
 	}
 
 	private boolean pause = false;
+	private long pause_time;
 
 	public boolean isPaused() {
 		return this.pause;
@@ -19,6 +20,14 @@ public abstract class Threadable extends Thread implements Pauseable {
 
 	public void setPaused(boolean set) {
 		this.pause = set;
+		if (set)
+			this.pause_time = System.currentTimeMillis();
+		else
+			this.pause_time = -1;
+	}
+
+	public long getPauseTime() {
+		return this.pause_time;
 	}
 
 	private List<PauseType> pause_types;
