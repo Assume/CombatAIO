@@ -22,11 +22,8 @@ public class CEquipment {
 	public static void equip(int... id) {
 		GameTab.TABS.INVENTORY.open();
 		RSItem[] items = Inventory.find(id);
-		if (items.length > 0) {
+		if (items.length > 0)
 			items[0].click("W");
-			General.sleep(450, 700);
-		}
-
 	}
 
 	public static void equip(String... name) {
@@ -69,14 +66,16 @@ public class CEquipment {
 	}
 
 	public static void equip(int[][] is) {
-		for (int i = 0; i < is.length; i++)
+		for (int i = 0; i < is.length; i++) {
 			equip(is[i]);
-
+			General.sleep(450, 700);
+		}
 	}
 
 	public static void equipAll(int... id) {
-		for (int x : id)
+		for (int x : id) {
 			equip(x);
-
+			General.sleep(450, 700);
+		}
 	}
 }

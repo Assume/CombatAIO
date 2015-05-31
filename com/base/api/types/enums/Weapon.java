@@ -58,7 +58,6 @@ public enum Weapon {
 			RSItem temp2 = Equipment.getItem(SLOTS.SHIELD);
 			if (temp2 != null)
 				shield_id = temp2.getID();
-			System.out.println(original_weapon_id + ",,, " + shield_id);
 			CEquipment.equip(id);
 			General.sleep(500, 1100);
 			final int start_special = getSpecialPercent();

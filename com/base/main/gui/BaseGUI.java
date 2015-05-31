@@ -65,6 +65,8 @@ public class BaseGUI extends JFrame {
 	private JCheckBox chckbx_flicker;
 	private JCheckBox chckbx_guthans;
 	private JCheckBox chckbx_ranged;
+	private JCheckBox chckbx_wait_for_loot;
+	private JCheckBox chckbx_loot_in_combat;
 	private JLabel lblOnlySome;
 	private JButton button;
 	private JButton button_add_to_possible;
@@ -87,9 +89,6 @@ public class BaseGUI extends JFrame {
 	private JSpinner spinner_food;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
-	
-	private JCheckBox chckbox_wait_for_loot;
-	private JCheckBox chckbox_loot_in_combat;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -184,14 +183,14 @@ public class BaseGUI extends JFrame {
 		text_field_loot_over_x.setBounds(87, 265, 105, 20);
 		tab_two_panel.add(text_field_loot_over_x);
 		text_field_loot_over_x.setColumns(10);
-		
-		JCheckBox checkBox = new JCheckBox("Wait for loot");
-		checkBox.setBounds(213, 264, 111, 23);
-		tab_two_panel.add(checkBox);
-		
-		JCheckBox checkBox_1 = new JCheckBox("Loot in combat");
-		checkBox_1.setBounds(333, 264, 111, 23);
-		tab_two_panel.add(checkBox_1);
+
+		chckbx_wait_for_loot = new JCheckBox("Wait for loot");
+		chckbx_wait_for_loot.setBounds(213, 264, 111, 23);
+		tab_two_panel.add(chckbx_wait_for_loot);
+
+		chckbx_loot_in_combat = new JCheckBox("Loot in combat");
+		chckbx_loot_in_combat.setBounds(333, 264, 111, 23);
+		tab_two_panel.add(chckbx_loot_in_combat);
 		tabbedPane.addTab("Combat", tab_three_panel);
 		tab_three_panel.setLayout(null);
 		tabbedPane.addTab("Advanced", tab_four_panel);
@@ -201,7 +200,7 @@ public class BaseGUI extends JFrame {
 		button.setBounds(10, 22, 89, 23);
 		tab_four_panel.add(button);
 
-		combo_box_prayer = new JComboBox<Prayer>();
+		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
 
@@ -217,7 +216,8 @@ public class BaseGUI extends JFrame {
 		chckbx_guthans.setBounds(10, 84, 97, 23);
 		tab_three_panel.add(chckbx_guthans);
 
-		lblOnlySome = new JLabel("* Only piety and chivalry are supported for flicker");
+		lblOnlySome = new JLabel(
+				"* Only piety and chivalry are supported for flicker");
 		lblOnlySome.setBounds(10, 268, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
@@ -225,7 +225,7 @@ public class BaseGUI extends JFrame {
 		chckbx_ranged.setBounds(131, 58, 97, 23);
 		tab_three_panel.add(chckbx_ranged);
 
-		combo_box_special_attack = new JComboBox<Weapon>();
+		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
 
@@ -233,7 +233,7 @@ public class BaseGUI extends JFrame {
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
 		tab_three_panel.add(lblSpecialAttack);
 
-		combo_box_food = new JComboBox<Food>();
+		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
 
@@ -379,9 +379,9 @@ public class BaseGUI extends JFrame {
 		Dispatcher.get().set(ValueType.FOOD,
 				new Value<Food>((Food) combo_box_food.getSelectedItem()));
 		Dispatcher.get().set(ValueType.WAIT_FOR_LOOT,
-				new Value<Boolean>(chckbox_wait_for_loot.isSelected()));
+				new Value<Boolean>(chckbx_wait_for_loot.isSelected()));
 		Dispatcher.get().set(ValueType.LOOT_IN_COMBAT,
-				new Value<Boolean>(chckbox_loot_in_combat.isSelected()));
+				new Value<Boolean>(chckbx_loot_in_combat.isSelected()));
 		Dispatcher.get().set(ValueType.MONSTER_NAMES, getMonsterNames());
 		Dispatcher.get().set(
 				ValueType.SPECIAL_ATTACK_WEAPON,
@@ -477,7 +477,8 @@ public class BaseGUI extends JFrame {
 					Dispatcher.get().get(ValueType.FLICKER).getValue()
 							.toString());
 			prop.setProperty("use_guthans",
-					Dispatcher.get().get(ValueType.USE_GUTHANS).getValue().toString());
+					Dispatcher.get().get(ValueType.USE_GUTHANS).getValue()
+							.toString());
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -527,9 +528,9 @@ public class BaseGUI extends JFrame {
 			combo_box_prayer.setSelectedItem(Prayer.parse(prop
 					.getProperty("prayer")));
 			fillLootTable(prop.getProperty("loot_items"));
-			chckbox_loot_in_combat.setSelected(Boolean.parseBoolean(prop
+			chckbx_loot_in_combat.setSelected(Boolean.parseBoolean(prop
 					.getProperty("loot_in_combat")));
-			chckbox_wait_for_loot.setSelected(Boolean.parseBoolean(prop
+			chckbx_wait_for_loot.setSelected(Boolean.parseBoolean(prop
 					.getProperty("wait_for_loot")));
 			combo_box_special_attack.setSelectedItem(Weapon
 					.getWeaponFromName(prop
