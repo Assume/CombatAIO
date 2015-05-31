@@ -66,8 +66,6 @@ public class BaseGUI extends JFrame {
 	private JCheckBox chckbx_guthans;
 	private JCheckBox chckbx_ranged;
 	private JLabel lblOnlySome;
-	private JCheckBox chckbox_wait_for_loot;
-	private JCheckBox chckbox_loot_in_combat;
 	private JButton button;
 	private JButton button_add_to_possible;
 	private JButton button_remove_from_possible;
@@ -89,6 +87,9 @@ public class BaseGUI extends JFrame {
 	private JSpinner spinner_food;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
+	
+	private JCheckBox chckbox_wait_for_loot;
+	private JCheckBox chckbox_loot_in_combat;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -183,6 +184,14 @@ public class BaseGUI extends JFrame {
 		text_field_loot_over_x.setBounds(87, 265, 105, 20);
 		tab_two_panel.add(text_field_loot_over_x);
 		text_field_loot_over_x.setColumns(10);
+		
+		JCheckBox checkBox = new JCheckBox("Wait for loot");
+		checkBox.setBounds(213, 264, 111, 23);
+		tab_two_panel.add(checkBox);
+		
+		JCheckBox checkBox_1 = new JCheckBox("Loot in combat");
+		checkBox_1.setBounds(333, 264, 111, 23);
+		tab_two_panel.add(checkBox_1);
 		tabbedPane.addTab("Combat", tab_three_panel);
 		tab_three_panel.setLayout(null);
 		tabbedPane.addTab("Advanced", tab_four_panel);
@@ -192,7 +201,7 @@ public class BaseGUI extends JFrame {
 		button.setBounds(10, 22, 89, 23);
 		tab_four_panel.add(button);
 
-		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
+		combo_box_prayer = new JComboBox<Prayer>();
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
 
@@ -208,23 +217,15 @@ public class BaseGUI extends JFrame {
 		chckbx_guthans.setBounds(10, 84, 97, 23);
 		tab_three_panel.add(chckbx_guthans);
 
-		lblOnlySome = new JLabel("* Only some prayers supported");
-		lblOnlySome.setBounds(10, 198, 169, 14);
+		lblOnlySome = new JLabel("* Only piety and chivalry are supported for flicker");
+		lblOnlySome.setBounds(10, 268, 262, 14);
 		tab_three_panel.add(lblOnlySome);
-
-		chckbox_wait_for_loot = new JCheckBox("Wait for loot");
-		chckbox_wait_for_loot.setBounds(20, 110, 111, 23);
-		tab_three_panel.add(chckbox_wait_for_loot);
-
-		chckbox_loot_in_combat = new JCheckBox("Loot in combat");
-		chckbox_loot_in_combat.setBounds(20, 136, 111, 23);
-		tab_three_panel.add(chckbox_loot_in_combat);
 
 		chckbx_ranged = new JCheckBox("Ranged");
 		chckbx_ranged.setBounds(131, 58, 97, 23);
 		tab_three_panel.add(chckbx_ranged);
 
-		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
+		combo_box_special_attack = new JComboBox<Weapon>();
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
 
@@ -232,7 +233,7 @@ public class BaseGUI extends JFrame {
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
 		tab_three_panel.add(lblSpecialAttack);
 
-		combo_box_food = new JComboBox<Food>(Food.values());
+		combo_box_food = new JComboBox<Food>();
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
 
@@ -248,7 +249,7 @@ public class BaseGUI extends JFrame {
 				dispose();
 			}
 		});
-		btnStart.setBounds(353, 235, 89, 23);
+		btnStart.setBounds(354, 259, 89, 23);
 		tab_one_panel.add(btnStart);
 
 		JButton btnSave = new JButton("Save");
@@ -269,7 +270,7 @@ public class BaseGUI extends JFrame {
 				save(name);
 			}
 		});
-		btnSave.setBounds(141, 235, 89, 23);
+		btnSave.setBounds(141, 259, 89, 23);
 		tab_one_panel.add(btnSave);
 
 		JButton btnLoad = new JButton("Load");
@@ -278,7 +279,7 @@ public class BaseGUI extends JFrame {
 				load(combo_box_settings.getSelectedItem().toString());
 			}
 		});
-		btnLoad.setBounds(42, 235, 89, 23);
+		btnLoad.setBounds(42, 259, 89, 23);
 		tab_one_panel.add(btnLoad);
 
 		JLabel lblWithdrawAmount = new JLabel("Amount");
@@ -290,12 +291,12 @@ public class BaseGUI extends JFrame {
 		tab_one_panel.add(spinner_food);
 
 		combo_box_settings = new JComboBox<String>();
-		combo_box_settings.setBounds(10, 204, 121, 20);
+		combo_box_settings.setBounds(10, 228, 121, 20);
 		tab_one_panel.add(combo_box_settings);
 		combo_box_settings.setModel(this.model_combo_box);
 
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(141, 31, 121, 148);
+		scrollPane_2.setBounds(141, 31, 121, 166);
 		tab_one_panel.add(scrollPane_2);
 
 		list_possible_monsters = new JList<String>();
@@ -303,7 +304,7 @@ public class BaseGUI extends JFrame {
 		list_possible_monsters.setModel(model_possible_monsters);
 
 		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(321, 32, 121, 145);
+		scrollPane_3.setBounds(321, 32, 122, 165);
 		tab_one_panel.add(scrollPane_3);
 
 		list_selected_monsters = new JList<String>();
@@ -355,7 +356,7 @@ public class BaseGUI extends JFrame {
 						model_possible_monsters.addElement(n.getName());
 			}
 		});
-		btnNewButton.setBounds(249, 186, 89, 23);
+		btnNewButton.setBounds(248, 207, 89, 23);
 		tab_one_panel.add(btnNewButton);
 
 		fillSettingsNames();

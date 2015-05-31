@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.types;
 
+import org.tribot.api.General;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.types.RSItem;
@@ -68,6 +69,7 @@ public class ArmorHolder {
 	public void equip() {
 		CEquipment.equipAll(this.helmet_id, this.weapon_id, this.shield_id,
 				this.legs_id, this.body_id);
+		General.sleep(1100);
 		for (int x : new int[] { this.helmet_id, this.weapon_id,
 				this.shield_id, this.legs_id, this.body_id })
 			if (!Equipment.isEquipped(x))
