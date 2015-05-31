@@ -4,8 +4,6 @@ import org.tribot.api2007.Player;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DCondition;
 
-
-
 public class DNotInArea implements DCondition {
 
 	private RSArea area;

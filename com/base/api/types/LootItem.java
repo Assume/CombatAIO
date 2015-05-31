@@ -45,6 +45,8 @@ public class LootItem implements Comparable<LootItem> {
 		return price;
 	}
 
+
+	
 	public int getAmountLooted() {
 		return this.amount_looted;
 	}

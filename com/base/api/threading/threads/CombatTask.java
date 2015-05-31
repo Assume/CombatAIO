@@ -7,12 +7,16 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
@@ -25,6 +29,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
@@ -43,13 +48,15 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private KillTracker kill_tracker;
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
-	private String[] monster_names;
+	private int[] monster_ids;
 	private boolean isRanging = false;
 	private Prayer prayer = Prayer.NONE;
 	private boolean flicker;
 	private Prayer flicker_prayer = Prayer.NONE;
 	private Weapon weapon = Weapon.NONE;
 	private Weapon special_attack_weapon = Weapon.NONE;
+	private int ammo_id = -1;
+	private int knife_id = -1;
 
 	private boolean use_guthans = false;
 	private ArmorHolder armor_holder;
@@ -82,6 +89,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
 		if (current_target == null) {
+			equipAmmo();
 			long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.next();
 			General.sleep(time);
@@ -151,7 +159,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void fight(RSNPC[] monsters) {
-		if (monsters.length == 0 && NPCs.find(this.monster_names).length >= 0)
+		if (monsters.length == 0 && NPCs.find(this.monster_ids).length >= 0)
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
 			return;
@@ -245,7 +253,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return new Value<RSTile>(home_tile);
 	}
 
-	public Value<Integer> getCombatDistance() {
+	public Value<Integer> getCombatRadius() {
 		return new Value<Integer>(this.combat_distance);
 	}
 
@@ -257,22 +265,16 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return null;
 	}
 
-	public void setMonsterNames(String... names) {
-		this.monster_names = names;
+	public void setMonsterIDs(int... id) {
+		this.monster_ids = id;
 	}
 
-	public Value<String[]> getMonsterNames() {
-		return new Value<String[]>(this.monster_names);
+	public Value<int[]> getMonsterIDs() {
+		return new Value<int[]>(this.monster_ids);
 	}
 
 	public Value<Boolean> isRanging() {
 		return new Value<Boolean>(this.isRanging);
-	}
-
-	public Value<String> getFirstMonsterName() {
-		if (this.monster_names.length == 0)
-			return null;
-		return new Value<String>(this.monster_names[0]);
 	}
 
 	public void resetTarget() {
@@ -327,6 +329,44 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void setUseFlicker(boolean b) {
 		this.flicker = b;
+	}
+
+	private void equipAmmo() {
+		RSItem[] ammo = Inventory.find(ammo_id, knife_id);
+		if (ammo.length > 0)
+			if (ammo[0].getStack() > 50)
+				ammo[0].click("Wield");
+	}
+
+	public void setAmmo() {
+		if (this.isRanging) {
+			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
+			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
+			if (ammo != null && ammo.getStack() > 1) {
+				this.ammo_id = ammo.getID();
+				RSItemDefinition ammo_def = ammo.getDefinition();
+				if (ammo_def != null)
+					Dispatcher.get().set(
+							ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { ammo_def
+									.getName() }));
+			}
+			if (knife != null && knife.getStack() > 1) {
+				this.knife_id = knife.getID();
+				RSItemDefinition knife_def = ammo.getDefinition();
+				if (knife_def != null)
+					Dispatcher.get().set(
+							ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { knife_def
+									.getName() }));
+			}
+
+		}
+
+	}
+
+	public void setCombatRadius(int value) {
+		this.combat_distance = value;
 	}
 
 }

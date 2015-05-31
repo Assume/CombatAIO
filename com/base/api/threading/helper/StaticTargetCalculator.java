@@ -9,6 +9,7 @@ import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -46,26 +47,32 @@ public class StaticTargetCalculator {
 	}
 
 	private static RSNPC[] getMonsters() {
-		RSNPC[] npcs = filter_one(NPCs.find((String[]) Dispatcher.get()
-				.get(ValueType.MONSTER_NAMES).getValue()));
+		RSNPC[] npcs = filter_one(NPCs.find((int[]) Dispatcher.get()
+				.get(ValueType.MONSTER_IDS).getValue()));
 		return filter_two(npcs);
 	}
 
 	private static RSNPC[] filter_one(RSNPC[] npcs) {
 		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
+		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS)
+				.getValue();
+		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
+				.getValue();
 		for (RSNPC x : npcs) {
 			if (x.isInteractingWithMe())
 				if (PathFinding.canReach(x, false))
 					return new RSNPC[] { x };
-			if (!x.isInCombat() && !isBeingSplashed(x)) {
-				if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
-						.getValue()) {
-					possible_npcs.add(x);
-					continue;
+			if (home_tile.distanceTo(x) < radius) {
+				if (!x.isInCombat() && !isBeingSplashed(x)) {
+					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
+							.getValue()) {
+						possible_npcs.add(x);
+						continue;
+					}
+					if (Player.getPosition().distanceTo(x) <= 12
+							&& PathFinding.canReach(x, false))
+						possible_npcs.add(x);
 				}
-				if (Player.getPosition().distanceTo(x) <= 12
-						&& PathFinding.canReach(x, false))
-					possible_npcs.add(x);
 			}
 		}
 		return NPCs.sortByDistance(Player.getPosition(),

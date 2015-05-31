@@ -87,12 +87,13 @@ public class BaseGUI extends JFrame {
 	private JTextField text_field_loot_over_x;
 
 	private JSpinner spinner_food;
+	private JSpinner spinner_combat_radius;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 484, 370);
+		setBounds(100, 100, 645, 367);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -197,8 +198,12 @@ public class BaseGUI extends JFrame {
 		tab_four_panel.setLayout(null);
 
 		button = new JButton("Progression");
-		button.setBounds(10, 22, 89, 23);
+		button.setBounds(10, 22, 122, 23);
 		tab_four_panel.add(button);
+
+		JButton btnNewButton_1 = new JButton("Custom Walking");
+		btnNewButton_1.setBounds(10, 56, 122, 23);
+		tab_four_panel.add(btnNewButton_1);
 
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
@@ -296,7 +301,7 @@ public class BaseGUI extends JFrame {
 		combo_box_settings.setModel(this.model_combo_box);
 
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(141, 31, 121, 166);
+		scrollPane_2.setBounds(141, 32, 195, 165);
 		tab_one_panel.add(scrollPane_2);
 
 		list_possible_monsters = new JList<String>();
@@ -304,7 +309,7 @@ public class BaseGUI extends JFrame {
 		list_possible_monsters.setModel(model_possible_monsters);
 
 		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(321, 32, 122, 165);
+		scrollPane_3.setBounds(410, 32, 195, 165);
 		tab_one_panel.add(scrollPane_3);
 
 		list_selected_monsters = new JList<String>();
@@ -322,7 +327,7 @@ public class BaseGUI extends JFrame {
 				model_selected_monsters.addElement(selected);
 			}
 		});
-		button_add_to_possible.setBounds(265, 75, 54, 20);
+		button_add_to_possible.setBounds(346, 75, 54, 20);
 		tab_one_panel.add(button_add_to_possible);
 
 		button_remove_from_possible = new JButton("<");
@@ -334,7 +339,7 @@ public class BaseGUI extends JFrame {
 				model_selected_monsters.remove(selected);
 			}
 		});
-		button_remove_from_possible.setBounds(265, 106, 54, 20);
+		button_remove_from_possible.setBounds(346, 106, 54, 20);
 		tab_one_panel.add(button_remove_from_possible);
 
 		lblPossible = new JLabel("Possible");
@@ -342,7 +347,7 @@ public class BaseGUI extends JFrame {
 		tab_one_panel.add(lblPossible);
 
 		lblSelected = new JLabel("Selected");
-		lblSelected.setBounds(321, 11, 46, 14);
+		lblSelected.setBounds(410, 11, 46, 14);
 		tab_one_panel.add(lblSelected);
 
 		btnNewButton = new JButton("Refresh");
@@ -350,14 +355,26 @@ public class BaseGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				for (RSNPC n : NPCs.getAll())
 					if (n.getCombatLevel() > 0
-							&& !model_possible_monsters.contains(n.getName())
+							&& !model_possible_monsters.contains(n.getID()
+									+ " -- " + n.getName() + " ("
+									+ n.getCombatLevel() + ")")
 							&& n.getName() != null
 							&& !n.getName().equals("null"))
-						model_possible_monsters.addElement(n.getName());
+						model_possible_monsters.addElement(n.getID() + " -- "
+								+ n.getName() + " (" + n.getCombatLevel() + ")");
 			}
 		});
 		btnNewButton.setBounds(248, 207, 89, 23);
 		tab_one_panel.add(btnNewButton);
+
+		JLabel lblRadius = new JLabel("Radius");
+		lblRadius.setBounds(10, 90, 46, 14);
+		tab_one_panel.add(lblRadius);
+
+		spinner_combat_radius = new JSpinner();
+		spinner_combat_radius.setBounds(85, 84, 46, 20);
+		tab_one_panel.add(spinner_combat_radius);
+		spinner_combat_radius.setValue(15);
 
 		fillSettingsNames();
 
@@ -382,7 +399,7 @@ public class BaseGUI extends JFrame {
 				new Value<Boolean>(chckbx_wait_for_loot.isSelected()));
 		Dispatcher.get().set(ValueType.LOOT_IN_COMBAT,
 				new Value<Boolean>(chckbx_loot_in_combat.isSelected()));
-		Dispatcher.get().set(ValueType.MONSTER_NAMES, getMonsterNames());
+		Dispatcher.get().set(ValueType.MONSTER_IDS, getMonsterIDs());
 		Dispatcher.get().set(
 				ValueType.SPECIAL_ATTACK_WEAPON,
 				new Value<Weapon>((Weapon) combo_box_special_attack
@@ -399,6 +416,10 @@ public class BaseGUI extends JFrame {
 						.toString())));
 		Dispatcher.get().set(ValueType.FLICKER,
 				new Value<Boolean>(chckbx_flicker.isSelected()));
+		Dispatcher.get().set(
+				ValueType.COMBAT_RADIUS,
+				new Value<Integer>(Integer.parseInt(spinner_combat_radius
+						.getValue().toString())));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -458,9 +479,9 @@ public class BaseGUI extends JFrame {
 					Dispatcher.get().get(ValueType.SPECIAL_ATTACK_WEAPON)
 							.getValue().toString());
 			prop.setProperty(
-					"monster_names",
-					stringArrayToString(((String[]) Dispatcher.get()
-							.get(ValueType.MONSTER_NAMES).getValue())));
+					"monster_ids",
+					intArrayToString(((int[]) Dispatcher.get()
+							.get(ValueType.MONSTER_IDS).getValue())));
 			prop.setProperty("bank_item_ids",
 					intArrayToString((int[]) Dispatcher.get().getBanker()
 							.getItemIds()));
@@ -478,6 +499,9 @@ public class BaseGUI extends JFrame {
 							.toString());
 			prop.setProperty("use_guthans",
 					Dispatcher.get().get(ValueType.USE_GUTHANS).getValue()
+							.toString());
+			prop.setProperty("combat_radius",
+					Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue()
 							.toString());
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
@@ -541,21 +565,23 @@ public class BaseGUI extends JFrame {
 						.getProperty("minimum_loot_value"));
 			spinner_food.setValue(Integer.parseInt(prop
 					.getProperty("food_withdraw_amount")));
-			fillSelectedMonster(prop.getProperty("monster_names"));
+			fillSelectedMonster(prop.getProperty("monster_ids"));
 			fillBankTable(prop);
 			chckbx_flicker.setSelected(Boolean.parseBoolean(prop
 					.getProperty("use_flicker")));
 			chckbx_guthans.setSelected(Boolean.parseBoolean(prop
 					.getProperty("use_guthans")));
+			spinner_combat_radius.setValue(Integer.parseInt(prop
+					.getProperty("combat_radius")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void fillSelectedMonster(String property) {
-		List<String> list = parseStringIntoList(property);
-		for (String x : list)
-			model_selected_monsters.addElement(x);
+		int[] list = parseStringIntoIntegerArray(property);
+		for (int x : list)
+			model_selected_monsters.addElement("" + x);
 
 	}
 
@@ -603,14 +629,24 @@ public class BaseGUI extends JFrame {
 		return data;
 	}
 
-	private Value<String[]> getMonsterNames() {
+	private Value<int[]> getMonsterIDs() {
 		int size = model_selected_monsters.getSize();
 		if (size == 0)
-			return new Value<String[]>(new String[0]);
-		List<String> temp_list = new ArrayList<String>();
+			return new Value<int[]>(
+					new int[] { parse(model_selected_monsters.get(0)) });
+		List<Integer> temp_list = new ArrayList<Integer>();
 		for (int i = 0; i < size; i++)
-			temp_list.add(model_selected_monsters.get(i));
-		return new Value<String[]>(temp_list.toArray(new String[temp_list
-				.size()]));
+			temp_list.add(parse(model_selected_monsters.get(i)));
+		return new Value<int[]>(ArrayUtil.toArrayInt(temp_list));
+	}
+
+	private int parse(String line) {
+		String[] split = line.split("--");
+		String fin = "";
+		if (split.length > 0)
+			fin = split[0].trim();
+		else
+			fin = line.trim();
+		return Integer.parseInt(fin);
 	}
 }

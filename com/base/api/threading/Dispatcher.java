@@ -1,16 +1,12 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Properties;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
-import org.tribot.util.Util;
 import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
@@ -35,7 +31,7 @@ import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.GenericMethods;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 
-public class Dispatcher implements XMLable {
+public class Dispatcher {
 
 	private static Dispatcher dispatcher;
 
@@ -107,10 +103,8 @@ public class Dispatcher implements XMLable {
 			return looting_thread.getAmountLooted(extra_paramaters);
 		case FOOD:
 			return eat_thread.getFood();
-		case MONSTER_NAMES:
-			return this.combat_thread.getMonsterNames();
-		case FIRST_MONSTER_NAME:
-			return this.combat_thread.getFirstMonsterName();
+		case MONSTER_IDS:
+			return this.combat_thread.getMonsterIDs();
 		case HOME_TILE:
 			return this.combat_thread.getHomeTile();
 		case IS_RANGING:
@@ -145,6 +139,8 @@ public class Dispatcher implements XMLable {
 			return this.combat_thread.shouldFlicker();
 		case USE_GUTHANS:
 			return new Value<Boolean>(this.combat_thread.getUseGuthans());
+		case COMBAT_RADIUS:
+			return this.combat_thread.getCombatRadius();
 		default:
 			break;
 		}
@@ -159,8 +155,8 @@ public class Dispatcher implements XMLable {
 		case FOOD:
 			eat_thread.setFood((Food) val.getValue());
 			break;
-		case MONSTER_NAMES:
-			this.combat_thread.setMonsterNames((String[]) val.getValue());
+		case MONSTER_IDS:
+			this.combat_thread.setMonsterIDs((int[]) val.getValue());
 			break;
 		case HOME_TILE:
 			this.combat_thread.setHomeTile((RSTile) val.getValue());
@@ -194,6 +190,9 @@ public class Dispatcher implements XMLable {
 			break;
 		case FLICKER:
 			this.combat_thread.setUseFlicker((Boolean) val.getValue());
+			break;
+		case COMBAT_RADIUS:
+			this.combat_thread.setCombatRadius((Integer) val.getValue());
 			break;
 		default:
 			break;
@@ -229,6 +228,7 @@ public class Dispatcher implements XMLable {
 		this.looting_thread.start();
 		this.eat_thread.start();
 		this.price_updater_thread.start();
+		this.combat_thread.setAmmo();
 		if (this.eat_thread.isUsingBonesToPeaches())
 			this.looting_thread.addPossibleLootItem("Bones");
 	}
@@ -252,89 +252,6 @@ public class Dispatcher implements XMLable {
 
 	public boolean hasStarted() {
 		return this.started;
-	}
-
-	@Override
-	public Element toXML(XMLWriter writer, Element parent, Object... data) {
-		writer.append(parent, "hash_id", this.hash_id);
-		writer.appendArray(parent, "monster_names",
-				stringArrayToList((String[]) this.get(ValueType.MONSTER_NAMES)
-						.getValue()), getStringXMLLoader());
-		writer.append(parent, "prayer", this.get(ValueType.FLICKER_PRAYER)
-				.getValue().toString());
-		writer.append(parent, "home_tile",
-				((RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue())
-						.toString());
-		return parent;
-	}
-
-	private ArrayList<String> stringArrayToList(String[] strings) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (String x : strings)
-			list.add(x);
-		return list;
-	}
-
-	private XMLLoader<String> getStringXMLLoader() {
-		return new XMLLoader<String>() {
-			@Override
-			public <T> XMLable toXMLable(final T t) {
-				return new XMLable() {
-					@Override
-					public Element toXML(XMLWriter writer, Element parent,
-							Object... data) {
-						String s = (String) t;
-						writer.append(parent, "monster_name", s);
-						return parent;
-					}
-
-					@Override
-					public void fromXML(XMLReader reader, String path,
-							Object... data) {
-					}
-
-					@Override
-					public String getXMLName() {
-						return "";
-					}
-				};
-			}
-		};
-	}
-
-	@Override
-	public void fromXML(XMLReader reader, String path, Object... data) {
-		this.hash_id = reader.evalLong("hash_id", path);
-		ArrayList<String> elements = reader.evalArray(path,
-				"monster_names/monster_name", "monster_names");
-		Dispatcher.get().set(
-				ValueType.MONSTER_NAMES,
-				new Value<String[]>(
-						elements.toArray(new String[elements.size()])));
-		Dispatcher.get().set(ValueType.FLICKER_PRAYER,
-				new Value<Prayer>(Prayer.parse(reader.eval("prayer", path))));
-		Dispatcher.get().set(ValueType.HOME_TILE,
-				new Value<RSTile>(parseRSTile(reader.eval("home_tile", path))));
-	}
-
-	@Override
-	public String getXMLName() {
-		return "all_generic_values";
-	}
-
-	private RSTile parseRSTile(String tile) {
-		String[] val = tile.split(",");
-		if (val.length == 0)
-			return null;
-		int x = Integer.parseInt(removeNonNumber(val[0]));
-		int y = Integer.parseInt(removeNonNumber(val[1]));
-		int z = Integer.parseInt(removeNonNumber(val[2]));
-		return new RSTile(x, y, z);
-
-	}
-
-	private String removeNonNumber(String x) {
-		return x.replaceAll("[^0-9]", "");
 	}
 
 	public ABCUtil getABCUtil() {
