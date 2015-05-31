@@ -71,8 +71,10 @@ public enum Weapon {
 				}
 			}, 3500);
 			CEquipment.equipAll(original_weapon_id, shield_id);
-			if (!Equipment.isEquipped(original_weapon_id, shield_id))
-				CEquipment.equipAll(original_weapon_id, shield_id);
+			if (!Equipment.isEquipped(shield_id))
+				CEquipment.equipAll(shield_id);
+			if (!Equipment.isEquipped(original_weapon_id))
+				CEquipment.equip(original_weapon_id);
 		} else
 			this.turnSpecialOn();
 

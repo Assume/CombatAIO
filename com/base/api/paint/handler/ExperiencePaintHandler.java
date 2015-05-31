@@ -28,28 +28,25 @@ public class ExperiencePaintHandler implements PaintHandler {
 			g.setFont(font1);
 			int i = 0;
 			for (final SkillData skill : SkillData.values()) {
-				if (skill.getExperienceGained() > 0) {
-					// Bar
-					g.setColor(getCapeColor(100, skill));
-					g.fillRect(8, 320 - 15 * i, 242, 13);
+				// Bar
+				g.setColor(getCapeColor(100, skill));
+				g.fillRect(8, 320 - 15 * i, 242, 13);
 
-					// Progress
-					g.setColor(getCapeColor(255, skill));
-					g.fillRect(8, 320 - 15 * i,
-							skill.getPercentToNextLevel() * 242 / 100, 13);
+				// Progress
+				g.setColor(getCapeColor(255, skill));
+				g.fillRect(8, 320 - 15 * i,
+						skill.getPercentToNextLevel() * 242 / 100, 13);
 
-					// Trim
-					g.setColor(getTrimColor(skill));
-					g.drawRect(8, 320 - 15 * i, 242, 13);
+				// Trim
+				g.setColor(getTrimColor(skill));
+				g.drawRect(8, 320 - 15 * i, 242, 13);
 
-					// Text
-					g.drawString(
-							toString(
-									(Long) Dispatcher.get()
-											.get(ValueType.RUN_TIME).getValue(),
-									skill), 11, 331 - 15 * i);
-					i++;
-				}
+				// Text
+				g.drawString(
+						toString((Long) Dispatcher.get()
+								.get(ValueType.RUN_TIME).getValue(), skill),
+						11, 331 - 15 * i);
+				i++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,8 +68,9 @@ public class ExperiencePaintHandler implements PaintHandler {
 	}
 
 	private long getTimeToLevel(long runtime, SkillData skill) {
-		return (long) ((skill.getExperienceToNextLevel() * 3600000.0) / getExperiencePerHour(
+		long ttl = (long) ((skill.getExperienceToNextLevel() * 3600000.0) / getExperiencePerHour(
 				runtime, skill));
+		return ttl > 3000000 ? 0 : ttl;
 	}
 
 	private String formatNumber(int num) {
@@ -119,12 +117,12 @@ public class ExperiencePaintHandler implements PaintHandler {
 			return new Color(70, 74, 210, alpha);
 		case RANGED:
 			return new Color(87, 224, 74, alpha);
-		case MAGIC:
-			return new Color(200, 200, 200, alpha);
+			// / MAGIC:
+			// return new Color(200, 200, 200, alpha);
 		case HITPOINTS:
 			return new Color(200, 200, 200, alpha);
-		case SLAYER:
-			return new Color(69, 69, 69, alpha);
+			// case SLAYER:
+			// return new Color(69, 69, 69, alpha);
 		}
 
 		return null;
@@ -140,12 +138,12 @@ public class ExperiencePaintHandler implements PaintHandler {
 			return new Color(232, 232, 232);
 		case RANGED:
 			return new Color(0, 0, 0);
-		case MAGIC:
-			return new Color(92, 94, 214);
+			// case MAGIC:
+			// return new Color(92, 94, 214);
 		case HITPOINTS:
 			return new Color(138, 17, 17);
-		case SLAYER:
-			return new Color(110, 0, 0);
+			// case SLAYER:
+			// return new Color(110, 0, 0);
 		}
 		return null;
 	}

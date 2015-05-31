@@ -1,7 +1,6 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

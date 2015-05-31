@@ -100,7 +100,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				flicker(this.flicker_prayer);
 			else
 				usePrayer(this.flicker_prayer);
-			this.useSpecialAttack();
+			if (this.armor_holder == null)
+				this.useSpecialAttack();
 			if (this.use_guthans)
 				useGuthans();
 			General.sleep(300);
@@ -128,7 +129,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void equipGuthans() {
-		CEquipment.equip(new int[][] { guthans_body_ids, guthans_helm_ids,
+		CEquipment.equip(new int[][] { guthans_helm_ids, guthans_body_ids,
 				guthans_legs_ids, guthans_warspear_ids });
 	}
 
@@ -176,22 +177,23 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			General.sleep(50);
 	}
 
-	public void attackCurrentTarget() {
-		if (this.current_target != null) {
-			Clicking.click("Attack " + this.current_target.getName(),
+	public boolean attackCurrentTarget() {
+		if (this.current_target != null)
+			return Clicking.click("Attack " + this.current_target.getName(),
 					this.current_target);
-		}
+		return false;
 	}
 
 	private void attackTarget(RSNPC target) {
 		if (target == null
 				|| (target.isInCombat() && !target.isInteractingWithMe()))
 			return;
-		Clicking.click("Attack " + target.getName(), target);
-		int distance = Player.getPosition().distanceTo(target);
-		int sleep_time = General.random((int) ((distance / 3.5) * 1000),
-				(int) ((distance / 2.5) * 1000));
-		General.sleep(sleep_time);
+		if (Clicking.click("Attack " + target.getName(), target)) {
+			int distance = Player.getPosition().distanceTo(target);
+			int sleep_time = General.random((int) ((distance / 3.5) * 1000),
+					(int) ((distance / 2.5) * 1000));
+			General.sleep(sleep_time);
+		}
 	}
 
 	private int getAverageDistance(RSNPC[] npcs) {

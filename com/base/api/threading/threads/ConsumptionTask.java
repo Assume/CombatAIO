@@ -34,7 +34,7 @@ public class ConsumptionTask extends Threadable implements Runnable {
 	public void run() {
 		while (true) {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
-					.next()) {
+					.next() && food != Food.None) {
 				GenericMethods
 						.println("CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);

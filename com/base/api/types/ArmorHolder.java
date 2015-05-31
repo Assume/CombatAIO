@@ -68,6 +68,10 @@ public class ArmorHolder {
 	public void equip() {
 		CEquipment.equipAll(this.helmet_id, this.weapon_id, this.shield_id,
 				this.legs_id, this.body_id);
+		for (int x : new int[] { this.helmet_id, this.weapon_id,
+				this.shield_id, this.legs_id, this.body_id })
+			if (!Equipment.isEquipped(x))
+				CEquipment.equip(x);
 	}
 
 	@Override

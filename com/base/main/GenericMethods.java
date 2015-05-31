@@ -3,6 +3,8 @@ package scripts.CombatAIO.com.base.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tribot.api.General;
+
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class GenericMethods {
@@ -19,8 +21,8 @@ public class GenericMethods {
 	public static void println(Object j) {
 		if (j == null)
 			return;
-		// if (General.getTRiBotUsername().equalsIgnoreCase("assume"))
-		System.out.println(j.toString());
+		if (General.getTRiBotUsername().equalsIgnoreCase("assume"))
+			System.out.println(j.toString());
 	}
 
 }

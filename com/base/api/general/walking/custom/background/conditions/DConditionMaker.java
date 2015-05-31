@@ -6,7 +6,7 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.DConditi
 
 public enum DConditionMaker {
 
-	DNotInArea {
+	Not_in_area {
 		@Override
 		public DCondition make() {
 			int neX = Integer.parseInt(JOptionPane.showInputDialog(
@@ -19,6 +19,26 @@ public enum DConditionMaker {
 					"Enter South West Tile y").replaceAll("[^0-9]", ""));
 			return new DNotInArea(new RSArea(swX, swY, neX, neY));
 		}
+	},
+	Npc_is_on_screen {
+
+		@Override
+		public DCondition make() {
+			int id = Integer.parseInt(JOptionPane.showInputDialog("NPC id")
+					.replaceAll("[^0-9]", ""));
+			return new DNPCIsOnScreenCondition(id);
+		}
+
+	},
+	Object_is_on_screen {
+
+		@Override
+		public DCondition make() {
+			int id = Integer.parseInt(JOptionPane.showInputDialog("Object id")
+					.replaceAll("[^0-9]", ""));
+			return new DNPCIsOnScreenCondition(id);
+		}
+
 	};
 
 	public abstract DCondition make();

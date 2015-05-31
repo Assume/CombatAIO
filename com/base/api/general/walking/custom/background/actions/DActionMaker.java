@@ -8,7 +8,7 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.bo
 
 public enum DActionMaker {
 
-	DTeleport {
+	Teleport {
 		@Override
 		public DAction make() {
 			JComboBox<NormalSpell> box = new JComboBox<NormalSpell>(
@@ -19,7 +19,7 @@ public enum DActionMaker {
 			return new DTeleport(k);
 		}
 	},
-	DUseItem {
+	Click_item {
 		@Override
 		public DAction make() {
 			int x = getInt(JOptionPane.showInputDialog("Enter item id"));
@@ -27,12 +27,69 @@ public enum DActionMaker {
 			return new DUseItem(action, x);
 		}
 	},
-	DWalkToTile {
+	Click_object {
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter object id"));
+			String action = JOptionPane.showInputDialog("Enter action");
+			return new DClickObject(x, action);
+		}
+	},
+	Walk_to_tile {
 		@Override
 		public DAction make() {
 			int x = getInt(JOptionPane.showInputDialog("Enter x cord"));
 			int y = getInt(JOptionPane.showInputDialog("Enter y cord"));
 			return new DWalkToTile(x, y);
+		}
+	},
+	Walk_to_object {
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter object id"));
+			return new DWalkToObject(x);
+		}
+	},
+	Walk_to_npc {
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter object id"));
+			return new DWalkToNPC(x);
+		}
+	},
+	Sleep {
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter time to sleep"));
+			return new DSleep(x);
+		}
+	},
+	Wait_until_stopped {
+		@Override
+		public DAction make() {
+			return new DWaitUntilStoppedAction();
+		}
+	},
+	Wait_until_not_animating {
+
+		@Override
+		public DAction make() {
+			return new DWaitUntilNotAnimating();
+		}
+	},
+	Wait_until_object_on_screen {
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter object id"));
+			return new DWaitUntilObjectOnScreen(x);
+		}
+	},
+	Wait_until_npc_on_screen {
+
+		@Override
+		public DAction make() {
+			int x = getInt(JOptionPane.showInputDialog("Enter npc id"));
+			return new DWaitUntilNPCOnScreen(x);
 		}
 	};
 

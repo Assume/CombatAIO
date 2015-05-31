@@ -4,7 +4,6 @@ import org.tribot.api2007.Combat;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
 
-
 public class DChangeAttackStyle implements DAction {
 
 	private String style;
@@ -17,9 +16,7 @@ public class DChangeAttackStyle implements DAction {
 
 	@Override
 	public void execute() {
-
 		Combat.selectAttackAction(style);
-
 	}
 
 	@Override

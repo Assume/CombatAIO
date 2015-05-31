@@ -13,9 +13,11 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
 
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSArea;
 import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
@@ -25,22 +27,21 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.DFullHol
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DHolder;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.actions.DActionMaker;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.DConditionMaker;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.RSArea;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class BMainGui extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private RSArea area;
 	private MovementType type;
 
-	private static final String PATH = Util.getAppDataDirectory()
-			+ File.separator + "base_aio" + File.separator + "NAME" + ".dat";
+	private JComboBox<MovementType> combo_box_movement_type;
+	private JSpinner spinner;
 
-	public BMainGui(final MovementType type, final RSArea area) {
-		this.type = type;
-		this.area = area;
+	private static final String PATH = Util.getAppDataDirectory()
+			+ File.separator + "Base" + File.separator + File.separator
+			+ "movements" + "NAME" + ".dat";
+
+	public BMainGui() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 568);
 		contentPane = new JPanel();
@@ -62,7 +63,7 @@ public class BMainGui extends JFrame {
 		contentPane.add(lblComplete);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 279, 290, 153);
+		scrollPane_1.setBounds(10, 256, 290, 153);
 		contentPane.add(scrollPane_1);
 
 		final DefaultListModel<DAction> action_list_model = new DefaultListModel<DAction>();
@@ -71,11 +72,11 @@ public class BMainGui extends JFrame {
 		list_actions.setModel(action_list_model);
 
 		JLabel lblNewLabel = new JLabel("Actions");
-		lblNewLabel.setBounds(10, 254, 46, 14);
+		lblNewLabel.setBounds(10, 231, 46, 14);
 		contentPane.add(lblNewLabel);
 
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(324, 279, 290, 151);
+		scrollPane_2.setBounds(324, 256, 290, 151);
 		contentPane.add(scrollPane_2);
 
 		final DefaultListModel<DCondition> condition_list_model = new DefaultListModel<DCondition>();
@@ -84,17 +85,17 @@ public class BMainGui extends JFrame {
 		list_conditions.setModel(condition_list_model);
 
 		JLabel lblConditions = new JLabel("Conditions");
-		lblConditions.setBounds(324, 254, 77, 14);
+		lblConditions.setBounds(324, 231, 77, 14);
 		contentPane.add(lblConditions);
 		// TODO
 		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(
 				DConditionMaker.values());
-		comboBoxConditions.setBounds(324, 443, 150, 20);
+		comboBoxConditions.setBounds(324, 421, 191, 20);
 		contentPane.add(comboBoxConditions);
 		// TODO
 		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(
 				DActionMaker.values());
-		comboBoxActions.setBounds(10, 443, 150, 20);
+		comboBoxActions.setBounds(10, 421, 191, 20);
 		contentPane.add(comboBoxActions);
 
 		JButton btnAddAction = new JButton("Add");
@@ -105,7 +106,7 @@ public class BMainGui extends JFrame {
 				action_list_model.addElement(ac);
 			}
 		});
-		btnAddAction.setBounds(170, 442, 130, 23);
+		btnAddAction.setBounds(211, 420, 89, 23);
 		contentPane.add(btnAddAction);
 
 		JButton btnAddCondition = new JButton("Add");
@@ -120,13 +121,12 @@ public class BMainGui extends JFrame {
 				}
 			}
 		});
-		btnAddCondition.setBounds(484, 442, 130, 23);
+		btnAddCondition.setBounds(525, 420, 89, 23);
 		contentPane.add(btnAddCondition);
 
 		JButton btnAddLine = new JButton("Add Line");
 		btnAddLine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				try {
 					DAction[] actions = new DAction[action_list_model.size()];
 					action_list_model.copyInto(actions);
@@ -142,13 +142,8 @@ public class BMainGui extends JFrame {
 				}
 			}
 		});
-		btnAddLine.setBounds(10, 495, 89, 23);
+		btnAddLine.setBounds(10, 468, 89, 23);
 		contentPane.add(btnAddLine);
-
-		textField = new JTextField();
-		textField.setBounds(464, 496, 150, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
 
 		JButton btnSave = new JButton("Done");
 		btnSave.addActionListener(new ActionListener() {
@@ -158,10 +153,13 @@ public class BMainGui extends JFrame {
 				DFullHolder dfh = new DFullHolder(holders);
 				String name = JOptionPane
 						.showInputDialog("Enter name for this custom action");
+				type = (MovementType) combo_box_movement_type.getSelectedItem();
+				RSArea area = new RSArea(Player.getPosition(), Integer
+						.parseInt(spinner.getValue().toString()));
 				WalkingManager.addMovement(type, dfh, area, name);
 			}
 		});
-		btnSave.setBounds(365, 495, 89, 23);
+		btnSave.setBounds(525, 495, 89, 23);
 		contentPane.add(btnSave);
 
 		JButton btnNewButton = new JButton("Remove");
@@ -173,7 +171,7 @@ public class BMainGui extends JFrame {
 				action_list_model.remove(index);
 			}
 		});
-		btnNewButton.setBounds(170, 468, 130, 23);
+		btnNewButton.setBounds(211, 446, 89, 23);
 		contentPane.add(btnNewButton);
 
 		JButton button = new JButton("Remove");
@@ -185,7 +183,7 @@ public class BMainGui extends JFrame {
 				condition_list_model.remove(index);
 			}
 		});
-		button.setBounds(484, 468, 130, 23);
+		button.setBounds(525, 446, 89, 23);
 		contentPane.add(button);
 
 		JButton btnRemove = new JButton("Remove");
@@ -199,6 +197,19 @@ public class BMainGui extends JFrame {
 		});
 		btnRemove.setBounds(525, 222, 89, 23);
 		contentPane.add(btnRemove);
+
+		combo_box_movement_type = new JComboBox<MovementType>(
+				MovementType.values());
+		combo_box_movement_type.setBounds(385, 496, 130, 20);
+		contentPane.add(combo_box_movement_type);
+
+		JLabel lblRadius = new JLabel("Radius");
+		lblRadius.setBounds(272, 499, 46, 14);
+		contentPane.add(lblRadius);
+
+		spinner = new JSpinner();
+		spinner.setBounds(333, 496, 37, 20);
+		contentPane.add(spinner);
 	}
 }
 

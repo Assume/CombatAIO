@@ -15,9 +15,6 @@ import javax.imageio.ImageIO;
 
 public class LootItem implements Comparable<LootItem> {
 
-	public static void main(String[] args) {
-		Image i = getIcon(314);
-	}
 
 	private int price;
 	private int amount_looted;
