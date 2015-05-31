@@ -17,9 +17,8 @@ public class DFullHolder implements Serializable {
 	public void checkAndExecute() {
 		for (int i = 0; i < holders.size(); i++) {
 			DHolder d = holders.get(i);
-			if (d.shouldExecute()) {
+			if (d.shouldExecute())
 				d.execute();
-			}
 		}
 	}
 

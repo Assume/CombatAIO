@@ -32,4 +32,8 @@ public class CustomMovement {
 		return this.activation_area;
 	}
 
+	public void execute() {
+		holder.checkAndExecute();
+	}
+
 }

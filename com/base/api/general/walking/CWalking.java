@@ -1,16 +1,15 @@
 package scripts.CombatAIO.com.base.api.general.walking;
 
 import org.tribot.api2007.Player;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
-import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.general.walking.types.Bank;
 import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.general.walking.types.Teleport;
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class CWalking {
 
@@ -21,10 +20,7 @@ public class CWalking {
 				.getValue());
 		if (isFasterToTeleport(end_tile))
 			teleported = Teleporting.attemptToTeleport(end_tile);
-		if (type.equals(MovementType.TO_BANK))
-			WebWalking.walkToBank();
-		else
-			WebWalking.walkTo(end_tile);
+		WalkingManager.walk(type, end_tile);
 		return teleported;
 	}
 
@@ -38,4 +34,5 @@ public class CWalking {
 		return distance_tele < distance_walk || distance_jewel < distance_walk;
 	}
 
+	
 }
