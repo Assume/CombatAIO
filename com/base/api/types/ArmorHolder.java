@@ -65,13 +65,9 @@ public class ArmorHolder {
 		return true;
 	}
 
-	public void equip(int attempt) {
-		if (attempt >= 4)
-			return;
-		CEquipment.equip(this.helmet_id, this.weapon_id, this.shield_id,
+	public void equip() {
+		CEquipment.equipAll(this.helmet_id, this.weapon_id, this.shield_id,
 				this.legs_id, this.body_id);
-		if (!this.isEquipped())
-			equip(++attempt);
 	}
 
 	@Override

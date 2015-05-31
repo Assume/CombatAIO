@@ -109,7 +109,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void usePrayer(Prayer flicker_prayer) {
-		if (!flicker_prayer.isActivated())
+		if (!flicker_prayer.isActivated()
+				&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0)
 			flicker_prayer.activate();
 	}
 
@@ -117,12 +118,11 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (this.armor_holder == null && Combat.getHPRatio() <= 50
 				&& !isDegradedGuthansInInventory()) {
 			this.armor_holder = new ArmorHolder();
-			System.out.println(this.armor_holder);
 			equipGuthans();
 			return;
 		}
 		if (this.armor_holder != null && Combat.getHPRatio() >= 90) {
-			this.armor_holder.equip(0);
+			this.armor_holder.equip();
 			this.armor_holder = null;
 		}
 	}
@@ -216,7 +216,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
 				&& getTargetHPPercent() >= 30)
-			this.special_attack_weapon.useSpecial();
+			this.special_attack_weapon.useSpecial(this);
 	}
 
 	private double getTargetHPPercent() {

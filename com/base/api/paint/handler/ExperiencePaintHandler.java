@@ -27,44 +27,33 @@ public class ExperiencePaintHandler implements PaintHandler {
 				return;
 			g.setFont(font1);
 			int i = 0;
-			g.setColor(Color.WHITE);
-			g.fillRect(8, 348, 242,
-					(13 * (getSkillsWithExperienceGained() - 1)) + 15);
 			for (final SkillData skill : SkillData.values()) {
 				if (skill.getExperienceGained() > 0) {
 					// Bar
 					g.setColor(getCapeColor(100, skill));
-					g.fillRect(8, 348 + 15 * i, 242, 13);
+					g.fillRect(8, 320 - 15 * i, 242, 13);
 
 					// Progress
 					g.setColor(getCapeColor(255, skill));
-					g.fillRect(8, 348 + 15 * i,
+					g.fillRect(8, 320 - 15 * i,
 							skill.getPercentToNextLevel() * 242 / 100, 13);
 
 					// Trim
 					g.setColor(getTrimColor(skill));
-					g.drawRect(8, 348 + 15 * i, 242, 13);
+					g.drawRect(8, 320 - 15 * i, 242, 13);
 
 					// Text
 					g.drawString(
 							toString(
 									(Long) Dispatcher.get()
 											.get(ValueType.RUN_TIME).getValue(),
-									skill), 11, 359 + 15 * i);
+									skill), 11, 331 - 15 * i);
 					i++;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private int getSkillsWithExperienceGained() {
-		int i = 0;
-		for (final SkillData skill : SkillData.values())
-			if (skill.getExperienceGained() > 0)
-				i++;
-		return i;
 	}
 
 	private String toString(Long runtime, SkillData skill) {

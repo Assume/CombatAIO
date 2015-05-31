@@ -5,13 +5,13 @@ import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Game;
 import org.tribot.api2007.Equipment.SLOTS;
+import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSItemDefinition;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
+import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 
 public enum Weapon {
 
@@ -19,7 +19,7 @@ public enum Weapon {
 			2400, -1, 55, 4587), DRAGON_BATTLEAXE(-1, -1, 100, 1377), DRAGON_DAGGER(
 			-1, -1, 25, 1215), MAGIC_SHORT_BOW(-1, -1, 55, 861), DRAGON_LONGSWORD(
 			-1, -1, 25, 1305), ARMADYL_GODSWORD(-1, -1, 50, 11694), BANDOS_GODSWORD(
-			-1, -1, 100, 11696), SARADOMIN_GODSWORD(-1, -1, 50, 11698), ZAMORAK_GODSWORD(
+			-1, -1, 100, 11804), SARADOMIN_GODSWORD(-1, -1, 50, 11698), ZAMORAK_GODSWORD(
 			-1, -1, 60, 11700), DARK_BOW(-1, -1, 55, 11235), SARADOMIN_SWORD(
 			-1, -1, 100, 11739), EXCALIBUR(-1, -1, 100, 35);
 
@@ -48,27 +48,38 @@ public enum Weapon {
 		return this.special_attack_usage;
 	}
 
-	public void useSpecial() {
-		String name = this.toString();
-		if (!Equipment.isEquipped(name)) {
-			String original_weapon_name = null;
-			String shield_name = null;
+	public void useSpecial(CombatTask task) {
+		if (!Equipment.isEquipped(id)) {
+			int original_weapon_id = -1;
+			int shield_id = -1;
 			RSItem temp = Equipment.getItem(SLOTS.WEAPON);
-			RSItemDefinition defintion = temp.getDefinition();
-			if (defintion != null)
-				original_weapon_name = defintion.getName();
+			if (temp != null)
+				original_weapon_id = temp.getID();
 			RSItem temp2 = Equipment.getItem(SLOTS.SHIELD);
-			if (temp2 != null) {
-				RSItemDefinition defintion2 = temp2.getDefinition();
-				if (defintion2 != null)
-					shield_name = defintion.getName();
-			}
-			CEquipment.equip(name);
+			if (temp2 != null)
+				shield_id = temp2.getID();
+			System.out.println(original_weapon_id + ",,, " + shield_id);
+			CEquipment.equip(id);
+			General.sleep(500, 1100);
+			final int start_special = getSpecialPercent();
 			this.turnSpecialOn();
-			CEquipment.equip(original_weapon_name, shield_name);
+			task.attackCurrentTarget();
+			Timing.waitCondition(new Condition() {
+				@Override
+				public boolean active() {
+					return getSpecialPercent() < start_special;
+				}
+			}, 3500);
+			CEquipment.equipAll(original_weapon_id, shield_id);
+			if (!Equipment.isEquipped(original_weapon_id, shield_id))
+				CEquipment.equipAll(original_weapon_id, shield_id);
 		} else
 			this.turnSpecialOn();
 
+	}
+
+	private int getSpecialPercent() {
+		return Game.getSetting(300) / 10;
 	}
 
 	private void turnSpecialOn() {

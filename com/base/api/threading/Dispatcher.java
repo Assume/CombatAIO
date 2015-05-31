@@ -143,6 +143,8 @@ public class Dispatcher implements XMLable {
 			return this.banker.getFoodWithdrawAmount();
 		case FLICKER:
 			return this.combat_thread.shouldFlicker();
+		case USE_GUTHANS:
+			return new Value<Boolean>(this.combat_thread.getUseGuthans());
 		default:
 			break;
 		}

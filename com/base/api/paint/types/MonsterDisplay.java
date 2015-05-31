@@ -21,16 +21,20 @@ public class MonsterDisplay extends Paintable<RSNPC> {
 
 	@Override
 	public void draw(Graphics g) {
-		Color c = Color.BLACK;
-		if (this.target)
-			c = Color.RED;
-		g.setColor(c);
-		if (super.get() != null) {
-			Polygon x = Projection.getTileBoundsPoly(super.get(), 0);
-			if (x != null)
-				g.drawPolygon(x);
-			g.drawString("HP: " + super.get().getHealth(), super.get()
-					.getLocalX(), super.get().getLocalY());
+		try {
+			Color c = Color.BLACK;
+			if (this.target)
+				c = Color.RED;
+			g.setColor(c);
+			if (super.get() != null) {
+				Polygon x = Projection.getTileBoundsPoly(super.get(), 0);
+				if (x != null)
+					g.drawPolygon(x);
+				g.drawString("HP: " + super.get().getHealth(), super.get()
+						.getLocalX(), super.get().getLocalY());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

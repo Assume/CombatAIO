@@ -67,8 +67,13 @@ final class MonsterPaintHandler implements PaintHandler {
 		 * for (RSNPC x : this.map.keySet()) { MonsterDisplay temp = map.get(x);
 		 * if (temp != null) temp.draw(g); }
 		 */
-		if (this.current_target_display != null)
-			this.current_target_display.draw(g);
+		try {
+			if (this.current_target_display != null)
+				this.current_target_display.draw(g);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

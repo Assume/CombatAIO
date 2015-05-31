@@ -13,7 +13,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
-	private static final String VERSION_NUMBER = "0.0.4_5";
+	private static final String VERSION_NUMBER = "0.0.5_6";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -41,8 +41,7 @@ public class TotalPaintHandler {
 	}
 
 	public void updateAll() {
-		this.monster_paint_handler.update();
-		this.loot_paint_handler.update();
+		//this.monster_paint_handler.update();
 	}
 
 	public void updateMonsters() {
@@ -77,12 +76,12 @@ public class TotalPaintHandler {
 				return;
 			if (Dispatcher.get().hasStarted()) {
 				this.drawGenericPaint(arg0);
-				this.monster_paint_handler.draw(arg0);
+				//this.monster_paint_handler.draw(arg0);
 				this.loot_paint_handler.draw(arg0);
 				this.experience_paint_handler.draw(arg0);
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -100,37 +99,42 @@ public class TotalPaintHandler {
 	}
 
 	private void drawGenericPaint(Graphics g) {
-		long run_time = (Long) Dispatcher.get().get(ValueType.RUN_TIME)
-				.getValue();
-		int kill_count = (Integer) Dispatcher.get().get(ValueType.TOTAL_KILLS)
-				.getValue();
-		int total_profit = (Integer) Dispatcher.get()
-				.get(ValueType.TOTAL_LOOT_VALUE).getValue();
+		try {
+			long run_time = (Long) Dispatcher.get().get(ValueType.RUN_TIME)
+					.getValue();
+			int kill_count = (Integer) Dispatcher.get()
+					.get(ValueType.TOTAL_KILLS).getValue();
+			int total_profit = (Integer) Dispatcher.get()
+					.get(ValueType.TOTAL_LOOT_VALUE).getValue();
 
-		g.setColor(new Color(0, 0, 0, 175));
-		g.fillRect(255, 361, 240, 78);
+			g.setColor(new Color(0, 0, 0, 175));
+			g.fillRect(255, 349, 240, 78);
 
-		String[] infoArray = {
-				"Runtime: " + getFormattedTime(run_time),
-				"Kills: " + kill_count + " ("
-						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
-				"Profit: "
-						+ formatNumber(total_profit)
-						+ " ("
-						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
-						+ "/HR)", "Version: " + VERSION_NUMBER };
+			String[] infoArray = {
+					"Runtime: " + getFormattedTime(run_time),
+					"Kills: " + kill_count + " ("
+							+ (int) ((3600000.0 / run_time) * kill_count)
+							+ "/HR)",
+					"Profit: "
+							+ formatNumber(total_profit)
+							+ " ("
+							+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
+							+ "/HR)", "Version: " + VERSION_NUMBER };
 
-		g.setFont(font2);
-		int c = 0;
-		for (String s : infoArray) {
-			g.setColor(new Color(255, 255, 255, 150));
-			int length = stringLength(s, g);
-			g.fillRect(260, 366 + 17 * c, length + 20, 12);
-			g.setColor(color2);
-			((Graphics2D) g).setStroke(stroke1);
-			g.drawRect(260, 366 + 17 * c, length + 20, 12);
-			g.drawString(s, 270, 376 + 17 * c);
-			c++;
+			g.setFont(font2);
+			int c = 0;
+			for (String s : infoArray) {
+				g.setColor(new Color(255, 255, 255, 150));
+				int length = stringLength(s, g);
+				g.fillRect(260, 354 + 17 * c, length + 20, 13);
+				g.setColor(color2);
+				((Graphics2D) g).setStroke(stroke1);
+				g.drawRect(260, 354 + 17 * c, length + 20, 13);
+				g.drawString(s, 270, 364 + 17 * c);
+				c++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

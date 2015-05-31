@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -86,6 +87,8 @@ public class BaseGUI extends JFrame {
 	private JTextField text_field_loot_over_x;
 
 	private JSpinner spinner_food;
+
+	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -289,6 +292,7 @@ public class BaseGUI extends JFrame {
 		combo_box_settings = new JComboBox<String>();
 		combo_box_settings.setBounds(10, 204, 121, 20);
 		tab_one_panel.add(combo_box_settings);
+		combo_box_settings.setModel(this.model_combo_box);
 
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(141, 31, 121, 148);
@@ -359,8 +363,11 @@ public class BaseGUI extends JFrame {
 	}
 
 	private void fillSettingsNames() {
+		model_combo_box.removeAllElements();
 		File[] files = new File(Util.getWorkingDirectory() + File.separator
 				+ "Base").listFiles();
+		if (files == null)
+			return;
 		for (File file : files) {
 			if (file.isFile() && file.getName().endsWith(".ini"))
 				combo_box_settings.addItem(file.getName().replace(".ini", ""));
@@ -389,7 +396,8 @@ public class BaseGUI extends JFrame {
 				ValueType.FOOD_WITHDRAW_AMOUNT,
 				new Value<Integer>(Integer.parseInt(spinner_food.getValue()
 						.toString())));
-		Dispatcher.get().set(ValueType.FLICKER, new Value<Boolean>(chckbx_flicker.isSelected()));
+		Dispatcher.get().set(ValueType.FLICKER,
+				new Value<Boolean>(chckbx_flicker.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -464,6 +472,11 @@ public class BaseGUI extends JFrame {
 			prop.setProperty("food_withdraw_amount",
 					Dispatcher.get().get(ValueType.FOOD_WITHDRAW_AMOUNT)
 							.getValue().toString());
+			prop.setProperty("use_flicker",
+					Dispatcher.get().get(ValueType.FLICKER).getValue()
+							.toString());
+			prop.setProperty("use_guthans",
+					Dispatcher.get().get(ValueType.USE_GUTHANS).getValue().toString());
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -528,6 +541,10 @@ public class BaseGUI extends JFrame {
 					.getProperty("food_withdraw_amount")));
 			fillSelectedMonster(prop.getProperty("monster_names"));
 			fillBankTable(prop);
+			chckbx_flicker.setSelected(Boolean.parseBoolean(prop
+					.getProperty("use_flicker")));
+			chckbx_guthans.setSelected(Boolean.parseBoolean(prop
+					.getProperty("use_guthans")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
