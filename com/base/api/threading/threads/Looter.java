@@ -63,7 +63,7 @@ public class Looter extends Threadable implements Pauseable {
 
 	public void addPossibleLootItem(String... name) {
 		for (String x : name)
-			if (x != null)
+			if (x != null && x.length() > 1)
 				this.items_known.put(x, new LootItem(x));
 	}
 
@@ -305,7 +305,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	public boolean lootInCombat() {
-		return this.lootInCombat();
+		return this.loot_in_combat;
 	}
 
 	public boolean waitForLoot() {

@@ -28,26 +28,30 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		super(pause_types);
 	}
 
-	private Food food = null;
+	private Food food = Food.None;
 
 	@Override
 	public void run() {
 		while (true) {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
 					.next()) {
-				GenericMethods.println("CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
+				GenericMethods
+						.println("CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				executeBonesToPeaches();
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
-				GenericMethods.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
+				GenericMethods
+						.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			if (Potions.getPotionsRequired().length > 0) {
-				GenericMethods.println("CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
+				GenericMethods
+						.println("CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				drink();
-				GenericMethods.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
+				GenericMethods
+						.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			General.sleep(500);

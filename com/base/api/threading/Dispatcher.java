@@ -1,5 +1,7 @@
 package scripts.CombatAIO.com.base.api.threading;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -8,6 +10,7 @@ import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.util.Util;
 import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
@@ -29,8 +32,8 @@ import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
 import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.main.BaseCombat;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
-import scripts.CombatAIO.com.base.main.utils.FileUtil;
 
 public class Dispatcher implements XMLable {
 
@@ -136,6 +139,10 @@ public class Dispatcher implements XMLable {
 			return new Value<int[]>(this.combat_thread.getGuthansIDs());
 		case ALL_LOOT_ITEMS:
 			return this.looting_thread.getLootItems();
+		case FOOD_WITHDRAW_AMOUNT:
+			return this.banker.getFoodWithdrawAmount();
+		case FLICKER:
+			return this.combat_thread.shouldFlicker();
 		default:
 			break;
 		}
@@ -179,6 +186,13 @@ public class Dispatcher implements XMLable {
 			break;
 		case USE_GUTHANS:
 			this.combat_thread.setUseGuthans((Boolean) val.getValue());
+			break;
+		case FOOD_WITHDRAW_AMOUNT:
+			this.banker.setFoodWithdrawAmount((Integer) val.getValue());
+			break;
+		case FLICKER:
+			this.combat_thread.setUseFlicker((Boolean) val.getValue());
+			break;
 		default:
 			break;
 		}
@@ -189,7 +203,7 @@ public class Dispatcher implements XMLable {
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
-				System.out.println(x.getName() + " " + x.getId());
+				GenericMethods.println(x.getName() + " " + x.getId());
 				x.setPaused(true);
 				x.suspend();
 			}
@@ -337,35 +351,8 @@ public class Dispatcher implements XMLable {
 		this.banker.bank(world_hop);
 	}
 
-	public void save(String name) {
-		try {
-			Properties prop = new Properties();
-			prop.setProperty("food", dispatcher.get(ValueType.FOOD).getValue()
-					.toString());
-			prop.setProperty("ranging", dispatcher.get(ValueType.IS_RANGING)
-					.getValue().toString());
-			prop.setProperty("prayer", dispatcher.get(ValueType.FLICKER_PRAYER)
-					.getValue().toString());
-			prop.setProperty("loot_items",
-					((String[]) dispatcher.get(ValueType.LOOT_ITEM_NAMES)
-							.getValue()).toString());
-			prop.setProperty("loot_in_combat",
-					dispatcher.get(ValueType.LOOT_IN_COMBAT).getValue()
-							.toString());
-			prop.setProperty("wait_for_loot",
-					dispatcher.get(ValueType.WAIT_FOR_LOOT).getValue()
-							.toString());
-			prop.setProperty("special_attack_weapon",
-					dispatcher.get(ValueType.SPECIAL_ATTACK_WEAPON).getValue()
-							.toString());
-			prop.setProperty("monster_names",
-					dispatcher.get(ValueType.MONSTER_NAMES).getValue()
-							.toString());
-			FileUtil.saveProperties(name, prop, "bset");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public Banker getBanker() {
+		return this.banker;
 	}
 
 }

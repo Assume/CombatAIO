@@ -89,6 +89,13 @@ public enum Weapon {
 		return Game.getSetting(301) == 1;
 	}
 
+	public static Weapon getWeaponFromName(String name) {
+		for (Weapon x : Weapon.values())
+			if (x.toString().equalsIgnoreCase(name))
+				return x;
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

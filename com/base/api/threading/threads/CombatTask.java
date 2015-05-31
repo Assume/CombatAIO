@@ -45,7 +45,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private RSNPC[] possible_monsters;
 	private String[] monster_names;
 	private boolean isRanging = false;
-	private Prayer prayer;
+	private Prayer prayer = Prayer.NONE;
 	private boolean flicker;
 	private Prayer flicker_prayer = Prayer.NONE;
 	private Weapon weapon = Weapon.NONE;
@@ -98,12 +98,19 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			}
 			if (this.flicker)
 				flicker(this.flicker_prayer);
+			else
+				usePrayer(this.flicker_prayer);
 			this.useSpecialAttack();
 			if (this.use_guthans)
 				useGuthans();
 			General.sleep(300);
 
 		}
+	}
+
+	private void usePrayer(Prayer flicker_prayer) {
+		if (!flicker_prayer.isActivated())
+			flicker_prayer.activate();
 	}
 
 	private void useGuthans() {
@@ -312,4 +319,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return GenericMethods.combineArrays(guthans_body_ids, guthans_helm_ids,
 				guthans_legs_ids, guthans_warspear_ids);
 	}
+
+	public Value<Boolean> shouldFlicker() {
+		return new Value<Boolean>(this.flicker);
+	}
+
+	public void setUseFlicker(boolean b) {
+		this.flicker = b;
+	}
+
 }

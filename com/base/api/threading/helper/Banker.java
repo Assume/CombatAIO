@@ -19,13 +19,16 @@ import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
+import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
+import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.GenericMethods;
+import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class Banker {
 
@@ -56,6 +59,10 @@ public class Banker {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
+		Prayer p = (Prayer) Dispatcher.get().get(ValueType.FLICKER_PRAYER)
+				.getValue();
+		if (p.isActivated())
+			p.disable();
 		JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
 		if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 			checkAndRemoveGlory();
@@ -175,4 +182,25 @@ public class Banker {
 		this.list.add(new BankItem(id, amount));
 	}
 
+	public int[] getItemIds() {
+		List<Integer> items = new ArrayList<Integer>();
+		for (BankItem x : this.list)
+			items.add(x.getId());
+		return ArrayUtil.toArrayInt(items);
+	}
+
+	public int[] getItemAmounts() {
+		List<Integer> items = new ArrayList<Integer>();
+		for (BankItem x : this.list)
+			items.add(x.getAmount());
+		return ArrayUtil.toArrayInt(items);
+	}
+
+	public Value<Integer> getFoodWithdrawAmount() {
+		return new Value<Integer>(this.food_amount);
+	}
+
+	public void setFoodWithdrawAmount(int amount) {
+		this.food_amount = amount;
+	}
 }

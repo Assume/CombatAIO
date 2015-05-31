@@ -37,7 +37,7 @@ public enum Prayer {
 	}
 
 	public boolean isActivated() {
-		return p.isEnabled();
+		return this == NONE ? true : p.isEnabled();
 	}
 
 	public void disable() {
@@ -49,17 +49,18 @@ public enum Prayer {
 	}
 
 	public void flicker() {
-		if (!isActivated()) {
-			int xp = Skills.getXP(Skills.SKILLS.HITPOINTS);
-			activate();
-			for (int fsafe = 0; Skills.getXP(Skills.SKILLS.HITPOINTS) == xp
-					&& !(Player.getRSPlayer().getInteractingCharacter() == null)
-					&& fsafe < 40; fsafe++)
-				General.sleep(15);
-			disable();
-		} else {
-			disable();
-		}
+		if (this == PIETY || this == CHIVALRY)
+			if (!isActivated()) {
+				int xp = Skills.getXP(Skills.SKILLS.HITPOINTS);
+				activate();
+				for (int fsafe = 0; Skills.getXP(Skills.SKILLS.HITPOINTS) == xp
+						&& !(Player.getRSPlayer().getInteractingCharacter() == null)
+						&& fsafe < 40; fsafe++)
+					General.sleep(15);
+				disable();
+			} else {
+				disable();
+			}
 	}
 
 	public static Prayer parse(String eval) {

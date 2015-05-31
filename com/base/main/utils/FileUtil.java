@@ -141,6 +141,7 @@ public class FileUtil {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
+				e.printStackTrace();
 				return false;
 			}
 		} else if (shouldWipe) {
@@ -148,6 +149,7 @@ public class FileUtil {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
+				e.printStackTrace();
 				return false;
 			}
 		}
@@ -180,32 +182,17 @@ public class FileUtil {
 
 	public static void saveProperties(String name, Properties prop,
 			String extension) {
-		File file = FileUtil.getSaveFile(name, extension, FileUtil.getDir().getPath());
-		OutputStream output = null;
 		try {
+			OutputStream output = null;
+			File file = new File(getDir() + name + "." + extension);
 			output = new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			prop.store(output, null);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			output.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			output.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**

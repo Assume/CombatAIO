@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,11 +27,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
@@ -40,8 +42,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.main.utils.FileUtil;
-import javax.swing.JTextField;
+import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class BaseGUI extends JFrame {
 
@@ -83,6 +84,8 @@ public class BaseGUI extends JFrame {
 	private JComboBox<String> combo_box_settings;
 	private JLabel lblSpecialAttack;
 	private JTextField text_field_loot_over_x;
+
+	private JSpinner spinner_food;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -248,10 +251,10 @@ public class BaseGUI extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,
-						"Saving is currently disabled");
-				if (true)
-					return;
+				/*
+				 * JOptionPane.showMessageDialog(null,
+				 * "Saving is currently disabled"); if (true) return;
+				 */
 				String name = JOptionPane
 						.showInputDialog("Enter name for this profile");
 				if (name == null) {
@@ -260,7 +263,7 @@ public class BaseGUI extends JFrame {
 					return;
 				}
 				set();
-				Dispatcher.get().save(name);
+				save(name);
 			}
 		});
 		btnSave.setBounds(141, 235, 89, 23);
@@ -269,7 +272,7 @@ public class BaseGUI extends JFrame {
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				load(combo_box_settings.getSelectedItem().toString());
 			}
 		});
 		btnLoad.setBounds(42, 235, 89, 23);
@@ -279,9 +282,9 @@ public class BaseGUI extends JFrame {
 		lblWithdrawAmount.setBounds(10, 65, 89, 14);
 		tab_one_panel.add(lblWithdrawAmount);
 
-		JSpinner spinner = new JSpinner();
-		spinner.setBounds(102, 62, 29, 20);
-		tab_one_panel.add(spinner);
+		spinner_food = new JSpinner();
+		spinner_food.setBounds(85, 62, 46, 20);
+		tab_one_panel.add(spinner_food);
 
 		combo_box_settings = new JComboBox<String>();
 		combo_box_settings.setBounds(10, 204, 121, 20);
@@ -356,12 +359,12 @@ public class BaseGUI extends JFrame {
 	}
 
 	private void fillSettingsNames() {
-		File[] files = FileUtil.getFilesInDirectory("bset", FileUtil.getDir()
-				.getAbsolutePath());
-		if (files == null)
-			return;
-		for (File f : files)
-			combo_box_settings.addItem(f.getName());
+		File[] files = new File(Util.getWorkingDirectory() + File.separator
+				+ "Base").listFiles();
+		for (File file : files) {
+			if (file.isFile() && file.getName().endsWith(".ini"))
+				combo_box_settings.addItem(file.getName().replace(".ini", ""));
+		}
 	}
 
 	private void set() {
@@ -382,6 +385,11 @@ public class BaseGUI extends JFrame {
 				new Value<Boolean>(chckbx_ranged.isSelected()));
 		Dispatcher.get().set(ValueType.FLICKER_PRAYER,
 				new Value<Prayer>((Prayer) combo_box_prayer.getSelectedItem()));
+		Dispatcher.get().set(
+				ValueType.FOOD_WITHDRAW_AMOUNT,
+				new Value<Integer>(Integer.parseInt(spinner_food.getValue()
+						.toString())));
+		Dispatcher.get().set(ValueType.FLICKER, new Value<Boolean>(chckbx_flicker.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -397,7 +405,9 @@ public class BaseGUI extends JFrame {
 		for (int i = 0; i < 60 && table_loot.getValueAt(i, 0) != null; i++)
 			if (table_loot.getValueAt(i, 0) != null)
 				temp.add(table_loot.getValueAt(i, 0).toString().trim());
-		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
+		Dispatcher.get()
+
+		.set(ValueType.LOOT_ITEM_NAMES,
 				new Value<String[]>(temp.toArray(new String[temp.size()])));
 	}
 
@@ -414,10 +424,86 @@ public class BaseGUI extends JFrame {
 		}
 	}
 
+	public void save(String name) {
+		try {
+			Properties prop = new Properties();
+			prop.setProperty("food", Dispatcher.get().get(ValueType.FOOD)
+					.getValue().toString());
+			prop.setProperty("ranging",
+					Dispatcher.get().get(ValueType.IS_RANGING).getValue()
+							.toString());
+			prop.setProperty("prayer",
+					Dispatcher.get().get(ValueType.FLICKER_PRAYER).getValue()
+							.toString());
+			prop.setProperty(
+					"loot_items",
+					stringArrayToString(((String[]) Dispatcher.get()
+							.get(ValueType.LOOT_ITEM_NAMES).getValue())));
+			prop.setProperty("loot_in_combat",
+					Dispatcher.get().get(ValueType.LOOT_IN_COMBAT).getValue()
+							.toString());
+			prop.setProperty("wait_for_loot",
+					Dispatcher.get().get(ValueType.WAIT_FOR_LOOT).getValue()
+							.toString());
+			prop.setProperty("special_attack_weapon",
+					Dispatcher.get().get(ValueType.SPECIAL_ATTACK_WEAPON)
+							.getValue().toString());
+			prop.setProperty(
+					"monster_names",
+					stringArrayToString(((String[]) Dispatcher.get()
+							.get(ValueType.MONSTER_NAMES).getValue())));
+			prop.setProperty("bank_item_ids",
+					intArrayToString((int[]) Dispatcher.get().getBanker()
+							.getItemIds()));
+			prop.setProperty("bank_item_amounts",
+					intArrayToString((int[]) Dispatcher.get().getBanker()
+							.getItemAmounts()));
+			prop.setProperty("minimum_loot_value",
+					Dispatcher.get().get(ValueType.MINIMUM_LOOT_VALUE)
+							.getValue().toString());
+			prop.setProperty("food_withdraw_amount",
+					Dispatcher.get().get(ValueType.FOOD_WITHDRAW_AMOUNT)
+							.getValue().toString());
+			boolean exist = (new File(Util.getWorkingDirectory()
+					+ File.separator + "Base").mkdirs());
+			FileOutputStream streamO = new FileOutputStream(
+					Util.getWorkingDirectory() + File.separator + "Base"
+							+ File.separator + name + ".ini");
+			prop.store(streamO, null);
+			streamO.flush();
+			streamO.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private String intArrayToString(int[] ars) {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < ars.length; i++) {
+			if (i < ars.length - 1)
+				b.append(ars[i] + ",");
+			else
+				b.append(ars[i]);
+		}
+		return b.toString();
+	}
+
+	private String stringArrayToString(String[] strings) {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < strings.length; i++) {
+			if (i < strings.length - 1)
+				b.append(strings[i] + ",");
+			else
+				b.append(strings[i]);
+		}
+		return b.toString();
+	}
+
 	private void load(String name) {
 		try {
-			FileInputStream in = new FileInputStream(FileUtil.getFile(true,
-					"name", "bset", FileUtil.getDir().getAbsolutePath()));
+			FileInputStream in = new FileInputStream(Util.getWorkingDirectory()
+					+ File.separator + "Base" + File.separator + name + ".ini");
 			Properties prop = new Properties();
 			prop.load(in);
 			combo_box_food.setSelectedItem(Food.getFoodFromName(prop
@@ -426,14 +512,23 @@ public class BaseGUI extends JFrame {
 					.getProperty("ranging")));
 			combo_box_prayer.setSelectedItem(Prayer.parse(prop
 					.getProperty("prayer")));
+			fillLootTable(prop.getProperty("loot_items"));
 			chckbox_loot_in_combat.setSelected(Boolean.parseBoolean(prop
 					.getProperty("loot_in_combat")));
 			chckbox_wait_for_loot.setSelected(Boolean.parseBoolean(prop
 					.getProperty("wait_for_loot")));
+			combo_box_special_attack.setSelectedItem(Weapon
+					.getWeaponFromName(prop
+							.getProperty("special_attack_weapon")));
+			String val = prop.getProperty("minimum_loot_value");
+			if (!val.equalsIgnoreCase("2147483647"))
+				text_field_loot_over_x.setText(prop
+						.getProperty("minimum_loot_value"));
+			spinner_food.setValue(Integer.parseInt(prop
+					.getProperty("food_withdraw_amount")));
 			fillSelectedMonster(prop.getProperty("monster_names"));
-			fillLootTable(prop.getProperty("loot_items"));
-
-		} catch (IOException e) {
+			fillBankTable(prop);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -445,25 +540,38 @@ public class BaseGUI extends JFrame {
 
 	}
 
-	private void fillBankTable(String property) {
-		// TODO Auto-generated method stub
+	private void fillBankTable(Properties prop) {
+		int[] bank_ids = parseStringIntoIntegerArray(prop
+				.getProperty("bank_item_ids"));
+		int[] bank_amounts = parseStringIntoIntegerArray(prop
+				.getProperty("bank_item_amounts"));
+		for (int i = 0; i < bank_ids.length && i < bank_amounts.length; i++) {
+			table_banking_items.setValueAt(bank_ids[i], i, 0);
+			table_banking_items.setValueAt(bank_amounts[i], i, 1);
+		}
 
 	}
 
 	private List<String> parseStringIntoList(String s) {
 		List<String> intList = new ArrayList<String>();
-		for (String a : Arrays.asList(s.substring(1, s.length() - 1)
-				.split(", ")))
+		for (String a : Arrays.asList(s.substring(0, s.length()).split(",")))
 			if (!a.equals(""))
 				intList.add(a);
-
 		return intList;
+	}
+
+	private int[] parseStringIntoIntegerArray(String s) {
+		List<Integer> intList = new ArrayList<Integer>();
+		for (String a : Arrays.asList(s.substring(0, s.length()).split(",")))
+			if (!a.equals(""))
+				intList.add(Integer.valueOf(a));
+		return ArrayUtil.toArrayInt(intList);
 	}
 
 	private void fillLootTable(String text) {
 		List<String> list = parseStringIntoList(text);
 		for (int i = 0; i < list.size(); i++)
-			table_loot.setValueAt(list.get(i), 0, i);
+			table_loot.setValueAt(list.get(i), i, 0);
 	}
 
 	private static Map<Integer, String> convertStringToHashMap(String text) {
