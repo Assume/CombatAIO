@@ -33,4 +33,9 @@ public class DWaitUntilNPCOnScreen implements DAction {
 
 	}
 
+	@Override
+	public String toString() {
+		return "wait until NPC "+id+ "is on screen";
+	}
+	
 }

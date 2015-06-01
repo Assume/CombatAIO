@@ -15,5 +15,11 @@ public class DWaitUntilStoppedAction implements DAction {
 			General.sleep(50);
 
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "wait until player isn't moving";
+	}
 
 }

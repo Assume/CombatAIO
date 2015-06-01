@@ -22,4 +22,8 @@ public class DFullHolder implements Serializable {
 		}
 	}
 
+	public DHolder[] getHolders() {
+		return holders.toArray(new DHolder[holders.size()]);
+	}
+
 }

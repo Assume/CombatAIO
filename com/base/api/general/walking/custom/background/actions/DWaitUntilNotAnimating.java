@@ -16,4 +16,9 @@ public class DWaitUntilNotAnimating implements DAction {
 
 	}
 
+	@Override
+	public String toString() {
+		return "wait until player isn't animating";
+	}
+	
 }

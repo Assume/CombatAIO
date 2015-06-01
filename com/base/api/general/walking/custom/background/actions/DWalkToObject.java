@@ -26,4 +26,9 @@ public class DWalkToObject implements DAction {
 		Walking.walkTo(objects[0]);
 	}
 
+	@Override
+	public String toString() {
+		return "walk to object "+id;
+	}
+	
 }

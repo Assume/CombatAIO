@@ -27,5 +27,10 @@ public class DClickObject implements DAction {
 			Clicking.click(action, objects[0]);
 
 	}
+	
+	@Override
+	public String toString() {
+		return "click object "+id +" with the action "+action;
+	}
 
 }

@@ -22,5 +22,9 @@ public class DNPCIsOnScreenCondition implements DCondition {
 			return false;
 		return npcs[0].isOnScreen();
 	}
+	@Override
+	public String toString() {
+		return "npc "+id+" is on screen";
+	}
 
 }

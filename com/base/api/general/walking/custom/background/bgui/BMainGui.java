@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSArea;
@@ -27,6 +29,7 @@ import scripts.CombatAIO.com.base.api.general.walking.custom.background.DFullHol
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DHolder;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.actions.DActionMaker;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.conditions.DConditionMaker;
+import scripts.CombatAIO.com.base.api.general.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 
 public class BMainGui extends JFrame {
@@ -40,6 +43,8 @@ public class BMainGui extends JFrame {
 	private static final String PATH = Util.getAppDataDirectory()
 			+ File.separator + "Base" + File.separator + File.separator
 			+ "movements" + "NAME" + ".dat";
+
+	private boolean changed = false;
 
 	public BMainGui() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -134,9 +139,11 @@ public class BMainGui extends JFrame {
 					DCondition[] conditions = new DCondition[condition_list_model
 							.size()];
 					condition_list_model.copyInto(conditions);
-
 					DHolder full = new DHolder(conditions, actions);
 					complete_list_model.addElement(full);
+					condition_list_model.clear();
+					action_list_model.clear();
+					changed = true;
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -148,15 +155,31 @@ public class BMainGui extends JFrame {
 		JButton btnSave = new JButton("Done");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DHolder[] holders = new DHolder[complete_list_model.size()];
-				complete_list_model.copyInto(holders);
-				DFullHolder dfh = new DFullHolder(holders);
-				String name = JOptionPane
-						.showInputDialog("Enter name for this custom action");
-				type = (MovementType) combo_box_movement_type.getSelectedItem();
-				RSArea area = new RSArea(Player.getPosition(), Integer
-						.parseInt(spinner.getValue().toString()));
-				WalkingManager.addMovement(type, dfh, area, name);
+				try {
+					if (changed) {
+						String name = JOptionPane
+								.showInputDialog("Enter name for this custom action");
+						if (name == null) {
+							JOptionPane.showMessageDialog(null,
+									"You must enter a name");
+							return;
+						}
+						DHolder[] holders = new DHolder[complete_list_model
+								.size()];
+						complete_list_model.copyInto(holders);
+						DFullHolder dfh = new DFullHolder(holders);
+
+						type = (MovementType) combo_box_movement_type
+								.getSelectedItem();
+						String rad = spinner.getValue().toString();
+						WalkingManager.addMovement(type, dfh,
+								Player.getPosition(), name, rad);
+					}
+					setVisible(false);
+					dispose();
+				} catch (Exception r) {
+					r.printStackTrace();
+				}
 			}
 		});
 		btnSave.setBounds(525, 495, 89, 23);
@@ -193,11 +216,12 @@ public class BMainGui extends JFrame {
 				if (index == -1)
 					return;
 				complete_list_model.remove(index);
+				changed = true;
 			}
 		});
 		btnRemove.setBounds(525, 222, 89, 23);
 		contentPane.add(btnRemove);
-
+		// TODO
 		combo_box_movement_type = new JComboBox<MovementType>(
 				MovementType.values());
 		combo_box_movement_type.setBounds(385, 496, 130, 20);
@@ -210,22 +234,36 @@ public class BMainGui extends JFrame {
 		spinner = new JSpinner();
 		spinner.setBounds(333, 496, 37, 20);
 		contentPane.add(spinner);
+		spinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				changed = true;
+			}
+		});
+
+		final JComboBox<String> combo_box_movements = new JComboBox<String>(
+				WalkingManager.getAllNames());
+		combo_box_movements.setBounds(10, 496, 130, 20);
+		contentPane.add(combo_box_movements);
+
+		JButton btnLoad = new JButton("Load");
+		btnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String name = (String) combo_box_movements.getSelectedItem();
+				if (name == null)
+					return;
+				CustomMovement x = WalkingManager.getMovementForName(name);
+				if (x == null)
+					return;
+				complete_list_model.clear();
+				DFullHolder holder = x.getFullHolder();
+				for (DHolder xy : holder.getHolders())
+					complete_list_model.addElement(xy);
+				spinner.setValue(x.getRadius());
+				combo_box_movement_type.setSelectedItem(x.getMovementType());
+			}
+		});
+		btnLoad.setBounds(150, 495, 89, 23);
+		contentPane.add(btnLoad);
 	}
 }
-
-/*
- * if (!new File(Util.getAppDataDirectory() + File.separator +
- * "base_aio").exists()) new File(Util.getAppDataDirectory() + File.separator +
- * "base_aio").mkdirs(); try {
- * 
- * DHolder[] holders = new DHolder[complete_list_model.size()];
- * complete_list_model.copyInto(holders); DFullHolder dfh = new
- * DFullHolder(holders); FileOutputStream fos = new FileOutputStream(new
- * File(PATH .replaceAll("NAME", textField.getText()))); ObjectOutputStream oos
- * = new ObjectOutputStream(fos); oos.writeObject(dfh); fos.flush();
- * fos.close(); oos.flush(); oos.close(); complete_list_model.clear();
- * action_list_model.clear(); condition_list_model.clear(); } catch
- * (FileNotFoundException e1) { // TODO Auto-generated catch block
- * e1.printStackTrace(); } catch (IOException e1) { // TODO Auto-generated catch
- * block e1.printStackTrace(); }
- */

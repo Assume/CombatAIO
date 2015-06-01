@@ -1,24 +1,19 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
 
 public enum DActionMaker {
-
-	Teleport {
-		@Override
-		public DAction make() {
-			JComboBox<NormalSpell> box = new JComboBox<NormalSpell>(
-					NormalSpell.values());
-			JOptionPane.showMessageDialog(null, box, "Select a skill",
-					JOptionPane.QUESTION_MESSAGE);
-			NormalSpell k = (NormalSpell) box.getSelectedItem();
-			return new DTeleport(k);
-		}
-	},
+	/*
+	 * Teleport {
+	 * 
+	 * @Override public DAction make() { JComboBox<NormalSpell> box = new
+	 * JComboBox<NormalSpell>( NormalSpell.values());
+	 * JOptionPane.showMessageDialog(null, box, "Select a skill",
+	 * JOptionPane.QUESTION_MESSAGE); NormalSpell k = (NormalSpell)
+	 * box.getSelectedItem(); return new DTeleport(k); } }
+	 */
 	Click_item {
 		@Override
 		public DAction make() {
@@ -53,7 +48,7 @@ public enum DActionMaker {
 	Walk_to_npc {
 		@Override
 		public DAction make() {
-			int x = getInt(JOptionPane.showInputDialog("Enter object id"));
+			int x = getInt(JOptionPane.showInputDialog("Enter npc id"));
 			return new DWalkToNPC(x);
 		}
 	},

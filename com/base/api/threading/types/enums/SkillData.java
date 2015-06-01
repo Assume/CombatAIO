@@ -6,11 +6,8 @@ import org.tribot.api2007.Skills.SKILLS;
 public enum SkillData {
 
 	STRENGTH(SKILLS.STRENGTH), ATTACK(SKILLS.ATTACK), DEFENCE(SKILLS.DEFENCE), HITPOINTS(
-			SKILLS.HITPOINTS), RANGED(SKILLS.RANGED);
+			SKILLS.HITPOINTS), RANGED(SKILLS.RANGED), MAGIC(SKILLS.MAGIC);
 
-	// SLAYER(
-	// SKILLS.SLAYER);
-	// MAGIC(SKILLS.MAGIC),
 	private int start_exp;
 	private int start_level;
 	private SKILLS skill;

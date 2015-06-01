@@ -21,5 +21,10 @@ public class DObjectIsOnScreenCondition implements DCondition {
 			return false;
 		return npcs[0].isOnScreen();
 	}
+	
+	@Override
+	public String toString() {
+		return "object "+id +" is on screen";
+	}
 
 }

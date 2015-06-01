@@ -21,14 +21,12 @@ public enum DConditionMaker {
 		}
 	},
 	Npc_is_on_screen {
-
 		@Override
 		public DCondition make() {
 			int id = Integer.parseInt(JOptionPane.showInputDialog("NPC id")
 					.replaceAll("[^0-9]", ""));
 			return new DNPCIsOnScreenCondition(id);
 		}
-
 	},
 	Object_is_on_screen {
 
@@ -42,10 +40,6 @@ public enum DConditionMaker {
 	};
 
 	public abstract DCondition make();
-
-	private static int getInt(String string) {
-		return Integer.parseInt(string.replaceAll("[^0-9-]", ""));
-	}
 
 	@Override
 	public String toString() {

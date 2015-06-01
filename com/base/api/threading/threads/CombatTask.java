@@ -11,6 +11,7 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
@@ -63,7 +64,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
-				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_LOOTING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.possible_monsters = new RSNPC[0];
@@ -368,5 +368,4 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void setCombatRadius(int value) {
 		this.combat_distance = value;
 	}
-
 }

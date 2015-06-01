@@ -5,7 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,6 +40,9 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.util.Util;
 
+import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.bgui.BMainGui;
+import scripts.CombatAIO.com.base.api.general.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -200,8 +207,19 @@ public class BaseGUI extends JFrame {
 		button = new JButton("Progression");
 		button.setBounds(10, 22, 122, 23);
 		tab_four_panel.add(button);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "This option is not currently available");
+			}
+		});
 
 		JButton btnNewButton_1 = new JButton("Custom Walking");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				BMainGui bmaingui = new BMainGui();
+				bmaingui.setVisible(true);
+			}
+		});
 		btnNewButton_1.setBounds(10, 56, 122, 23);
 		tab_four_panel.add(btnNewButton_1);
 
@@ -273,6 +291,7 @@ public class BaseGUI extends JFrame {
 				}
 				set();
 				save(name);
+				saveMovements(name);
 			}
 		});
 		btnSave.setBounds(141, 259, 89, 23);
@@ -281,7 +300,11 @@ public class BaseGUI extends JFrame {
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				load(combo_box_settings.getSelectedItem().toString());
+				String name = combo_box_settings.getSelectedItem().toString();
+				if (name == null)
+					return;
+				load(name);
+				loadMovements(name);
 			}
 		});
 		btnLoad.setBounds(42, 259, 89, 23);
@@ -515,6 +538,47 @@ public class BaseGUI extends JFrame {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
+			+ File.separator + "Base" + File.separator + "movements";
+
+	private void saveMovements(String name) {
+		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
+		List<CustomMovement> movements = WalkingManager.getMovements();
+		try {
+			FileOutputStream fout = new FileOutputStream(MOVEMENT_PATH
+					+ File.separator + name + ".cmov");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(movements);
+			fout.flush();
+			fout.close();
+			oos.flush();
+			oos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void loadMovements(String name) {
+		try {
+			FileInputStream fis = new FileInputStream(MOVEMENT_PATH
+					+ File.separator + name + ".cmov");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			@SuppressWarnings("unchecked")
+			List<CustomMovement> cmovements = (List<CustomMovement>) ois
+					.readObject();
+			WalkingManager.setMovements(cmovements);
+			fis.close();
+			ois.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private String intArrayToString(int[] ars) {

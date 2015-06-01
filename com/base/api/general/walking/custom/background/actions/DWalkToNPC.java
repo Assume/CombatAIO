@@ -24,5 +24,10 @@ public class DWalkToNPC implements DAction {
 		Walking.walkTo(objects[0]);
 	}
 	
+	@Override
+	public String toString() {
+		return "walk to NPC "+id;
+	}
+	
 
 }

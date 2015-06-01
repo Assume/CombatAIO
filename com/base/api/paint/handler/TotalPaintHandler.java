@@ -13,7 +13,7 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler {
 
-	private static final String VERSION_NUMBER = "0.0.5_8";
+	private static final String VERSION_NUMBER = "2.0.0_3";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -41,7 +41,7 @@ public class TotalPaintHandler {
 	}
 
 	public void updateAll() {
-		//this.monster_paint_handler.update();
+		// this.monster_paint_handler.update();
 	}
 
 	public void updateMonsters() {
@@ -76,7 +76,7 @@ public class TotalPaintHandler {
 				return;
 			if (Dispatcher.get().hasStarted()) {
 				this.drawGenericPaint(arg0);
-				//this.monster_paint_handler.draw(arg0);
+				// this.monster_paint_handler.draw(arg0);
 				this.loot_paint_handler.draw(arg0);
 				this.experience_paint_handler.draw(arg0);
 			}

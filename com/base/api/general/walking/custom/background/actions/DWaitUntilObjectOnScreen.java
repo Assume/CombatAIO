@@ -31,5 +31,10 @@ public class DWaitUntilObjectOnScreen implements DAction {
 		}, 10000);
 
 	}
+	
+	@Override
+	public String toString() {
+		return "wait until Object "+id+ "is on screen";
+	}
 
 }
