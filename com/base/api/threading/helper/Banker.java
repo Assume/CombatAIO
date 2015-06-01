@@ -76,18 +76,19 @@ public class Banker {
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
-		int weapon = ((Weapon) (Dispatcher.get().get(
-				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getID();
+		int[] weapon = ((Weapon) (Dispatcher.get().get(
+				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getIDs();
 		if (Inventory.getAll().length > 0) {
-			if (weapon == -1
+			if (weapon[0] == -1
 					&& !((Boolean) Dispatcher.get().get(ValueType.USE_GUTHANS)
 							.getValue()))
 				Banking.depositAll();
 			else
-				Banking.depositAllExcept(GenericMethods.combineArrays(
-						new int[] { weapon },
+				Banking.depositAllExcept(GenericMethods.combineArrays(weapon,
 						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
-								.getValue()));
+								.getValue(),
+						(int[]) Dispatcher.get()
+								.get(ValueType.ARMOR_HOLDER_IDS).getValue()));
 		}
 
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
@@ -127,6 +128,7 @@ public class Banker {
 
 	private void openBank(boolean world_hop) {
 		Banking.openBank();
+		Banking.openBankBanker();
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {

@@ -38,9 +38,10 @@ public class Dispatcher {
 	}
 
 	private boolean started = false;
+	private BaseGUI gui;
 
 	public void start() {
-		BaseGUI gui = new BaseGUI();
+		gui = new BaseGUI();
 		gui.setVisible(true);
 		while (gui.isVisible())
 			General.sleep(300);
@@ -137,6 +138,10 @@ public class Dispatcher {
 			return this.combat_thread.getCombatRadius();
 		case WORLD_HOP_TOLERANCE:
 			return this.combat_thread.getWorldHopTolerance();
+		case SAFE_SPOT_TILE:
+			return this.combat_thread.getSafeSpot();
+		case ARMOR_HOLDER_IDS:
+			return this.combat_thread.getArmorHolderIDs();
 		default:
 			break;
 		}
@@ -274,6 +279,10 @@ public class Dispatcher {
 
 	public Banker getBanker() {
 		return this.banker;
+	}
+
+	public BaseGUI getGUI() {
+		return this.gui;
 	}
 
 }

@@ -306,7 +306,6 @@ public class BaseGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				set();
 				setVisible(false);
-				dispose();
 			}
 		});
 		btnStart.setBounds(354, 259, 89, 23);

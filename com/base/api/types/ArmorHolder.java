@@ -82,4 +82,9 @@ public class ArmorHolder {
 				+ ", " + this.shield_id + ", " + this.weapon_id;
 	}
 
+	public int[] getIDs() {
+		return new int[] { this.helmet_id, this.weapon_id, this.shield_id,
+				this.legs_id, this.body_id };
+	}
+
 }

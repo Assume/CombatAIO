@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.general.walking;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tribot.api.General;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.WebWalking;
@@ -52,6 +53,7 @@ public class WalkingManager {
 			if (execute == null)
 				return;
 			execute.execute();
+			General.sleep(300);
 		}
 
 	}

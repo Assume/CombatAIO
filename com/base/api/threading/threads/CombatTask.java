@@ -404,4 +404,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public Value<RSTile> getSafeSpot() {
 		return new Value<RSTile>(this.safe_spot_tile);
 	}
+
+	public Value<int[]> getArmorHolderIDs() {
+		if (this.armor_holder == null)
+			return new Value<int[]>(new int[0]);
+		return new Value<int[]>(this.armor_holder.getIDs());
+	}
 }

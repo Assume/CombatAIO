@@ -52,7 +52,9 @@ public enum Bank {
 
 	NARDAH(new RSArea(new RSTile(3430, 2889, 0), new RSTile(3427, 2894, 0))),
 
-	ROGUE_DEN(new RSArea(new RSTile(3040, 4975, 1), new RSTile(3049, 4969, 1)));
+	ROGUE_DEN(new RSArea(new RSTile(3040, 4975, 1), new RSTile(3049, 4969, 1))),
+
+	ELF_BANK(new RSArea(new RSTile(2350, 3163), new RSTile(2353, 3161)));
 
 	private RSArea area;
 

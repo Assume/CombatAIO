@@ -11,9 +11,9 @@ import java.text.DecimalFormat;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
-public class TotalPaintHandler {
+public class TotalPaintHandler implements PaintHandler {
 
-	private static final String VERSION_NUMBER = "2.0.1_2";
+	private static final String VERSION_NUMBER = "2.0.1_6";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -21,6 +21,7 @@ public class TotalPaintHandler {
 
 	private ExperiencePaintHandler experience_paint_handler;
 
+	private final static Color color1 = new Color(155, 155, 155, 110);
 	private final static Color color2 = new Color(0, 0, 0);
 	private final static BasicStroke stroke1 = new BasicStroke(1);
 	private final static Font font2 = new Font("Arial", 0, 11);
@@ -35,7 +36,12 @@ public class TotalPaintHandler {
 		this.monster_paint_handler = new MonsterPaintHandler();
 	}
 
+	@Override
 	public void onClick(Point p) {
+		if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441) {
+			Dispatcher.get().getGUI().setVisible(true);
+		}
+
 		this.monster_paint_handler.onClick(p);
 		this.loot_paint_handler.onClick(p);
 	}
@@ -68,6 +74,7 @@ public class TotalPaintHandler {
 		return (hours + ":" + minutes + ":" + seconds);
 	}
 
+	@Override
 	public void draw(Graphics arg0) {
 		try {
 			if (Dispatcher.get() == null)
@@ -133,6 +140,13 @@ public class TotalPaintHandler {
 				g.drawString(s, 270, 364 + 17 * c);
 				c++;
 			}
+			g.setColor(color1);
+			g.fillRect(255, 430, 66, 11);
+			g.setColor(color2);
+			((Graphics2D) g).setStroke(stroke1);
+			g.drawRect(255, 430, 66, 11);
+			g.drawString("Show GUI", 265, 440);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -145,6 +159,12 @@ public class TotalPaintHandler {
 			x += g.getFontMetrics().charWidth(ch);
 		}
 		return x;
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
