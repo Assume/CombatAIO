@@ -15,6 +15,7 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Players;
 import org.tribot.api2007.Skills;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
@@ -60,6 +61,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private int ammo_id = -1;
 	private int knife_id = -1;
 	private int world_hop_tolerance = -1;
+	private RSTile safe_spot_tile;
 
 	private boolean use_guthans = false;
 	private ArmorHolder armor_holder;
@@ -89,6 +91,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			Dispatcher.get().bank(false);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
+		this.safeSpotCheck();
 		if (!Player.getRSPlayer().isInCombat()
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
@@ -118,6 +121,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			General.sleep(300);
 
 		}
+	}
+
+	private void safeSpotCheck() {
+		if (this.safe_spot_tile != null)
+			if (!Player.getPosition().equals(safe_spot_tile))
+				Walking.walkScreenPath(Walking
+						.generateStraightScreenPath(safe_spot_tile));
 	}
 
 	private void usePrayer(Prayer flicker_prayer) {
@@ -174,7 +184,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			this.current_target = monsters[0];
 		if (!StaticTargetCalculator.verifyTarget(this.current_target))
 			return;
-		moveToTarget(this.current_target);
+		if (this.safe_spot_tile != null)
+			moveToTarget(this.current_target);
 		attackTarget(this.current_target);
 
 	}
@@ -384,5 +395,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public Value<Integer> getWorldHopTolerance() {
 		return new Value<Integer>(this.world_hop_tolerance);
+	}
+
+	public void setSafeSpot(RSTile value) {
+		this.safe_spot_tile = value;
+	}
+
+	public Value<RSTile> getSafeSpot() {
+		return new Value<RSTile>(this.safe_spot_tile);
 	}
 }

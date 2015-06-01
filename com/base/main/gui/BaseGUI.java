@@ -37,7 +37,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.tribot.api2007.NPCs;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
@@ -96,6 +98,7 @@ public class BaseGUI extends JFrame {
 	private JSpinner spinner_food;
 	private JSpinner spinner_combat_radius;
 	private JSpinner spinner_world_hop_tolerance;
+	private RSTile safe_spot_tile;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
@@ -273,6 +276,22 @@ public class BaseGUI extends JFrame {
 		lblNewLabel_1.setBounds(10, 268, 240, 14);
 		tab_three_panel.add(lblNewLabel_1);
 
+		lbl_safe_spot = new JLabel("Safe spot: ");
+		lbl_safe_spot.setBounds(109, 162, 141, 14);
+		tab_three_panel.add(lbl_safe_spot);
+
+		JButton btnSet = new JButton("Set");
+		btnSet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				safe_spot_tile = Player.getRSPlayer().getPosition();
+				if (safe_spot_tile != null)
+					lbl_safe_spot.setText("Safe spot: "
+							+ safe_spot_tile.toString());
+			}
+		});
+		btnSet.setBounds(10, 158, 89, 23);
+		tab_three_panel.add(btnSet);
+
 		// TODO
 		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
@@ -360,12 +379,13 @@ public class BaseGUI extends JFrame {
 		button_add_to_possible = new JButton(">");
 		button_add_to_possible.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String selected = list_possible_monsters.getSelectedValue();
-				if (selected == null)
-					return;
-				if (model_selected_monsters.contains(selected))
-					return;
-				model_selected_monsters.addElement(selected);
+				List<String> selected = list_possible_monsters
+						.getSelectedValuesList();
+				for (String x : selected) {
+					if (model_selected_monsters.contains(x))
+						continue;
+					model_selected_monsters.addElement(x);
+				}
 			}
 		});
 		button_add_to_possible.setBounds(346, 75, 54, 20);
@@ -466,6 +486,8 @@ public class BaseGUI extends JFrame {
 				ValueType.WORLD_HOP_TOLERANCE,
 				new Value<Integer>(Integer.parseInt(spinner_world_hop_tolerance
 						.getValue().toString())));
+		Dispatcher.get().set(ValueType.SAFE_SPOT_TILE,
+				new Value<RSTile>(this.safe_spot_tile));
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
 					ValueType.MINIMUM_LOOT_VALUE,
@@ -551,6 +573,9 @@ public class BaseGUI extends JFrame {
 			prop.setProperty("world_hop_tolerance",
 					Dispatcher.get().get(ValueType.WORLD_HOP_TOLERANCE)
 							.getValue().toString());
+			String safe_spot_tile_text = this.safe_spot_tile == null ? "null"
+					: this.safe_spot_tile.toString().replaceAll("[^0-9,]", "");
+			prop.setProperty("safe_spot_tile", safe_spot_tile_text);
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -568,6 +593,7 @@ public class BaseGUI extends JFrame {
 	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
 			+ File.separator + "Base" + File.separator + "movements";
 	private JLabel lblNewLabel_1;
+	private JLabel lbl_safe_spot;
 
 	private void saveMovements(String name) {
 		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
@@ -665,9 +691,28 @@ public class BaseGUI extends JFrame {
 					.getProperty("combat_radius")));
 			spinner_world_hop_tolerance.setValue(Integer.parseInt(prop
 					.getProperty("world_hop_tolerance")));
+			this.safe_spot_tile = getSafeSpotTile(prop);
+			if (this.safe_spot_tile != null)
+				lbl_safe_spot
+						.setText("Safe spot: " + safe_spot_tile.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private RSTile getSafeSpotTile(Properties prop) {
+		String text = prop.getProperty("safe_spot_tile");
+		if (text.equalsIgnoreCase("null"))
+			return null;
+		String[] text_ar = text.split(",");
+		if (text_ar.length > 2)
+			return new RSTile(getInt(text_ar[0]), getInt(text_ar[1]),
+					getInt(text_ar[2]));
+		return null;
+	}
+
+	private static int getInt(String string) {
+		return Integer.parseInt(string.replaceAll("[^0-9-]", ""));
 	}
 
 	private void fillSelectedMonster(String property) {

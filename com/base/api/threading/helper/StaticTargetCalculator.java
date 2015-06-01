@@ -10,6 +10,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
@@ -69,7 +70,7 @@ public class StaticTargetCalculator {
 						possible_npcs.add(x);
 						continue;
 					}
-					if (Player.getPosition().distanceTo(x) <= 12
+					if (new DPathNavigator().findPath(x).length <= 12
 							&& PathFinding.canReach(x, false))
 						possible_npcs.add(x);
 				}
@@ -82,7 +83,7 @@ public class StaticTargetCalculator {
 	private static RSNPC[] filter_two(RSNPC[] npcs) {
 		List<RSNPC> list = new ArrayList<RSNPC>();
 		for (RSNPC x : npcs) {
-			int distance = Player.getPosition().distanceTo(x);
+			int distance = new DPathNavigator().findPath(x).length;
 			if (distance <= 3)
 				list.add(x);
 		}

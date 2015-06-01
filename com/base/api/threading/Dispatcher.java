@@ -191,7 +191,10 @@ public class Dispatcher {
 			this.combat_thread.setCombatRadius((Integer) val.getValue());
 			break;
 		case WORLD_HOP_TOLERANCE:
-			this.combat_thread.setWorldHopTolerance((Integer)val.getValue());
+			this.combat_thread.setWorldHopTolerance((Integer) val.getValue());
+			break;
+		case SAFE_SPOT_TILE:
+			this.combat_thread.setSafeSpot((RSTile) val.getValue());
 			break;
 		default:
 			break;

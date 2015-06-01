@@ -70,7 +70,7 @@ public class ExperiencePaintHandler implements PaintHandler {
 	private long getTimeToLevel(long runtime, SkillData skill) {
 		long ttl = (long) ((skill.getExperienceToNextLevel() * 3600000.0) / getExperiencePerHour(
 				runtime, skill));
-		return ttl > 3000000 ? 0 : ttl;
+		return ttl > 300000000 ? 0 : ttl;
 	}
 
 	private String formatNumber(int num) {
