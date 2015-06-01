@@ -370,8 +370,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public boolean shouldChangeWorld() {
-		return this.world_hop_tolerance > -1
-				&& Players.getAll().length >= this.world_hop_tolerance;
+		return this.world_hop_tolerance > 0
+				&& Players.getAll().length > this.world_hop_tolerance;
 	}
 
 	public void setCombatRadius(int value) {

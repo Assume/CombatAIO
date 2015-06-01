@@ -37,6 +37,8 @@ public class IngameWorldSwitcher {
 			14, 17, 18, 19, 20, 21, 22, 27, 28, 29, 30, 33, 34, 36, 38, 41, 42,
 			43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 65,
 			66, 67, 68, 69, 70, 73, 74, 75, 76, 77, 78 };
+	
+	private static final int[] F2P_WORLDS = {1,8,16,26,35,81,82,83,84,93,94};
 
 	private static int getWorldSkipDifference(int world) {
 		int diff = 0;
