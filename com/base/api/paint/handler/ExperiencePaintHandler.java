@@ -117,8 +117,8 @@ public class ExperiencePaintHandler implements PaintHandler {
 			return new Color(70, 74, 210, alpha);
 		case RANGED:
 			return new Color(87, 224, 74, alpha);
-			// / MAGIC:
-			// return new Color(200, 200, 200, alpha);
+		case MAGIC:
+			return new Color(200, 200, 200, alpha);
 		case HITPOINTS:
 			return new Color(200, 200, 200, alpha);
 			// case SLAYER:
@@ -138,8 +138,8 @@ public class ExperiencePaintHandler implements PaintHandler {
 			return new Color(232, 232, 232);
 		case RANGED:
 			return new Color(0, 0, 0);
-			// case MAGIC:
-			// return new Color(92, 94, 214);
+		case MAGIC:
+			return new Color(92, 94, 214);
 		case HITPOINTS:
 			return new Color(138, 17, 17);
 			// case SLAYER:

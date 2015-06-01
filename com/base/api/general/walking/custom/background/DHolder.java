@@ -32,13 +32,17 @@ public class DHolder implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder line = new StringBuilder("if ");
-		for (int i = 0; i < cons.length; i++)
-			if (i < cons.length - 1 && cons.length > 1)
-				line.append(cons[i].toString() + " &");
-			else
-				line.append(cons[i].toString());
-		line.append(": do ");
+		StringBuilder line;
+		if (cons.length > 0) {
+			line = new StringBuilder("if ");
+			for (int i = 0; i < cons.length; i++)
+				if (i < cons.length - 1 && cons.length > 1)
+					line.append(cons[i].toString() + " &");
+				else
+					line.append(cons[i].toString());
+			line.append(": do ");
+		} else
+			line = new StringBuilder();
 		for (int i = 0; i < actions.length; i++)
 			if (i < actions.length - 1 && actions.length > 1)
 				line.append(actions[i].toString() + " then ");

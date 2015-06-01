@@ -95,6 +95,7 @@ public class BaseGUI extends JFrame {
 
 	private JSpinner spinner_food;
 	private JSpinner spinner_combat_radius;
+	private JSpinner spinner_world_hop_tolerance;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
@@ -209,7 +210,8 @@ public class BaseGUI extends JFrame {
 		tab_four_panel.add(button);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "This option is not currently available");
+				JOptionPane.showMessageDialog(null,
+						"This option is not currently available");
 			}
 		});
 
@@ -223,6 +225,7 @@ public class BaseGUI extends JFrame {
 		btnNewButton_1.setBounds(10, 56, 122, 23);
 		tab_four_panel.add(btnNewButton_1);
 
+		// TODO
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
@@ -241,13 +244,14 @@ public class BaseGUI extends JFrame {
 
 		lblOnlySome = new JLabel(
 				"* Only piety and chivalry are supported for flicker");
-		lblOnlySome.setBounds(10, 268, 262, 14);
+		lblOnlySome.setBounds(10, 243, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
 		chckbx_ranged = new JCheckBox("Ranged");
 		chckbx_ranged.setBounds(131, 58, 97, 23);
 		tab_three_panel.add(chckbx_ranged);
 
+		// TODO
 		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
@@ -256,6 +260,20 @@ public class BaseGUI extends JFrame {
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
 		tab_three_panel.add(lblSpecialAttack);
 
+		JLabel lblWorldHopTolerance = new JLabel("World hop tolerance**");
+		lblWorldHopTolerance.setBounds(10, 114, 121, 14);
+		tab_three_panel.add(lblWorldHopTolerance);
+
+		spinner_world_hop_tolerance = new JSpinner();
+		spinner_world_hop_tolerance.setBounds(131, 111, 39, 20);
+		tab_three_panel.add(spinner_world_hop_tolerance);
+		spinner_world_hop_tolerance.setValue(-1);
+
+		lblNewLabel_1 = new JLabel("** Leave at -1 for no hopping");
+		lblNewLabel_1.setBounds(10, 268, 240, 14);
+		tab_three_panel.add(lblNewLabel_1);
+
+		// TODO
 		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
@@ -444,6 +462,10 @@ public class BaseGUI extends JFrame {
 				new Value<Integer>(Integer.parseInt(spinner_combat_radius
 						.getValue().toString())));
 		String loot_over_x = text_field_loot_over_x.getText();
+		Dispatcher.get().set(
+				ValueType.WORLD_HOP_TOLERANCE,
+				new Value<Integer>(Integer.parseInt(spinner_world_hop_tolerance
+						.getValue().toString())));
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
 					ValueType.MINIMUM_LOOT_VALUE,
@@ -526,6 +548,9 @@ public class BaseGUI extends JFrame {
 			prop.setProperty("combat_radius",
 					Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue()
 							.toString());
+			prop.setProperty("world_hop_tolerance",
+					Dispatcher.get().get(ValueType.WORLD_HOP_TOLERANCE)
+							.getValue().toString());
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -542,6 +567,7 @@ public class BaseGUI extends JFrame {
 
 	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
 			+ File.separator + "Base" + File.separator + "movements";
+	private JLabel lblNewLabel_1;
 
 	private void saveMovements(String name) {
 		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
@@ -637,6 +663,8 @@ public class BaseGUI extends JFrame {
 					.getProperty("use_guthans")));
 			spinner_combat_radius.setValue(Integer.parseInt(prop
 					.getProperty("combat_radius")));
+			spinner_world_hop_tolerance.setValue(Integer.parseInt(prop
+					.getProperty("world_hop_tolerance")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

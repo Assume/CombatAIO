@@ -118,8 +118,12 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	@Override
 	public void serverMessageReceived(String arg0) {
 		if (arg0 != null)
-			if (arg0.contains("advanced"))
+			if (arg0.contains("advanced")) {
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
+				General.sleep(600, 700);
+				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
+			}
+
 	}
 
 	@Override

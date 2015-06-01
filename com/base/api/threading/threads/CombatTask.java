@@ -11,9 +11,9 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Players;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
@@ -25,6 +25,7 @@ import org.tribot.api2007.util.DPathNavigator;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
+import scripts.CombatAIO.com.base.api.threading.helper.IngameWorldSwitcher;
 import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
@@ -58,6 +59,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private Weapon special_attack_weapon = Weapon.NONE;
 	private int ammo_id = -1;
 	private int knife_id = -1;
+	private int world_hop_tolerance = -1;
 
 	private boolean use_guthans = false;
 	private ArmorHolder armor_holder;
@@ -85,6 +87,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void fight() {
 		if (Banker.shouldBank())
 			Dispatcher.get().bank(false);
+		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
+			IngameWorldSwitcher.switchToRandomWorld();
 		if (!Player.getRSPlayer().isInCombat()
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
@@ -365,7 +369,20 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	}
 
+	public boolean shouldChangeWorld() {
+		return this.world_hop_tolerance > -1
+				&& Players.getAll().length >= this.world_hop_tolerance;
+	}
+
 	public void setCombatRadius(int value) {
 		this.combat_distance = value;
+	}
+
+	public void setWorldHopTolerance(int value) {
+		this.world_hop_tolerance = value;
+	}
+
+	public Value<Integer> getWorldHopTolerance() {
+		return new Value<Integer>(this.world_hop_tolerance);
 	}
 }

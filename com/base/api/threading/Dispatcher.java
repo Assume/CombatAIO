@@ -1,13 +1,10 @@
 package scripts.CombatAIO.com.base.api.threading;
 
-import java.util.ArrayList;
-
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
-import org.w3c.dom.Element;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
@@ -23,10 +20,7 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.api.xml.XMLReader;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter;
-import scripts.CombatAIO.com.base.api.xml.XMLWriter.XMLLoader;
-import scripts.CombatAIO.com.base.api.xml.XMLable;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.GenericMethods;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
@@ -141,6 +135,8 @@ public class Dispatcher {
 			return new Value<Boolean>(this.combat_thread.getUseGuthans());
 		case COMBAT_RADIUS:
 			return this.combat_thread.getCombatRadius();
+		case WORLD_HOP_TOLERANCE:
+			return this.combat_thread.getWorldHopTolerance();
 		default:
 			break;
 		}
@@ -193,6 +189,9 @@ public class Dispatcher {
 			break;
 		case COMBAT_RADIUS:
 			this.combat_thread.setCombatRadius((Integer) val.getValue());
+			break;
+		case WORLD_HOP_TOLERANCE:
+			this.combat_thread.setWorldHopTolerance((Integer)val.getValue());
 			break;
 		default:
 			break;
