@@ -247,8 +247,8 @@ public class BaseGUI extends JFrame {
 		lblOnlySome.setBounds(10, 243, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
-		chckbx_ranged = new JCheckBox("Ranged");
-		chckbx_ranged.setBounds(131, 58, 97, 23);
+		chckbx_ranged = new JCheckBox("Ranged/Magic");
+		chckbx_ranged.setBounds(131, 58, 119, 23);
 		tab_three_panel.add(chckbx_ranged);
 
 		// TODO
