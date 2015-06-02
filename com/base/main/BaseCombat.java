@@ -16,6 +16,7 @@ import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MouseActions,
@@ -42,13 +43,18 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
-			updateAllPaint();
+			this.checkSkillsForExperiencedGained();
 		}
 
 	}
 
-	private void updateAllPaint() {
-		this.paint_handler.updateAll();
+	private void checkSkillsForExperiencedGained() {
+		for (SkillData x : SkillData.values())
+			if (!x.shouldShow() && x.getExperienceGained() > 0) {
+				x.setShouldShow();
+				this.paint_handler.addSkill(x);
+			}
+
 	}
 
 	@Override

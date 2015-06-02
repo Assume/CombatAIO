@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.types.enums;
+package scripts.CombatAIO.com.base.api.types.enums;
 
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Skills.SKILLS;
@@ -31,7 +31,7 @@ public enum SkillData {
 	}
 
 	public int getExperienceGained() {
-		return Skills.getXP(skill) - this.start_exp;
+		return skill.getXP() - this.start_exp;
 	}
 
 	public int getLevelsGained() {
@@ -58,6 +58,5 @@ public enum SkillData {
 	public void setShouldShow() {
 		this.should_show = true;
 	}
-	
 
 }
