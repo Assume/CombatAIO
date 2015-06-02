@@ -66,8 +66,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	@Override
 	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
 		if (this.paint_handler != null)
-			if (!arg2)
-				this.paint_handler.onClick(arg0);
+			this.paint_handler.onClick(arg0);
 	}
 
 	@Override

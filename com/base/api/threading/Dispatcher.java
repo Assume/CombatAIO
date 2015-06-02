@@ -16,6 +16,7 @@ import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.threading.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
@@ -251,11 +252,18 @@ public class Dispatcher {
 
 	public void checkThreads() {
 		this.handler.checkAndExecute();
+		this.checkSkillsForExperiencedGained();
 		if (this.combat_thread.isPaused()
 				&& Timing.timeFromMark(this.combat_thread.getPauseTime()) > 30000) {
 			this.combat_thread.resume();
 			this.combat_thread.setPaused(false);
 		}
+	}
+
+	private void checkSkillsForExperiencedGained() {
+		for (SkillData x : SkillData.values())
+			if (x.getExperienceGained() > 0)
+				x.setShouldShow();
 	}
 
 	public boolean hasStarted() {

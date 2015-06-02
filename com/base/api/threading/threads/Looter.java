@@ -63,8 +63,7 @@ public class Looter extends Threadable implements Pauseable {
 
 	public void addPossibleLootItem(boolean always_loot, String... name) {
 		for (String x : name)
-			if (x != null && x.length() > 1
-					&& !this.items_known.containsKey(name))
+			if (x != null && x.length() > 1 && !this.items_known.containsKey(x))
 				this.items_known.put(x, new LootItem(x, always_loot));
 	}
 
@@ -141,10 +140,9 @@ public class Looter extends Threadable implements Pauseable {
 				continue;
 			if (!x.isOnScreen())
 				Camera.turnToTile(x.getPosition());
-			RSItemDefinition def = x.getDefinition();
-			if (def == null)
+			String name = getRSGroundItemName(x);
+			if (name == null)
 				continue;
-			String name = def.getName();
 			final int total_item_in_inventory = getInventoryCountOfItem(name);
 			final int total_items_in_inventory = getTotalInventoryCount();
 			Clicking.click("Take " + name, x);
@@ -160,9 +158,6 @@ public class Looter extends Threadable implements Pauseable {
 				update.setId(x.getID());
 			update.incrementAmountLooted(getInventoryCountOfItem(name)
 					- total_item_in_inventory);
-			System.out.println("looted: " + name
-					+ " total amount of that looted = "
-					+ update.getAmountLooted());
 		}
 	}
 
@@ -206,9 +201,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private boolean lootIsOnGround() {
-
-		RSGroundItem[] items = GroundItems.find(getAllItemsName());
-		return items.length > 0;
+		return getLootableItems().length > 0;
 	}
 
 	private RSGroundItem[] removeLongRangeItems(RSGroundItem[] items) {

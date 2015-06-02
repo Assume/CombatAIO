@@ -6,11 +6,13 @@ import org.tribot.api2007.Skills.SKILLS;
 public enum SkillData {
 
 	STRENGTH(SKILLS.STRENGTH), ATTACK(SKILLS.ATTACK), DEFENCE(SKILLS.DEFENCE), HITPOINTS(
-			SKILLS.HITPOINTS), RANGED(SKILLS.RANGED), MAGIC(SKILLS.MAGIC), SLAYER(SKILLS.SLAYER);
+			SKILLS.HITPOINTS), RANGED(SKILLS.RANGED), MAGIC(SKILLS.MAGIC), SLAYER(
+			SKILLS.SLAYER);
 
 	private int start_exp;
 	private int start_level;
 	private SKILLS skill;
+	private boolean should_show;
 
 	SkillData(SKILLS skill) {
 		this.skill = skill;
@@ -25,7 +27,7 @@ public enum SkillData {
 	}
 
 	public boolean shouldShow() {
-		return getExperienceGained() > 0;
+		return should_show;
 	}
 
 	public int getExperienceGained() {
@@ -51,6 +53,10 @@ public enum SkillData {
 
 	public int getStartingLevel() {
 		return this.start_level;
+	}
+
+	public void setShouldShow() {
+		this.should_show = true;
 	}
 
 }
