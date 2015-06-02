@@ -1,7 +1,9 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
 import org.tribot.api.Clicking;
+import org.tribot.api2007.Camera;
 import org.tribot.api2007.Objects;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
@@ -23,14 +25,16 @@ public class DClickObject implements DAction {
 		RSObject[] objects = Objects.findNearest(99999, id);
 		if (objects.length == 0)
 			return;
-		if (objects[0].isOnScreen())
-			Clicking.click(action, objects[0]);
-
+		if (!objects[0].isOnScreen()) {
+			Walking.walkTo(objects[0].getPosition());
+			Camera.turnToTile(objects[0]);
+		}
+		Clicking.click(action, objects[0]);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "click object "+id +" with the action "+action;
+		return "click object " + id + " with the action " + action;
 	}
 
 }

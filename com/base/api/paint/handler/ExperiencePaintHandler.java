@@ -14,7 +14,6 @@ public class ExperiencePaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -28,24 +27,31 @@ public class ExperiencePaintHandler implements PaintHandler {
 			g.setFont(font1);
 			int i = 0;
 			for (final SkillData skill : SkillData.values()) {
+				if (!skill.shouldShow())
+					continue;
 				// Bar
-				g.setColor(getCapeColor(100, skill));
-				g.fillRect(8, 320 - 15 * i, 242, 13);
+				// g.setColor(getCapeColor(100, skill));
+				g.setColor(Color.GRAY);
+				g.fillRect(8, 320 - 15 * i, 242, 12);
 
 				// Progress
-				g.setColor(getCapeColor(255, skill));
+				// g.setColor(getCapeColor(255, skill));
+				g.setColor(new Color(Color.BLACK.getRed(), Color.BLACK
+						.getGreen(), Color.BLACK.getBlue(), 125));
 				g.fillRect(8, 320 - 15 * i,
-						skill.getPercentToNextLevel() * 242 / 100, 13);
+						skill.getPercentToNextLevel() * 242 / 100, 12);
 
 				// Trim
-				g.setColor(getTrimColor(skill));
+				// g.setColor(getTrimColor(skill));
+				g.setColor(Color.BLACK);
 				g.drawRect(8, 320 - 15 * i, 242, 13);
 
 				// Text
+				g.setColor(Color.WHITE);
 				g.drawString(
 						toString((Long) Dispatcher.get()
 								.get(ValueType.RUN_TIME).getValue(), skill),
-						11, 331 - 15 * i);
+						11, 331 - 16 * i);
 				i++;
 			}
 		} catch (Exception e) {

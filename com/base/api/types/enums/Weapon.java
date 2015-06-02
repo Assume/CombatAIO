@@ -50,17 +50,11 @@ public enum Weapon {
 		return this.special_attack_usage;
 	}
 
-	public void useSpecial(CombatTask task) {
-		int original_weapon_id = -1;
-		int shield_id = -1;
-		RSItem temp = Equipment.getItem(SLOTS.WEAPON);
-		if (temp != null)
-			original_weapon_id = temp.getID();
-		RSItem temp2 = Equipment.getItem(SLOTS.SHIELD);
-		if (temp2 != null)
-			shield_id = temp2.getID();
-		CEquipment.equipAll(ids);
-		General.sleep(500, 1100);
+	public void useSpecial(CombatTask task, int wep_id, int shield_id) {
+		if (!Equipment.isEquipped(ids)) {
+			CEquipment.equipAll(ids);
+			General.sleep(500, 1100);
+		}
 		final int start_special = getSpecialPercent();
 		this.turnSpecialOn();
 		Timing.waitCondition(new Condition() {
@@ -72,13 +66,13 @@ public enum Weapon {
 		RSNPC curr_atr = (RSNPC) task.getCurrentTarget().getValue();
 		if (this.getSpecialPercent() >= this.getSpecialUsage()
 				&& curr_atr != null && curr_atr.isValid())
-			this.useSpecial(task);
+			this.useSpecial(task, wep_id, shield_id);
 		else {
-			CEquipment.equipAll(original_weapon_id, shield_id);
+			CEquipment.equipAll(wep_id, shield_id);
 			if (!Equipment.isEquipped(shield_id))
 				CEquipment.equipAll(shield_id);
-			if (!Equipment.isEquipped(original_weapon_id))
-				CEquipment.equip(original_weapon_id);
+			if (!Equipment.isEquipped(wep_id))
+				CEquipment.equip(wep_id);
 		}
 	}
 

@@ -68,4 +68,9 @@ public class CustomMovement implements Serializable {
 
 	}
 
+	public RSTile getCenterTile() {
+		return this.center_tile;
+	}
+
+
 }

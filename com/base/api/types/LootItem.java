@@ -15,25 +15,26 @@ import javax.imageio.ImageIO;
 
 public class LootItem implements Comparable<LootItem> {
 
-
 	private int price;
 	private int amount_looted;
 	private boolean alch;
 	private String name;
 	private Image icon;
 	private int id;
+	private boolean always_loot;
 
-	public LootItem(String name) {
-		this(name, false);
+	public LootItem(String name, boolean always_loot) {
+		this(name, always_loot, false);
 	}
 
-	public LootItem(String name, boolean alch) {
+	public LootItem(String name, boolean always_loot, boolean alch) {
 		this.price = 0;
 		this.amount_looted = 0;
 		this.name = name;
 		this.alch = alch;
 		this.id = -1;
 		this.icon = null;
+		this.always_loot = always_loot;
 	}
 
 	public int getPrice() {
@@ -45,8 +46,6 @@ public class LootItem implements Comparable<LootItem> {
 		return price;
 	}
 
-
-	
 	public int getAmountLooted() {
 		return this.amount_looted;
 	}
@@ -135,5 +134,9 @@ public class LootItem implements Comparable<LootItem> {
 	@Override
 	public int compareTo(LootItem arg0) {
 		return this.getName().compareTo(arg0.getName());
+	}
+
+	public boolean shouldAlwaysLoot() {
+		return this.always_loot;
 	}
 }

@@ -46,13 +46,11 @@ public class PriceUpdater extends Threadable implements Runnable {
 					continue;
 				String name = def.getName();
 				int price = LootItem.getPrice(id);
-				if (price >= minimum_price) {
-					LootItem temp = new LootItem(name);
-					temp.setPrice(price);
-					temp.setId(id);
-					Dispatcher.get().set(ValueType.LOOT_ITEM,
-							new Value<LootItem>(temp));
-				}
+				LootItem temp = new LootItem(name, false);
+				temp.setPrice(price);
+				temp.setId(id);
+				Dispatcher.get().set(ValueType.LOOT_ITEM,
+						new Value<LootItem>(temp));
 			}
 			General.sleep(1000);
 		}

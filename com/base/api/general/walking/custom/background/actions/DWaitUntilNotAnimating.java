@@ -1,7 +1,7 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
 import org.tribot.api.General;
-import org.tribot.api.rs3.Player;
+import org.tribot.api2007.Player;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
 

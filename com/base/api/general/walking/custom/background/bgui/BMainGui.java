@@ -19,7 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSArea;
+import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
@@ -44,11 +44,12 @@ public class BMainGui extends JFrame {
 			+ File.separator + "Base" + File.separator + File.separator
 			+ "movements" + "NAME" + ".dat";
 
+	private RSTile center_tile;
 	private boolean changed = false;
 
 	public BMainGui() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 640, 568);
+		setBounds(100, 100, 640, 590);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -93,13 +94,11 @@ public class BMainGui extends JFrame {
 		lblConditions.setBounds(324, 231, 77, 14);
 		contentPane.add(lblConditions);
 		// TODO
-		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(
-				DConditionMaker.values());
+		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(DConditionMaker.values());
 		comboBoxConditions.setBounds(324, 421, 191, 20);
 		contentPane.add(comboBoxConditions);
 		// TODO
-		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(
-				DActionMaker.values());
+		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(DActionMaker.values());
 		comboBoxActions.setBounds(10, 421, 191, 20);
 		contentPane.add(comboBoxActions);
 
@@ -149,13 +148,18 @@ public class BMainGui extends JFrame {
 				}
 			}
 		});
-		btnAddLine.setBounds(10, 468, 89, 23);
+		btnAddLine.setBounds(10, 490, 89, 23);
 		contentPane.add(btnAddLine);
 
 		JButton btnSave = new JButton("Done");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					if (center_tile == null) {
+						JOptionPane.showMessageDialog(null,
+								"You must set the center tile");
+						return;
+					}
 					if (changed) {
 						String name = JOptionPane
 								.showInputDialog("Enter name for this custom action");
@@ -172,8 +176,8 @@ public class BMainGui extends JFrame {
 						type = (MovementType) combo_box_movement_type
 								.getSelectedItem();
 						String rad = spinner.getValue().toString();
-						WalkingManager.addMovement(type, dfh,
-								Player.getPosition(), name, rad);
+						WalkingManager.addMovement(type, dfh, center_tile,
+								name, rad);
 					}
 					setVisible(false);
 					dispose();
@@ -182,7 +186,7 @@ public class BMainGui extends JFrame {
 				}
 			}
 		});
-		btnSave.setBounds(525, 495, 89, 23);
+		btnSave.setBounds(525, 517, 89, 23);
 		contentPane.add(btnSave);
 
 		JButton btnNewButton = new JButton("Remove");
@@ -222,17 +226,16 @@ public class BMainGui extends JFrame {
 		btnRemove.setBounds(525, 222, 89, 23);
 		contentPane.add(btnRemove);
 		// TODO
-		combo_box_movement_type = new JComboBox<MovementType>(
-				MovementType.values());
-		combo_box_movement_type.setBounds(385, 496, 130, 20);
+		combo_box_movement_type = new JComboBox<MovementType>(MovementType.values());
+		combo_box_movement_type.setBounds(385, 518, 130, 20);
 		contentPane.add(combo_box_movement_type);
 
 		JLabel lblRadius = new JLabel("Radius");
-		lblRadius.setBounds(272, 499, 46, 14);
+		lblRadius.setBounds(521, 494, 46, 14);
 		contentPane.add(lblRadius);
 
 		spinner = new JSpinner();
-		spinner.setBounds(333, 496, 37, 20);
+		spinner.setBounds(577, 491, 37, 20);
 		contentPane.add(spinner);
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
@@ -240,11 +243,14 @@ public class BMainGui extends JFrame {
 				changed = true;
 			}
 		});
-
-		final JComboBox<String> combo_box_movements = new JComboBox<String>(
-				WalkingManager.getAllNames());
-		combo_box_movements.setBounds(10, 496, 130, 20);
+		// TODO
+		final JComboBox<String> combo_box_movements = new JComboBox<String>(WalkingManager.getAllNames());
+		combo_box_movements.setBounds(10, 518, 130, 20);
 		contentPane.add(combo_box_movements);
+
+		final JLabel lblCenterTile = new JLabel("Center tile: ");
+		lblCenterTile.setBounds(379, 494, 136, 14);
+		contentPane.add(lblCenterTile);
 
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
@@ -261,9 +267,21 @@ public class BMainGui extends JFrame {
 					complete_list_model.addElement(xy);
 				spinner.setValue(x.getRadius());
 				combo_box_movement_type.setSelectedItem(x.getMovementType());
+				center_tile = x.getCenterTile();
+				lblCenterTile.setText("Center tile: " + center_tile);
 			}
 		});
-		btnLoad.setBounds(150, 495, 89, 23);
+		btnLoad.setBounds(150, 517, 89, 23);
 		contentPane.add(btnLoad);
+
+		JButton btnSet = new JButton("Set");
+		btnSet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				center_tile = Player.getPosition();
+				lblCenterTile.setText("Center tile: " + center_tile);
+			}
+		});
+		btnSet.setBounds(281, 490, 89, 23);
+		contentPane.add(btnSet);
 	}
 }

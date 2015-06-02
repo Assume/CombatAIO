@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Equipment;
@@ -20,6 +21,7 @@ import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
@@ -239,8 +241,18 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (this.special_attack_weapon == Weapon.NONE)
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
-				&& getTargetHPPercent() >= 30)
-			this.special_attack_weapon.useSpecial(this);
+				&& getTargetHPPercent() >= 30) {
+			int wep_id = -1;
+			int shield_id = -1;
+			RSItem temp = Equipment.getItem(SLOTS.WEAPON);
+			if (temp != null)
+				wep_id = temp.getID();
+			RSItem temp2 = Equipment.getItem(SLOTS.SHIELD);
+			if (temp2 != null)
+				shield_id = temp2.getID();
+			this.special_attack_weapon.useSpecial(this, wep_id, shield_id);
+		}
+
 	}
 
 	private double getTargetHPPercent() {
@@ -382,7 +394,12 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public boolean shouldChangeWorld() {
 		return this.world_hop_tolerance > 0
-				&& Players.getAll().length > this.world_hop_tolerance;
+				&& Players.find(new Filter<RSPlayer>() {
+					@Override
+					public boolean accept(RSPlayer arg0) {
+						return arg0.getPosition().distanceTo(home_tile) <= combat_distance;
+					}
+				}).length > this.world_hop_tolerance;
 	}
 
 	public void setCombatRadius(int value) {

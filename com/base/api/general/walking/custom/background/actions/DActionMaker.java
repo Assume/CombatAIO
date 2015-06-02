@@ -96,6 +96,6 @@ public enum DActionMaker {
 
 	@Override
 	public String toString() {
-		return this.name().replaceFirst("D", "");
+		return this.name().replaceFirst("_", " ");
 	}
 }

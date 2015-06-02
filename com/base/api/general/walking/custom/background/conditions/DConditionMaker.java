@@ -43,7 +43,7 @@ public enum DConditionMaker {
 
 	@Override
 	public String toString() {
-		return this.name().replaceFirst("D", "");
+		return this.name().replaceFirst("_", " ");
 	}
 
 }

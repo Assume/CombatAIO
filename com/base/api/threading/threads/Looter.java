@@ -46,7 +46,7 @@ public class Looter extends Threadable implements Pauseable {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new ConcurrentHashMap<String, LootItem>();
-		this.addPossibleLootItem("Clue scroll");
+		this.addPossibleLootItem(true, "Clue scroll");
 		super.setName("LOOTING_THREAD");
 	}
 
@@ -61,10 +61,11 @@ public class Looter extends Threadable implements Pauseable {
 		return new Value<Integer>(tot);
 	}
 
-	public void addPossibleLootItem(String... name) {
+	public void addPossibleLootItem(boolean always_loot, String... name) {
 		for (String x : name)
-			if (x != null && x.length() > 1)
-				this.items_known.put(x, new LootItem(x));
+			if (x != null && x.length() > 1
+					&& !this.items_known.containsKey(name))
+				this.items_known.put(x, new LootItem(x, always_loot));
 	}
 
 	@Override
@@ -120,7 +121,7 @@ public class Looter extends Threadable implements Pauseable {
 	private void loot(RSNPC target) {
 		if (this.wait_for_loot && !this.loot_in_combat && target != null)
 			waitForLoot(target);
-		RSGroundItem[] items = GroundItems.find(getAllItemsName());
+		RSGroundItem[] items = getLootableItems();
 		if (items.length == 0)
 			return;
 		items = GroundItems.sortByDistance(Player.getPosition(), items);
@@ -205,6 +206,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private boolean lootIsOnGround() {
+
 		RSGroundItem[] items = GroundItems.find(getAllItemsName());
 		return items.length > 0;
 	}
@@ -320,4 +322,25 @@ public class Looter extends Threadable implements Pauseable {
 		this.items_known.put(value.getName(), value);
 	}
 
+	private RSGroundItem[] getLootableItems() {
+		RSGroundItem[] items = GroundItems.find(getAllItemsName());
+		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
+		for (RSGroundItem x : items) {
+			LootItem r = this.items_known.get(getRSGroundItemName(x));
+			if (r != null) {
+				if (r.shouldAlwaysLoot())
+					list.add(x);
+				else if (x.getStack() * r.getPrice() >= this.minimum_price)
+					list.add(x);
+			}
+		}
+		return list.toArray(new RSGroundItem[list.size()]);
+	}
+
+	private String getRSGroundItemName(RSGroundItem x) {
+		RSItemDefinition def = x.getDefinition();
+		if (def == null)
+			return null;
+		return def.getName();
+	}
 }

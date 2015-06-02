@@ -53,7 +53,7 @@ public class WalkingManager {
 			if (execute == null)
 				return;
 			execute.execute();
-			General.sleep(300);
+			General.sleep(500);
 		}
 
 	}

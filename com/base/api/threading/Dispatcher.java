@@ -169,7 +169,8 @@ public class Dispatcher {
 			this.combat_thread.setPrayer((Prayer) val.getValue());
 			break;
 		case LOOT_ITEM_NAMES:
-			this.looting_thread.addPossibleLootItem((String[]) val.getValue());
+			this.looting_thread.addPossibleLootItem(true,
+					(String[]) val.getValue());
 			break;
 		case LOOT_ITEM:
 			this.looting_thread.addLootItem((LootItem) val.getValue());
@@ -237,7 +238,7 @@ public class Dispatcher {
 		this.price_updater_thread.start();
 		this.combat_thread.setAmmo();
 		if (this.eat_thread.isUsingBonesToPeaches())
-			this.looting_thread.addPossibleLootItem("Bones");
+			this.looting_thread.addPossibleLootItem(true, "Bones");
 	}
 
 	public void checkAndExecuteProgression() {
