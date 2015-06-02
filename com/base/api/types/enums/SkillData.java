@@ -13,6 +13,10 @@ public enum SkillData {
 	private int start_level;
 	private SKILLS skill;
 	private boolean should_show;
+	private int exp;
+	private int level;
+	private int exp_to_next_level;
+	private int percent_to_next_level;
 
 	SkillData(SKILLS skill) {
 		this.skill = skill;
@@ -31,24 +35,36 @@ public enum SkillData {
 	}
 
 	public int getExperienceGained() {
-		return skill.getXP() - this.start_exp;
+		return this.exp;
 	}
 
 	public int getLevelsGained() {
-		return skill.getActualLevel() - this.start_level;
+		return this.level;
 	}
 
 	public int getExperienceToNextLevel() {
-		return Skills.getXPToNextLevel(skill);
+		return this.exp_to_next_level;
 	}
 
 	public int getPercentToNextLevel() {
-		return Skills.getPercentToNextLevel(skill);
+		return this.percent_to_next_level;
 	}
 
 	public static void initiate() {
 		for (SkillData x : SkillData.values())
 			x.init();
+	}
+
+	public void update() {
+		this.exp = skill.getXP() - this.start_exp;
+		this.level = skill.getActualLevel() - this.start_level;
+		this.exp_to_next_level = Skills.getXPToNextLevel(skill);
+		this.percent_to_next_level = Skills.getPercentToNextLevel(skill);
+	}
+
+	public static void updateAll() {
+		for (SkillData x : values())
+			x.update();
 	}
 
 	public int getStartingLevel() {

@@ -18,39 +18,41 @@ public class ExperiencePaintHandler implements PaintHandler {
 	}
 
 	private final static Font font1 = new Font("Arial", 0, 9);
+	private static Color inside = new Color(Color.BLACK.getRed(),
+			Color.BLACK.getGreen(), Color.BLACK.getBlue(), 125);
 
 	@Override
 	public void draw(Graphics g) {
 		try {
-			if (!Dispatcher.hasBeenInitialized())
-				return;
 			g.setFont(font1);
 			int i = 0;
 			for (final SkillData skill : SkillData.values()) {
-				// Bar
-				// g.setColor(getCapeColor(100, skill));
-				g.setColor(Color.GRAY);
-				g.fillRect(8, 320 - 15 * i, 242, 12);
+				if (skill.getExperienceGained() > 0) {
+					// Bar
+					// g.setColor(getCapeColor(100, skill));
+					g.setColor(Color.GRAY);
+					g.fillRect(8, 320 - 16 * i, 242, 12);
 
-				// Progress
-				// g.setColor(getCapeColor(255, skill));
-				g.setColor(new Color(Color.BLACK.getRed(), Color.BLACK
-						.getGreen(), Color.BLACK.getBlue(), 125));
-				g.fillRect(8, 320 - 15 * i,
-						skill.getPercentToNextLevel() * 242 / 100, 12);
+					// Progress
+					// g.setColor(getCapeColor(255, skill));
+					g.setColor(inside);
+					g.fillRect(8, 320 - 16 * i,
+							skill.getPercentToNextLevel() * 242 / 100, 12);
 
-				// Trim
-				// g.setColor(getTrimColor(skill));
-				g.setColor(Color.BLACK);
-				g.drawRect(8, 320 - 15 * i, 242, 13);
+					// Trim
+					// g.setColor(getTrimColor(skill));
+					g.setColor(Color.BLACK);
+					g.drawRect(8, 320 - 16 * i, 242, 13);
 
-				// Text
-				g.setColor(Color.WHITE);
-				g.drawString(
-						toString((Long) Dispatcher.get()
-								.get(ValueType.RUN_TIME).getValue(), skill),
-						11, 331 - 16 * i);
-				i++;
+					// Text
+					g.setColor(Color.WHITE);
+					g.drawString(
+							toString(
+									(Long) Dispatcher.get()
+											.get(ValueType.RUN_TIME).getValue(),
+									skill), 11, 331 - 16 * i);
+					i++;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

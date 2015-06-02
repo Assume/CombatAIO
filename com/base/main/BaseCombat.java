@@ -43,17 +43,8 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
-			this.checkSkillsForExperiencedGained();
+			SkillData.updateAll();
 		}
-
-	}
-
-	private void checkSkillsForExperiencedGained() {
-		for (SkillData x : SkillData.values())
-			if (!x.shouldShow() && x.getExperienceGained() > 0) {
-				x.setShouldShow();
-				this.paint_handler.addSkill(x);
-			}
 
 	}
 
