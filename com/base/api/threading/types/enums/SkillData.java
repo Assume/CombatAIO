@@ -58,5 +58,6 @@ public enum SkillData {
 	public void setShouldShow() {
 		this.should_show = true;
 	}
+	
 
 }

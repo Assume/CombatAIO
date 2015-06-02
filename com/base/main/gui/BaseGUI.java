@@ -498,9 +498,12 @@ public class BaseGUI extends JFrame {
 
 	private void setLootingList() {
 		List<String> temp = new ArrayList<String>();
-		for (int i = 0; i < 60 && table_loot.getValueAt(i, 0) != null; i++)
-			if (table_loot.getValueAt(i, 0) != null)
-				temp.add(table_loot.getValueAt(i, 0).toString().trim());
+		for (int i = 0; i < 60; i++) {
+			Object val = table_loot.getValueAt(i, 0);
+			if (val != null)
+				temp.add(val.toString().trim());
+		}
+
 		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
 				new Value<String[]>(temp.toArray(new String[temp.size()])));
 	}
@@ -508,13 +511,11 @@ public class BaseGUI extends JFrame {
 	private void setBankingList() {
 		Banker b = (Banker) Dispatcher.get().get(ValueType.BANKER).getValue();
 		for (int i = 0; i < 28; i++) {
-			if (table_banking_items.getValueAt(i, 0) != null
-					&& table_banking_items.getValueAt(i, 1) != null)
-				b.addBankItem(
-						Integer.parseInt(table_banking_items.getValueAt(i, 0)
-								.toString().trim()),
-						Integer.parseInt(table_banking_items.getValueAt(i, 1)
-								.toString().trim()));
+			Object id = table_banking_items.getValueAt(i, 0);
+			Object amount = table_banking_items.getValueAt(i, 1);
+			if (id != null && amount != null)
+				b.addBankItem(Integer.parseInt(id.toString().trim()),
+						Integer.parseInt(amount.toString().trim()));
 		}
 	}
 

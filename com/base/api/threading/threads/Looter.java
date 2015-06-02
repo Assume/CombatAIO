@@ -15,6 +15,7 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItem;
@@ -46,7 +47,10 @@ public class Looter extends Threadable implements Pauseable {
 				PauseType.NON_ESSENTIAL_TO_BANKING,
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.items_known = new ConcurrentHashMap<String, LootItem>();
-		this.addPossibleLootItem(true, "Clue scroll");
+		this.addPossibleLootItem(true, "Clue scroll (easy)");
+		this.addPossibleLootItem(true, "Clue scroll (medium)");
+		this.addPossibleLootItem(true, "Clue scroll (hard)");
+		this.addPossibleLootItem(true, "Clue scroll (elite)");
 		super.setName("LOOTING_THREAD");
 	}
 
@@ -320,6 +324,8 @@ public class Looter extends Threadable implements Pauseable {
 		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
 		for (RSGroundItem x : items) {
 			LootItem r = this.items_known.get(getRSGroundItemName(x));
+			if (!PathFinding.canReach(x, false))
+				continue;
 			if (r != null) {
 				if (r.shouldAlwaysLoot())
 					list.add(x);

@@ -38,11 +38,6 @@ public class LootItem implements Comparable<LootItem> {
 	}
 
 	public int getPrice() {
-		if (this.price == -1)
-			return price;
-		if (this.price == 0) {
-			// disptach zybez thread and return value
-		}
 		return price;
 	}
 
@@ -60,6 +55,8 @@ public class LootItem implements Comparable<LootItem> {
 
 	public void setId(int id) {
 		this.id = id;
+		if (id == 995)
+			this.price = 1;
 		this.setImage();
 	}
 
@@ -114,7 +111,7 @@ public class LootItem implements Comparable<LootItem> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return -1;
+		return 0;
 	}
 
 	private static Image getIcon(int id) {
