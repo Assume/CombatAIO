@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.text.DecimalFormat;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
 public class ExperiencePaintHandler implements PaintHandler {
@@ -22,8 +20,7 @@ public class ExperiencePaintHandler implements PaintHandler {
 			Color.BLACK.getGreen(), Color.BLACK.getBlue(), 125);
 
 	@Override
-	public void draw(Graphics g) {
-		try {
+	public void draw(Graphics g, long l) {
 			g.setFont(font1);
 			int i = 0;
 			for (final SkillData skill : SkillData.values()) {
@@ -46,17 +43,10 @@ public class ExperiencePaintHandler implements PaintHandler {
 
 					// Text
 					g.setColor(Color.WHITE);
-					g.drawString(
-							toString(
-									(Long) Dispatcher.get()
-											.get(ValueType.RUN_TIME).getValue(),
-									skill), 11, 331 - 16 * i);
+					g.drawString(toString(l, skill), 11, 331 - 16 * i);
 					i++;
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private String toString(Long runtime, SkillData skill) {

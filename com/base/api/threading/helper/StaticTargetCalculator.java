@@ -48,7 +48,7 @@ public class StaticTargetCalculator {
 	}
 
 	private static RSNPC[] getMonsters() {
-		RSNPC[] npcs = filter_one(NPCs.find((int[]) Dispatcher.get()
+		RSNPC[] npcs = filter_one(NPCs.findNearest((int[]) Dispatcher.get()
 				.get(ValueType.MONSTER_IDS).getValue()));
 		return filter_two(npcs);
 	}

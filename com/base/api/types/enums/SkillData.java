@@ -12,7 +12,6 @@ public enum SkillData {
 	private int start_exp;
 	private int start_level;
 	private SKILLS skill;
-	private boolean should_show;
 	private int exp;
 	private int level;
 	private int exp_to_next_level;
@@ -28,10 +27,6 @@ public enum SkillData {
 		this.start_exp = Skills.getXP(skill);
 		this.start_level = skill.getActualLevel();
 
-	}
-
-	public boolean shouldShow() {
-		return should_show;
 	}
 
 	public int getExperienceGained() {
@@ -71,8 +66,5 @@ public enum SkillData {
 		return this.start_level;
 	}
 
-	public void setShouldShow() {
-		this.should_show = true;
-	}
 
 }

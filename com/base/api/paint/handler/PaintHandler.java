@@ -7,7 +7,7 @@ public interface PaintHandler {
 
 	public void update();
 
-	public void draw(Graphics g);
+	public void draw(Graphics g, long run_time);
 
 	public void onClick(Point p);
 }

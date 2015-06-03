@@ -14,6 +14,7 @@ import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
 
+import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
@@ -33,31 +34,27 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	public void run() {
 		// GUI done and what not
 		General.useAntiBanCompliance(true);
+		this.paint_handler = new TotalPaintHandler();
 		Dispatcher.create(this, 0);
 		Dispatcher.get().start();
 		// XMLWriter writer = new XMLWriter(Dispatcher.get());
 		// writer.save(new File(Util.getAppDataDirectory() + File.separator
 		// + "base_aio" + File.separator + "test.dat"), false,
 		// Dispatcher.get());
+
 		while (true) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
 			SkillData.updateAll();
+			PaintData.updateAll();
 		}
 
 	}
 
 	@Override
 	public void onPaint(Graphics arg0) {
-		if (this.paint_handler == null)
-			this.paint_handler = new TotalPaintHandler();
-		try {
-			this.paint_handler.draw(arg0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		this.paint_handler.draw(arg0, super.getRunningTime());
 	}
 
 	@Override

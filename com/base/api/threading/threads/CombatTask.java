@@ -225,7 +225,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			return 0;
 		int total = 0;
 		for (RSNPC x : npcs)
-			total += Player.getPosition().distanceTo(x);
+			total += new DPathNavigator().findPath(x).length;
 		return total / npcs.length;
 	}
 

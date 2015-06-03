@@ -212,7 +212,7 @@ public class Looter extends Threadable implements Pauseable {
 		List<RSGroundItem> short_distance = new ArrayList<RSGroundItem>();
 		RSTile pos = Player.getPosition();
 		for (RSGroundItem x : items) {
-			if (pos.distanceTo(x.getPosition()) <= 3)
+			if (pos.distanceTo(x.getPosition()) <= 5)
 				short_distance.add(x);
 		}
 		return short_distance.toArray(new RSGroundItem[short_distance.size()]);
@@ -333,7 +333,8 @@ public class Looter extends Threadable implements Pauseable {
 					list.add(x);
 			}
 		}
-		return list.toArray(new RSGroundItem[list.size()]);
+		return this.removeLongRangeItems(list.toArray(new RSGroundItem[list
+				.size()]));
 	}
 
 	private String getRSGroundItemName(RSGroundItem x) {

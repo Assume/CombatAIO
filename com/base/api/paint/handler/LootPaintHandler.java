@@ -13,8 +13,6 @@ import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
 final class LootPaintHandler implements PaintHandler {
@@ -26,35 +24,30 @@ final class LootPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		try {
-			/*
-			 * g.setColor(Color.BLUE); Map<RSTile, List<RSGroundItem>> map =
-			 * sort(); for (RSTile tile : map.keySet()) { String[] unique_names
-			 * = getUniqueNames(map.get(tile));
-			 * g.drawPolygon(Projection.getTileBoundsPoly(tile, 0)); int i = 0;
-			 * for (String y : unique_names) g.drawString(y, tile.getX(),
-			 * tile.getY() + (i * 10)); }
-			 */
-			int space = 0;
-			LootItem[] looted_items = (LootItem[]) Dispatcher.get()
-					.get(ValueType.ALL_LOOT_ITEMS).getValue();
-			Arrays.sort(looted_items);
-			for (LootItem y : looted_items) {
-				if (y.getAmountLooted() > 0) {
-					g.setColor(new Color(0, 0, 0, 110));
-					g.fillRect(475, 5 + 40 * space - 3, 38, 38);
-					g.setColor(Color.RED);
-					g.drawRect(475, 5 + 40 * space - 3, 38, 38);
-					g.drawImage(y.getIcon(), 479, 5 + 37 * space, null, null);
-					g.drawString(
-							TotalPaintHandler.formatNumber(y.getAmountLooted()),
-							479, 14 + 39 * space);
-					space++;
-				}
+	public void draw(Graphics g, long l) {
+		/*
+		 * g.setColor(Color.BLUE); Map<RSTile, List<RSGroundItem>> map = sort();
+		 * for (RSTile tile : map.keySet()) { String[] unique_names =
+		 * getUniqueNames(map.get(tile));
+		 * g.drawPolygon(Projection.getTileBoundsPoly(tile, 0)); int i = 0; for
+		 * (String y : unique_names) g.drawString(y, tile.getX(), tile.getY() +
+		 * (i * 10)); }
+		 */
+		int space = 0;
+		LootItem[] looted_items = PaintData.getLootItems();
+		Arrays.sort(looted_items);
+		for (LootItem y : looted_items) {
+			if (y.getAmountLooted() > 0) {
+				g.setColor(new Color(0, 0, 0, 110));
+				g.fillRect(475, 5 + 40 * space - 3, 38, 38);
+				g.setColor(Color.RED);
+				g.drawRect(475, 5 + 40 * space - 3, 38, 38);
+				g.drawImage(y.getIcon(), 479, 5 + 37 * space, null, null);
+				g.drawString(
+						TotalPaintHandler.formatNumber(y.getAmountLooted()),
+						479, 14 + 39 * space);
+				space++;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
