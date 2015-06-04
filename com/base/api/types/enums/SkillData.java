@@ -66,5 +66,11 @@ public enum SkillData {
 		return this.start_level;
 	}
 
+	public static int getTotalExperienceGained() {
+		int tot = 0;
+		for (SkillData x : values())
+			tot += x.getExperienceGained();
+		return tot;
+	}
 
 }

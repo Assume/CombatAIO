@@ -468,7 +468,7 @@ public class BaseGUI extends JFrame {
 				new Value<Boolean>(chckbx_guthans.isSelected()));
 		Dispatcher.get().set(ValueType.IS_RANGING,
 				new Value<Boolean>(chckbx_ranged.isSelected()));
-		Dispatcher.get().set(ValueType.FLICKER_PRAYER,
+		Dispatcher.get().set(ValueType.PRAYER,
 				new Value<Prayer>((Prayer) combo_box_prayer.getSelectedItem()));
 		Dispatcher.get().set(
 				ValueType.FOOD_WITHDRAW_AMOUNT,
@@ -527,9 +527,8 @@ public class BaseGUI extends JFrame {
 			prop.setProperty("ranging",
 					Dispatcher.get().get(ValueType.IS_RANGING).getValue()
 							.toString());
-			prop.setProperty("prayer",
-					Dispatcher.get().get(ValueType.FLICKER_PRAYER).getValue()
-							.toString());
+			prop.setProperty("prayer", Dispatcher.get().get(ValueType.PRAYER)
+					.getValue().toString());
 			prop.setProperty(
 					"loot_items",
 					stringArrayToString(((String[]) Dispatcher.get()

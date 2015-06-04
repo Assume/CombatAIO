@@ -57,7 +57,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private boolean isRanging = false;
 	private Prayer prayer = Prayer.NONE;
 	private boolean flicker;
-	private Prayer flicker_prayer = Prayer.NONE;
 	private Weapon weapon = Weapon.NONE;
 	private Weapon special_attack_weapon = Weapon.NONE;
 	private int ammo_id = -1;
@@ -91,6 +90,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void fight() {
 		if (Banker.shouldBank())
 			Dispatcher.get().bank(false);
+		usePrayer(this.prayer);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
 		this.safeSpotCheck();
@@ -113,9 +113,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				fight(this.possible_monsters);
 			}
 			if (this.flicker)
-				flicker(this.flicker_prayer);
-			else
-				usePrayer(this.flicker_prayer);
+				flicker(this.prayer);
 			if (this.armor_holder == null)
 				this.useSpecialAttack();
 			if (this.use_guthans)

@@ -106,7 +106,7 @@ public class Dispatcher {
 			return this.combat_thread.isRanging();
 		case RUN_TIME:
 			return new Value<Long>(this.main_class.getRunningTime());
-		case FLICKER_PRAYER:
+		case PRAYER:
 			return this.combat_thread.getPrayer();
 		case EAT_FOR_SPACE:
 			return this.looting_thread.shouldEatForSpace();
@@ -165,7 +165,7 @@ public class Dispatcher {
 		case IS_RANGING:
 			this.combat_thread.setRanging((Boolean) val.getValue());
 			break;
-		case FLICKER_PRAYER:
+		case PRAYER:
 			this.combat_thread.setPrayer((Prayer) val.getValue());
 			break;
 		case LOOT_ITEM_NAMES:

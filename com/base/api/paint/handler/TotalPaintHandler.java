@@ -1,19 +1,15 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class TotalPaintHandler implements PaintHandler {
 
-	private static final String VERSION_NUMBER = "2.0.1_6";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -23,8 +19,9 @@ public class TotalPaintHandler implements PaintHandler {
 
 	private final static Color color1 = new Color(155, 155, 155, 110);
 	private final static Color color2 = new Color(0, 0, 0);
-	private final static BasicStroke stroke1 = new BasicStroke(1);
 	private final static Font font2 = new Font("Arial", 0, 11);
+
+	private boolean show_paint = true;
 
 	public TotalPaintHandler() {
 		this.experience_paint_handler = new ExperiencePaintHandler();
@@ -38,10 +35,10 @@ public class TotalPaintHandler implements PaintHandler {
 
 	@Override
 	public void onClick(Point p) {
-		if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441) {
+		if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441)
 			Dispatcher.get().getGUI().setVisible(true);
-		}
-
+		if (p.x >= 326 && p.x <= 364 && p.y >= 430 && p.y <= 441)
+			this.setShowPaint();
 		this.monster_paint_handler.onClick(p);
 		this.loot_paint_handler.onClick(p);
 	}
@@ -75,21 +72,20 @@ public class TotalPaintHandler implements PaintHandler {
 	}
 
 	@Override
-	public void draw(Graphics arg0) {
-		try {
-			if (Dispatcher.get() == null)
-				return;
-			if (!Dispatcher.get().hasStarted())
-				return;
-			if (Dispatcher.get().hasStarted()) {
-				this.drawGenericPaint(arg0);
-				// this.monster_paint_handler.draw(arg0);
-				this.loot_paint_handler.draw(arg0);
-				this.experience_paint_handler.draw(arg0);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void draw(Graphics g, long l) {
+		g.setFont(font2);
+		g.setColor(color1);
+		g.fillRect(326, 430, 38, 11);
+		g.setColor(color2);
+		g.drawRect(326, 430, 38, 11);
+		g.drawString("Hide", 336, 440);
+		if (!this.show_paint)
+			return;
+		this.drawGenericPaint(g, l);
+		// this.monster_paint_handler.draw(arg0);
+		this.loot_paint_handler.draw(g, l);
+		this.experience_paint_handler.draw(g, l);
+
 	}
 
 	public static String formatNumber(int num) {
@@ -105,51 +101,39 @@ public class TotalPaintHandler implements PaintHandler {
 		return "" + num;
 	}
 
-	private void drawGenericPaint(Graphics g) {
-		try {
-			long run_time = (Long) Dispatcher.get().get(ValueType.RUN_TIME)
-					.getValue();
-			int kill_count = (Integer) Dispatcher.get()
-					.get(ValueType.TOTAL_KILLS).getValue();
-			int total_profit = (Integer) Dispatcher.get()
-					.get(ValueType.TOTAL_LOOT_VALUE).getValue();
+	private void drawGenericPaint(Graphics g, long run_time) {
+		int kill_count = PaintData.getMonsterKills();
+		int total_profit = PaintData.getProfit();
 
-			g.setColor(new Color(0, 0, 0, 175));
-			g.fillRect(255, 349, 240, 78);
+		g.setColor(new Color(0, 0, 0, 175));
+		g.fillRect(255, 349, 240, 78);
 
-			String[] infoArray = {
-					"Runtime: " + getFormattedTime(run_time),
-					"Kills: " + kill_count + " ("
-							+ (int) ((3600000.0 / run_time) * kill_count)
-							+ "/HR)",
-					"Profit: "
-							+ formatNumber(total_profit)
-							+ " ("
-							+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
-							+ "/HR)", "Version: " + VERSION_NUMBER };
+		String[] infoArray = {
+				"Runtime: " + getFormattedTime(run_time),
+				"Kills: " + kill_count + " ("
+						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
+				"Profit: "
+						+ formatNumber(total_profit)
+						+ " ("
+						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
+						+ "/HR)", "Version: " + VERSION_NUMBER };
 
-			g.setFont(font2);
-			int c = 0;
-			for (String s : infoArray) {
-				g.setColor(new Color(255, 255, 255, 150));
-				int length = stringLength(s, g);
-				g.fillRect(260, 354 + 17 * c, length + 20, 13);
-				g.setColor(color2);
-				((Graphics2D) g).setStroke(stroke1);
-				g.drawRect(260, 354 + 17 * c, length + 20, 13);
-				g.drawString(s, 270, 364 + 17 * c);
-				c++;
-			}
-			g.setColor(color1);
-			g.fillRect(255, 430, 66, 11);
+		g.setFont(font2);
+		int c = 0;
+		for (String s : infoArray) {
+			g.setColor(new Color(255, 255, 255, 150));
+			int length = stringLength(s, g);
+			g.fillRect(260, 354 + 17 * c, length + 20, 13);
 			g.setColor(color2);
-			((Graphics2D) g).setStroke(stroke1);
-			g.drawRect(255, 430, 66, 11);
-			g.drawString("Show GUI", 265, 440);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			g.drawRect(260, 354 + 17 * c, length + 20, 13);
+			g.drawString(s, 270, 365 + 17 * c);
+			c++;
 		}
+		g.setColor(color1);
+		g.fillRect(255, 430, 66, 11);
+		g.setColor(color2);
+		g.drawRect(255, 430, 66, 11);
+		g.drawString("Show GUI", 265, 440);
 	}
 
 	private static int stringLength(String s, Graphics g) {
@@ -159,6 +143,10 @@ public class TotalPaintHandler implements PaintHandler {
 			x += g.getFontMetrics().charWidth(ch);
 		}
 		return x;
+	}
+
+	private void setShowPaint() {
+		this.show_paint = !show_paint;
 	}
 
 	@Override

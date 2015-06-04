@@ -59,7 +59,7 @@ public class Banker {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
-		Prayer p = (Prayer) Dispatcher.get().get(ValueType.FLICKER_PRAYER)
+		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER)
 				.getValue();
 		if (p.isActivated())
 			p.disable();
