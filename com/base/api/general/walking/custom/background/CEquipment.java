@@ -1,11 +1,17 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tribot.api.General;
+import org.tribot.api2007.Equipment;
 import org.tribot.api2007.GameTab;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
+
+import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class CEquipment {
 
@@ -24,6 +30,14 @@ public class CEquipment {
 		RSItem[] items = Inventory.find(id);
 		if (items.length > 0)
 			items[0].click("W");
+	}
+
+	public static int[] getUnequippedItems(int... ar) {
+		List<Integer> list = new ArrayList<Integer>();
+		for (int x : ar)
+			if (!Equipment.isEquipped(x))
+				list.add(x);
+		return ArrayUtil.toArrayInt(list);
 	}
 
 	public static void equip(String... name) {

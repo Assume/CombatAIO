@@ -104,12 +104,12 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			General.sleep(time);
 			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.reset();
-			StaticTargetCalculator.set(this);
+			this.setMonsters(StaticTargetCalculator.calculate());
 			fight(this.possible_monsters);
 		} else {
 			if (!this.current_target.isValid()) {
 				this.current_target = null;
-				StaticTargetCalculator.set(this);
+				this.setMonsters(StaticTargetCalculator.calculate());
 				fight(this.possible_monsters);
 			}
 			if (this.flicker)

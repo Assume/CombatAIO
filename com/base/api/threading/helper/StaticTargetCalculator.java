@@ -13,20 +13,17 @@ import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class StaticTargetCalculator {
 
-	public static void set(CombatTask combat_thread) {
+	public static RSNPC[] calculate() {
 		RSCharacter[] entities = Combat.getAttackingEntities();
 		if (entities.length > 0) {
 			if (entities[0] instanceof RSNPC && ((RSNPC) entities[0]).isValid()) {
 				if (PathFinding.canReach(entities[0], false)) {
 					if (((RSNPC) entities[0]).isValid()) {
-						combat_thread
-								.setMonsters(new RSNPC[] { (RSNPC) entities[0] });
-						return;
+						return new RSNPC[] { (RSNPC) entities[0] };
 					}
 				}
 			}
@@ -34,7 +31,8 @@ public class StaticTargetCalculator {
 		RSCharacter npc = Combat.getTargetEntity();
 		if (npc == null || !(npc instanceof RSNPC)
 				|| !isAttackable((RSNPC) npc))
-			combat_thread.setMonsters(getMonsters());
+			return getMonsters();
+		return new RSNPC[0];
 	}
 
 	public static RSNPC[] getPaintableMonsters() {
