@@ -45,7 +45,6 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		// Dispatcher.get());
 		this.updater = new Thread(new TrackingUpdater(this));
 		this.updater.start();
-
 		while (true) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
