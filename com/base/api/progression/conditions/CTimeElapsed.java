@@ -17,7 +17,7 @@ public class CTimeElapsed extends CProgressionCondition {
 	}
 
 	@Override
-	public boolean shouldProgress() {
+	protected boolean should_progress() {
 		return (Long) Dispatcher.get().get(ValueType.RUN_TIME).getValue() >= time;
 	}
 

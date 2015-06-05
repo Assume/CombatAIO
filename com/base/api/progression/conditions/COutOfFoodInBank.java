@@ -10,7 +10,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 public class COutOfFoodInBank extends CProgressionCondition {
 
 	@Override
-	public boolean shouldProgress() {
+	protected boolean should_progress() {
 		if (Banking.isBankScreenOpen())
 			return Banking.find((((Food) Dispatcher.get().get(ValueType.FOOD)
 					.getValue()).getId())).length == 0;

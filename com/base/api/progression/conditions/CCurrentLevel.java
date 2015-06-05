@@ -19,7 +19,7 @@ public class CCurrentLevel extends CProgressionCondition {
 	}
 
 	@Override
-	public boolean shouldProgress() {
+	protected boolean should_progress() {
 		return skill.getActualLevel() >= this.level;
 	}
 
