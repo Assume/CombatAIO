@@ -28,9 +28,12 @@ public class StaticTargetCalculator {
 				}
 			}
 		}
-		RSCharacter npc = Combat.getTargetEntity();
-		if (npc == null || !(npc instanceof RSNPC)
-				|| !isAttackable((RSNPC) npc))
+		RSCharacter npc = Player.getRSPlayer().getInteractingCharacter();
+		if (npc == null
+				|| !(npc instanceof RSNPC)
+				|| !isAttackable((RSNPC) npc)
+				&& ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
+						.getValue() || PathFinding.canReach(npc, false)))
 			return getMonsters();
 		return new RSNPC[0];
 	}
@@ -68,7 +71,7 @@ public class StaticTargetCalculator {
 						possible_npcs.add(x);
 						continue;
 					}
-					if (new DPathNavigator().findPath(x).length <= 12
+					if (Player.getPosition().distanceTo(x) <= radius * 2
 							&& PathFinding.canReach(x, false))
 						possible_npcs.add(x);
 				}
@@ -82,7 +85,7 @@ public class StaticTargetCalculator {
 		List<RSNPC> list = new ArrayList<RSNPC>();
 		for (RSNPC x : npcs) {
 			int distance = new DPathNavigator().findPath(x).length;
-			if (distance <= 3)
+			if (distance <= 4)
 				list.add(x);
 		}
 		if (list.size() > 1)

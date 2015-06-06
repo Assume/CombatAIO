@@ -1,6 +1,10 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Polygon;
 import java.util.Arrays;
+
+import org.tribot.api2007.Projection;
+import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
@@ -11,6 +15,7 @@ public class PaintData {
 	private static int monster_kills;
 	private static int profit;
 	private static LootItem[] loot_items;
+	private static Polygon target;
 
 	public static void updateAll() {
 		monster_kills = (Integer) Dispatcher.get().get(ValueType.TOTAL_KILLS)
@@ -21,6 +26,12 @@ public class PaintData {
 				.get(ValueType.ALL_LOOT_ITEMS).getValue());
 		if (loot_items != null)
 			Arrays.sort(loot_items);
+		RSNPC tar = (RSNPC) Dispatcher.get().get(ValueType.CURRENT_TARGET)
+				.getValue();
+		if (tar != null)
+			target = Projection.getTileBoundsPoly(tar, 0);
+		else
+			target = null;
 	}
 
 	public static int getMonsterKills() {
@@ -35,6 +46,10 @@ public class PaintData {
 		if (loot_items != null)
 			return Arrays.copyOf(loot_items, loot_items.length);
 		return new LootItem[0];
+	}
+
+	public static Polygon getTargetPolygon() {
+		return target;
 	}
 
 }

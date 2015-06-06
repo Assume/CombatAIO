@@ -177,7 +177,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			WebWalking.walkTo(this.home_tile);
 		if (monsters.length == 0)
 			return;
-		if (getAverageDistance(monsters) <= 3)
+		if (getAverageDistance(monsters) <= 4)
 			this.current_target = monsters[General.random(0,
 					monsters.length - 1)];
 		else
@@ -193,7 +193,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private void moveToTarget(RSNPC target) {
 		if (!target.isOnScreen())
 			Camera.turnToTile(target);
-		if (Player.getPosition().distanceTo(target) > 7 && !target.isOnScreen())
+		if (Player.getPosition().distanceTo(target) > 7 || !target.isOnScreen())
 			new DPathNavigator().traverse(target);
 		while (Player.isMoving())
 			General.sleep(50);
@@ -359,8 +359,11 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private void equipAmmo() {
 		RSItem[] ammo = Inventory.find(ammo_id, knife_id);
 		if (ammo.length > 0)
-			if (ammo[0].getStack() > 50)
+			if (ammo[0].getStack() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
+					.next()) {
+				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
 				ammo[0].click("Wield");
+			}
 	}
 
 	public void setAmmo() {

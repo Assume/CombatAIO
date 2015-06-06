@@ -1,17 +1,18 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.paint.types.MonsterDisplay;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 final class MonsterPaintHandler implements PaintHandler {
 
@@ -26,8 +27,6 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void update() {
-		this.current_target = (RSNPC) Dispatcher.get()
-				.get(ValueType.CURRENT_TARGET).getValue();
 		if (this.current_target_display == null)
 			this.current_target_display = new MonsterDisplay(
 					this.current_target, true);
@@ -62,12 +61,18 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
+
+		g.setColor(Color.BLACK);
+		Polygon pol = PaintData.getTargetPolygon();
+		if (pol != null)
+			g.drawPolygon(pol);
+
 		/*
 		 * for (RSNPC x : this.map.keySet()) { MonsterDisplay temp = map.get(x);
 		 * if (temp != null) temp.draw(g); }
 		 */
-		if (this.current_target_display != null)
-			this.current_target_display.draw(g);
+		// if (this.current_target_display != null)
+		// this.current_target_display.draw(g);
 
 	}
 

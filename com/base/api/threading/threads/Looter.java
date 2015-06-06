@@ -13,6 +13,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Camera;
+import org.tribot.api2007.Combat;
 import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.PathFinding;
@@ -85,7 +86,8 @@ public class Looter extends Threadable implements Pauseable {
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
-			if (this.lootIsOnGround() && !Player.getRSPlayer().isInCombat()
+			if (this.lootIsOnGround()
+					&& Combat.getAttackingEntities().length == 0
 					&& !this.loot_in_combat
 					&& Player.getRSPlayer().getInteractingCharacter() == null) {
 
@@ -212,7 +214,7 @@ public class Looter extends Threadable implements Pauseable {
 		List<RSGroundItem> short_distance = new ArrayList<RSGroundItem>();
 		RSTile pos = Player.getPosition();
 		for (RSGroundItem x : items) {
-			if (pos.distanceTo(x.getPosition()) <= 5)
+			if (pos.distanceTo(x.getPosition()) <= 9)
 				short_distance.add(x);
 		}
 		return short_distance.toArray(new RSGroundItem[short_distance.size()]);

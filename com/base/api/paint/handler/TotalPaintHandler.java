@@ -10,7 +10,7 @@ import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler implements PaintHandler {
 
-	private static final String VERSION_NUMBER = "2.0.4_0";
+	private static final String VERSION_NUMBER = "2.0.4_1";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -83,7 +83,7 @@ public class TotalPaintHandler implements PaintHandler {
 		if (!this.show_paint)
 			return;
 		this.drawGenericPaint(g, l);
-		// this.monster_paint_handler.draw(arg0);
+		this.monster_paint_handler.draw(g, l);
 		this.loot_paint_handler.draw(g, l);
 		this.experience_paint_handler.draw(g, l);
 
