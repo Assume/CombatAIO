@@ -10,7 +10,7 @@ import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler implements PaintHandler {
 
-	private static final String VERSION_NUMBER = "2.0.4_1";
+	private static final String VERSION_NUMBER = "2.0.4_2";
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -117,7 +117,9 @@ public class TotalPaintHandler implements PaintHandler {
 						+ formatNumber(total_profit)
 						+ " ("
 						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
-						+ "/HR)", "Version: " + VERSION_NUMBER };
+						+ "/HR)",
+				"Version" + (Dispatcher.get().isLiteMode() ? "(Lite)" : "")
+						+ ": " + VERSION_NUMBER };
 
 		g.setFont(font2);
 		int c = 0;

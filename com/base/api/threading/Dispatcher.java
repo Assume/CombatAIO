@@ -29,6 +29,8 @@ public class Dispatcher {
 
 	private static Dispatcher dispatcher;
 
+	public static final int LITE_VERSION_REPO_ID = 64;
+
 	public static void create(BaseCombat main_class, long hash_id) {
 		dispatcher = new Dispatcher(main_class, hash_id);
 	}
@@ -60,6 +62,7 @@ public class Dispatcher {
 	private CProgressionHandler handler;
 	private Banker banker;
 	private PriceUpdater price_updater_thread;
+	private int repo_id;
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
@@ -71,6 +74,7 @@ public class Dispatcher {
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
 		this.banker = new Banker();
+		this.repo_id = main_class.getRepoID();
 	}
 
 	/*
@@ -283,8 +287,16 @@ public class Dispatcher {
 		return this.banker;
 	}
 
+	public int getRepoID() {
+		return this.repo_id;
+	}
+
 	public BaseGUI getGUI() {
 		return this.gui;
+	}
+
+	public boolean isLiteMode() {
+		return Dispatcher.get().getRepoID() == Dispatcher.LITE_VERSION_REPO_ID;
 	}
 
 }

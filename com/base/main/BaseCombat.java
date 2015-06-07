@@ -1,8 +1,14 @@
 package scripts.CombatAIO.com.base.main;
 
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+
+import javax.swing.JOptionPane;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
@@ -10,6 +16,7 @@ import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Arguments;
+import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
@@ -22,7 +29,7 @@ import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MouseActions,
-		Arguments, MessageListening07 {
+		Arguments, MessageListening07, Ending {
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
@@ -132,6 +139,25 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	@Override
 	public void tradeRequestReceived(String arg0) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onEnd() {
+		if (Dispatcher.get().isLiteMode()) {
+			try {
+				Desktop.getDesktop()
+						.browse(new URI(
+								"https://tribot.org/repository/script/id/193-combataio-premium/"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			JOptionPane
+					.showMessageDialog(null,
+							"If you like this script, please check out CombatAIO Premium");
+		}
 
 	}
 

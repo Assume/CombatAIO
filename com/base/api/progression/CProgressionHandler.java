@@ -62,8 +62,7 @@ public class CProgressionHandler {
 		Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 		for (CProgressionMove x : temp) {
 			x.execute();
-			if (x.removable())
-				this.moves.remove(x);
+			this.moves.remove(x);
 		}
 		Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 	}

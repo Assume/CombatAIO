@@ -195,6 +195,8 @@ public class BaseGUI extends JFrame {
 		text_field_loot_over_x.setBounds(87, 265, 105, 20);
 		tab_two_panel.add(text_field_loot_over_x);
 		text_field_loot_over_x.setColumns(10);
+		if (Dispatcher.get().isLiteMode())
+			text_field_loot_over_x.setEditable(false);
 
 		chckbx_wait_for_loot = new JCheckBox("Wait for loot");
 		chckbx_wait_for_loot.setBounds(213, 264, 111, 23);
@@ -213,14 +215,22 @@ public class BaseGUI extends JFrame {
 		tab_four_panel.add(button);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,
-						"This option is not currently available");
+				if (Dispatcher.get().isLiteMode()) {
+					showPremiumMessageDialog("Progression");
+					return;
+				} else
+					JOptionPane.showMessageDialog(null,
+							"This option is not currently available");
 			}
 		});
 
 		JButton btnNewButton_1 = new JButton("Custom Walking");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (Dispatcher.get().isLiteMode()) {
+					showPremiumMessageDialog("Custom walking");
+					return;
+				}
 				BMainGui bmaingui = new BMainGui();
 				bmaingui.setVisible(true);
 			}
@@ -240,10 +250,14 @@ public class BaseGUI extends JFrame {
 		chckbx_flicker = new JCheckBox("Flicker *");
 		chckbx_flicker.setBounds(10, 58, 97, 23);
 		tab_three_panel.add(chckbx_flicker);
+		if (Dispatcher.get().isLiteMode())
+			chckbx_flicker.setEnabled(false);
 
 		chckbx_guthans = new JCheckBox("Guthans");
 		chckbx_guthans.setBounds(10, 84, 97, 23);
 		tab_three_panel.add(chckbx_guthans);
+		if (Dispatcher.get().isLiteMode())
+			chckbx_guthans.setEnabled(false);
 
 		lblOnlySome = new JLabel(
 				"* Only piety and chivalry are supported for flicker");
@@ -271,6 +285,8 @@ public class BaseGUI extends JFrame {
 		spinner_world_hop_tolerance.setBounds(131, 111, 39, 20);
 		tab_three_panel.add(spinner_world_hop_tolerance);
 		spinner_world_hop_tolerance.setValue(-1);
+		if (Dispatcher.get().isLiteMode())
+			spinner_world_hop_tolerance.setEnabled(false);
 
 		lblNewLabel_1 = new JLabel("** Leave at -1 for no hopping");
 		lblNewLabel_1.setBounds(10, 268, 240, 14);
@@ -283,6 +299,11 @@ public class BaseGUI extends JFrame {
 		JButton btnSet = new JButton("Set");
 		btnSet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent paramActionEvent) {
+				if (Dispatcher.get().isLiteMode()) {
+					showPremiumMessageDialog("Safe spot");
+					return;
+				}
+
 				safe_spot_tile = Player.getRSPlayer().getPosition();
 				if (safe_spot_tile != null)
 					lbl_safe_spot.setText("Safe spot: "
@@ -296,6 +317,7 @@ public class BaseGUI extends JFrame {
 		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
+		combo_box_food.removeItemAt(2);
 
 		JLabel lblFood = new JLabel("Food");
 		lblFood.setBounds(10, 11, 46, 14);
@@ -314,10 +336,6 @@ public class BaseGUI extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				/*
-				 * JOptionPane.showMessageDialog(null,
-				 * "Saving is currently disabled"); if (true) return;
-				 */
 				String name = JOptionPane
 						.showInputDialog("Enter name for this profile");
 				if (name == null) {
@@ -464,8 +482,10 @@ public class BaseGUI extends JFrame {
 				ValueType.SPECIAL_ATTACK_WEAPON,
 				new Value<Weapon>((Weapon) combo_box_special_attack
 						.getSelectedItem()));
-		Dispatcher.get().set(ValueType.USE_GUTHANS,
-				new Value<Boolean>(chckbx_guthans.isSelected()));
+		Dispatcher.get().set(
+				ValueType.USE_GUTHANS,
+				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
+						: chckbx_guthans.isSelected()));
 		Dispatcher.get().set(ValueType.IS_RANGING,
 				new Value<Boolean>(chckbx_ranged.isSelected()));
 		Dispatcher.get().set(ValueType.PRAYER,
@@ -474,8 +494,10 @@ public class BaseGUI extends JFrame {
 				ValueType.FOOD_WITHDRAW_AMOUNT,
 				new Value<Integer>(Integer.parseInt(spinner_food.getValue()
 						.toString())));
-		Dispatcher.get().set(ValueType.FLICKER,
-				new Value<Boolean>(chckbx_flicker.isSelected()));
+		Dispatcher.get().set(
+				ValueType.FLICKER,
+				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
+						: chckbx_flicker.isSelected()));
 		Dispatcher.get().set(
 				ValueType.COMBAT_RADIUS,
 				new Value<Integer>(Integer.parseInt(spinner_combat_radius
@@ -674,21 +696,26 @@ public class BaseGUI extends JFrame {
 							.getProperty("special_attack_weapon")));
 			String val = prop.getProperty("minimum_loot_value");
 			if (!val.equalsIgnoreCase("2147483647"))
-				text_field_loot_over_x.setText(prop
-						.getProperty("minimum_loot_value"));
+				text_field_loot_over_x
+						.setText(Dispatcher.get().isLiteMode() ? "" : prop
+								.getProperty("minimum_loot_value"));
 			spinner_food.setValue(Integer.parseInt(prop
 					.getProperty("food_withdraw_amount")));
 			fillSelectedMonster(prop.getProperty("monster_ids"));
 			fillBankTable(prop);
-			chckbx_flicker.setSelected(Boolean.parseBoolean(prop
-					.getProperty("use_flicker")));
-			chckbx_guthans.setSelected(Boolean.parseBoolean(prop
-					.getProperty("use_guthans")));
+			chckbx_flicker.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean(prop.getProperty("use_flicker")));
+			chckbx_guthans.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean(prop.getProperty("use_guthans")));
 			spinner_combat_radius.setValue(Integer.parseInt(prop
 					.getProperty("combat_radius")));
-			spinner_world_hop_tolerance.setValue(Integer.parseInt(prop
-					.getProperty("world_hop_tolerance")));
-			this.safe_spot_tile = getSafeSpotTile(prop);
+			spinner_world_hop_tolerance
+					.setValue(Dispatcher.get().isLiteMode() ? -1 : Integer
+							.parseInt(prop.getProperty("world_hop_tolerance")));
+			if (Dispatcher.get().isLiteMode())
+				this.safe_spot_tile = null;
+			else
+				this.safe_spot_tile = getSafeSpotTile(prop);
 			if (this.safe_spot_tile != null)
 				lbl_safe_spot
 						.setText("Safe spot: " + safe_spot_tile.toString());
@@ -783,4 +810,10 @@ public class BaseGUI extends JFrame {
 			fin = line.trim();
 		return Integer.parseInt(fin);
 	}
+
+	private void showPremiumMessageDialog(String feature_name) {
+		JOptionPane.showMessageDialog(null, feature_name
+				+ " is only available on CombatAIO Premium");
+	}
+
 }

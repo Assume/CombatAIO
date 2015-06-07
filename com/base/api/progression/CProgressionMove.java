@@ -1,6 +1,5 @@
 package scripts.CombatAIO.com.base.api.progression;
 
-import scripts.CombatAIO.com.base.api.progression.conditions.CCurrentLevel;
 
 public class CProgressionMove {
 
@@ -19,10 +18,8 @@ public class CProgressionMove {
 
 	public void execute() {
 		this.action.execute();
+		this.con.deactivate();
 	}
 
-	public boolean removable() {
-		return con instanceof CCurrentLevel;
-	}
 
 }

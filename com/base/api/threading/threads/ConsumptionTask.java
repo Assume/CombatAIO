@@ -45,7 +45,8 @@ public class ConsumptionTask extends Threadable implements Runnable {
 						.println("CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
-			if (Potions.getPotionsRequired().length > 0) {
+			if (!Dispatcher.get().isLiteMode()
+					&& Potions.getPotionsRequired().length > 0) {
 				GenericMethods
 						.println("CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);

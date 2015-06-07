@@ -88,7 +88,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void fight() {
-		if (Banker.shouldBank())
+		if (!Dispatcher.get().isLiteMode() && Banker.shouldBank())
 			Dispatcher.get().bank(false);
 		usePrayer(this.prayer);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
