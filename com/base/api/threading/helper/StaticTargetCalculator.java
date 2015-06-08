@@ -33,8 +33,13 @@ public class StaticTargetCalculator {
 				|| !(npc instanceof RSNPC)
 				|| !isAttackable((RSNPC) npc)
 				&& ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
-						.getValue() || PathFinding.canReach(npc, false)))
-			return getMonsters();
+						.getValue() || PathFinding.canReach(npc, false))) {
+			RSNPC[] mobs = getMonsters(true);
+			if (mobs.length > 0)
+				return mobs;
+			else
+				return getMonsters(false);
+		}
 		return new RSNPC[0];
 	}
 
@@ -48,13 +53,14 @@ public class StaticTargetCalculator {
 		return y != null;
 	}
 
-	private static RSNPC[] getMonsters() {
-		RSNPC[] npcs = filter_one(NPCs.findNearest((int[]) Dispatcher.get()
-				.get(ValueType.MONSTER_IDS).getValue()));
+	private static RSNPC[] getMonsters(boolean reachable) {
+		RSNPC[] npcs = filter_one(
+				NPCs.findNearest((int[]) Dispatcher.get()
+						.get(ValueType.MONSTER_IDS).getValue()), reachable);
 		return filter_two(npcs);
 	}
 
-	private static RSNPC[] filter_one(RSNPC[] npcs) {
+	private static RSNPC[] filter_one(RSNPC[] npcs, boolean reachable) {
 		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
 		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS)
 				.getValue();
@@ -71,8 +77,9 @@ public class StaticTargetCalculator {
 						possible_npcs.add(x);
 						continue;
 					}
-					if (Player.getPosition().distanceTo(x) <= radius * 2
-							&& PathFinding.canReach(x, false))
+					if (!reachable
+							|| (Player.getPosition().distanceTo(x) <= radius * 2 && PathFinding
+									.canReach(x, false)))
 						possible_npcs.add(x);
 				}
 			}

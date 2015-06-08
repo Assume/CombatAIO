@@ -18,6 +18,7 @@ import scripts.CombatAIO.com.base.api.general.walking.CWalking;
 import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
@@ -59,8 +60,7 @@ public class Banker {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
-		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER)
-				.getValue();
+		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
 		JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
@@ -165,7 +165,7 @@ public class Banker {
 
 	}
 
-	public static boolean shouldBank() {
+	public static boolean shouldBank(CombatTask task) {
 		int id = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
 				.getId();
 		if (id == -1 && Inventory.isFull())
@@ -176,6 +176,9 @@ public class Banker {
 		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
 				&& food_length > 0)
 			return false;
+		if (task.isUsingProtectionPrayer()
+				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
+			return true;
 		return Inventory.isFull()
 				|| (id != -1 && Inventory.find(id).length == 0);
 	}

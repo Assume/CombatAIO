@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
+import org.tribot.api2007.Login;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
@@ -41,6 +42,7 @@ public class Dispatcher {
 
 	private boolean started = false;
 	private BaseGUI gui;
+	private boolean run = true;
 
 	public void start() {
 		gui = new BaseGUI();
@@ -280,7 +282,18 @@ public class Dispatcher {
 	}
 
 	public void bank(boolean world_hop) {
+		if (Dispatcher.get().isLiteMode()) {
+			Login.logout();
+			Dispatcher.get().stop();
+			throw new RuntimeException();
+		}
+
 		this.banker.bank(world_hop);
+	}
+
+	private void stop() {
+		this.run = false;
+
 	}
 
 	public Banker getBanker() {
@@ -297,6 +310,10 @@ public class Dispatcher {
 
 	public boolean isLiteMode() {
 		return Dispatcher.get().getRepoID() == Dispatcher.LITE_VERSION_REPO_ID;
+	}
+
+	public boolean shouldRun() {
+		return this.run;
 	}
 
 }

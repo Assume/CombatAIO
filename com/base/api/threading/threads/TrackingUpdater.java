@@ -11,7 +11,6 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
 
 import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 
@@ -33,7 +32,7 @@ public class TrackingUpdater implements Runnable {
 
 	private void update() {
 		RSPlayer p = Player.getRSPlayer();
-		String name = (Dispatcher.get().isLiteMode() ? " (LITE) " : "(PREM)")
+		String name = (PaintData.isLite() ? "(LITE)" : "(PREM)")
 				+ (p == null ? "of" : p.getName().replaceAll(" ", "%20"));
 		String data = " Tbot: " + General.getTRiBotUsername() + "| time: "
 				+ Timing.msToString(combat.getRunningTime()) + " | exp"

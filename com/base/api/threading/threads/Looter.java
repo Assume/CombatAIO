@@ -77,7 +77,10 @@ public class Looter extends Threadable implements Pauseable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
-			if (this.loot_in_combat && Player.getRSPlayer().isInCombat()
+			RSGroundItem[] items = getLootableItems();
+			for (RSGroundItem x : items)
+				GenericMethods.println(x.getID());
+			if (this.loot_in_combat && Combat.getAttackingEntities().length > 0
 					&& this.lootIsOnGround()) {
 				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
@@ -88,9 +91,7 @@ public class Looter extends Threadable implements Pauseable {
 			}
 			if (this.lootIsOnGround()
 					&& Combat.getAttackingEntities().length == 0
-					&& !this.loot_in_combat
 					&& Player.getRSPlayer().getInteractingCharacter() == null) {
-
 				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(nil);
@@ -335,8 +336,11 @@ public class Looter extends Threadable implements Pauseable {
 					list.add(x);
 			}
 		}
-		return this.removeLongRangeItems(list.toArray(new RSGroundItem[list
-				.size()]));
+		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue())
+			return this.removeLongRangeItems(list.toArray(new RSGroundItem[list
+					.size()]));
+		else
+			return list.toArray(list.toArray(new RSGroundItem[list.size()]));
 	}
 
 	private String getRSGroundItemName(RSGroundItem x) {

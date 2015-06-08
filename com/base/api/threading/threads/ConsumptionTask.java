@@ -19,6 +19,8 @@ import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class ConsumptionTask extends Threadable implements Runnable {
 
+	private int vial_id = 229;
+
 	public ConsumptionTask() {
 		this(null);
 		super.setName("CONSUMPTION_THREAD");
@@ -72,8 +74,10 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		Potions[] potions = Potions.getPotionsRequired();
 		for (Potions x : potions) {
 			RSItem[] pot = Inventory.find(x.getPotionsIDs());
-			if (pot.length > 0)
+			if (pot.length > 0) {
 				pot[0].click("Drink");
+				General.sleep(300, 500);
+			}
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
+import org.tribot.api.input.Mouse;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
@@ -50,6 +51,9 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private static int[] guthans_body_ids = { 4728, 4916, 4917, 4918, 4919 };
 	private static int[] guthans_warspear_ids = { 4726, 4910, 4911, 4912, 4913 };
 
+	public static int trash_ids[] = { 117, 1623, 1619, 1621, 1617, 9978, 10115,
+			10125, 10127, 229, 592 };
+
 	private RSNPC current_target;
 	private RSTile home_tile;
 	private KillTracker kill_tracker;
@@ -92,9 +96,10 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void fight() {
-		if (!Dispatcher.get().isLiteMode() && Banker.shouldBank())
+		if (Banker.shouldBank(this))
 			Dispatcher.get().bank(false);
 		checkRun();
+		checkUse();
 		usePrayer(this.prayer);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
@@ -103,6 +108,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
 		if (current_target == null) {
+			dropTrash();
 			equipAmmo();
 			long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
 					.next();
@@ -204,9 +210,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			this.current_target = monsters[0];
 		if (!StaticTargetCalculator.verifyTarget(this.current_target))
 			return;
-		if (this.safe_spot_tile != null)
+		if (this.safe_spot_tile == null)
 			moveToTarget(this.current_target);
-
 		attackTarget(this.current_target);
 
 	}
@@ -215,7 +220,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (!target.isOnScreen())
 			Camera.turnToTile(target);
 		if (Player.getPosition().distanceTo(target) >= 7
-				|| !target.isOnScreen()) {
+				|| !target.isOnScreen()
+				|| (!this.is_ranging && !PathFinding.canReach(target, false))) {
 			if (PathFinding.canReach(target, false))
 				Walking.walkTo(target);
 			else
@@ -453,5 +459,26 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (this.armor_holder == null)
 			return new Value<int[]>(new int[0]);
 		return new Value<int[]>(this.armor_holder.getIDs());
+	}
+
+	private void checkUse() {
+		if (Game.getUptext().contains("->"))
+			Mouse.clickBox(10, 446, 480, 480, 1);
+	}
+
+	private void dropTrash() {
+		RSItem[] items = Inventory.find(trash_ids);
+		if (items.length == 0)
+			return;
+		for (RSItem x : items) {
+			x.click("Drop");
+			General.sleep(200, 400);
+		}
+	}
+
+	public boolean isUsingProtectionPrayer() {
+		return prayer == Prayer.PROTECT_FROM_MAGIC
+				|| prayer == Prayer.PROTECT_FROM_MELEE
+				|| prayer == Prayer.PROTECT_FROM_MISSILES;
 	}
 }

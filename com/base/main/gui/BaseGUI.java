@@ -242,6 +242,8 @@ public class BaseGUI extends JFrame {
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
+		if (Dispatcher.get().isLiteMode())
+			combo_box_special_attack.setEditable(false);
 
 		lblPrayer = new JLabel("Prayer");
 		lblPrayer.setBounds(10, 11, 46, 14);
@@ -272,6 +274,8 @@ public class BaseGUI extends JFrame {
 		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
+		if (Dispatcher.get().isLiteMode())
+			combo_box_special_attack.setEditable(false);
 
 		lblSpecialAttack = new JLabel("Special Attack");
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
@@ -317,7 +321,8 @@ public class BaseGUI extends JFrame {
 		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
-		combo_box_food.removeItemAt(2);
+		if (Dispatcher.get().isLiteMode())
+			combo_box_food.removeItemAt(2);
 
 		JLabel lblFood = new JLabel("Food");
 		lblFood.setBounds(10, 11, 46, 14);
@@ -685,16 +690,17 @@ public class BaseGUI extends JFrame {
 					.getProperty("food")));
 			chckbx_ranged.setSelected(Boolean.parseBoolean(prop
 					.getProperty("ranging")));
-			combo_box_prayer.setSelectedItem(Prayer.parse(prop
-					.getProperty("prayer")));
+			combo_box_prayer
+					.setSelectedItem(Dispatcher.get().isLiteMode() ? Prayer.NONE
+							: Prayer.parse(prop.getProperty("prayer")));
 			fillLootTable(prop.getProperty("loot_items"));
 			chckbx_loot_in_combat.setSelected(Boolean.parseBoolean(prop
 					.getProperty("loot_in_combat")));
 			chckbx_wait_for_loot.setSelected(Boolean.parseBoolean(prop
 					.getProperty("wait_for_loot")));
-			combo_box_special_attack.setSelectedItem(Weapon
-					.getWeaponFromName(prop
-							.getProperty("special_attack_weapon")));
+			combo_box_special_attack.setSelectedItem(Dispatcher.get()
+					.isLiteMode() ? Weapon.NONE : Weapon.getWeaponFromName(prop
+					.getProperty("special_attack_weapon")));
 			String val = prop.getProperty("minimum_loot_value");
 			if (!val.equalsIgnoreCase("2147483647"))
 				text_field_loot_over_x

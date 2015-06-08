@@ -50,6 +50,8 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		// writer.save(new File(Util.getAppDataDirectory() + File.separator
 		// + "base_aio" + File.separator + "test.dat"), false,
 		// Dispatcher.get());
+		SkillData.updateAll();
+		PaintData.updateAll();
 		this.updater = new Thread(new TrackingUpdater(this));
 		this.updater.start();
 		while (true) {
