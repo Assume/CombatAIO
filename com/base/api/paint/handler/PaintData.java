@@ -16,6 +16,7 @@ public class PaintData {
 	private static int profit;
 	private static LootItem[] loot_items;
 	private static Polygon target;
+	private static boolean is_lite;
 
 	public static void updateAll() {
 		monster_kills = (Integer) Dispatcher.get().get(ValueType.TOTAL_KILLS)
@@ -32,6 +33,7 @@ public class PaintData {
 			target = Projection.getTileBoundsPoly(tar, 0);
 		else
 			target = null;
+		is_lite = Dispatcher.get().isLiteMode();
 	}
 
 	public static int getMonsterKills() {
@@ -40,6 +42,10 @@ public class PaintData {
 
 	public static int getProfit() {
 		return profit;
+	}
+
+	public static boolean isLite() {
+		return is_lite;
 	}
 
 	public static LootItem[] getLootItems() {

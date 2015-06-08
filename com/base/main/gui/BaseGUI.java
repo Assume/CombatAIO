@@ -371,6 +371,7 @@ public class BaseGUI extends JFrame {
 		spinner_food = new JSpinner();
 		spinner_food.setBounds(85, 62, 46, 20);
 		tab_one_panel.add(spinner_food);
+		spinner_food.setValue(12);
 
 		combo_box_settings = new JComboBox<String>();
 		combo_box_settings.setBounds(10, 228, 121, 20);

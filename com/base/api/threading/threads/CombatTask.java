@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
@@ -13,11 +14,12 @@ import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.NPCs;
+import org.tribot.api2007.Options;
+import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Players;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
@@ -54,7 +56,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private int combat_distance;
 	private RSNPC[] possible_monsters;
 	private int[] monster_ids;
-	private boolean isRanging = false;
+	private boolean is_ranging = false;
 	private Prayer prayer = Prayer.NONE;
 	private boolean flicker;
 	private Weapon weapon = Weapon.NONE;
@@ -66,6 +68,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	private boolean use_guthans = false;
 	private ArmorHolder armor_holder;
+
+	private long last_attack_time = System.currentTimeMillis();
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -90,6 +94,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void fight() {
 		if (!Dispatcher.get().isLiteMode() && Banker.shouldBank())
 			Dispatcher.get().bank(false);
+		checkRun();
 		usePrayer(this.prayer);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
@@ -112,6 +117,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				this.setMonsters(StaticTargetCalculator.calculate());
 				fight(this.possible_monsters);
 			}
+			this.last_attack_time = System.currentTimeMillis();
 			if (this.flicker)
 				flicker(this.prayer);
 			if (this.armor_holder == null)
@@ -120,6 +126,14 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				useGuthans();
 			General.sleep(300);
 
+		}
+	}
+
+	private void checkRun() {
+		if (Game.getRunEnergy() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_RUN_AT
+				.next() && !Game.isRunOn()) {
+			Options.setRunOn(true);
+			Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_RUN_AT.reset();
 		}
 	}
 
@@ -173,8 +187,14 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void fight(RSNPC[] monsters) {
-		if (monsters.length == 0 && NPCs.find(this.monster_ids).length >= 0)
-			WebWalking.walkTo(this.home_tile);
+		if ((monsters.length == 0 && NPCs.find(this.monster_ids).length >= 0 && Player
+				.getPosition().distanceTo(home_tile) >= combat_distance)
+				|| Timing.timeFromMark(this.last_attack_time) >= 10000) {
+			if (Player.getPosition().distanceTo(home_tile) >= 5) {
+				new DPathNavigator().traverse(this.home_tile);
+				this.last_attack_time = System.currentTimeMillis();
+			}
+		}
 		if (monsters.length == 0)
 			return;
 		if (getAverageDistance(monsters) <= 4)
@@ -186,6 +206,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			return;
 		if (this.safe_spot_tile != null)
 			moveToTarget(this.current_target);
+
 		attackTarget(this.current_target);
 
 	}
@@ -193,8 +214,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private void moveToTarget(RSNPC target) {
 		if (!target.isOnScreen())
 			Camera.turnToTile(target);
-		if (Player.getPosition().distanceTo(target) > 7 || !target.isOnScreen())
-			new DPathNavigator().traverse(target);
+		if (Player.getPosition().distanceTo(target) >= 7
+				|| !target.isOnScreen()) {
+			if (PathFinding.canReach(target, false))
+				Walking.walkTo(target);
+			else
+				new DPathNavigator().traverse(target);
+		}
 		while (Player.isMoving())
 			General.sleep(50);
 	}
@@ -299,7 +325,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public Value<Boolean> isRanging() {
-		return new Value<Boolean>(this.isRanging);
+		return new Value<Boolean>(this.is_ranging);
 	}
 
 	public void resetTarget() {
@@ -323,7 +349,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void setRanging(Boolean value) {
-		this.isRanging = value.booleanValue();
+		this.is_ranging = value.booleanValue();
 	}
 
 	public void setPrayer(Prayer value) {
@@ -367,7 +393,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public void setAmmo() {
-		if (this.isRanging) {
+		if (this.is_ranging) {
 			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
 			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
 			if (ammo != null && ammo.getStack() > 1) {
