@@ -54,7 +54,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		PaintData.updateAll();
 		this.updater = new Thread(new TrackingUpdater(this));
 		this.updater.start();
-		while (true) {
+		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);

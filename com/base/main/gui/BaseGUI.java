@@ -243,7 +243,7 @@ public class BaseGUI extends JFrame {
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
 		if (Dispatcher.get().isLiteMode())
-			combo_box_special_attack.setEditable(false);
+			combo_box_prayer.setEnabled(false);
 
 		lblPrayer = new JLabel("Prayer");
 		lblPrayer.setBounds(10, 11, 46, 14);
@@ -275,7 +275,7 @@ public class BaseGUI extends JFrame {
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
 		if (Dispatcher.get().isLiteMode())
-			combo_box_special_attack.setEditable(false);
+			combo_box_special_attack.setEnabled(false);
 
 		lblSpecialAttack = new JLabel("Special Attack");
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
