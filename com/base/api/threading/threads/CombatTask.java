@@ -21,6 +21,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.Players;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
+import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
@@ -51,8 +52,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	private static int[] guthans_body_ids = { 4728, 4916, 4917, 4918, 4919 };
 	private static int[] guthans_warspear_ids = { 4726, 4910, 4911, 4912, 4913 };
 
-	public static int trash_ids[] = { 117, 1623, 1619, 1621, 1617, 9978, 10115,
-			10125, 10127, 229, 592 };
+	public static int trash_ids[] = { 117, 9978, 10115, 10125, 10127, 229, 592 };
 
 	private RSNPC current_target;
 	private RSTile home_tile;
@@ -118,6 +118,13 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			this.setMonsters(StaticTargetCalculator.calculate());
 			fight(this.possible_monsters);
 		} else {
+			RSCharacter interacting_char = Player.getRSPlayer()
+					.getInteractingCharacter();
+			if (interacting_char instanceof RSNPC) {
+				RSNPC inter_rsnpc = (RSNPC) interacting_char;
+				if (inter_rsnpc != current_target && inter_rsnpc.isValid())
+					current_target = inter_rsnpc;
+			}
 			if (!this.current_target.isValid()) {
 				this.current_target = null;
 				this.setMonsters(StaticTargetCalculator.calculate());
@@ -227,8 +234,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			else
 				new DPathNavigator().traverse(target);
 		}
-		while (Player.isMoving())
-			General.sleep(50);
 	}
 
 	public boolean attackCurrentTarget() {

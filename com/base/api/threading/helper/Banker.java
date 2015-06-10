@@ -128,7 +128,6 @@ public class Banker {
 
 	private void openBank(boolean world_hop) {
 		Banking.openBank();
-		Banking.openBankBanker();
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
@@ -166,21 +165,23 @@ public class Banker {
 	}
 
 	public static boolean shouldBank(CombatTask task) {
-		int id = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
-				.getId();
-		if (id == -1 && Inventory.isFull())
+		Food food = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue());
+		if (food.getId() == -1 && Inventory.isFull())
 			return true;
-		if (id == -1)
+		if (food.getId() == -1)
 			return false;
-		int food_length = Inventory.find(id).length;
-		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
-				&& food_length > 0)
-			return false;
+		int food_length = Inventory.find(food.getId()).length;
 		if (task.isUsingProtectionPrayer()
 				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
 			return true;
+		if (food == Food.BonesToPeaches)
+			return false;
+		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
+				&& food_length > 0)
+			return false;
+
 		return Inventory.isFull()
-				|| (id != -1 && Inventory.find(id).length == 0);
+				|| (food.getId() != -1 && Inventory.find(food.getId()).length == 0);
 	}
 
 	public void addBankItem(int id, int amount) {

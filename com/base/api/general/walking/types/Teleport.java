@@ -10,6 +10,7 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public enum Teleport {
 
@@ -60,6 +61,7 @@ public enum Teleport {
 		int distance = Integer.MAX_VALUE;
 		for (Teleport x : Teleport.values()) {
 			int test_distance = x.getSpellLocationResult().distanceTo(pos);
+			GenericMethods.println("Distance for: " + x + " is " + test_distance);
 			if (test_distance < distance) {
 				nearest = x;
 				distance = test_distance;

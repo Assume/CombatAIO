@@ -10,7 +10,7 @@ import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler implements PaintHandler {
 
-	private static final String VERSION_NUMBER = "2.0.5_3";
+	private static final String VERSION_NUMBER = "2.0.5_5";
 
 	private MonsterPaintHandler monster_paint_handler;
 

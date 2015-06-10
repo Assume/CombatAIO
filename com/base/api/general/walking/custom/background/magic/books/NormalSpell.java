@@ -15,8 +15,7 @@ import org.tribot.api2007.types.RSInterface;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Rune;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.SpellType;
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Staff;
-
-
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public enum NormalSpell implements Serializable {
 
@@ -75,6 +74,11 @@ public enum NormalSpell implements Serializable {
 			Rune.NATURE, Rune.EARTH, Rune.WATER }, new int[] { 4, 5, 4 },
 			SpellType.CURSE),
 
+	/*
+	 * HOUSE_TELEPORT( "Teleport to House", 40, new Rune[] { Rune.LAW,
+	 * Rune.EARTH, Rune.AIR }, new int[] { 1, 1, 1 }, SpellType.TELEPORT),
+	 */
+
 	// TELEPORT SPELLS
 	LUMBRIDGE_HOME_TELEPORT("Lumbridge Home Teleport", 0, new Rune[] {},
 			new int[] {}, SpellType.TELEPORT), VARROCK_TELEPORT(
@@ -85,9 +89,7 @@ public enum NormalSpell implements Serializable {
 					Rune.EARTH }, new int[] { 1, 3, 1 }, SpellType.TELEPORT), FALADOR_TELEPORT(
 			"Falador Teleport", 37,
 			new Rune[] { Rune.LAW, Rune.AIR, Rune.WATER },
-			new int[] { 1, 3, 1 }, SpellType.TELEPORT), HOUSE_TELEPORT(
-			"Teleport to House", 40, new Rune[] { Rune.LAW, Rune.EARTH,
-					Rune.AIR }, new int[] { 1, 1, 1 }, SpellType.TELEPORT), CAMELOT_TELEPORT(
+			new int[] { 1, 3, 1 }, SpellType.TELEPORT), CAMELOT_TELEPORT(
 			"Camelot Teleport", 45, new Rune[] { Rune.LAW, Rune.AIR },
 			new int[] { 1, 5 }, SpellType.TELEPORT), ARDOUGNE_TELEPORT(
 			"Ardougne Teleport", 51, new Rune[] { Rune.LAW, Rune.WATER },
@@ -263,9 +265,16 @@ public enum NormalSpell implements Serializable {
 		Staff staff = Staff.getEquipped();
 
 		// check the runes in the inventory
-		for (int i = 0; i < getRequiredRunes().length; i++)
-			if (Inventory.getCount(getRequiredRunes()[i].getId()) >= getNumberOfRunes()[i])
+		for (int i = 0; i < getRequiredRunes().length; i++) {
+			int count = Inventory.getCount(getRequiredRunes()[i].getId());
+			GenericMethods.println("Count of: " + getRequiredRunes()[i]
+					+ " is " + count);
+			if (count >= getNumberOfRunes()[i]) {
+				GenericMethods.println("Count is higher");
 				currentRunes.add(getRequiredRunes()[i]);
+			}
+
+		}
 
 		// check the runes that the staff provides
 		if (staff != null && currentRunes.size() < requiredAmount)
@@ -273,8 +282,8 @@ public enum NormalSpell implements Serializable {
 				for (Rune r2 : getRequiredRunes())
 					if (r.getId() == r2.getId() && !currentRunes.contains(r))
 						currentRunes.add(r);
-
-		return currentRunes.size() == requiredAmount;
+		GenericMethods.println(currentRunes.size() + " " + requiredAmount);
+		return currentRunes.size() >= requiredAmount;
 	}
 
 	/**
