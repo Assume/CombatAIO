@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books;
+package scripts.CombatAIO.com.base.api.magic.books;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import org.tribot.api2007.Skills;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSInterfaceMaster;
 
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Rune;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.Staff;
+import scripts.CombatAIO.com.base.api.magic.Rune;
+import scripts.CombatAIO.com.base.api.magic.Staff;
 
 
 

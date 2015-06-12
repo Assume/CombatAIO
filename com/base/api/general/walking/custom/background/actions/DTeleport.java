@@ -1,7 +1,7 @@
 package scripts.CombatAIO.com.base.api.general.walking.custom.background.actions;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.DAction;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
 
 public class DTeleport implements DAction {
 
