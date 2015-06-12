@@ -20,7 +20,7 @@ import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
 
 public class LootItem implements Comparable<LootItem> {
 

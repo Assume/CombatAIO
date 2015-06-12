@@ -7,7 +7,7 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;

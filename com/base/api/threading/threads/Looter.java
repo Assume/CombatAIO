@@ -81,6 +81,12 @@ public class Looter extends Threadable implements Pauseable {
 				this.items_known.put(x, new LootItem(x, always_loot, false));
 	}
 
+	public void addLootItem(LootItem value) {
+		LootItem temp = this.items_known.get(value.getName());
+		if (temp == null || !temp.shouldAlwaysLoot())
+			this.items_known.put(value.getName(), value);
+	}
+
 	@Override
 	public void run() {
 		while (true) {
@@ -137,8 +143,6 @@ public class Looter extends Threadable implements Pauseable {
 		if (items.length == 0)
 			return;
 		items = GroundItems.sortByDistance(Player.getPosition(), items);
-		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue())
-			items = removeLongRangeItems(items);
 		if (items.length == 0)
 			return;
 		loot(items);
@@ -321,10 +325,6 @@ public class Looter extends Threadable implements Pauseable {
 
 	public void setWaitForLoot(boolean active) {
 		this.wait_for_loot = active;
-	}
-
-	public void addLootItem(LootItem value) {
-		this.items_known.put(value.getName(), value);
 	}
 
 	private RSGroundItem[] getLootableItems() {

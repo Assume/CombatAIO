@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.data;
+package scripts.CombatAIO.com.base.api.magic.data;
 
 import java.io.Serializable;
 

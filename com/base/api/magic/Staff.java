@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.general.walking.custom.background.magic;
+package scripts.CombatAIO.com.base.api.magic;
 
 import java.io.Serializable;
 import org.tribot.api2007.Equipment;
