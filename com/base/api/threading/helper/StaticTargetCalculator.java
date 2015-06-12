@@ -49,8 +49,7 @@ public class StaticTargetCalculator {
 	}
 
 	private static boolean isBeingSplashed(RSNPC n) {
-		RSCharacter y = n.getInteractingCharacter();
-		return y != null;
+		return n.getInteractingCharacter() != null;
 	}
 
 	private static RSNPC[] getMonsters(boolean reachable) {

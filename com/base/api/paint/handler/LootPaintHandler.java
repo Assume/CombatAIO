@@ -40,16 +40,18 @@ final class LootPaintHandler implements PaintHandler {
 		int tot_drawn = 0;
 		for (LootItem y : looted_items) {
 			if (y.getAmountLooted() > 0) {
-				if (tot_drawn != 00 && tot_drawn % 8 == 0)
-					x -= 45;
+				if (tot_drawn != 00 && tot_drawn % 8 == 0) {
+					x -= 41;
+					space = 0;
+				}
 				g.setColor(new Color(0, 0, 0, 110));
-				g.fillRect(x, 5 + 40 * space - 3, 38, 38);
+				g.fillRect(x, 15 + 40 * space - 3, 38, 38);
 				g.setColor(Color.RED);
-				g.drawRect(x, 5 + 40 * space - 3, 38, 38);
-				g.drawImage(y.getIcon(), x + 4, 5 + 40 * space, null, null);
+				g.drawRect(x, 15 + 40 * space - 3, 38, 38);
+				g.drawImage(y.getIcon(), x + 4, 15 + 40 * space, null, null);
 				g.drawString(
 						TotalPaintHandler.formatNumber(y.getAmountLooted()),
-						x + 4, 14 + 40 * space);
+						x + 4, 24 + 40 * space);
 				tot_drawn++;
 				space++;
 			}

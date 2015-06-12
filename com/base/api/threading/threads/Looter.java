@@ -66,10 +66,19 @@ public class Looter extends Threadable implements Pauseable {
 		return new Value<Integer>(tot);
 	}
 
+	public void addPossibleLootItem(boolean always_loot, boolean[] alch,
+			String... name) {
+		for (int i = 0; i < name.length; i++)
+			if (name[i] != null && name[i].length() > 1
+					&& !this.items_known.containsKey(name[i]))
+				this.items_known.put(name[i], new LootItem(name[i],
+						always_loot, alch[i]));
+	}
+
 	public void addPossibleLootItem(boolean always_loot, String... name) {
 		for (String x : name)
 			if (x != null && x.length() > 1 && !this.items_known.containsKey(x))
-				this.items_known.put(x, new LootItem(x, always_loot));
+				this.items_known.put(x, new LootItem(x, always_loot, false));
 	}
 
 	@Override
@@ -77,9 +86,6 @@ public class Looter extends Threadable implements Pauseable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
-			RSGroundItem[] items = getLootableItems();
-			for (RSGroundItem x : items)
-				GenericMethods.println(x.getID());
 			if (this.loot_in_combat && Combat.getAttackingEntities().length > 0
 					&& this.lootIsOnGround()) {
 				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
@@ -222,9 +228,13 @@ public class Looter extends Threadable implements Pauseable {
 
 	}
 
-	private String[] getAllItemsName() {
+	private String[] getAllItemNames() {
 		Set<String> key_set = this.items_known.keySet();
 		return key_set.toArray(new String[key_set.size()]);
+	}
+
+	public Value<String[]> getAllItemNamesValue() {
+		return new Value<String[]>(getAllItemNames());
 	}
 
 	/*
@@ -250,11 +260,6 @@ public class Looter extends Threadable implements Pauseable {
 
 	public Value<Integer> getMinimumLootValue() {
 		return new Value<Integer>(this.minimum_price);
-	}
-
-	public Value<String[]> getAllLootableItemNames() {
-		Set<String> temp = this.items_known.keySet();
-		return new Value<String[]>(temp.toArray(new String[temp.size()]));
 	}
 
 	public Value<LootItem[]> getLootItems() {
@@ -323,7 +328,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private RSGroundItem[] getLootableItems() {
-		RSGroundItem[] items = GroundItems.find(getAllItemsName());
+		RSGroundItem[] items = GroundItems.find(getAllItemNames());
 		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
 		for (RSGroundItem x : items) {
 			LootItem r = this.items_known.get(getRSGroundItemName(x));
@@ -349,4 +354,31 @@ public class Looter extends Threadable implements Pauseable {
 			return null;
 		return def.getName();
 	}
+
+	public void alch() {
+		String names[] = getAllItemNames();
+		if (names.length == 0)
+			return;
+		RSItem[] items = Inventory.find(names);
+		for (RSItem x : items) {
+			String name = getItemNameFromRSItem(x);
+			if (name == null)
+				continue;
+			LootItem item = this.items_known.get(name);
+			if (item == null)
+				continue;
+			if (item.shouldAlch())
+				item.alch(x);
+		}
+	}
+
+	private String getItemNameFromRSItem(RSItem x) {
+		if (x == null)
+			return null;
+		RSItemDefinition def = x.getDefinition();
+		if (def == null)
+			return null;
+		return def.getName();
+	}
+
 }

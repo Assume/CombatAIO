@@ -4,6 +4,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Login;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
@@ -44,9 +45,17 @@ public class Dispatcher {
 	private BaseGUI gui;
 	private boolean run = true;
 
-	public void start() {
+	public void start(String name) {
 		gui = new BaseGUI();
-		gui.setVisible(true);
+		if (name == null || name.equals("null") || name.length() == 0)
+			gui.setVisible(true);
+		else {
+			if (gui.load(name))
+				gui.set();
+			else
+				throw new RuntimeException(
+						"Profile not found, please try again");
+		}
 		while (gui.isVisible())
 			General.sleep(300);
 		if (!started) {
@@ -117,7 +126,7 @@ public class Dispatcher {
 		case EAT_FOR_SPACE:
 			return this.looting_thread.shouldEatForSpace();
 		case LOOT_ITEM_NAMES:
-			return this.looting_thread.getAllLootableItemNames();
+			return this.looting_thread.getAllItemNamesValue();
 		case IS_BONES_TO_PEACHES:
 			return new Value<Boolean>(this.eat_thread.isUsingBonesToPeaches());
 		case LOOT_IN_COMBAT:
@@ -236,6 +245,7 @@ public class Dispatcher {
 	}
 
 	private void run() {
+		this.combat_thread.setHomeTile(Player.getPosition());
 		Walking.setControlClick(true);
 		this.combat_thread.start();
 		this.combat_thread.initiate();
@@ -314,6 +324,13 @@ public class Dispatcher {
 
 	public boolean shouldRun() {
 		return this.run;
+	}
+
+	public void alch() {
+		if (isLiteMode())
+			return;
+		this.looting_thread.alch();
+
 	}
 
 }

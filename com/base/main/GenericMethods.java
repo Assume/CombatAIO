@@ -19,10 +19,8 @@ public class GenericMethods {
 	}
 
 	public static void println(Object j) {
-		if (j == null)
-			return;
 		if (General.getTRiBotUsername().equalsIgnoreCase("assume"))
-			System.out.println(j.toString());
+			System.out.println(j == null ? "null" : j.toString());
 	}
 
 }

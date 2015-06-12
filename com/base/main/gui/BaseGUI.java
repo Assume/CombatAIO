@@ -1,6 +1,7 @@
 package scripts.CombatAIO.com.base.main.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
@@ -49,9 +53,11 @@ import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class BaseGUI extends JFrame {
@@ -131,33 +137,57 @@ public class BaseGUI extends JFrame {
 		scrollPane.setBounds(10, 31, 182, 227);
 		tab_two_panel.add(scrollPane);
 
-		table_loot = new JTable();
-		scrollPane.setViewportView(table_loot);
-		table_loot.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		table_loot.setModel(new DefaultTableModel(new Object[][] { { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, { null }, { null }, { null }, { null },
-				{ null }, { null }, }, new String[] { "Item name" }) {
+		UneditableDefaultTableModel uneditable_default_table_model = new UneditableDefaultTableModel(
+				new Object[][] { { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, { null, false }, { null, false },
+						{ null, false }, },
+				new String[] { "Item name", "Alch" }) {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 			@SuppressWarnings("rawtypes")
-			Class[] columnTypes = new Class[] { String.class };
+			Class[] columnTypes = new Class[] { String.class, Boolean.class };
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-		});
+		};
+
+		table_loot = new JTable(uneditable_default_table_model) {
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer,
+					int row, int col) {
+				Component c = super.prepareRenderer(renderer, row, col);
+				if (col == 1)
+					c.setEnabled(!Dispatcher.get().isLiteMode());
+				return c;
+			}
+		};
+		scrollPane.setViewportView(table_loot);
+		table_loot.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+		table_loot.getColumnModel().getColumn(1).setMaxWidth(35);
 
 		JLabel lblNewLabel = new JLabel("Loot items");
 		lblNewLabel.setBounds(10, 11, 70, 14);
@@ -476,7 +506,7 @@ public class BaseGUI extends JFrame {
 		}
 	}
 
-	private void set() {
+	public void set() {
 		Dispatcher.get().set(ValueType.FOOD,
 				new Value<Food>((Food) combo_box_food.getSelectedItem()));
 		Dispatcher.get().set(ValueType.WAIT_FOR_LOOT,
@@ -525,15 +555,15 @@ public class BaseGUI extends JFrame {
 	}
 
 	private void setLootingList() {
-		List<String> temp = new ArrayList<String>();
 		for (int i = 0; i < 60; i++) {
 			Object val = table_loot.getValueAt(i, 0);
+			Boolean alch = (Boolean) table_loot.getValueAt(i, 1);
 			if (val != null)
-				temp.add(val.toString().trim());
+				Dispatcher.get().set(
+						ValueType.LOOT_ITEM,
+						new Value<LootItem>(new LootItem(val.toString(), true,
+								alch)));
 		}
-
-		Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
-				new Value<String[]>(temp.toArray(new String[temp.size()])));
 	}
 
 	private void setBankingList() {
@@ -559,8 +589,8 @@ public class BaseGUI extends JFrame {
 					.getValue().toString());
 			prop.setProperty(
 					"loot_items",
-					stringArrayToString(((String[]) Dispatcher.get()
-							.get(ValueType.LOOT_ITEM_NAMES).getValue())));
+					lootItemsToString(((LootItem[]) Dispatcher.get()
+							.get(ValueType.ALL_LOOT_ITEMS).getValue())));
 			prop.setProperty("loot_in_combat",
 					Dispatcher.get().get(ValueType.LOOT_IN_COMBAT).getValue()
 							.toString());
@@ -611,6 +641,59 @@ public class BaseGUI extends JFrame {
 			streamO.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+
+	public boolean load(String name) {
+		try {
+			FileInputStream in = new FileInputStream(Util.getWorkingDirectory()
+					+ File.separator + "Base" + File.separator + name + ".ini");
+			Properties prop = new Properties();
+			prop.load(in);
+			combo_box_food.setSelectedItem(Food.getFoodFromName(prop
+					.getProperty("food")));
+			chckbx_ranged.setSelected(Boolean.parseBoolean(prop
+					.getProperty("ranging")));
+			combo_box_prayer
+					.setSelectedItem(Dispatcher.get().isLiteMode() ? Prayer.NONE
+							: Prayer.parse(prop.getProperty("prayer")));
+			fillLootTable(prop.getProperty("loot_items"));
+			chckbx_loot_in_combat.setSelected(Boolean.parseBoolean(prop
+					.getProperty("loot_in_combat")));
+			chckbx_wait_for_loot.setSelected(Boolean.parseBoolean(prop
+					.getProperty("wait_for_loot")));
+			combo_box_special_attack.setSelectedItem(Dispatcher.get()
+					.isLiteMode() ? Weapon.NONE : Weapon.getWeaponFromName(prop
+					.getProperty("special_attack_weapon")));
+			String val = prop.getProperty("minimum_loot_value");
+			if (!val.equalsIgnoreCase("2147483647"))
+				text_field_loot_over_x
+						.setText(Dispatcher.get().isLiteMode() ? "" : prop
+								.getProperty("minimum_loot_value"));
+			spinner_food.setValue(Integer.parseInt(prop
+					.getProperty("food_withdraw_amount")));
+			fillSelectedMonster(prop.getProperty("monster_ids"));
+			fillBankTable(prop);
+			chckbx_flicker.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean(prop.getProperty("use_flicker")));
+			chckbx_guthans.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean(prop.getProperty("use_guthans")));
+			spinner_combat_radius.setValue(Integer.parseInt(prop
+					.getProperty("combat_radius")));
+			spinner_world_hop_tolerance
+					.setValue(Dispatcher.get().isLiteMode() ? -1 : Integer
+							.parseInt(prop.getProperty("world_hop_tolerance")));
+			if (Dispatcher.get().isLiteMode())
+				this.safe_spot_tile = null;
+			else
+				this.safe_spot_tile = getSafeSpotTile(prop);
+			if (this.safe_spot_tile != null)
+				lbl_safe_spot
+						.setText("Safe spot: " + safe_spot_tile.toString());
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 
 	}
@@ -669,6 +752,24 @@ public class BaseGUI extends JFrame {
 		return b.toString();
 	}
 
+	private String lootItemsToString(LootItem[] items) {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < items.length; i++) {
+			if (i < items.length - 1) {
+				if (items[i].shouldAlch())
+					b.append(items[i].getName() + "A" + ",");
+				else
+					b.append(items[i].getName() + ",");
+			} else {
+				if (items[i].shouldAlch())
+					b.append(items[i].getName() + "A");
+				else
+					b.append(items[i].getName());
+			}
+		}
+		return b.toString();
+	}
+
 	private String stringArrayToString(String[] strings) {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < strings.length; i++) {
@@ -678,57 +779,6 @@ public class BaseGUI extends JFrame {
 				b.append(strings[i]);
 		}
 		return b.toString();
-	}
-
-	private void load(String name) {
-		try {
-			FileInputStream in = new FileInputStream(Util.getWorkingDirectory()
-					+ File.separator + "Base" + File.separator + name + ".ini");
-			Properties prop = new Properties();
-			prop.load(in);
-			combo_box_food.setSelectedItem(Food.getFoodFromName(prop
-					.getProperty("food")));
-			chckbx_ranged.setSelected(Boolean.parseBoolean(prop
-					.getProperty("ranging")));
-			combo_box_prayer
-					.setSelectedItem(Dispatcher.get().isLiteMode() ? Prayer.NONE
-							: Prayer.parse(prop.getProperty("prayer")));
-			fillLootTable(prop.getProperty("loot_items"));
-			chckbx_loot_in_combat.setSelected(Boolean.parseBoolean(prop
-					.getProperty("loot_in_combat")));
-			chckbx_wait_for_loot.setSelected(Boolean.parseBoolean(prop
-					.getProperty("wait_for_loot")));
-			combo_box_special_attack.setSelectedItem(Dispatcher.get()
-					.isLiteMode() ? Weapon.NONE : Weapon.getWeaponFromName(prop
-					.getProperty("special_attack_weapon")));
-			String val = prop.getProperty("minimum_loot_value");
-			if (!val.equalsIgnoreCase("2147483647"))
-				text_field_loot_over_x
-						.setText(Dispatcher.get().isLiteMode() ? "" : prop
-								.getProperty("minimum_loot_value"));
-			spinner_food.setValue(Integer.parseInt(prop
-					.getProperty("food_withdraw_amount")));
-			fillSelectedMonster(prop.getProperty("monster_ids"));
-			fillBankTable(prop);
-			chckbx_flicker.setSelected(Dispatcher.get().isLiteMode() ? false
-					: Boolean.parseBoolean(prop.getProperty("use_flicker")));
-			chckbx_guthans.setSelected(Dispatcher.get().isLiteMode() ? false
-					: Boolean.parseBoolean(prop.getProperty("use_guthans")));
-			spinner_combat_radius.setValue(Integer.parseInt(prop
-					.getProperty("combat_radius")));
-			spinner_world_hop_tolerance
-					.setValue(Dispatcher.get().isLiteMode() ? -1 : Integer
-							.parseInt(prop.getProperty("world_hop_tolerance")));
-			if (Dispatcher.get().isLiteMode())
-				this.safe_spot_tile = null;
-			else
-				this.safe_spot_tile = getSafeSpotTile(prop);
-			if (this.safe_spot_tile != null)
-				lbl_safe_spot
-						.setText("Safe spot: " + safe_spot_tile.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private RSTile getSafeSpotTile(Properties prop) {
@@ -783,8 +833,16 @@ public class BaseGUI extends JFrame {
 
 	private void fillLootTable(String text) {
 		List<String> list = parseStringIntoList(text);
-		for (int i = 0; i < list.size(); i++)
-			table_loot.setValueAt(list.get(i), i, 0);
+		for (int i = 0; i < list.size(); i++) {
+			String name = list.get(i);
+			if (name.endsWith("A") && !Dispatcher.get().isLiteMode()) {
+				table_loot.setValueAt(name.substring(0, name.length() - 1), i,
+						0);
+				table_loot.setValueAt(true, i, 1);
+			} else
+				table_loot.setValueAt(name, i, 0);
+		}
+
 	}
 
 	private static Map<Integer, String> convertStringToHashMap(String text) {

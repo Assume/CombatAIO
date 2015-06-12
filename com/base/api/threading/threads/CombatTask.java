@@ -81,7 +81,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				PauseType.COULD_INTERFERE_WITH_EATING }));
 		this.possible_monsters = new RSNPC[0];
 		this.kill_tracker = new KillTracker(this);
-		this.home_tile = Player.getPosition();
 		this.armor_holder = null;
 		super.setName("COMBAT_THREAD");
 	}
@@ -100,6 +99,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			Dispatcher.get().bank(false);
 		checkRun();
 		checkUse();
+		Dispatcher.get().alch();
 		usePrayer(this.prayer);
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
@@ -120,12 +120,12 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		} else {
 			RSCharacter interacting_char = Player.getRSPlayer()
 					.getInteractingCharacter();
-			if (interacting_char instanceof RSNPC) {
+			if (interacting_char != null && interacting_char instanceof RSNPC) {
 				RSNPC inter_rsnpc = (RSNPC) interacting_char;
 				if (inter_rsnpc != current_target && inter_rsnpc.isValid())
 					current_target = inter_rsnpc;
 			}
-			if (!this.current_target.isValid()) {
+			if (this.current_target != null && !this.current_target.isValid()) {
 				this.current_target = null;
 				this.setMonsters(StaticTargetCalculator.calculate());
 				fight(this.possible_monsters);

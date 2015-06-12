@@ -13,6 +13,15 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
+import org.tribot.api.General;
+import org.tribot.api.Timing;
+import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.NPCChat;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSItem;
+
+import scripts.CombatAIO.com.base.api.general.walking.custom.background.magic.books.NormalSpell;
+
 public class LootItem implements Comparable<LootItem> {
 
 	private int price;
@@ -22,10 +31,6 @@ public class LootItem implements Comparable<LootItem> {
 	private Image icon;
 	private int id;
 	private boolean always_loot;
-
-	public LootItem(String name, boolean always_loot) {
-		this(name, always_loot, false);
-	}
 
 	public LootItem(String name, boolean always_loot, boolean alch) {
 		this.price = 0;
@@ -47,6 +52,31 @@ public class LootItem implements Comparable<LootItem> {
 
 	public int incrementAmountLooted(int by) {
 		return this.amount_looted += by;
+	}
+
+	public boolean shouldAlwaysLoot() {
+		return this.always_loot;
+	}
+
+	public boolean shouldAlch() {
+		return this.alch;
+	}
+
+	public void alch(RSItem x) {
+		if (NormalSpell.HIGH_ALCHEMY.canCast())
+			NormalSpell.HIGH_ALCHEMY.select();
+		else if (NormalSpell.LOW_ALCHEMY.canCast())
+			NormalSpell.LOW_ALCHEMY.select();
+		else
+			return;
+		x.click("Cast");
+		NPCChat.clickContinue(false);
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Player.getAnimation() == -1;
+			}
+		}, General.random(600, 1100));
 	}
 
 	public void setPrice(int price) {
@@ -133,7 +163,4 @@ public class LootItem implements Comparable<LootItem> {
 		return this.getName().compareTo(arg0.getName());
 	}
 
-	public boolean shouldAlwaysLoot() {
-		return this.always_loot;
-	}
 }

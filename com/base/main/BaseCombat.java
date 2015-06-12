@@ -34,6 +34,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
+	private String name;
 
 	public boolean isRunning() {
 		return this.run;
@@ -45,7 +46,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		this.paint_handler = new TotalPaintHandler();
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this, 0);
-		Dispatcher.get().start();
+		Dispatcher.get().start(name);
 		// XMLWriter writer = new XMLWriter(Dispatcher.get());
 		// writer.save(new File(Util.getAppDataDirectory() + File.separator
 		// + "base_aio" + File.separator + "test.dat"), false,
@@ -100,6 +101,20 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 
 	@Override
 	public void passArguments(HashMap<String, String> arg0) {
+		if (this.getRepoID() == 64)
+			return;
+		String scriptSelect = arg0.get("custom_input");
+		String clientStarter = arg0.get("client_starter");
+		String autoStart = arg0.get("autostart");
+		String input;
+		if (scriptSelect != null) {
+			input = scriptSelect;
+		} else if (clientStarter != null) {
+			input = clientStarter;
+		} else {
+			input = autoStart;
+		}
+		this.name = input;
 
 	}
 
