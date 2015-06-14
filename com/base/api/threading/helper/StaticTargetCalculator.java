@@ -105,6 +105,7 @@ public class StaticTargetCalculator {
 	}
 
 	public static boolean verifyTarget(RSNPC current_target) {
-		return !current_target.isInCombat() && !isBeingSplashed(current_target);
+		return current_target != null && !current_target.isInCombat()
+				&& !isBeingSplashed(current_target);
 	}
 }

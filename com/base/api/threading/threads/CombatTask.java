@@ -94,6 +94,12 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		SkillData.initiate();
 	}
 
+	@Override
+	public void run() {
+		while (Dispatcher.get().isRunning())
+			fight();
+	}
+
 	public void fight() {
 		if (Banker.shouldBank(this))
 			Dispatcher.get().bank(false);
@@ -193,12 +199,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				guthans_legs_ids[4] + 1, guthans_warspear_ids[4] + 1).length > 0;
 	}
 
-	@Override
-	public void run() {
-		while (Dispatcher.get().isRunning())
-			fight();
-	}
-
 	private void fight(RSNPC[] monsters) {
 		if ((monsters.length == 0 && NPCs.find(this.monster_ids).length >= 0 && Player
 				.getPosition().distanceTo(home_tile) >= combat_distance)
@@ -208,13 +208,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				this.last_attack_time = System.currentTimeMillis();
 			}
 		}
-		if (monsters.length == 0)
-			return;
-		if (getAverageDistance(monsters) <= 4)
-			this.current_target = monsters[General.random(0,
-					monsters.length - 1)];
-		else
-			this.current_target = monsters[0];
+		setTarget(monsters);
 		if (!StaticTargetCalculator.verifyTarget(this.current_target))
 			return;
 		if (this.safe_spot_tile == null)
@@ -223,11 +217,21 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	}
 
+	private void setTarget(RSNPC[] monsters) {
+		if (monsters.length == 0)
+			return;
+		if (getAverageDistance(monsters) < 3)
+			this.current_target = monsters[General.random(0,
+					monsters.length - 1)];
+		else
+			this.current_target = monsters[0];
+
+	}
+
 	private void moveToTarget(RSNPC target) {
 		if (!target.isOnScreen())
 			Camera.turnToTile(target);
-		if (Player.getPosition().distanceTo(target) >= 7
-				|| !target.isOnScreen()
+		if (!target.isOnScreen()
 				|| (!this.is_ranging && !PathFinding.canReach(target, false))) {
 			if (PathFinding.canReach(target, false))
 				Walking.walkTo(target);
@@ -276,7 +280,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		if (this.special_attack_weapon == Weapon.NONE)
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
-				&& getTargetHPPercent() >= 30) {
+				&& this.getNPCHPPercent(this.current_target) >= 30) {
 			int wep_id = -1;
 			int shield_id = -1;
 			RSItem temp = Equipment.getItem(SLOTS.WEAPON);
@@ -290,13 +294,85 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	}
 
-	private double getTargetHPPercent() {
-		if (this.current_target == null)
-			return -1;
-		int health = this.current_target.getMaxHealth();
-		if (health == 0)
+	private int getNPCHPPercent(RSNPC current_tar) {
+		try {
+			if (current_tar == null)
+				return -1;
+			int health = current_tar.getMaxHealth();
+			if (health == 0)
+				return 0;
+			return ((current_tar.getHealth() / health) * 100);
+		} catch (Exception e) {
 			return 0;
-		return ((this.current_target.getHealth() / health) * 100);
+		}
+	}
+
+	private void equipAmmo() {
+		RSItem[] ammo = Inventory.find(ammo_id, knife_id);
+		if (ammo.length > 0)
+			if (ammo[0].getStack() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
+					.next()) {
+				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
+				ammo[0].click("Wield");
+			}
+	}
+
+	public void setAmmo() {
+		if (this.is_ranging) {
+			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
+			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
+			if (ammo != null && ammo.getStack() > 1) {
+				this.ammo_id = ammo.getID();
+				RSItemDefinition ammo_def = ammo.getDefinition();
+				if (ammo_def != null)
+					Dispatcher.get().set(
+							ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { ammo_def
+									.getName() }));
+			}
+			if (knife != null && knife.getStack() > 1) {
+				this.knife_id = knife.getID();
+				RSItemDefinition knife_def = ammo.getDefinition();
+				if (knife_def != null)
+					Dispatcher.get().set(
+							ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { knife_def
+									.getName() }));
+			}
+
+		}
+
+	}
+
+	public boolean shouldChangeWorld() {
+		return this.world_hop_tolerance > 0
+				&& Players.find(new Filter<RSPlayer>() {
+					@Override
+					public boolean accept(RSPlayer arg0) {
+						return arg0.getPosition().distanceTo(home_tile) <= combat_distance;
+					}
+				}).length > this.world_hop_tolerance;
+	}
+
+	private void checkUse() {
+		if (Game.getUptext().contains("->"))
+			Mouse.clickBox(10, 446, 480, 480, 1);
+	}
+
+	private void dropTrash() {
+		RSItem[] items = Inventory.find(trash_ids);
+		if (items.length == 0)
+			return;
+		for (RSItem x : items) {
+			x.click("Drop");
+			General.sleep(200, 400);
+		}
+	}
+
+	public boolean isUsingProtectionPrayer() {
+		return prayer == Prayer.PROTECT_FROM_MAGIC
+				|| prayer == Prayer.PROTECT_FROM_MELEE
+				|| prayer == Prayer.PROTECT_FROM_MISSILES;
 	}
 
 	private int getSpecialPercent() {
@@ -365,7 +441,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void setPrayer(Prayer value) {
 		this.prayer = value;
-
 	}
 
 	public Value<Weapon> getSpecialAttackWeapon() {
@@ -391,53 +466,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void setUseFlicker(boolean b) {
 		this.flicker = b;
-	}
-
-	private void equipAmmo() {
-		RSItem[] ammo = Inventory.find(ammo_id, knife_id);
-		if (ammo.length > 0)
-			if (ammo[0].getStack() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
-					.next()) {
-				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
-				ammo[0].click("Wield");
-			}
-	}
-
-	public void setAmmo() {
-		if (this.is_ranging) {
-			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
-			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
-			if (ammo != null && ammo.getStack() > 1) {
-				this.ammo_id = ammo.getID();
-				RSItemDefinition ammo_def = ammo.getDefinition();
-				if (ammo_def != null)
-					Dispatcher.get().set(
-							ValueType.LOOT_ITEM_NAMES,
-							new Value<String[]>(new String[] { ammo_def
-									.getName() }));
-			}
-			if (knife != null && knife.getStack() > 1) {
-				this.knife_id = knife.getID();
-				RSItemDefinition knife_def = ammo.getDefinition();
-				if (knife_def != null)
-					Dispatcher.get().set(
-							ValueType.LOOT_ITEM_NAMES,
-							new Value<String[]>(new String[] { knife_def
-									.getName() }));
-			}
-
-		}
-
-	}
-
-	public boolean shouldChangeWorld() {
-		return this.world_hop_tolerance > 0
-				&& Players.find(new Filter<RSPlayer>() {
-					@Override
-					public boolean accept(RSPlayer arg0) {
-						return arg0.getPosition().distanceTo(home_tile) <= combat_distance;
-					}
-				}).length > this.world_hop_tolerance;
 	}
 
 	public void setCombatRadius(int value) {
@@ -466,24 +494,4 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return new Value<int[]>(this.armor_holder.getIDs());
 	}
 
-	private void checkUse() {
-		if (Game.getUptext().contains("->"))
-			Mouse.clickBox(10, 446, 480, 480, 1);
-	}
-
-	private void dropTrash() {
-		RSItem[] items = Inventory.find(trash_ids);
-		if (items.length == 0)
-			return;
-		for (RSItem x : items) {
-			x.click("Drop");
-			General.sleep(200, 400);
-		}
-	}
-
-	public boolean isUsingProtectionPrayer() {
-		return prayer == Prayer.PROTECT_FROM_MAGIC
-				|| prayer == Prayer.PROTECT_FROM_MELEE
-				|| prayer == Prayer.PROTECT_FROM_MISSILES;
-	}
 }
