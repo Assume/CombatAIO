@@ -47,12 +47,17 @@ import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class CombatTask extends Threadable implements Runnable, Pauseable {
 
-	private static int[] guthans_helm_ids = { 4724, 4904, 4905, 4906, 4907 };
-	private static int[] guthans_legs_ids = { 4730, 4922, 4923, 4924, 4925 };
-	private static int[] guthans_body_ids = { 4728, 4916, 4917, 4918, 4919 };
-	private static int[] guthans_warspear_ids = { 4726, 4910, 4911, 4912, 4913 };
+	private static final int[] GUTHANS_HELM_IDS = { 4724, 4904, 4905, 4906,
+			4907 };
+	private static final int[] GUTHANS_BODY_IDS = { 4728, 4916, 4917, 4918,
+			4919 };
+	private static final int[] GUTHANS_LEGS_IDS = { 4730, 4922, 4923, 4924,
+			4925 };
+	private static final int[] GUTHANS_WARSPEAR_IDS = { 4726, 4910, 4911, 4912,
+			4913 };
 
-	public static int trash_ids[] = { 117, 9978, 10115, 10125, 10127, 229, 592 };
+	public static final int TRASH_ITEM_IDS[] = { 117, 9978, 10115, 10125,
+			10127, 229, 592 };
 
 	private RSNPC current_target;
 	private RSTile home_tile;
@@ -183,20 +188,20 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void equipGuthans() {
-		CEquipment.equip(new int[][] { guthans_helm_ids, guthans_body_ids,
-				guthans_legs_ids, guthans_warspear_ids });
+		CEquipment.equip(new int[][] { GUTHANS_HELM_IDS, GUTHANS_BODY_IDS,
+				GUTHANS_LEGS_IDS, GUTHANS_WARSPEAR_IDS });
 	}
 
 	private boolean isGuthanDegraded() {
-		return !CEquipment.isEquiped(guthans_body_ids[4] + 1)
-				&& !CEquipment.isEquiped(guthans_helm_ids[4] + 1)
-				&& !CEquipment.isEquiped(guthans_legs_ids[4] + 1)
-				&& !CEquipment.isEquiped(guthans_warspear_ids[4] + 1);
+		return !CEquipment.isEquiped(GUTHANS_BODY_IDS[4] + 1)
+				&& !CEquipment.isEquiped(GUTHANS_HELM_IDS[4] + 1)
+				&& !CEquipment.isEquiped(GUTHANS_LEGS_IDS[4] + 1)
+				&& !CEquipment.isEquiped(GUTHANS_WARSPEAR_IDS[4] + 1);
 	}
 
 	private boolean isDegradedGuthansInInventory() {
-		return Inventory.find(guthans_body_ids[4] + 1, guthans_helm_ids[4] + 1,
-				guthans_legs_ids[4] + 1, guthans_warspear_ids[4] + 1).length > 0;
+		return Inventory.find(GUTHANS_BODY_IDS[4] + 1, GUTHANS_HELM_IDS[4] + 1,
+				GUTHANS_LEGS_IDS[4] + 1, GUTHANS_WARSPEAR_IDS[4] + 1).length > 0;
 	}
 
 	private void fight(RSNPC[] monsters) {
@@ -344,6 +349,14 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	}
 
+	public void setMonsters(RSNPC[] possible_monsters) {
+		this.possible_monsters = possible_monsters;
+	}
+
+	public void resetTarget() {
+		this.current_target = null;
+	}
+
 	public boolean shouldChangeWorld() {
 		return this.world_hop_tolerance > 0
 				&& Players.find(new Filter<RSPlayer>() {
@@ -360,7 +373,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	private void dropTrash() {
-		RSItem[] items = Inventory.find(trash_ids);
+		RSItem[] items = Inventory.find(TRASH_ITEM_IDS);
 		if (items.length == 0)
 			return;
 		for (RSItem x : items) {
@@ -379,10 +392,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return Game.getSetting(300) / 10;
 	}
 
-	public void setMonsters(RSNPC[] possible_monsters) {
-		this.possible_monsters = possible_monsters;
-	}
-
 	public Value<RSNPC> getCurrentTarget() {
 		return new Value<RSNPC>(current_target);
 	}
@@ -399,10 +408,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return kill_tracker.getTotalKills();
 	}
 
-	public Value<?> getNextTarget() {
-		return null;
-	}
-
 	public void setMonsterIDs(int... id) {
 		this.monster_ids = id;
 	}
@@ -413,10 +418,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public Value<Boolean> isRanging() {
 		return new Value<Boolean>(this.is_ranging);
-	}
-
-	public void resetTarget() {
-		this.current_target = null;
 	}
 
 	public Value<Prayer> getPrayer() {
@@ -456,8 +457,8 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	}
 
 	public int[] getGuthansIDs() {
-		return GenericMethods.combineArrays(guthans_body_ids, guthans_helm_ids,
-				guthans_legs_ids, guthans_warspear_ids);
+		return GenericMethods.combineArrays(GUTHANS_BODY_IDS, GUTHANS_HELM_IDS,
+				GUTHANS_LEGS_IDS, GUTHANS_WARSPEAR_IDS);
 	}
 
 	public Value<Boolean> shouldFlicker() {
