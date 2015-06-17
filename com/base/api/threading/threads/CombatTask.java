@@ -103,6 +103,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 	public void run() {
 		while (Dispatcher.get().isRunning())
 			fight();
+
 	}
 
 	public void fight() {
@@ -119,38 +120,44 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
 		if (current_target == null) {
-			dropTrash();
-			equipAmmo();
-			long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-					.next();
-			General.sleep(time);
-			Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-					.reset();
+			this.executeNoTarget();
+		} else {
+			executeHasTarget();
+		}
+	}
+
+	private void executeNoTarget() {
+		dropTrash();
+		equipAmmo();
+		long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
+				.next();
+		General.sleep(time);
+		Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT.reset();
+		this.setMonsters(StaticTargetCalculator.calculate());
+		fight(this.possible_monsters);
+	}
+
+	private void executeHasTarget() {
+		RSCharacter interacting_char = Player.getRSPlayer()
+				.getInteractingCharacter();
+		if (interacting_char != null && interacting_char instanceof RSNPC) {
+			RSNPC inter_rsnpc = (RSNPC) interacting_char;
+			if (inter_rsnpc != current_target && inter_rsnpc.isValid())
+				current_target = inter_rsnpc;
+		}
+		if (this.current_target != null && !this.current_target.isValid()) {
+			this.current_target = null;
 			this.setMonsters(StaticTargetCalculator.calculate());
 			fight(this.possible_monsters);
-		} else {
-			RSCharacter interacting_char = Player.getRSPlayer()
-					.getInteractingCharacter();
-			if (interacting_char != null && interacting_char instanceof RSNPC) {
-				RSNPC inter_rsnpc = (RSNPC) interacting_char;
-				if (inter_rsnpc != current_target && inter_rsnpc.isValid())
-					current_target = inter_rsnpc;
-			}
-			if (this.current_target != null && !this.current_target.isValid()) {
-				this.current_target = null;
-				this.setMonsters(StaticTargetCalculator.calculate());
-				fight(this.possible_monsters);
-			}
-			this.last_attack_time = System.currentTimeMillis();
-			if (this.flicker)
-				flicker(this.prayer);
-			if (this.armor_holder == null)
-				this.useSpecialAttack();
-			if (this.use_guthans)
-				useGuthans();
-			General.sleep(300);
-
 		}
+		this.last_attack_time = System.currentTimeMillis();
+		if (this.flicker)
+			flicker(this.prayer);
+		if (this.armor_holder == null)
+			this.useSpecialAttack();
+		if (this.use_guthans)
+			useGuthans();
+		General.sleep(300);
 	}
 
 	private void checkRun() {
@@ -230,7 +237,6 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 					monsters.length - 1)];
 		else
 			this.current_target = monsters[0];
-
 	}
 
 	private void moveToTarget(RSNPC target) {
@@ -337,7 +343,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 			}
 			if (knife != null && knife.getStack() > 1) {
 				this.knife_id = knife.getID();
-				RSItemDefinition knife_def = ammo.getDefinition();
+				RSItemDefinition knife_def = knife.getDefinition();
 				if (knife_def != null)
 					Dispatcher.get().set(
 							ValueType.LOOT_ITEM_NAMES,
@@ -489,10 +495,15 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		return new Value<RSTile>(this.safe_spot_tile);
 	}
 
-	public Value<int[]> getArmorHolderIDs() {
+	public Value<int[]> getArmorHolderIds() {
 		if (this.armor_holder == null)
 			return new Value<int[]>(new int[0]);
 		return new Value<int[]>(this.armor_holder.getIDs());
+	}
+
+	public Value<Integer> getAmmoId() {
+		return new Value<Integer>(this.ammo_id == -1 ? this.knife_id
+				: this.ammo_id);
 	}
 
 }

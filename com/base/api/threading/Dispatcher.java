@@ -156,7 +156,11 @@ public class Dispatcher {
 		case SAFE_SPOT_TILE:
 			return this.combat_thread.getSafeSpot();
 		case ARMOR_HOLDER_IDS:
-			return this.combat_thread.getArmorHolderIDs();
+			return this.combat_thread.getArmorHolderIds();
+		case AMMO_ID:
+			return this.combat_thread.getAmmoId();
+		case USE_TELEKINETIC_GRAB:
+			return this.looting_thread.shouldUseTelegrab();
 		default:
 			break;
 		}
@@ -217,6 +221,8 @@ public class Dispatcher {
 		case SAFE_SPOT_TILE:
 			this.combat_thread.setSafeSpot((RSTile) val.getValue());
 			break;
+		case USE_TELEKINETIC_GRAB:
+			this.looting_thread.setUseTelegrab((Boolean) val.getValue());
 		default:
 			break;
 		}

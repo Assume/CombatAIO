@@ -13,8 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,30 +63,40 @@ public class BaseGUI extends JFrame {
 	private JPanel contentPane;
 
 	private JComboBox<Food> combo_box_food;
+	private JComboBox<Prayer> combo_box_prayer;
+	private JComboBox<Weapon> combo_box_special_attack;
+	private JComboBox<String> combo_box_settings;
+
+	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
 	private JPanel tab_one_panel;
 	private JPanel tab_two_panel;
 	private JPanel tab_three_panel;
 	private JPanel tab_four_panel;
 
-	private JComboBox<Prayer> combo_box_prayer;
-	private JLabel lblPrayer;
 	private JTable table_loot;
 	private JTable table_banking_items;
-	private JLabel lblBankItems;
+
 	private JScrollPane scrollPane_1;
+
 	private JCheckBox chckbx_flicker;
 	private JCheckBox chckbx_guthans;
 	private JCheckBox chckbx_ranged;
 	private JCheckBox chckbx_wait_for_loot;
 	private JCheckBox chckbx_loot_in_combat;
+	private JCheckBox chckbx_telekinetic_grab;
+
+	private JLabel lblBankItems;
+	private JLabel lblPrayer;
 	private JLabel lblOnlySome;
+	private JLabel lblPossible;
+	private JLabel lblSelected;
+	private JLabel lblSpecialAttack;
+
+	private JButton btnNewButton;
 	private JButton button;
 	private JButton button_add_to_possible;
 	private JButton button_remove_from_possible;
-	private JLabel lblPossible;
-	private JLabel lblSelected;
-	private JButton btnNewButton;
 
 	private JList<String> list_possible_monsters;
 	private JList<String> list_selected_monsters;
@@ -96,21 +104,17 @@ public class BaseGUI extends JFrame {
 	private DefaultListModel<String> model_possible_monsters;
 	private DefaultListModel<String> model_selected_monsters;
 
-	private JComboBox<Weapon> combo_box_special_attack;
-	private JComboBox<String> combo_box_settings;
-	private JLabel lblSpecialAttack;
 	private JTextField text_field_loot_over_x;
 
 	private JSpinner spinner_food;
 	private JSpinner spinner_combat_radius;
 	private JSpinner spinner_world_hop_tolerance;
-	private RSTile safe_spot_tile;
 
-	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
+	private RSTile safe_spot_tile;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 645, 367);
+		setBounds(100, 100, 645, 347);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -194,7 +198,7 @@ public class BaseGUI extends JFrame {
 		tab_two_panel.add(lblNewLabel);
 
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(227, 31, 217, 227);
+		scrollPane_1.setBounds(315, 31, 269, 227);
 		tab_two_panel.add(scrollPane_1);
 
 		table_banking_items = new JTable();
@@ -214,27 +218,33 @@ public class BaseGUI extends JFrame {
 		new String[] { "Item ID", "Amount" }));
 
 		lblBankItems = new JLabel("Bank items");
-		lblBankItems.setBounds(227, 11, 70, 14);
+		lblBankItems.setBounds(374, 11, 70, 14);
 		tab_two_panel.add(lblBankItems);
 
 		JLabel lblLootOverX = new JLabel("Loot over X");
-		lblLootOverX.setBounds(10, 268, 70, 14);
+		lblLootOverX.setBounds(202, 38, 70, 14);
 		tab_two_panel.add(lblLootOverX);
 
 		text_field_loot_over_x = new JTextField();
-		text_field_loot_over_x.setBounds(87, 265, 105, 20);
+		text_field_loot_over_x.setBounds(225, 63, 80, 20);
 		tab_two_panel.add(text_field_loot_over_x);
 		text_field_loot_over_x.setColumns(10);
 		if (Dispatcher.get().isLiteMode())
 			text_field_loot_over_x.setEditable(false);
 
 		chckbx_wait_for_loot = new JCheckBox("Wait for loot");
-		chckbx_wait_for_loot.setBounds(213, 264, 111, 23);
+		chckbx_wait_for_loot.setBounds(198, 90, 111, 23);
 		tab_two_panel.add(chckbx_wait_for_loot);
 
 		chckbx_loot_in_combat = new JCheckBox("Loot in combat");
-		chckbx_loot_in_combat.setBounds(333, 264, 111, 23);
+		chckbx_loot_in_combat.setBounds(198, 116, 111, 23);
 		tab_two_panel.add(chckbx_loot_in_combat);
+
+		chckbx_telekinetic_grab = new JCheckBox("Telekinetic Grab");
+		chckbx_telekinetic_grab.setBounds(198, 142, 116, 23);
+		tab_two_panel.add(chckbx_telekinetic_grab);
+		if (Dispatcher.get().isLiteMode())
+			this.chckbx_telekinetic_grab.setEnabled(false);
 		tabbedPane.addTab("Combat", tab_three_panel);
 		tab_three_panel.setLayout(null);
 		tabbedPane.addTab("Advanced", tab_four_panel);
@@ -293,7 +303,7 @@ public class BaseGUI extends JFrame {
 
 		lblOnlySome = new JLabel(
 				"* Only piety and chivalry are supported for flicker");
-		lblOnlySome.setBounds(10, 243, 262, 14);
+		lblOnlySome.setBounds(10, 217, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
 		chckbx_ranged = new JCheckBox("Ranged/Magic");
@@ -323,7 +333,7 @@ public class BaseGUI extends JFrame {
 			spinner_world_hop_tolerance.setEnabled(false);
 
 		lblNewLabel_1 = new JLabel("** Leave at -1 for no hopping");
-		lblNewLabel_1.setBounds(10, 268, 240, 14);
+		lblNewLabel_1.setBounds(10, 242, 240, 14);
 		tab_three_panel.add(lblNewLabel_1);
 
 		lbl_safe_spot = new JLabel("Safe spot: ");
@@ -365,7 +375,7 @@ public class BaseGUI extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnStart.setBounds(354, 259, 89, 23);
+		btnStart.setBounds(516, 236, 89, 23);
 		tab_one_panel.add(btnStart);
 
 		JButton btnSave = new JButton("Save");
@@ -383,7 +393,7 @@ public class BaseGUI extends JFrame {
 				saveMovements(name);
 			}
 		});
-		btnSave.setBounds(141, 259, 89, 23);
+		btnSave.setBounds(141, 236, 89, 23);
 		tab_one_panel.add(btnSave);
 
 		JButton btnLoad = new JButton("Load");
@@ -396,7 +406,7 @@ public class BaseGUI extends JFrame {
 				loadMovements(name);
 			}
 		});
-		btnLoad.setBounds(42, 259, 89, 23);
+		btnLoad.setBounds(39, 236, 89, 23);
 		tab_one_panel.add(btnLoad);
 
 		JLabel lblWithdrawAmount = new JLabel("Amount");
@@ -409,7 +419,7 @@ public class BaseGUI extends JFrame {
 		spinner_food.setValue(12);
 
 		combo_box_settings = new JComboBox<String>();
-		combo_box_settings.setBounds(10, 228, 121, 20);
+		combo_box_settings.setBounds(10, 208, 121, 20);
 		tab_one_panel.add(combo_box_settings);
 		combo_box_settings.setModel(this.model_combo_box);
 
@@ -545,6 +555,10 @@ public class BaseGUI extends JFrame {
 						.getValue().toString())));
 		Dispatcher.get().set(ValueType.SAFE_SPOT_TILE,
 				new Value<RSTile>(this.safe_spot_tile));
+		Dispatcher.get().set(
+				ValueType.USE_TELEKINETIC_GRAB,
+				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
+						: chckbx_telekinetic_grab.isSelected()));
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
 					ValueType.MINIMUM_LOOT_VALUE,
@@ -631,6 +645,11 @@ public class BaseGUI extends JFrame {
 			String safe_spot_tile_text = this.safe_spot_tile == null ? "null"
 					: this.safe_spot_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("safe_spot_tile", safe_spot_tile_text);
+			prop.setProperty(
+					"tele_grab",
+					((Boolean) Dispatcher.get()
+							.get(ValueType.USE_TELEKINETIC_GRAB).getValue())
+							.toString());
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -684,6 +703,8 @@ public class BaseGUI extends JFrame {
 			spinner_world_hop_tolerance
 					.setValue(Dispatcher.get().isLiteMode() ? -1 : Integer
 							.parseInt(prop.getProperty("world_hop_tolerance")));
+			chckbx_ranged.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean("tele_grab"));
 			if (Dispatcher.get().isLiteMode())
 				this.safe_spot_tile = null;
 			else
@@ -880,5 +901,4 @@ public class BaseGUI extends JFrame {
 		JOptionPane.showMessageDialog(null, feature_name
 				+ " is only available on CombatAIO Premium");
 	}
-
 }

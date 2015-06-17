@@ -24,6 +24,7 @@ import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
@@ -40,6 +41,8 @@ public class Looter extends Threadable implements Pauseable {
 	private boolean eat_for_space = true;
 	private boolean wait_for_loot;
 	private boolean loot_in_combat;
+	private boolean use_tele_grab;
+
 	private RSNPC nil = null;
 	private int minimum_price = Integer.MAX_VALUE;
 
@@ -57,13 +60,6 @@ public class Looter extends Threadable implements Pauseable {
 
 	private Looter(List<PauseType> pause_types) {
 		super(pause_types);
-	}
-
-	public Value<Integer> getTotalLootValue() {
-		int tot = 0;
-		for (LootItem x : this.items_known.values())
-			tot += (x.getAmountLooted() * x.getPrice());
-		return new Value<Integer>(tot);
 	}
 
 	public void addPossibleLootItem(boolean always_loot, boolean[] alch,
@@ -162,7 +158,15 @@ public class Looter extends Threadable implements Pauseable {
 				continue;
 			final int total_item_in_inventory = getInventoryCountOfItem(name);
 			final int total_items_in_inventory = getTotalInventoryCount();
-			Clicking.click("Take " + name, x);
+			if (this.use_tele_grab)
+				if (!NormalSpell.TELEKINETIC_GRAB.canCast())
+					return;
+				else
+					NormalSpell.TELEKINETIC_GRAB.select();
+			if (this.use_tele_grab)
+				Clicking.click("Cast Telekinetic Grab -> " + name, x);
+			else
+				Clicking.click("Take " + name, x);
 			Timing.waitCondition(new Condition() {
 				@Override
 				public boolean active() {
@@ -232,45 +236,6 @@ public class Looter extends Threadable implements Pauseable {
 
 	}
 
-	private String[] getAllItemNames() {
-		Set<String> key_set = this.items_known.keySet();
-		return key_set.toArray(new String[key_set.size()]);
-	}
-
-	public Value<String[]> getAllItemNamesValue() {
-		return new Value<String[]>(getAllItemNames());
-	}
-
-	/*
-	 * @param extra_paramaters pass the name of the item whose object is wanted
-	 * 
-	 * @return the requested item in LootItemValue form, contains a null object
-	 * if none exists
-	 */
-	public Value<LootItem> getLootItem(String[] extra_paramaters) {
-		if (extra_paramaters.length == 0)
-			return new Value<LootItem>(null);
-		else
-			return new Value<LootItem>(get(extra_paramaters[0]));
-	}
-
-	private LootItem get(String name) {
-		return this.items_known.get(name);
-	}
-
-	public void setMinimumLootValue(int value) {
-		this.minimum_price = value;
-	}
-
-	public Value<Integer> getMinimumLootValue() {
-		return new Value<Integer>(this.minimum_price);
-	}
-
-	public Value<LootItem[]> getLootItems() {
-		Collection<LootItem> items = this.items_known.values();
-		return new Value<LootItem[]>(items.toArray(new LootItem[items.size()]));
-	}
-
 	/*
 	 * @param extra_paramaters pass the name of the item whose value is wanted
 	 * 
@@ -307,32 +272,12 @@ public class Looter extends Threadable implements Pauseable {
 		}
 	}
 
-	public Value<Boolean> shouldEatForSpace() {
-		return new Value<Boolean>(this.eat_for_space);
-	}
-
-	public void setLootInCombat(boolean active) {
-		this.loot_in_combat = active;
-	}
-
-	public boolean lootInCombat() {
-		return this.loot_in_combat;
-	}
-
-	public boolean waitForLoot() {
-		return this.wait_for_loot;
-	}
-
-	public void setWaitForLoot(boolean active) {
-		this.wait_for_loot = active;
-	}
-
 	private RSGroundItem[] getLootableItems() {
 		RSGroundItem[] items = GroundItems.find(getAllItemNames());
 		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
 		for (RSGroundItem x : items) {
 			LootItem r = this.items_known.get(getRSGroundItemName(x));
-			if (!PathFinding.canReach(x, false))
+			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
 				continue;
 			if (r != null) {
 				if (r.shouldAlwaysLoot())
@@ -379,6 +324,80 @@ public class Looter extends Threadable implements Pauseable {
 		if (def == null)
 			return null;
 		return def.getName();
+	}
+
+	public Value<Boolean> shouldUseTelegrab() {
+		return new Value<Boolean>(this.use_tele_grab);
+	}
+
+	public void setUseTelegrab(boolean use) {
+		this.use_tele_grab = use;
+	}
+
+	public Value<Boolean> shouldEatForSpace() {
+		return new Value<Boolean>(this.eat_for_space);
+	}
+
+	public void setLootInCombat(boolean active) {
+		this.loot_in_combat = active;
+	}
+
+	public boolean lootInCombat() {
+		return this.loot_in_combat;
+	}
+
+	public boolean waitForLoot() {
+		return this.wait_for_loot;
+	}
+
+	public void setWaitForLoot(boolean active) {
+		this.wait_for_loot = active;
+	}
+
+	private String[] getAllItemNames() {
+		Set<String> key_set = this.items_known.keySet();
+		return key_set.toArray(new String[key_set.size()]);
+	}
+
+	public Value<String[]> getAllItemNamesValue() {
+		return new Value<String[]>(getAllItemNames());
+	}
+
+	/*
+	 * @param extra_paramaters pass the name of the item whose object is wanted
+	 * 
+	 * @return the requested item in LootItemValue form, contains a null object
+	 * if none exists
+	 */
+	public Value<LootItem> getLootItem(String[] extra_paramaters) {
+		if (extra_paramaters.length == 0)
+			return new Value<LootItem>(null);
+		else
+			return new Value<LootItem>(get(extra_paramaters[0]));
+	}
+
+	private LootItem get(String name) {
+		return this.items_known.get(name);
+	}
+
+	public void setMinimumLootValue(int value) {
+		this.minimum_price = value;
+	}
+
+	public Value<Integer> getMinimumLootValue() {
+		return new Value<Integer>(this.minimum_price);
+	}
+
+	public Value<LootItem[]> getLootItems() {
+		Collection<LootItem> items = this.items_known.values();
+		return new Value<LootItem[]>(items.toArray(new LootItem[items.size()]));
+	}
+
+	public Value<Integer> getTotalLootValue() {
+		int tot = 0;
+		for (LootItem x : this.items_known.values())
+			tot += (x.getAmountLooted() * x.getPrice());
+		return new Value<Integer>(tot);
 	}
 
 }

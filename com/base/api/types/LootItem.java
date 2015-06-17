@@ -21,6 +21,8 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
+import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class LootItem implements Comparable<LootItem> {
 
@@ -51,7 +53,11 @@ public class LootItem implements Comparable<LootItem> {
 	}
 
 	public int incrementAmountLooted(int by) {
-		return this.amount_looted += by;
+		if (this.id == (Integer) Dispatcher.get().get(ValueType.AMMO_ID)
+				.getValue())
+			return (this.amount_looted = 0);
+		else
+			return this.amount_looted += by;
 	}
 
 	public boolean shouldAlwaysLoot() {
@@ -87,7 +93,7 @@ public class LootItem implements Comparable<LootItem> {
 		this.id = id;
 		if (id == 995)
 			this.price = 1;
-		this.setImage();
+		this.setImageAndPrice();
 	}
 
 	public int getId() {
@@ -102,9 +108,8 @@ public class LootItem implements Comparable<LootItem> {
 		return this.icon;
 	}
 
-	private void setImage() {
+	private void setImageAndPrice() {
 		new Timer().schedule(new TimerTask() {
-
 			@Override
 			public void run() {
 				icon = getIcon(id);
