@@ -33,4 +33,10 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 		return false;
 	}
 
+	@Override
+	protected void update(RSGroundItem t) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

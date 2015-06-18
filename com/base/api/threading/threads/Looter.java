@@ -149,7 +149,7 @@ public class Looter extends Threadable implements Pauseable {
 			if (Inventory.isFull())
 				if (!eatForSpace(x))
 					break;
-			if (Inventory.isFull())
+			if (Inventory.isFull() && !itemIsStackableAndInInventory(x))
 				continue;
 			if (!x.isOnScreen())
 				Camera.turnToTile(x.getPosition());
@@ -182,13 +182,25 @@ public class Looter extends Threadable implements Pauseable {
 		}
 	}
 
+	private boolean itemIsStackableAndInInventory(RSGroundItem x) {
+		RSItem[] inventory = Inventory.find(x.getID());
+		if (inventory.length > 0) {
+			RSItemDefinition def = inventory[0].getDefinition();
+			if (def != null && def.isStackable())
+				return true;
+		}
+		return false;
+	}
+
 	private boolean eatForSpace(RSGroundItem x) {
 		if ((Boolean) Dispatcher.get().get(ValueType.IS_BONES_TO_PEACHES)
 				.getValue()) {
 			RSItemDefinition def = x.getDefinition();
-			if (def.getName().equalsIgnoreCase("bones"))
+			if (def != null && def.getName().equalsIgnoreCase("bones"))
 				return true;
 		}
+		if (itemIsStackableAndInInventory(x))
+			return true;
 		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
 				.get(ValueType.FOOD).getValue()).getId());
 		if (food.length > 0) {

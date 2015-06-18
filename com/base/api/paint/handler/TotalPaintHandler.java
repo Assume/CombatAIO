@@ -3,14 +3,12 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.text.DecimalFormat;
 
+import scripts.CombatAIO.com.base.api.paint.types.ButtonDisplay;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
-public class TotalPaintHandler implements PaintHandler {
-
-	private static final String VERSION_NUMBER = "2.0.6_5";
+public class TotalPaintHandler extends PaintHandler {
 
 	private MonsterPaintHandler monster_paint_handler;
 
@@ -18,31 +16,53 @@ public class TotalPaintHandler implements PaintHandler {
 
 	private ExperiencePaintHandler experience_paint_handler;
 
+	private ButtonDisplay show_gui_button;
+
+	private ButtonDisplay hide_paint_button;
+
 	private final static Color color1 = new Color(155, 155, 155, 110);
 	private final static Color color2 = new Color(0, 0, 0);
 	private final static Font font2 = new Font("Arial", 0, 11);
 
 	private boolean show_paint = true;
 
-	public TotalPaintHandler() {
+	private String version;
+
+	public TotalPaintHandler(String version) {
+		this.version = version;
 		this.experience_paint_handler = new ExperiencePaintHandler();
 		this.monster_paint_handler = new MonsterPaintHandler();
 		this.loot_paint_handler = new LootPaintHandler();
+		this.show_gui_button = (new ButtonDisplay("Show GUI", 255, 430, 12) {
+			@Override
+			protected void onClick() {
+				Dispatcher.get().getGUI().setVisible(true);
+			}
+		});
+
+		this.hide_paint_button = (new ButtonDisplay("Hide", 326, 430, 12) {
+			@Override
+			protected void onClick() {
+				setShowPaint();
+			}
+		});
+
 	}
 
 	public void setValues(final String[] monster_ids, final String... loot_ids) {
 		this.monster_paint_handler = new MonsterPaintHandler();
 	}
 
-	@Override
-	public void onClick(Point p) {
-		if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441)
-			Dispatcher.get().getGUI().setVisible(true);
-		if (p.x >= 326 && p.x <= 364 && p.y >= 430 && p.y <= 441)
-			this.setShowPaint();
-		this.monster_paint_handler.onClick(p);
-		this.loot_paint_handler.onClick(p);
-	}
+	// @Override
+	// public void onClick(Point p) {
+	// if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441)
+	// Dispatcher.get().getGUI().setVisible(true);
+	// if (p.x >= 326 && p.x <= 364 && p.y >= 430 && p.y <= 441)
+	// this.show_gui_button.onClick();
+	// this.hide_paint_button.onClick();
+	// //this.monster_paint_handler.onClick(p);
+	// this.loot_paint_handler.onClick(p);
+	// }
 
 	public void updateAll() {
 		// this.monster_paint_handler.update();
@@ -74,14 +94,15 @@ public class TotalPaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
-		g.setFont(font2);
-		g.setColor(color1);
-		g.fillRect(326, 430, 38, 11);
-		g.setColor(color2);
-		g.drawRect(326, 430, 38, 11);
-		g.drawString("Hide", 336, 440);
+		/*
+		 * g.setFont(font2); g.setColor(color1); g.fillRect(326, 430, 38, 11);
+		 * g.setColor(color2); g.drawRect(326, 430, 38, 11);
+		 * g.drawString("Hide", 336, 440);
+		 */
+		this.hide_paint_button.draw(g);
 		if (!this.show_paint)
 			return;
+		this.show_gui_button.draw(g);
 		this.drawGenericPaint(g, l);
 		this.monster_paint_handler.draw(g, l);
 		this.loot_paint_handler.draw(g, l);
@@ -119,7 +140,7 @@ public class TotalPaintHandler implements PaintHandler {
 						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
 						+ "/HR)",
 				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
-						+ VERSION_NUMBER };
+						+ version };
 
 		g.setFont(font2);
 		int c = 0;
@@ -132,11 +153,10 @@ public class TotalPaintHandler implements PaintHandler {
 			g.drawString(s, 270, 365 + 17 * c);
 			c++;
 		}
-		g.setColor(color1);
-		g.fillRect(255, 430, 66, 11);
-		g.setColor(color2);
-		g.drawRect(255, 430, 66, 11);
-		g.drawString("Show GUI", 265, 440);
+		/*
+		 * g.setColor(color1); g.fillRect(255, 430, 66, 11); g.setColor(color2);
+		 * g.drawRect(255, 430, 66, 11); g.drawString("Show GUI", 265, 440);
+		 */
 	}
 
 	private static int stringLength(String s, Graphics g) {
@@ -150,6 +170,7 @@ public class TotalPaintHandler implements PaintHandler {
 
 	private void setShowPaint() {
 		this.show_paint = !show_paint;
+		this.hide_paint_button.update(this.show_paint ? "Hide" : "Show");
 	}
 
 	@Override

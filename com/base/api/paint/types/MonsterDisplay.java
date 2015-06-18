@@ -50,4 +50,10 @@ public class MonsterDisplay extends Paintable<RSNPC> {
 		return false;
 	}
 
+	@Override
+	protected void update(RSNPC t) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -3,11 +3,14 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 import java.awt.Graphics;
 import java.awt.Point;
 
-public interface PaintHandler {
+public abstract class PaintHandler {
 
-	public void update();
+	public abstract void update();
 
-	public void draw(Graphics g, long run_time);
+	public abstract void draw(Graphics g, long run_time);
 
-	public void onClick(Point p);
+	public final void onClick(Point p) {
+		Paintable.onClick(p);
+	}
+
 }

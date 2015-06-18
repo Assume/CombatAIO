@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
-final class LootPaintHandler implements PaintHandler {
+final class LootPaintHandler extends PaintHandler {
 
 	private List<RSGroundItem> paintable_items;
 
@@ -83,15 +82,6 @@ final class LootPaintHandler implements PaintHandler {
 				tlist.add(def.getName());
 		}
 		return tlist.toArray(new String[tlist.size()]);
-	}
-
-	@Override
-	public void onClick(Point p) {
-		// TODO
-		/*
-		 * for each RSGroundItem in this.paintable_items check if isInClick, if
-		 * so call onClick
-		 */
 	}
 
 }

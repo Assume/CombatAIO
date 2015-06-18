@@ -3,12 +3,11 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
-public class ExperiencePaintHandler implements PaintHandler {
+public class ExperiencePaintHandler extends PaintHandler {
 
 	@Override
 	public void update() {
@@ -21,32 +20,32 @@ public class ExperiencePaintHandler implements PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
-			g.setFont(font1);
-			int i = 0;
-			for (final SkillData skill : SkillData.values()) {
-				if (skill.getExperienceGained() > 0) {
-					// Bar
-					// g.setColor(getCapeColor(100, skill));
-					g.setColor(Color.GRAY);
-					g.fillRect(8, 320 - 16 * i, 242, 12);
+		g.setFont(font1);
+		int i = 0;
+		for (final SkillData skill : SkillData.values()) {
+			if (skill.getExperienceGained() > 0) {
+				// Bar
+				// g.setColor(getCapeColor(100, skill));
+				g.setColor(Color.GRAY);
+				g.fillRect(8, 320 - 16 * i, 242, 12);
 
-					// Progress
-					// g.setColor(getCapeColor(255, skill));
-					g.setColor(inside);
-					g.fillRect(8, 320 - 16 * i,
-							skill.getPercentToNextLevel() * 242 / 100, 12);
+				// Progress
+				// g.setColor(getCapeColor(255, skill));
+				g.setColor(inside);
+				g.fillRect(8, 320 - 16 * i,
+						skill.getPercentToNextLevel() * 242 / 100, 12);
 
-					// Trim
-					// g.setColor(getTrimColor(skill));
-					g.setColor(Color.BLACK);
-					g.drawRect(8, 320 - 16 * i, 242, 13);
+				// Trim
+				// g.setColor(getTrimColor(skill));
+				g.setColor(Color.BLACK);
+				g.drawRect(8, 320 - 16 * i, 242, 13);
 
-					// Text
-					g.setColor(Color.WHITE);
-					g.drawString(toString(l, skill), 11, 331 - 16 * i);
-					i++;
-				}
+				// Text
+				g.setColor(Color.WHITE);
+				g.drawString(toString(l, skill), 11, 331 - 16 * i);
+				i++;
 			}
+		}
 	}
 
 	private String toString(Long runtime, SkillData skill) {
@@ -96,52 +95,6 @@ public class ExperiencePaintHandler implements PaintHandler {
 			minutes -= (hours * 60);
 		}
 		return (hours + ":" + minutes + ":" + seconds);
-	}
-
-	@Override
-	public void onClick(Point p) {
-		return;
-	}
-
-	private static Color getCapeColor(int alpha, SkillData skill) {
-		switch (skill) {
-		case ATTACK:
-			return new Color(138, 17, 17, alpha);
-		case STRENGTH:
-			return new Color(29, 150, 67, alpha);
-		case DEFENCE:
-			return new Color(70, 74, 210, alpha);
-		case RANGED:
-			return new Color(87, 224, 74, alpha);
-		case MAGIC:
-			return new Color(200, 200, 200, alpha);
-		case HITPOINTS:
-			return new Color(200, 200, 200, alpha);
-			// case SLAYER:
-			// return new Color(69, 69, 69, alpha);
-		}
-
-		return null;
-	}
-
-	private static Color getTrimColor(SkillData skill) {
-		switch (skill) {
-		case ATTACK:
-			return new Color(217, 195, 56);
-		case STRENGTH:
-			return new Color(138, 17, 17);
-		case DEFENCE:
-			return new Color(232, 232, 232);
-		case RANGED:
-			return new Color(0, 0, 0);
-		case MAGIC:
-			return new Color(92, 94, 214);
-		case HITPOINTS:
-			return new Color(138, 17, 17);
-			// case SLAYER:
-			// return new Color(110, 0, 0);
-		}
-		return null;
 	}
 
 }

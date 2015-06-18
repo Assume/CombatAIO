@@ -2,19 +2,17 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.paint.types.MonsterDisplay;
 
-final class MonsterPaintHandler implements PaintHandler {
+final class MonsterPaintHandler extends PaintHandler {
 
 	private RSNPC[] paintable_monsters;
 	private RSNPC current_target;
@@ -76,14 +74,5 @@ final class MonsterPaintHandler implements PaintHandler {
 
 	}
 
-	@Override
-	public void onClick(Point p) {
-		// TODO
-		/*
-		 * for each RSNPC in this.paintable_items check if isInClick, if so call
-		 * onClick
-		 */
-
-	}
 
 }

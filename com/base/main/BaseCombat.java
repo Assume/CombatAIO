@@ -31,6 +31,8 @@ import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 public class BaseCombat extends Script implements Painting, MouseActions,
 		Arguments, MessageListening07, Ending {
 
+	public static final String VERSION_NUMBER = "2.0.6_6";
+
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
@@ -43,7 +45,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 	@Override
 	public void run() {
 		// GUI done and what not
-		this.paint_handler = new TotalPaintHandler();
+		this.paint_handler = new TotalPaintHandler(VERSION_NUMBER);
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this, 0);
 		Dispatcher.get().start(name);
