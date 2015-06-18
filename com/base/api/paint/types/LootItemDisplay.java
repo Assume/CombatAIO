@@ -5,8 +5,6 @@ import java.awt.Point;
 
 import org.tribot.api2007.types.RSGroundItem;
 
-import scripts.CombatAIO.com.base.api.paint.handler.Paintable;
-
 public class LootItemDisplay extends Paintable<RSGroundItem> {
 
 	public LootItemDisplay(RSGroundItem t) {
@@ -34,7 +32,7 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 	}
 
 	@Override
-	protected void update(RSGroundItem t) {
+	public void update(RSGroundItem t) {
 		// TODO Auto-generated method stub
 		
 	}

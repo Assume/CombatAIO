@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.paint.handler;
+package scripts.CombatAIO.com.base.api.paint.types;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,9 +9,10 @@ import java.util.List;
 
 public abstract class Paintable<T> {
 
-	protected final static Color color1 = new Color(155, 155, 155, 110);
-	protected final static Color color2 = new Color(0, 0, 0);
-	protected final static Font font2 = new Font("Arial", 0, 11);
+	protected final static Color DARK_GREY = new Color(0, 0, 0, 175);
+	
+	protected final static Color VERY_LIGHT_GREY = new Color(155, 155, 155, 110);
+	protected final static Font ARIAL_SIZE_ELEVEN = new Font("Arial", 0, 11);
 
 	private static final List<Paintable<?>> list_of_paintables = new ArrayList<Paintable<?>>();
 
@@ -30,11 +31,11 @@ public abstract class Paintable<T> {
 
 	protected abstract boolean isInClick(Point p);
 
-	protected void update(T t) {
+	public void update(T t) {
 		this.t = t;
 	}
 
-	protected T get() {
+	public T get() {
 		return this.t;
 	}
 

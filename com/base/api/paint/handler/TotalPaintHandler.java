@@ -1,12 +1,12 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.paint.types.ButtonDisplay;
 import scripts.CombatAIO.com.base.api.paint.types.DataDisplay;
+import scripts.CombatAIO.com.base.api.paint.types.PaintData;
+import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler extends PaintHandler {
@@ -23,9 +23,6 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private DataDisplay generic_data_display;
 
-	private final static Color color1 = new Color(155, 155, 155, 110);
-	private final static Color color2 = new Color(0, 0, 0);
-	private final static Font font2 = new Font("Arial", 0, 11);
 
 	private boolean show_paint = true;
 
@@ -51,7 +48,7 @@ public class TotalPaintHandler extends PaintHandler {
 		});
 
 		this.generic_data_display = new DataDisplay(new String[0], 255, 349,
-				240, 75);
+				240, 76);
 
 	}
 

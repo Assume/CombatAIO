@@ -8,8 +8,6 @@ import java.awt.Polygon;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.paint.handler.Paintable;
-
 public class MonsterDisplay extends Paintable<RSNPC> {
 
 	private boolean target;
@@ -51,9 +49,9 @@ public class MonsterDisplay extends Paintable<RSNPC> {
 	}
 
 	@Override
-	protected void update(RSNPC t) {
+	public void update(RSNPC t) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

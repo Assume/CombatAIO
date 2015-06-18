@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 
+import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
 public class ExperiencePaintHandler extends PaintHandler {

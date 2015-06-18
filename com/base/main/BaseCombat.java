@@ -21,8 +21,8 @@ import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.Painting;
 
-import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
+import scripts.CombatAIO.com.base.api.paint.types.PaintData;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.TrackingUpdater;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;

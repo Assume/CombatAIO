@@ -10,7 +10,7 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
 
-import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
+import scripts.CombatAIO.com.base.api.paint.types.PaintData;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 

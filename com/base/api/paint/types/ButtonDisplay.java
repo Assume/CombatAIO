@@ -1,9 +1,8 @@
 package scripts.CombatAIO.com.base.api.paint.types;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-
-import scripts.CombatAIO.com.base.api.paint.handler.Paintable;
 
 public abstract class ButtonDisplay extends Paintable<String> {
 
@@ -29,10 +28,10 @@ public abstract class ButtonDisplay extends Paintable<String> {
 		this.g = g;
 		int length = super.getStringLength(super.get(), g);
 		length += getTotalLengthAddition(length);
-		g.setColor(color1);
-		g.setFont(font2);
+		g.setColor(VERY_LIGHT_GREY);
+		g.setFont(ARIAL_SIZE_ELEVEN);
 		g.fillRect(x, y, length, height);
-		g.setColor(color2);
+		g.setColor(Color.BLACK);
 		g.drawRect(x, y, length, height);
 		g.drawString(super.get(), x + getAddition(length), y + 10);
 	}

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import scripts.CombatAIO.com.base.api.paint.handler.Paintable;
-
 public class DataDisplay extends Paintable<String[]> {
 
 	private int x;
@@ -27,17 +25,17 @@ public class DataDisplay extends Paintable<String[]> {
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(new Color(0, 0, 0, 175));
+		g.setColor(DARK_GREY);
 		g.fillRect(x, y, width, height);
-		g.setFont(font2);
+		g.setFont(ARIAL_SIZE_ELEVEN);
 		int c = 0;
 		for (String s : super.get()) {
 			g.setColor(new Color(255, 255, 255, 150));
 			int length = super.getStringLength(s, g);
-			g.fillRect(x + 5, y + 5 + 17 * c, length + 20, 13);
-			g.setColor(color2);
-			g.drawRect(x + 5, y + 5 + 17 * c, length + 20, 13);
-			g.drawString(s, 270, 365 + 17 * c);
+			g.fillRect(x + 5, (y + 5) + (17 * c), length + 20, 14);
+			g.setColor(Color.BLACK);
+			g.drawRect(x + 5, (y + 5) + (17 * c), length + 20, 14);
+			g.drawString(s, x + 15, (y + 16) + 17 * c);
 			c++;
 		}
 

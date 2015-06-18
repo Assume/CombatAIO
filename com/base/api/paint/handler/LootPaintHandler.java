@@ -12,6 +12,8 @@ import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.paint.types.PaintData;
+import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
 final class LootPaintHandler extends PaintHandler {

@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.paint.handler;
+package scripts.CombatAIO.com.base.api.paint.types;
 
 import java.awt.Polygon;
 import java.util.Arrays;
