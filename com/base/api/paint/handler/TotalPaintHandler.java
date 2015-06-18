@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.paint.types.ButtonDisplay;
+import scripts.CombatAIO.com.base.api.paint.types.DataDisplay;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler extends PaintHandler {
@@ -20,6 +21,8 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private ButtonDisplay hide_paint_button;
 
+	private DataDisplay generic_data_display;
+
 	private final static Color color1 = new Color(155, 155, 155, 110);
 	private final static Color color2 = new Color(0, 0, 0);
 	private final static Font font2 = new Font("Arial", 0, 11);
@@ -33,19 +36,22 @@ public class TotalPaintHandler extends PaintHandler {
 		this.experience_paint_handler = new ExperiencePaintHandler();
 		this.monster_paint_handler = new MonsterPaintHandler();
 		this.loot_paint_handler = new LootPaintHandler();
-		this.show_gui_button = (new ButtonDisplay("Show GUI", 255, 430, 12) {
+		this.show_gui_button = (new ButtonDisplay("Show GUI", 255, 428, 12) {
 			@Override
 			protected void onClick() {
 				Dispatcher.get().getGUI().setVisible(true);
 			}
 		});
 
-		this.hide_paint_button = (new ButtonDisplay("Hide", 326, 430, 12) {
+		this.hide_paint_button = (new ButtonDisplay("Hide", 320, 428, 12) {
 			@Override
 			protected void onClick() {
 				setShowPaint();
 			}
 		});
+
+		this.generic_data_display = new DataDisplay(new String[0], 255, 349,
+				240, 75);
 
 	}
 
@@ -64,7 +70,8 @@ public class TotalPaintHandler extends PaintHandler {
 	// this.loot_paint_handler.onClick(p);
 	// }
 
-	public void updateAll() {
+	public void updateAll(long run_time) {
+		this.generic_data_display.update(getGenericDataDisplay(run_time));
 		// this.monster_paint_handler.update();
 	}
 
@@ -74,6 +81,30 @@ public class TotalPaintHandler extends PaintHandler {
 
 	public void updateLoot() {
 		this.loot_paint_handler.update();
+	}
+
+	private void setShowPaint() {
+		this.show_paint = !show_paint;
+		this.hide_paint_button.update(this.show_paint ? "Hide" : "Show");
+	}
+
+	private String[] getGenericDataDisplay(long run_time) {
+		int kill_count = PaintData.getMonsterKills();
+		int total_profit = PaintData.getProfit();
+
+		String[] info_array = {
+				"Runtime: " + getFormattedTime(run_time),
+				"Kills: " + kill_count + " ("
+						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
+				"Profit: "
+						+ formatNumber(total_profit)
+						+ " ("
+						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
+						+ "/HR)",
+				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
+						+ version };
+		return info_array;
+
 	}
 
 	private String getFormattedTime(long time) {
@@ -94,16 +125,11 @@ public class TotalPaintHandler extends PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
-		/*
-		 * g.setFont(font2); g.setColor(color1); g.fillRect(326, 430, 38, 11);
-		 * g.setColor(color2); g.drawRect(326, 430, 38, 11);
-		 * g.drawString("Hide", 336, 440);
-		 */
 		this.hide_paint_button.draw(g);
 		if (!this.show_paint)
 			return;
 		this.show_gui_button.draw(g);
-		this.drawGenericPaint(g, l);
+		this.generic_data_display.draw(g);
 		this.monster_paint_handler.draw(g, l);
 		this.loot_paint_handler.draw(g, l);
 		this.experience_paint_handler.draw(g, l);
@@ -123,59 +149,8 @@ public class TotalPaintHandler extends PaintHandler {
 		return "" + num;
 	}
 
-	private void drawGenericPaint(Graphics g, long run_time) {
-		int kill_count = PaintData.getMonsterKills();
-		int total_profit = PaintData.getProfit();
-
-		g.setColor(new Color(0, 0, 0, 175));
-		g.fillRect(255, 349, 240, 78);
-
-		String[] infoArray = {
-				"Runtime: " + getFormattedTime(run_time),
-				"Kills: " + kill_count + " ("
-						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
-				"Profit: "
-						+ formatNumber(total_profit)
-						+ " ("
-						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
-						+ "/HR)",
-				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
-						+ version };
-
-		g.setFont(font2);
-		int c = 0;
-		for (String s : infoArray) {
-			g.setColor(new Color(255, 255, 255, 150));
-			int length = stringLength(s, g);
-			g.fillRect(260, 354 + 17 * c, length + 20, 13);
-			g.setColor(color2);
-			g.drawRect(260, 354 + 17 * c, length + 20, 13);
-			g.drawString(s, 270, 365 + 17 * c);
-			c++;
-		}
-		/*
-		 * g.setColor(color1); g.fillRect(255, 430, 66, 11); g.setColor(color2);
-		 * g.drawRect(255, 430, 66, 11); g.drawString("Show GUI", 265, 440);
-		 */
-	}
-
-	private static int stringLength(String s, Graphics g) {
-		int x = 0;
-		for (int c1 = 0; c1 < s.length(); c1++) {
-			char ch = s.charAt(c1);
-			x += g.getFontMetrics().charWidth(ch);
-		}
-		return x;
-	}
-
-	private void setShowPaint() {
-		this.show_paint = !show_paint;
-		this.hide_paint_button.update(this.show_paint ? "Hide" : "Show");
-	}
-
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 
 	}
 

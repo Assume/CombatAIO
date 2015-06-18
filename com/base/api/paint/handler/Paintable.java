@@ -24,7 +24,7 @@ public abstract class Paintable<T> {
 		Paintable.list_of_paintables.add(this);
 	}
 
-	protected abstract void draw(Graphics g);
+	public abstract void draw(Graphics g);
 
 	protected abstract void onClick();
 

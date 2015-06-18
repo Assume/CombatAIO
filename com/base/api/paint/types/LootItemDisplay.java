@@ -14,7 +14,7 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 	}
 
 	@Override
-	protected void draw(Graphics g) {
+	public void draw(Graphics g) {
 		// TODO check if display is open (if we use that on RSGroundItem
 		// otherwise override isOpen to always return false)
 		// 
