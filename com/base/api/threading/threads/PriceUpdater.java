@@ -14,6 +14,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class PriceUpdater extends Threadable implements Runnable {
 
@@ -45,7 +46,7 @@ public class PriceUpdater extends Threadable implements Runnable {
 				if (def == null)
 					continue;
 				String name = def.getName();
-				if (Dispatcher.get().get(ValueType.LOOT_ITEM, name) != null)
+				if (Dispatcher.get().get(ValueType.LOOT_ITEM, name).getValue() != null)
 					continue;
 				int price = LootItem.getPrice(id);
 				LootItem temp = new LootItem(name, false, false);

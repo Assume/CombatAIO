@@ -28,13 +28,13 @@ public class ExperiencePaintHandler extends PaintHandler {
 				// Bar
 				// g.setColor(getCapeColor(100, skill));
 				g.setColor(Color.GRAY);
-				g.fillRect(8, 320 - 16 * i, 242, 12);
+				g.fillRect(8, 320 - 16 * i, 242, 13);
 
 				// Progress
 				// g.setColor(getCapeColor(255, skill));
 				g.setColor(inside);
 				g.fillRect(8, 320 - 16 * i,
-						skill.getPercentToNextLevel() * 242 / 100, 12);
+						skill.getPercentToNextLevel() * 242 / 100, 13);
 
 				// Trim
 				// g.setColor(getTrimColor(skill));

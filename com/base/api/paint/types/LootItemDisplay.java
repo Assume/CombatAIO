@@ -4,8 +4,12 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 import org.tribot.api2007.types.RSGroundItem;
+import org.tribot.api2007.types.RSModel;
 
 public class LootItemDisplay extends Paintable<RSGroundItem> {
+
+	private int x;
+	private int y;
 
 	public LootItemDisplay(RSGroundItem t) {
 		super(t);
@@ -13,10 +17,9 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 
 	@Override
 	public void draw(Graphics g) {
-		// TODO check if display is open (if we use that on RSGroundItem
-		// otherwise override isOpen to always return false)
-		// 
-
+		if (this.isOpen()) {
+			g.setFont(ARIAL_SIZE_ELEVEN);
+		}
 	}
 
 	@Override
@@ -33,8 +36,13 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 
 	@Override
 	public void update(RSGroundItem t) {
-		// TODO Auto-generated method stub
-		
+		RSModel model = t.getModel();
+		if (model != null) {
+			Point center = model.getCentrePoint();
+			this.x = (int) center.getX();
+			this.y = (int) center.getY();
+		}
+
 	}
 
 }

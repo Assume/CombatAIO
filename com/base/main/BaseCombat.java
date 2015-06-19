@@ -75,7 +75,6 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 		} catch (Exception e) {
 
 		}
-
 	}
 
 	@Override

@@ -23,7 +23,6 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private DataDisplay generic_data_display;
 
-
 	private boolean show_paint = true;
 
 	private String version;
@@ -58,6 +57,7 @@ public class TotalPaintHandler extends PaintHandler {
 
 	public void updateAll(long run_time) {
 		this.generic_data_display.update(getGenericDataDisplay(run_time));
+		this.updateLoot();
 	}
 
 	public void updateMonsters() {

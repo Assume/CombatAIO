@@ -1,9 +1,7 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +10,22 @@ import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.paint.types.LootedItemsDisplay;
 import scripts.CombatAIO.com.base.api.paint.types.PaintData;
 import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
-import scripts.CombatAIO.com.base.api.types.LootItem;
 
 final class LootPaintHandler extends PaintHandler {
 
 	private List<RSGroundItem> paintable_items;
+	private LootedItemsDisplay loot_item_display;
+
+	public LootPaintHandler() {
+		this.loot_item_display = new LootedItemsDisplay(null, 475, 12, true);
+	}
 
 	@Override
 	public void update() {
+		this.loot_item_display.update(PaintData.getLootItems());
 	}
 
 	@Override
@@ -34,29 +38,8 @@ final class LootPaintHandler extends PaintHandler {
 		 * (String y : unique_names) g.drawString(y, tile.getX(), tile.getY() +
 		 * (i * 10)); }
 		 */
-		int space = 0;
-		LootItem[] looted_items = PaintData.getLootItems();
-		Arrays.sort(looted_items);
-		int x = 475;
-		int tot_drawn = 0;
-		for (LootItem y : looted_items) {
-			if (y.getAmountLooted() > 0) {
-				if (tot_drawn != 00 && tot_drawn % 8 == 0) {
-					x -= 41;
-					space = 0;
-				}
-				g.setColor(new Color(0, 0, 0, 110));
-				g.fillRect(x, 15 + 40 * space - 3, 38, 38);
-				g.setColor(Color.RED);
-				g.drawRect(x, 15 + 40 * space - 3, 38, 38);
-				g.drawImage(y.getIcon(), x + 4, 15 + 40 * space, null, null);
-				g.drawString(
-						TotalPaintHandler.formatNumber(y.getAmountLooted()),
-						x + 4, 24 + 40 * space);
-				tot_drawn++;
-				space++;
-			}
-		}
+		this.loot_item_display.draw(g);
+
 	}
 
 	private Map<RSTile, List<RSGroundItem>> sort() {

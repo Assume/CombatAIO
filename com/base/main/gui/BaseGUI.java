@@ -548,7 +548,7 @@ public class BaseGUI extends JFrame {
 				ValueType.COMBAT_RADIUS,
 				new Value<Integer>(Integer.parseInt(spinner_combat_radius
 						.getValue().toString())));
-		String loot_over_x = text_field_loot_over_x.getText();
+
 		Dispatcher.get().set(
 				ValueType.WORLD_HOP_TOLERANCE,
 				new Value<Integer>(Integer.parseInt(spinner_world_hop_tolerance
@@ -559,6 +559,7 @@ public class BaseGUI extends JFrame {
 				ValueType.USE_TELEKINETIC_GRAB,
 				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
 						: chckbx_telekinetic_grab.isSelected()));
+		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
 					ValueType.MINIMUM_LOOT_VALUE,

@@ -88,6 +88,7 @@ public class Looter extends Threadable implements Pauseable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
+			RSGroundItem[] possible_items = getLootableItems();
 			if (this.loot_in_combat && Combat.getAttackingEntities().length > 0
 					&& this.lootIsOnGround()) {
 				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
