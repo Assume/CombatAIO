@@ -56,20 +56,8 @@ public class TotalPaintHandler extends PaintHandler {
 		this.monster_paint_handler = new MonsterPaintHandler();
 	}
 
-	// @Override
-	// public void onClick(Point p) {
-	// if (p.x >= 255 && p.x <= 321 && p.y >= 430 && p.y <= 441)
-	// Dispatcher.get().getGUI().setVisible(true);
-	// if (p.x >= 326 && p.x <= 364 && p.y >= 430 && p.y <= 441)
-	// this.show_gui_button.onClick();
-	// this.hide_paint_button.onClick();
-	// //this.monster_paint_handler.onClick(p);
-	// this.loot_paint_handler.onClick(p);
-	// }
-
 	public void updateAll(long run_time) {
 		this.generic_data_display.update(getGenericDataDisplay(run_time));
-		// this.monster_paint_handler.update();
 	}
 
 	public void updateMonsters() {
