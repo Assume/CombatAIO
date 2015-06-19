@@ -19,6 +19,7 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 	public void draw(Graphics g) {
 		if (this.isOpen()) {
 			g.setFont(ARIAL_SIZE_ELEVEN);
+
 		}
 	}
 

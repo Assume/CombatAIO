@@ -1,12 +1,12 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
-import java.text.DecimalFormat;
 
 import scripts.CombatAIO.com.base.api.paint.types.ButtonDisplay;
 import scripts.CombatAIO.com.base.api.paint.types.DataDisplay;
 import scripts.CombatAIO.com.base.api.paint.types.PaintData;
 import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
+import scripts.CombatAIO.com.base.api.paint.types.Paintable;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 
 public class TotalPaintHandler extends PaintHandler {
@@ -82,9 +82,10 @@ public class TotalPaintHandler extends PaintHandler {
 				"Kills: " + kill_count + " ("
 						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
 				"Profit: "
-						+ formatNumber(total_profit)
+						+ Paintable.formatNumber(total_profit)
 						+ " ("
-						+ formatNumber((int) ((3600000.0 / run_time) * total_profit))
+						+ Paintable
+								.formatNumber((int) ((3600000.0 / run_time) * total_profit))
 						+ "/HR)",
 				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
 						+ version };
@@ -119,19 +120,6 @@ public class TotalPaintHandler extends PaintHandler {
 		this.loot_paint_handler.draw(g, l);
 		this.experience_paint_handler.draw(g, l);
 
-	}
-
-	public static String formatNumber(int num) {
-		DecimalFormat df = new DecimalFormat("0");
-		double i = num;
-		if (i >= 1000000)
-			if (i % 1000000 == 0)
-				return df.format(i / 1000000) + "M";
-			else
-				return (i / 1000000) + "M";
-		if (i >= 1000)
-			return df.format((i / 1000)) + "k";
-		return "" + num;
 	}
 
 	@Override

@@ -31,24 +31,25 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 			return;
 		int space = 0;
 		Arrays.sort(super.get());
+		int temp_x = x;
 		int tot_drawn = 0;
 		for (LootItem loot_item : super.get()) {
 			if (loot_item.getAmountLooted() > 0) {
 				if (tot_drawn != 0 && tot_drawn % 8 == 0) {
 					if (this.move_left_on_overflow)
-						x -= 41;
+						temp_x -= 41;
 					else
-						x += 41;
+						temp_x += 41;
 					space = 0;
 				}
 				g.setColor(new Color(0, 0, 0, 110));
-				g.fillRect(x, y + (40 * space), 38, 38);
+				g.fillRect(temp_x, y + (40 * space), 38, 38);
 				g.setColor(Color.RED);
-				g.drawRect(x, y + (40 * space), 38, 38);
-				g.drawImage(loot_item.getIcon(), x + 4, y + 3 + (40 * space),
-						null, null);
-				g.drawString(TotalPaintHandler.formatNumber(loot_item
-						.getAmountLooted()), x + 4, y + 12 + (40 * space));
+				g.drawRect(temp_x, y + (40 * space), 38, 38);
+				g.drawImage(loot_item.getIcon(), temp_x + 4, y + 3
+						+ (40 * space), null, null);
+				g.drawString(formatNumber(loot_item.getAmountLooted()),
+						temp_x + 4, y + 12 + (40 * space));
 				tot_drawn++;
 				space++;
 			}
