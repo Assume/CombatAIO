@@ -582,7 +582,7 @@ public class BaseGUI extends JFrame {
 	}
 
 	private void setBankingList() {
-		Banker b = (Banker) Dispatcher.get().getBanker();
+		Banker b = Dispatcher.get().getBanker();
 		for (int i = 0; i < 28; i++) {
 			Object id = table_banking_items.getValueAt(i, 0);
 			Object amount = table_banking_items.getValueAt(i, 1);
@@ -620,10 +620,10 @@ public class BaseGUI extends JFrame {
 					intArrayToString(((int[]) Dispatcher.get()
 							.get(ValueType.MONSTER_IDS).getValue())));
 			prop.setProperty("bank_item_ids",
-					intArrayToString((int[]) Dispatcher.get().getBanker()
+					intArrayToString(Dispatcher.get().getBanker()
 							.getItemIds()));
 			prop.setProperty("bank_item_amounts",
-					intArrayToString((int[]) Dispatcher.get().getBanker()
+					intArrayToString(Dispatcher.get().getBanker()
 							.getItemAmounts()));
 			prop.setProperty("minimum_loot_value",
 					Dispatcher.get().get(ValueType.MINIMUM_LOOT_VALUE)

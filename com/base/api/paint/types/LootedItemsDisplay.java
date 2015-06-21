@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Arrays;
 
-import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
 public class LootedItemsDisplay extends Paintable<LootItem[]> {

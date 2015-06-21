@@ -5,10 +5,8 @@ import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.GameTab.TABS;
-import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
@@ -63,7 +61,7 @@ public enum Weapon {
 				return getSpecialPercent() < start_special;
 			}
 		}, 3500);
-		RSNPC curr_atr = (RSNPC) task.getCurrentTarget().getValue();
+		RSNPC curr_atr =  task.getCurrentTarget().getValue();
 		if (this.getSpecialPercent() >= this.getSpecialUsage()
 				&& curr_atr != null && curr_atr.isValid())
 			this.useSpecial(task, wep_id, shield_id);

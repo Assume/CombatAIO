@@ -105,7 +105,7 @@ public class BMainGui extends JFrame {
 		JButton btnAddAction = new JButton("Add");
 		btnAddAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DAction ac = (DAction) ((DActionMaker) comboBoxActions
+				DAction ac = ((DActionMaker) comboBoxActions
 						.getSelectedItem()).make();
 				action_list_model.addElement(ac);
 			}

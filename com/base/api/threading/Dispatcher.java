@@ -3,7 +3,6 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
-import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;

@@ -125,8 +125,8 @@ public class CombatHelper {
 		if (this.special_attack_weapon == Weapon.NONE)
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
-				&& this.getNPCHPPercent((RSNPC) this.combat_task
-						.getCurrentTarget().getValue()) >= 30) {
+				&& this.getNPCHPPercent(this.combat_task.getCurrentTarget()
+						.getValue()) >= 30) {
 			int wep_id = -1;
 			int shield_id = -1;
 			RSItem temp = Equipment.getItem(SLOTS.WEAPON);

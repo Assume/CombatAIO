@@ -14,7 +14,6 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
-import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public class PriceUpdater extends Threadable implements Runnable {
 

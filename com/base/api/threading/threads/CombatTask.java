@@ -33,7 +33,7 @@ import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.GenericMethods;
 
-public class CombatTask extends Threadable implements Runnable, Pauseable {
+public class CombatTask extends Threadable implements Pauseable {
 
 	private static final String ROCK_CRABS_ASLEEP_NAME = "Rocks";
 

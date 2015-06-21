@@ -17,6 +17,8 @@ public abstract class Threadable extends Thread implements Pauseable {
 	public boolean isPaused() {
 		return this.pause;
 	}
+	
+	public abstract void run();
 
 	public void setPaused(boolean set) {
 		this.pause = set;

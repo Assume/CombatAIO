@@ -17,9 +17,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.main.GenericMethods;
 
-public class ConsumptionTask extends Threadable implements Runnable {
-
-	private int vial_id = 229;
+public class ConsumptionTask extends Threadable {
 
 	public ConsumptionTask() {
 		this(null);

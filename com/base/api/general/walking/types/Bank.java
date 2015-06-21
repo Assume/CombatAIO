@@ -3,7 +3,6 @@ package scripts.CombatAIO.com.base.api.general.walking.types;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
-import org.tribot.api2007.util.DPathNavigator;
 
 public enum Bank {
 

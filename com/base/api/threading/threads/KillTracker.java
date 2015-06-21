@@ -9,7 +9,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Threadable;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
-public class KillTracker extends Threadable implements Runnable {
+public class KillTracker extends Threadable {
 	// TODO FIGURE OUT
 
 	public KillTracker(CombatTask combat_thread) {
