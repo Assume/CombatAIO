@@ -12,12 +12,8 @@ public abstract class ButtonDisplay extends Paintable<String> {
 
 	private Graphics g;
 
-	private ButtonDisplay(String t) {
-		super(t);
-	}
-
 	public ButtonDisplay(String t, int x, int y, int height) {
-		this(t);
+		super(t);
 		this.x = x;
 		this.y = y;
 		this.height = height;

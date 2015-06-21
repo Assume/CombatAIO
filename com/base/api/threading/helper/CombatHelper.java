@@ -223,7 +223,7 @@ public class CombatHelper {
 	public void runDefaultChecks() {
 		checkRun();
 		checkUse();
-		Dispatcher.get().alch();
+		Dispatcher.get().getLooter().alch();
 		usePrayer(this.prayer);
 	}
 

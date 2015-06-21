@@ -218,6 +218,25 @@ public class Looter extends Threadable implements Pauseable {
 		return false;
 	}
 
+	public void alch() {
+		if (Dispatcher.get().isLiteMode())
+			return;
+		String names[] = getAllItemNames();
+		if (names.length == 0)
+			return;
+		RSItem[] items = Inventory.find(names);
+		for (RSItem x : items) {
+			String name = getItemNameFromRSItem(x);
+			if (name == null)
+				continue;
+			LootItem item = this.items_known.get(name);
+			if (item == null)
+				continue;
+			if (item.shouldAlch())
+				item.alch(x);
+		}
+	}
+
 	private int getInventoryCountOfItem(String name) {
 		int tot = 0;
 		RSItem[] items = Inventory.find(name);
@@ -313,23 +332,6 @@ public class Looter extends Threadable implements Pauseable {
 		return def.getName();
 	}
 
-	public void alch() {
-		String names[] = getAllItemNames();
-		if (names.length == 0)
-			return;
-		RSItem[] items = Inventory.find(names);
-		for (RSItem x : items) {
-			String name = getItemNameFromRSItem(x);
-			if (name == null)
-				continue;
-			LootItem item = this.items_known.get(name);
-			if (item == null)
-				continue;
-			if (item.shouldAlch())
-				item.alch(x);
-		}
-	}
-
 	private String getItemNameFromRSItem(RSItem x) {
 		if (x == null)
 			return null;
@@ -355,12 +357,12 @@ public class Looter extends Threadable implements Pauseable {
 		this.loot_in_combat = active;
 	}
 
-	public boolean lootInCombat() {
-		return this.loot_in_combat;
+	public Value<Boolean> lootInCombat() {
+		return new Value<Boolean>(this.loot_in_combat);
 	}
 
-	public boolean waitForLoot() {
-		return this.wait_for_loot;
+	public Value<Boolean> waitForLoot() {
+		return new Value<Boolean>(this.wait_for_loot);
 	}
 
 	public void setWaitForLoot(boolean active) {

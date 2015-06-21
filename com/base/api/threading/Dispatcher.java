@@ -64,23 +64,23 @@ public class Dispatcher {
 		}
 	}
 
-	private CombatTask combat_thread;
-	private Looter looting_thread;
-	private ConsumptionTask eat_thread;
+	private CombatTask combat_task;
+	private Looter looting_task;
+	private ConsumptionTask consumption_task;
+	private PriceUpdater price_updater_task;
 	private BaseCombat main_class;
 	private long hash_id;
 	private ABCUtil abc_util;
 	private CProgressionHandler handler;
 	private Banker banker;
-	private PriceUpdater price_updater_thread;
 	private int repo_id;
 
 	private Dispatcher(BaseCombat main_class, long hash_id) {
 		this.main_class = main_class;
-		this.combat_thread = new CombatTask();
-		this.looting_thread = new Looter();
-		this.eat_thread = new ConsumptionTask();
-		this.price_updater_thread = new PriceUpdater();
+		this.combat_task = new CombatTask();
+		this.looting_task = new Looter();
+		this.consumption_task = new ConsumptionTask();
+		this.price_updater_task = new PriceUpdater();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
@@ -98,69 +98,67 @@ public class Dispatcher {
 	public Value<?> get(ValueType type, String... extra_paramaters) {
 		switch (type) {
 		case CURRENT_TARGET:
-			return combat_thread.getCurrentTarget();
+			return combat_task.getCurrentTarget();
 		case MINIMUM_LOOT_VALUE:
-			return this.looting_thread.getMinimumLootValue();
+			return this.looting_task.getMinimumLootValue();
 		case TOTAL_KILLS:
-			return combat_thread.getTotalKills();
+			return combat_task.getTotalKills();
 		case TOTAL_LOOT_VALUE:
-			return looting_thread.getTotalLootValue();
+			return looting_task.getTotalLootValue();
 		case LOOT_ITEM:
-			return looting_thread.getLootItem(extra_paramaters);
+			return looting_task.getLootItem(extra_paramaters);
 		case ITEM_PRICE:
-			return looting_thread.getItemPrice(extra_paramaters);
+			return looting_task.getItemPrice(extra_paramaters);
 		case AMOUNT_LOOTED_OF_ITEM:
-			return looting_thread.getAmountLooted(extra_paramaters);
+			return looting_task.getAmountLooted(extra_paramaters);
 		case FOOD:
-			return eat_thread.getFood();
+			return consumption_task.getFood();
 		case MONSTER_IDS:
-			return this.combat_thread.getMonsterIDs();
+			return this.combat_task.getMonsterIDs();
 		case HOME_TILE:
-			return this.combat_thread.getHomeTile();
+			return this.combat_task.getHomeTile();
 		case IS_RANGING:
-			return this.combat_thread.isRanging();
+			return this.combat_task.isRanging();
 		case RUN_TIME:
 			return new Value<Long>(this.main_class.getRunningTime());
 		case PRAYER:
-			return this.combat_thread.getPrayer();
+			return this.combat_task.getPrayer();
 		case EAT_FOR_SPACE:
-			return this.looting_thread.shouldEatForSpace();
+			return this.looting_task.shouldEatForSpace();
 		case LOOT_ITEM_NAMES:
-			return this.looting_thread.getAllItemNamesValue();
+			return this.looting_task.getAllItemNamesValue();
 		case IS_BONES_TO_PEACHES:
-			return new Value<Boolean>(this.eat_thread.isUsingBonesToPeaches());
+			return this.consumption_task.isUsingBonesToPeaches();
 		case LOOT_IN_COMBAT:
-			return new Value<Boolean>(this.looting_thread.lootInCombat());
+			return this.looting_task.lootInCombat();
 		case WAIT_FOR_LOOT:
-			return new Value<Boolean>(this.looting_thread.waitForLoot());
-		case BANKER:
-			return new Value<Banker>(this.banker);
+			return this.looting_task.waitForLoot();
 		case POSSIBLE_MONSTERS:
-			return this.combat_thread.getPossibleMonsters();
+			return this.combat_task.getPossibleMonsters();
 		case SPECIAL_ATTACK_WEAPON:
-			return this.combat_thread.getSpecialAttackWeapon();
+			return this.combat_task.getSpecialAttackWeapon();
 		case GUTHANS_IDS:
-			return new Value<int[]>(this.combat_thread.getGuthansIDs());
+			return this.combat_task.getGuthansIDs();
 		case ALL_LOOT_ITEMS:
-			return this.looting_thread.getLootItems();
+			return this.looting_task.getLootItems();
 		case FOOD_WITHDRAW_AMOUNT:
 			return this.banker.getFoodWithdrawAmount();
 		case FLICKER:
-			return this.combat_thread.shouldFlicker();
+			return this.combat_task.shouldFlicker();
 		case USE_GUTHANS:
-			return new Value<Boolean>(this.combat_thread.getUseGuthans());
+			return this.combat_task.getUseGuthans();
 		case COMBAT_RADIUS:
-			return this.combat_thread.getCombatRadius();
+			return this.combat_task.getCombatRadius();
 		case WORLD_HOP_TOLERANCE:
-			return this.combat_thread.getWorldHopTolerance();
+			return this.combat_task.getWorldHopTolerance();
 		case SAFE_SPOT_TILE:
-			return this.combat_thread.getSafeSpot();
+			return this.combat_task.getSafeSpot();
 		case ARMOR_HOLDER_IDS:
-			return this.combat_thread.getArmorHolderIds();
+			return this.combat_task.getArmorHolderIds();
 		case AMMO_ID:
-			return this.combat_thread.getAmmoId();
+			return this.combat_task.getAmmoId();
 		case USE_TELEKINETIC_GRAB:
-			return this.looting_thread.shouldUseTelegrab();
+			return this.looting_task.shouldUseTelegrab();
 		default:
 			break;
 		}
@@ -170,63 +168,75 @@ public class Dispatcher {
 	public void set(ValueType type, Value<?> val) {
 		switch (type) {
 		case MINIMUM_LOOT_VALUE:
-			this.looting_thread.setMinimumLootValue((Integer) val.getValue());
+			this.looting_task.setMinimumLootValue((Integer) val.getValue());
 			break;
 		case FOOD:
-			eat_thread.setFood((Food) val.getValue());
+			consumption_task.setFood((Food) val.getValue());
 			break;
 		case MONSTER_IDS:
-			this.combat_thread.setMonsterIDs((int[]) val.getValue());
+			this.combat_task.setMonsterIDs((int[]) val.getValue());
 			break;
 		case HOME_TILE:
-			this.combat_thread.setHomeTile((RSTile) val.getValue());
+			this.combat_task.setHomeTile((RSTile) val.getValue());
 			break;
 		case IS_RANGING:
-			this.combat_thread.setRanging((Boolean) val.getValue());
+			this.combat_task.setRanging((Boolean) val.getValue());
 			break;
 		case PRAYER:
-			this.combat_thread.setPrayer((Prayer) val.getValue());
+			this.combat_task.setPrayer((Prayer) val.getValue());
 			break;
 		case LOOT_ITEM_NAMES:
-			this.looting_thread.addPossibleLootItem(true,
+			this.looting_task.addPossibleLootItem(true,
 					(String[]) val.getValue());
 			break;
 		case LOOT_ITEM:
-			this.looting_thread.addLootItem((LootItem) val.getValue());
+			this.looting_task.addLootItem((LootItem) val.getValue());
 			break;
 		case LOOT_IN_COMBAT:
-			this.looting_thread.setLootInCombat((Boolean) val.getValue());
+			this.looting_task.setLootInCombat((Boolean) val.getValue());
 			break;
 		case WAIT_FOR_LOOT:
-			this.looting_thread.setWaitForLoot((Boolean) val.getValue());
+			this.looting_task.setWaitForLoot((Boolean) val.getValue());
 			break;
 		case SPECIAL_ATTACK_WEAPON:
-			this.combat_thread.setSpecialAttackWeapon((Weapon) val.getValue());
+			this.combat_task.setSpecialAttackWeapon((Weapon) val.getValue());
 			break;
 		case USE_GUTHANS:
-			this.combat_thread.setUseGuthans((Boolean) val.getValue());
+			this.combat_task.setUseGuthans((Boolean) val.getValue());
 			break;
 		case FOOD_WITHDRAW_AMOUNT:
 			this.banker.setFoodWithdrawAmount((Integer) val.getValue());
 			break;
 		case FLICKER:
-			this.combat_thread.setUseFlicker((Boolean) val.getValue());
+			this.combat_task.setUseFlicker((Boolean) val.getValue());
 			break;
 		case COMBAT_RADIUS:
-			this.combat_thread.setCombatRadius((Integer) val.getValue());
+			this.combat_task.setCombatRadius((Integer) val.getValue());
 			break;
 		case WORLD_HOP_TOLERANCE:
-			this.combat_thread.setWorldHopTolerance((Integer) val.getValue());
+			this.combat_task.setWorldHopTolerance((Integer) val.getValue());
 			break;
 		case SAFE_SPOT_TILE:
-			this.combat_thread.setSafeSpot((RSTile) val.getValue());
+			this.combat_task.setSafeSpot((RSTile) val.getValue());
 			break;
 		case USE_TELEKINETIC_GRAB:
-			this.looting_thread.setUseTelegrab((Boolean) val.getValue());
+			this.looting_task.setUseTelegrab((Boolean) val.getValue());
 		default:
 			break;
 		}
 
+	}
+
+	public Banker getBanker() {
+		return this.banker;
+	}
+
+	public Looter getLooter() {
+		return this.looting_task;
+	}
+
+	public ConsumptionTask getConsumptionTask() {
+		return this.consumption_task;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -251,16 +261,25 @@ public class Dispatcher {
 	}
 
 	private void run() {
-		this.combat_thread.setHomeTile(Player.getPosition());
+		this.combat_task.setHomeTile(Player.getPosition());
 		Walking.setControlClick(true);
-		this.combat_thread.start();
-		this.combat_thread.initiate();
-		this.looting_thread.start();
-		this.eat_thread.start();
-		this.price_updater_thread.start();
-		this.combat_thread.setAmmo();
-		if (this.eat_thread.isUsingBonesToPeaches())
-			this.looting_thread.addPossibleLootItem(true, "Bones");
+		this.combat_task.start();
+		this.combat_task.initiate();
+		this.looting_task.start();
+		this.consumption_task.start();
+		this.price_updater_task.start();
+		this.combat_task.setAmmo();
+		if (this.consumption_task.isUsingBonesToPeaches().getValue())
+			this.looting_task.addPossibleLootItem(true, "Bones");
+	}
+
+	public void checkThreads() {
+		this.handler.checkAndExecute();
+		if (this.combat_task.isPaused()
+				&& Timing.timeFromMark(this.combat_task.getPauseTime()) > 30000) {
+			this.combat_task.resume();
+			this.combat_task.setPaused(false);
+		}
 	}
 
 	public void checkAndExecuteProgression() {
@@ -269,16 +288,6 @@ public class Dispatcher {
 
 	public boolean isRunning() {
 		return this.main_class.isRunning();
-	}
-
-	public void checkThreads() {
-		this.handler.checkAndExecute();
-		// this.checkSkillsForExperiencedGained();
-		if (this.combat_thread.isPaused()
-				&& Timing.timeFromMark(this.combat_thread.getPauseTime()) > 30000) {
-			this.combat_thread.resume();
-			this.combat_thread.setPaused(false);
-		}
 	}
 
 	public boolean hasStarted() {
@@ -290,30 +299,15 @@ public class Dispatcher {
 	}
 
 	public void attackTarget() {
-		this.combat_thread.attackCurrentTarget();
+		this.combat_task.attackCurrentTarget();
 	}
 
 	public static boolean hasBeenInitialized() {
 		return dispatcher != null;
 	}
 
-	public void bank(boolean world_hop) {
-		if (Dispatcher.get().isLiteMode()) {
-			Login.logout();
-			Dispatcher.get().stop();
-			throw new RuntimeException();
-		}
-
-		this.banker.bank(world_hop);
-	}
-
-	private void stop() {
+	public void stop() {
 		this.run = false;
-
-	}
-
-	public Banker getBanker() {
-		return this.banker;
 	}
 
 	public int getRepoID() {
@@ -330,13 +324,6 @@ public class Dispatcher {
 
 	public boolean shouldRun() {
 		return this.run;
-	}
-
-	public void alch() {
-		if (isLiteMode())
-			return;
-		this.looting_thread.alch();
-
 	}
 
 }

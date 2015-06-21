@@ -582,7 +582,7 @@ public class BaseGUI extends JFrame {
 	}
 
 	private void setBankingList() {
-		Banker b = (Banker) Dispatcher.get().get(ValueType.BANKER).getValue();
+		Banker b = (Banker) Dispatcher.get().getBanker();
 		for (int i = 0; i < 28; i++) {
 			Object id = table_banking_items.getValueAt(i, 0);
 			Object amount = table_banking_items.getValueAt(i, 1);

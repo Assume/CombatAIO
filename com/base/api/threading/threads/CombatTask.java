@@ -78,7 +78,7 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 
 	public void fight() {
 		if (Banker.shouldBank(this))
-			Dispatcher.get().bank(false);
+			Dispatcher.get().getBanker().bank(false);
 		this.helper.runDefaultChecks();
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
 			IngameWorldSwitcher.switchToRandomWorld();
@@ -269,14 +269,14 @@ public class CombatTask extends Threadable implements Runnable, Pauseable {
 		this.helper.setUseGuthans(use_guthans);
 	}
 
-	public boolean getUseGuthans() {
-		return this.helper.getUseGuthans();
+	public Value<Boolean> getUseGuthans() {
+		return new Value<Boolean>(this.helper.getUseGuthans());
 	}
 
-	public int[] getGuthansIDs() {
-		return GenericMethods.combineArrays(CombatHelper.GUTHANS_BODY_IDS,
+	public Value<int[]> getGuthansIDs() {
+		return new Value<int[]>(GenericMethods.combineArrays(CombatHelper.GUTHANS_BODY_IDS,
 				CombatHelper.GUTHANS_HELM_IDS, CombatHelper.GUTHANS_LEGS_IDS,
-				CombatHelper.GUTHANS_WARSPEAR_IDS);
+				CombatHelper.GUTHANS_WARSPEAR_IDS));
 	}
 
 	public Value<Boolean> shouldFlicker() {

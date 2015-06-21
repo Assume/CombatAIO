@@ -9,6 +9,7 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Login;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
@@ -56,7 +57,17 @@ public class Banker {
 	 * General.sleep(2000); } }
 	 */
 
-	public void bank(boolean world_hop) {
+	public void bank(boolean world_hop)
+	{
+		if (Dispatcher.get().isLiteMode()) {
+			Login.logout();
+			Dispatcher.get().stop();
+			throw new RuntimeException();
+		}
+		executeBanking(world_hop);
+	}
+	
+	private void executeBanking(boolean world_hop) {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
 				Camera.getCameraAngle() + 15));
@@ -166,7 +177,8 @@ public class Banker {
 
 	public static boolean shouldBank(CombatTask task) {
 		Food food = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue());
-		if (food.getId() == -1 && Inventory.isFull())
+		if (food.getId() == -1 && Inventory.isFull()
+				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
 			return true;
 		if (food.getId() == -1)
 			return false;
@@ -179,7 +191,6 @@ public class Banker {
 		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
 				&& food_length > 0)
 			return false;
-
 		return Inventory.isFull()
 				|| (food.getId() != -1 && Inventory.find(food.getId()).length == 0);
 	}

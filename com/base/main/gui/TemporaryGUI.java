@@ -202,7 +202,7 @@ public class TemporaryGUI extends JFrame {
 	}
 
 	private void setBankingList() {
-		Banker b = (Banker) Dispatcher.get().get(ValueType.BANKER).getValue();
+		Banker b = Dispatcher.get().getBanker();
 		for (int i = 0; i < 28; i++) {
 			if (bank_table.getValueAt(i, 0) != null
 					&& bank_table.getValueAt(i, 1) != null)

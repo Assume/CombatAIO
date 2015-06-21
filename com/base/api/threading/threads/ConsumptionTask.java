@@ -81,8 +81,8 @@ public class ConsumptionTask extends Threadable implements Runnable {
 		}
 	}
 
-	public boolean isUsingBonesToPeaches() {
-		return this.food == Food.BonesToPeaches;
+	public Value<Boolean> isUsingBonesToPeaches() {
+		return new Value<Boolean>(this.food == Food.BonesToPeaches);
 	}
 
 	private void executeBonesToPeaches() {

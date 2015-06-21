@@ -11,12 +11,8 @@ public class DataDisplay extends Paintable<String[]> {
 	private int width;
 	private int height;
 
-	private DataDisplay(String[] t) {
-		super(t);
-	}
-
 	public DataDisplay(String[] t, int x, int y, int width, int height) {
-		this(t);
+		super(t);
 		this.x = x;
 		this.y = y;
 		this.width = width;

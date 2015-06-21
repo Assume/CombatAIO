@@ -11,7 +11,7 @@ public class LootItemDisplay extends Paintable<RSGroundItem> {
 	private int x;
 	private int y;
 
-	public LootItemDisplay(RSGroundItem t) {
+	public LootItemDisplay(RSGroundItem t, int x, int y) {
 		super(t);
 	}
 

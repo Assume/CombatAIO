@@ -31,7 +31,7 @@ public class PKAvoider extends Threadable {
 			if (this.isBeingAttackedByPlayer()) {
 				GenericMethods.println("PK_AVOIDER_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-				Dispatcher.get().bank(this.hop_on_attack);
+				Dispatcher.get().getBanker().bank(this.hop_on_attack);
 				GenericMethods.println("PK_AVOIDER_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
