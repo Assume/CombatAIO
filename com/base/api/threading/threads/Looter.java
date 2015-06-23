@@ -33,7 +33,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
-import scripts.CombatAIO.com.base.main.GenericMethods;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class Looter extends Threadable implements Pauseable {
 
@@ -90,20 +90,24 @@ public class Looter extends Threadable implements Pauseable {
 					.get(ValueType.CURRENT_TARGET).getValue();
 			if (this.loot_in_combat && Combat.getAttackingEntities().length > 0
 					&& this.lootIsOnGround()) {
-				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(nil);
-				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
 			if (this.lootIsOnGround()
 					&& Combat.getAttackingEntities().length == 0
 					&& Player.getRSPlayer().getInteractingCharacter() == null) {
-				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(nil);
-				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 			}
@@ -113,10 +117,12 @@ public class Looter extends Threadable implements Pauseable {
 			}
 			if (target.getHealth() == 0 && target.isInCombat()
 					&& this.items_known.size() > 1 && this.wait_for_loot) {
-				GenericMethods.println("LOOTING_THREAD IS CALLING PAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				loot(target);
-				GenericMethods.println("LOOTING_THREAD IS CALLING UNPAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"LOOTING_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get()
 						.unpause(PauseType.COULD_INTERFERE_WITH_LOOTING);
 				General.sleep(400);
@@ -180,6 +186,27 @@ public class Looter extends Threadable implements Pauseable {
 			update.incrementAmountLooted(getInventoryCountOfItem(name)
 					- total_item_in_inventory);
 		}
+	}
+
+	private RSGroundItem[] getLootableItems() {
+		RSGroundItem[] items = GroundItems.find(getAllItemNames());
+		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
+		for (RSGroundItem x : items) {
+			LootItem r = this.items_known.get(getRSGroundItemName(x));
+			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
+				continue;
+			if (r != null) {
+				if (r.shouldAlwaysLoot())
+					list.add(x);
+				else if (x.getStack() * r.getPrice() >= this.minimum_price)
+					list.add(x);
+			}
+		}
+		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue())
+			return this.removeLongRangeItems(list.toArray(new RSGroundItem[list
+					.size()]));
+		else
+			return list.toArray(list.toArray(new RSGroundItem[list.size()]));
 	}
 
 	private boolean itemIsStackableAndInInventory(RSGroundItem x) {
@@ -301,27 +328,6 @@ public class Looter extends Threadable implements Pauseable {
 			else
 				return new Value<Integer>(got.getAmountLooted());
 		}
-	}
-
-	private RSGroundItem[] getLootableItems() {
-		RSGroundItem[] items = GroundItems.find(getAllItemNames());
-		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
-		for (RSGroundItem x : items) {
-			LootItem r = this.items_known.get(getRSGroundItemName(x));
-			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
-				continue;
-			if (r != null) {
-				if (r.shouldAlwaysLoot())
-					list.add(x);
-				else if (x.getStack() * r.getPrice() >= this.minimum_price)
-					list.add(x);
-			}
-		}
-		if (!(Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue())
-			return this.removeLongRangeItems(list.toArray(new RSGroundItem[list
-					.size()]));
-		else
-			return list.toArray(list.toArray(new RSGroundItem[list.size()]));
 	}
 
 	private String getRSGroundItemName(RSGroundItem x) {

@@ -15,7 +15,6 @@ import org.tribot.api2007.types.RSInterface;
 import scripts.CombatAIO.com.base.api.magic.Rune;
 import scripts.CombatAIO.com.base.api.magic.SpellType;
 import scripts.CombatAIO.com.base.api.magic.Staff;
-import scripts.CombatAIO.com.base.main.GenericMethods;
 
 public enum NormalSpell implements Serializable {
 
@@ -267,13 +266,8 @@ public enum NormalSpell implements Serializable {
 		// check the runes in the inventory
 		for (int i = 0; i < getRequiredRunes().length; i++) {
 			int count = Inventory.getCount(getRequiredRunes()[i].getId());
-			GenericMethods.println("Count of: " + getRequiredRunes()[i]
-					+ " is " + count);
-			if (count >= getNumberOfRunes()[i]) {
-				GenericMethods.println("Count is higher");
+			if (count >= getNumberOfRunes()[i]) 
 				currentRunes.add(getRequiredRunes()[i]);
-			}
-
 		}
 
 		// check the runes that the staff provides
@@ -282,7 +276,6 @@ public enum NormalSpell implements Serializable {
 				for (Rune r2 : getRequiredRunes())
 					if (r.getId() == r2.getId() && !currentRunes.contains(r))
 						currentRunes.add(r);
-		GenericMethods.println(currentRunes.size() + " " + requiredAmount);
 		return currentRunes.size() >= requiredAmount;
 	}
 

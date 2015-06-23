@@ -55,7 +55,8 @@ public enum DActionMaker {
 	Sleep {
 		@Override
 		public DAction make() {
-			int x = getInt(JOptionPane.showInputDialog("Enter time to sleep"));
+			int x = getInt(JOptionPane
+					.showInputDialog("Enter time to sleep (milliseconds)"));
 			return new DSleep(x);
 		}
 	},

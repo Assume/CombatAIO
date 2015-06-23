@@ -247,4 +247,12 @@ public class ArrayUtil {
         }
         return false;
     }
+
+	public static int[] combineArrays(int[]... ars) {
+		List<Integer> ar = new ArrayList<Integer>();
+		for (int i = 0; i < ars.length; i++)
+			for (int x = 0; x < ars[i].length; x++)
+				ar.add(ars[i][x]);
+		return toArrayInt(ar);
+	}
 }

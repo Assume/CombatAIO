@@ -58,7 +58,10 @@ public enum Bank {
 
 	private RSArea area;
 
-	Bank(RSArea area) {
+	private SkillRequirement[] skill_requirements;
+
+	Bank(RSArea area, SkillRequirement... skill_requirements) {
+		this.skill_requirements = skill_requirements;
 		this.area = area;
 	}
 
@@ -71,6 +74,8 @@ public enum Bank {
 		Bank nearest = null;
 		RSTile pos = Player.getPosition();
 		for (Bank bank : Bank.values()) {
+			if (!bank.hasRequirements())
+				continue;
 			int temp = pos.distanceTo(bank.getTile());
 			if (temp < distance) {
 				nearest = bank;
@@ -78,5 +83,12 @@ public enum Bank {
 			}
 		}
 		return nearest;
+	}
+
+	public boolean hasRequirements() {
+		for (SkillRequirement x : skill_requirements)
+			if (!x.hasRequirement())
+				return false;
+		return true;
 	}
 }

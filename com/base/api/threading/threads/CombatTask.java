@@ -31,7 +31,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.main.GenericMethods;
+import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class CombatTask extends Threadable implements Pauseable {
 
@@ -274,7 +274,7 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	public Value<int[]> getGuthansIDs() {
-		return new Value<int[]>(GenericMethods.combineArrays(CombatHelper.GUTHANS_BODY_IDS,
+		return new Value<int[]>(ArrayUtil.combineArrays(CombatHelper.GUTHANS_BODY_IDS,
 				CombatHelper.GUTHANS_HELM_IDS, CombatHelper.GUTHANS_LEGS_IDS,
 				CombatHelper.GUTHANS_WARSPEAR_IDS));
 	}

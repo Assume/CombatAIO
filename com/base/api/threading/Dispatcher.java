@@ -23,8 +23,8 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.main.BaseCombat;
-import scripts.CombatAIO.com.base.main.GenericMethods;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class Dispatcher {
 
@@ -242,7 +242,8 @@ public class Dispatcher {
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
-				GenericMethods.println(x.getName() + " " + x.getId());
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						x.getName() + " " + x.getId());
 				x.setPaused(true);
 				x.suspend();
 			}

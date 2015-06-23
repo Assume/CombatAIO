@@ -29,7 +29,6 @@ import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.main.GenericMethods;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class Banker {
@@ -95,7 +94,7 @@ public class Banker {
 							.getValue()))
 				Banking.depositAll();
 			else
-				Banking.depositAllExcept(GenericMethods.combineArrays(weapon,
+				Banking.depositAllExcept(ArrayUtil.combineArrays(weapon,
 						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
 								.getValue(),
 						(int[]) Dispatcher.get()

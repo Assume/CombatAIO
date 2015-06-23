@@ -9,7 +9,7 @@ import org.tribot.api2007.types.RSPlayer;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.main.GenericMethods;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class PKAvoider extends Threadable {
 
@@ -29,10 +29,12 @@ public class PKAvoider extends Threadable {
 	public void run() {
 		while (Dispatcher.get().isRunning()) {
 			if (this.isBeingAttackedByPlayer()) {
-				GenericMethods.println("PK_AVOIDER_THREAD IS CALLING PAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"PK_AVOIDER_THREAD IS CALLING PAUSE");
 				Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 				Dispatcher.get().getBanker().bank(this.hop_on_attack);
-				GenericMethods.println("PK_AVOIDER_THREAD IS CALLING UNPAUSE");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"PK_AVOIDER_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
 		}
