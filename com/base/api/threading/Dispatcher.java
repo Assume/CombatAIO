@@ -12,6 +12,7 @@ import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
 import scripts.CombatAIO.com.base.api.threading.threads.Looter;
+import scripts.CombatAIO.com.base.api.threading.threads.PKAvoider;
 import scripts.CombatAIO.com.base.api.threading.threads.PriceUpdater;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
 import scripts.CombatAIO.com.base.api.threading.types.Threadable;
@@ -67,6 +68,7 @@ public class Dispatcher {
 	private Looter looting_task;
 	private ConsumptionTask consumption_task;
 	private PriceUpdater price_updater_task;
+	private PKAvoider pk_avoider;
 	private BaseCombat main_class;
 	private long hash_id;
 	private ABCUtil abc_util;
@@ -79,12 +81,27 @@ public class Dispatcher {
 		this.combat_task = new CombatTask();
 		this.looting_task = new Looter();
 		this.consumption_task = new ConsumptionTask();
+		this.pk_avoider = new PKAvoider(true);
 		this.price_updater_task = new PriceUpdater();
 		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
+	}
+
+	private void run() {
+		this.combat_task.setHomeTile(Player.getPosition());
+		Walking.setControlClick(true);
+		this.combat_task.start();
+		this.combat_task.initiate();
+		this.looting_task.start();
+		this.consumption_task.start();
+		this.pk_avoider.start();
+		this.price_updater_task.start();
+		this.combat_task.setAmmo();
+		if (this.consumption_task.isUsingBonesToPeaches().getValue())
+			this.looting_task.addPossibleLootItem(true, "Bones");
 	}
 
 	/*
@@ -258,19 +275,6 @@ public class Dispatcher {
 				x.resume();
 			}
 
-	}
-
-	private void run() {
-		this.combat_task.setHomeTile(Player.getPosition());
-		Walking.setControlClick(true);
-		this.combat_task.start();
-		this.combat_task.initiate();
-		this.looting_task.start();
-		this.consumption_task.start();
-		this.price_updater_task.start();
-		this.combat_task.setAmmo();
-		if (this.consumption_task.isUsingBonesToPeaches().getValue())
-			this.looting_task.addPossibleLootItem(true, "Bones");
 	}
 
 	public void checkThreads() {

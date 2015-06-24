@@ -31,7 +31,7 @@ import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 public class BaseCombat extends Script implements Painting, MouseActions,
 		Arguments, MessageListening07, Ending {
 
-	public static final String VERSION_NUMBER = "2.0.6_7";
+	public static final String VERSION_NUMBER = "2.0.6_8";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;

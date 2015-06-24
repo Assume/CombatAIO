@@ -20,9 +20,11 @@ public class CWalking {
 				.getTile() : (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
 				.getValue());
 		Bank nearest = Bank.getNearestBank();
-		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Nearest bank: " + nearest);
-		if (isFasterToTeleport(end_tile)) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "It is faster to teleport");
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+				"Nearest bank: " + nearest);
+		if (type == MovementType.TO_BANK && isFasterToTeleport(end_tile)) {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+					"It is faster to teleport");
 			teleported = Teleporting.attemptToTeleport(end_tile);
 		}
 		WalkingManager.walk(type, end_tile);
@@ -31,7 +33,8 @@ public class CWalking {
 
 	private static boolean isFasterToTeleport(RSTile end_tile) {
 		Teleport tele = Teleport.getTeleportNearestTo(end_tile);
-		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Closest teleport: " + tele);
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+				"Closest teleport: " + tele);
 		JeweleryTeleport jewel = Jewelery.getNearestJewleryTeleport(end_tile);
 		int distance_tele = tele.getSpellLocationResult().distanceTo(end_tile);
 		int distance_jewel = jewel.getTeleportLocation().getTeleportTile()
