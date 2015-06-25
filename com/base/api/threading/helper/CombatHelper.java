@@ -1,12 +1,17 @@
 package scripts.CombatAIO.com.base.api.threading.helper;
 
+import org.tribot.api.Clicking;
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
+import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.Objects;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
@@ -14,7 +19,9 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
@@ -27,6 +34,10 @@ import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 
 public class CombatHelper {
 
+	private static final int CANNON_BALL_AMOUNT_INDEX = 3;
+
+	private static final int CANNON_IS_FIRING_INDEX = 1;
+
 	public static final int[] GUTHANS_HELM_IDS = { 4724, 4904, 4905, 4906, 4907 };
 	public static final int[] GUTHANS_BODY_IDS = { 4728, 4916, 4917, 4918, 4919 };
 	public static final int[] GUTHANS_LEGS_IDS = { 4730, 4922, 4923, 4924, 4925 };
@@ -35,6 +46,10 @@ public class CombatHelper {
 
 	public static final int TRASH_ITEM_IDS[] = { 117, 9978, 10115, 10125,
 			10127, 229, 592 };
+
+	public static final int[] CANNON_IDS = { 6, 7, 8, 10, 12 };
+
+	public static final int CANNON_BALL_ID = 2;
 
 	private CombatTask combat_task;
 
@@ -47,14 +62,20 @@ public class CombatHelper {
 	private boolean is_ranging = false;
 	private boolean flicker = false;
 	private boolean use_guthans = false;
+	private boolean use_cannon = false;
+
+	private int fill_cannon_at;
 
 	private Prayer prayer = Prayer.NONE;
 	private Weapon weapon = Weapon.NONE;
 	private Weapon special_attack_weapon = Weapon.NONE;
+	private RSTile cannon_location;
 
 	public CombatHelper(CombatTask task) {
 		this.combat_task = task;
 		this.armor_holder = null;
+		this.fill_cannon_at = General.random(0, 10);
+		this.cannon_location = null;
 	}
 
 	public void checkRun() {
@@ -70,6 +91,71 @@ public class CombatHelper {
 			if (!Player.getPosition().equals(safe_spot_tile))
 				Walking.walkScreenPath(Walking
 						.generateStraightScreenPath(safe_spot_tile));
+	}
+
+	public void setupCannon() {
+		if (this.use_cannon && Inventory.find(CANNON_IDS).length == 4) {
+			if (!Player.getPosition().equals(cannon_location)) {
+				Walking.walkTo(cannon_location);
+				while (Player.isMoving())
+					General.sleep(10);
+			}
+			RSItem[] cannon_base = Inventory.find(CANNON_IDS[0]);
+			if (cannon_base.length == 0)
+				return;
+			cannon_base[0].click("Set-up");
+			Timing.waitCondition(new Condition() {
+				@Override
+				public boolean active() {
+					return Inventory.find(CANNON_IDS).length == 0;
+				}
+			}, General.random(6000, 7000));
+			if (Inventory.find(CANNON_IDS).length != 0)
+				pickupCannon();
+			else
+				fireCannon();
+		}
+	}
+
+	private void fireCannon() {
+		if (!this.use_cannon)
+			return;
+		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0)
+			clickCannon("Fire");
+		else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
+			clickCannon("Fire");
+			this.fill_cannon_at = General.random(0, 10);
+		}
+	}
+
+	private void clickCannon(String option) {
+		RSObject[] obj = Objects.find(25, CANNON_IDS);
+		if (obj.length == 0)
+			return;
+		if (!obj[0].isOnScreen())
+			Camera.turnToTile(obj[0]);
+		if (!obj[0].isOnScreen())
+			new DPathNavigator().traverse(obj[0]);
+		Clicking.click(option, obj[0]);
+		while (Player.isMoving())
+			General.sleep(25);
+	}
+
+	public void pickupCannon() {
+		RSObject[] obj = Objects.find(25, CANNON_IDS);
+		if (obj.length == 0)
+			return;
+		if (!obj[0].isOnScreen())
+			Camera.turnToTile(obj[0]);
+		if (!obj[0].isOnScreen())
+			new DPathNavigator().traverse(obj[0]);
+		Clicking.click("Pick-up ", obj[0]);
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Inventory.find(CANNON_IDS).length == 4;
+			}
+		}, 5000);
 	}
 
 	public void usePrayer(Prayer flicker_prayer) {
@@ -165,7 +251,9 @@ public class CombatHelper {
 	}
 
 	public void setAmmo() {
-		if (this.is_ranging) {
+		if (this.is_ranging
+				&& !((Boolean) Dispatcher.get()
+						.get(ValueType.USE_TELEKINETIC_GRAB).getValue())) {
 			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
 			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
 			if (ammo != null && ammo.getStack() > 1) {
@@ -223,6 +311,8 @@ public class CombatHelper {
 	public void runDefaultChecks() {
 		checkRun();
 		checkUse();
+		setupCannon();
+		fireCannon();
 		Dispatcher.get().getLooter().alch();
 		usePrayer(this.prayer);
 	}
@@ -287,6 +377,22 @@ public class CombatHelper {
 
 	public int getAmmoId() {
 		return ammo_id == -1 ? this.knife_id : this.ammo_id;
+	}
+
+	public void setUseCannon(boolean value) {
+		this.use_cannon = value;
+	}
+
+	public boolean getUseCannon() {
+		return this.use_cannon;
+	}
+
+	public void setCannonTile(RSTile tile) {
+		this.cannon_location = tile;
+	}
+
+	public RSTile getCannonTile() {
+		return this.cannon_location;
 	}
 
 }

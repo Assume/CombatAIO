@@ -80,8 +80,10 @@ public class CombatTask extends Threadable implements Pauseable {
 		if (Banker.shouldBank(this))
 			Dispatcher.get().getBanker().bank(false);
 		this.helper.runDefaultChecks();
-		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat())
+		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat()) {
+			this.helper.pickupCannon();
 			IngameWorldSwitcher.switchToRandomWorld();
+		}
 		this.helper.safeSpotCheck();
 		if (!Player.getRSPlayer().isInCombat()
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
@@ -274,8 +276,9 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	public Value<int[]> getGuthansIDs() {
-		return new Value<int[]>(ArrayUtil.combineArrays(CombatHelper.GUTHANS_BODY_IDS,
-				CombatHelper.GUTHANS_HELM_IDS, CombatHelper.GUTHANS_LEGS_IDS,
+		return new Value<int[]>(ArrayUtil.combineArrays(
+				CombatHelper.GUTHANS_BODY_IDS, CombatHelper.GUTHANS_HELM_IDS,
+				CombatHelper.GUTHANS_LEGS_IDS,
 				CombatHelper.GUTHANS_WARSPEAR_IDS));
 	}
 
@@ -323,6 +326,27 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	public void setAmmo() {
 		this.helper.setAmmo();
+	}
+
+	public void pickupCannon() {
+		this.helper.pickupCannon();
+	}
+
+	public void setUseCannon(boolean value) {
+		this.helper.setUseCannon(value);
+	}
+
+	public void setCannonTile(RSTile value) {
+		this.helper.setCannonTile(value);
+
+	}
+
+	public Value<Boolean> getUseCannon() {
+		return new Value<Boolean>(this.helper.getUseCannon());
+	}
+
+	public Value<RSTile> getCannonTile() {
+		return new Value<RSTile>(this.helper.getCannonTile());
 	}
 
 }

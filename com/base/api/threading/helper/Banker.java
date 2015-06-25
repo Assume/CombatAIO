@@ -56,8 +56,8 @@ public class Banker {
 	 * General.sleep(2000); } }
 	 */
 
-	public void bank(boolean world_hop)
-	{
+	public void bank(boolean world_hop) {
+		Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
 			Login.logout();
 			Dispatcher.get().stop();
@@ -65,7 +65,7 @@ public class Banker {
 		}
 		executeBanking(world_hop);
 	}
-	
+
 	private void executeBanking(boolean world_hop) {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
 		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
@@ -98,7 +98,9 @@ public class Banker {
 						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
 								.getValue(),
 						(int[]) Dispatcher.get()
-								.get(ValueType.ARMOR_HOLDER_IDS).getValue()));
+								.get(ValueType.ARMOR_HOLDER_IDS).getValue(),
+						CombatHelper.CANNON_IDS,
+						new int[] { CombatHelper.CANNON_BALL_ID }));
 		}
 
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport

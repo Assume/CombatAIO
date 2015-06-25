@@ -175,6 +175,10 @@ public class Dispatcher {
 			return this.combat_task.getAmmoId();
 		case USE_TELEKINETIC_GRAB:
 			return this.looting_task.shouldUseTelegrab();
+		case USE_CANNON:
+			return this.combat_task.getUseCannon();
+		case CANNON_TILE:
+			return this.combat_task.getCannonTile();
 		default:
 			break;
 		}
@@ -237,6 +241,13 @@ public class Dispatcher {
 			break;
 		case USE_TELEKINETIC_GRAB:
 			this.looting_task.setUseTelegrab((Boolean) val.getValue());
+			break;
+		case USE_CANNON:
+			this.combat_task.setUseCannon((Boolean) val.getValue());
+			break;
+		case CANNON_TILE:
+			this.combat_task.setCannonTile((RSTile) val.getValue());
+			break;
 		default:
 			break;
 		}
@@ -253,6 +264,10 @@ public class Dispatcher {
 
 	public ConsumptionTask getConsumptionTask() {
 		return this.consumption_task;
+	}
+
+	public CombatTask getCombatTask() {
+		return this.combat_task;
 	}
 
 	@SuppressWarnings("deprecation")

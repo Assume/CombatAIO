@@ -31,7 +31,7 @@ import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 public class BaseCombat extends Script implements Painting, MouseActions,
 		Arguments, MessageListening07, Ending {
 
-	public static final String VERSION_NUMBER = "2.0.6_8";
+	public static final String VERSION_NUMBER = "2.0.7_0";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
@@ -153,6 +153,8 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 				General.sleep(600, 700);
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
 			}
+		if (arg0.contains("decay"))
+			Dispatcher.get().getCombatTask().pickupCannon();
 
 	}
 
@@ -164,6 +166,7 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 
 	@Override
 	public void onEnd() {
+		Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
 			try {
 				Desktop.getDesktop()

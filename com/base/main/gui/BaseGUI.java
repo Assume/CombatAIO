@@ -85,6 +85,7 @@ public class BaseGUI extends JFrame {
 	private JCheckBox chckbx_wait_for_loot;
 	private JCheckBox chckbx_loot_in_combat;
 	private JCheckBox chckbx_telekinetic_grab;
+	private JCheckBox chckbx_cannon;
 
 	private JLabel lblBankItems;
 	private JLabel lblPrayer;
@@ -92,6 +93,9 @@ public class BaseGUI extends JFrame {
 	private JLabel lblPossible;
 	private JLabel lblSelected;
 	private JLabel lblSpecialAttack;
+	private JLabel lbl_cannon_tile;
+	private JLabel lbl_worldhopping_info;
+	private JLabel lbl_safe_spot;
 
 	private JButton btnNewButton;
 	private JButton button;
@@ -111,6 +115,8 @@ public class BaseGUI extends JFrame {
 	private JSpinner spinner_world_hop_tolerance;
 
 	private RSTile safe_spot_tile;
+
+	private RSTile cannon_tile;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -332,9 +338,9 @@ public class BaseGUI extends JFrame {
 		if (Dispatcher.get().isLiteMode())
 			spinner_world_hop_tolerance.setEnabled(false);
 
-		lblNewLabel_1 = new JLabel("** Leave at -1 for no hopping");
-		lblNewLabel_1.setBounds(10, 242, 240, 14);
-		tab_three_panel.add(lblNewLabel_1);
+		lbl_worldhopping_info = new JLabel("** Leave at -1 for no hopping");
+		lbl_worldhopping_info.setBounds(10, 242, 240, 14);
+		tab_three_panel.add(lbl_worldhopping_info);
 
 		lbl_safe_spot = new JLabel("Safe spot: ");
 		lbl_safe_spot.setBounds(109, 162, 141, 14);
@@ -356,6 +362,32 @@ public class BaseGUI extends JFrame {
 		});
 		btnSet.setBounds(10, 158, 89, 23);
 		tab_three_panel.add(btnSet);
+
+		chckbx_cannon = new JCheckBox("Cannon");
+		chckbx_cannon.setBounds(131, 84, 141, 23);
+		tab_three_panel.add(chckbx_cannon);
+		if (Dispatcher.get().isLiteMode())
+			chckbx_cannon.setEnabled(false);
+
+		lbl_cannon_tile = new JLabel("Cannon tile: ");
+		lbl_cannon_tile.setBounds(321, 88, 121, 14);
+		tab_three_panel.add(lbl_cannon_tile);
+
+		JButton btnNewButton_2 = new JButton("Set");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (Dispatcher.get().isLiteMode()) {
+					showPremiumMessageDialog("Cannon");
+					return;
+				}
+				cannon_tile = Player.getRSPlayer().getPosition();
+				if (cannon_tile != null)
+					lbl_cannon_tile.setText("Cannon tile: "
+							+ cannon_tile.toString());
+			}
+		});
+		btnNewButton_2.setBounds(234, 85, 77, 20);
+		tab_three_panel.add(btnNewButton_2);
 
 		// TODO
 		combo_box_food = new JComboBox<Food>(Food.values());
@@ -559,6 +591,13 @@ public class BaseGUI extends JFrame {
 				ValueType.USE_TELEKINETIC_GRAB,
 				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
 						: chckbx_telekinetic_grab.isSelected()));
+		Dispatcher.get().set(
+				ValueType.USE_CANNON,
+				new Value<Boolean>(Dispatcher.get().isLiteMode()
+						|| this.cannon_tile == null ? false : chckbx_cannon
+						.isSelected()));
+		Dispatcher.get().set(ValueType.CANNON_TILE,
+				new Value<RSTile>(this.cannon_tile));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -619,12 +658,10 @@ public class BaseGUI extends JFrame {
 					"monster_ids",
 					intArrayToString(((int[]) Dispatcher.get()
 							.get(ValueType.MONSTER_IDS).getValue())));
-			prop.setProperty("bank_item_ids",
-					intArrayToString(Dispatcher.get().getBanker()
-							.getItemIds()));
-			prop.setProperty("bank_item_amounts",
-					intArrayToString(Dispatcher.get().getBanker()
-							.getItemAmounts()));
+			prop.setProperty("bank_item_ids", intArrayToString(Dispatcher.get()
+					.getBanker().getItemIds()));
+			prop.setProperty("bank_item_amounts", intArrayToString(Dispatcher
+					.get().getBanker().getItemAmounts()));
 			prop.setProperty("minimum_loot_value",
 					Dispatcher.get().get(ValueType.MINIMUM_LOOT_VALUE)
 							.getValue().toString());
@@ -651,6 +688,12 @@ public class BaseGUI extends JFrame {
 					((Boolean) Dispatcher.get()
 							.get(ValueType.USE_TELEKINETIC_GRAB).getValue())
 							.toString());
+			prop.setProperty("use_cannon",
+					Dispatcher.get().get(ValueType.USE_CANNON).getValue()
+							.toString());
+			String cannon_tile_text = this.cannon_tile == null ? "null"
+					: this.cannon_tile.toString().replaceAll("[^0-9,]", "");
+			prop.setProperty("cannon_tile", cannon_tile_text);
 			boolean exist = (new File(Util.getWorkingDirectory()
 					+ File.separator + "Base").mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -713,6 +756,14 @@ public class BaseGUI extends JFrame {
 			if (this.safe_spot_tile != null)
 				lbl_safe_spot
 						.setText("Safe spot: " + safe_spot_tile.toString());
+			if (Dispatcher.get().isLiteMode()) {
+				this.cannon_tile = null;
+				chckbx_cannon.setSelected(false);
+			} else
+				this.cannon_tile = getCannonTile(prop);
+			if (this.cannon_tile != null)
+				lbl_cannon_tile.setText("Cannon tile: "
+						+ this.cannon_tile.toString());
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -722,8 +773,6 @@ public class BaseGUI extends JFrame {
 
 	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
 			+ File.separator + "Base" + File.separator + "movements";
-	private JLabel lblNewLabel_1;
-	private JLabel lbl_safe_spot;
 
 	private void saveMovements(String name) {
 		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
@@ -805,6 +854,17 @@ public class BaseGUI extends JFrame {
 
 	private RSTile getSafeSpotTile(Properties prop) {
 		String text = prop.getProperty("safe_spot_tile");
+		if (text.equalsIgnoreCase("null"))
+			return null;
+		String[] text_ar = text.split(",");
+		if (text_ar.length > 2)
+			return new RSTile(getInt(text_ar[0]), getInt(text_ar[1]),
+					getInt(text_ar[2]));
+		return null;
+	}
+
+	private RSTile getCannonTile(Properties prop) {
+		String text = prop.getProperty("cannon_tile");
 		if (text.equalsIgnoreCase("null"))
 			return null;
 		String[] text_ar = text.split(",");
