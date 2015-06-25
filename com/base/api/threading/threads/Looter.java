@@ -271,7 +271,7 @@ public class Looter extends Threadable implements Pauseable {
 		return tot;
 	}
 
-	private int getTotalInventoryCount() {
+	public int getTotalInventoryCount() {
 		int tot = 0;
 		RSItem[] items = Inventory.getAll();
 		for (RSItem x : items)

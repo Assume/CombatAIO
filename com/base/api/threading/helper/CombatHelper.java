@@ -29,8 +29,10 @@ import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
+import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {
 
@@ -94,7 +96,8 @@ public class CombatHelper {
 	}
 
 	public void setupCannon() {
-		if (this.use_cannon && Inventory.find(CANNON_IDS).length == 4) {
+		if (this.use_cannon && Inventory.find(CANNON_IDS).length == 4
+				&& Inventory.find(CANNON_BALL_ID).length > 0) {
 			if (!Player.getPosition().equals(cannon_location)) {
 				Walking.walkTo(cannon_location);
 				while (Player.isMoving())
@@ -120,6 +123,10 @@ public class CombatHelper {
 	private void fireCannon() {
 		if (!this.use_cannon)
 			return;
+		if (Inventory.find(CANNON_BALL_ID).length == 0) {
+			this.pickupCannon();
+			return;
+		}
 		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0)
 			clickCannon("Fire");
 		else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
@@ -142,6 +149,17 @@ public class CombatHelper {
 	}
 
 	public void pickupCannon() {
+		int invin_length = Inventory.getAll().length;
+		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
+				.get(ValueType.FOOD).getValue()).getId());
+		if (Inventory.getAll().length > 24
+				&& (invin_length - food.length) >= 24) {
+			if (!this.eatForSpace(4, food)) {
+				Logger.getLogger()
+						.print("Unable to pickup cannon. You may have to retrieve it from the dwarf");
+				return;
+			}
+		}
 		RSObject[] obj = Objects.find(25, CANNON_IDS);
 		if (obj.length == 0)
 			return;
@@ -156,6 +174,27 @@ public class CombatHelper {
 				return Inventory.find(CANNON_IDS).length == 4;
 			}
 		}, 5000);
+	}
+
+	private boolean eatForSpace(int amount, RSItem[] food) {
+		long st = System.currentTimeMillis();
+		while (Timing.timeFromMark(st) < 12000 && amount > 0) {
+			if (food.length > 0) {
+				final int total_items_in_inventory = Dispatcher.get()
+						.getLooter().getTotalInventoryCount();
+				food[0].click("Eat");
+				Timing.waitCondition(new Condition() {
+					@Override
+					public boolean active() {
+						return Dispatcher.get().getLooter()
+								.getTotalInventoryCount() != total_items_in_inventory;
+					}
+				}, General.random(1200, 2000));
+				amount--;
+			}
+		}
+		return Inventory.getAll().length <= 24;
+
 	}
 
 	public void usePrayer(Prayer flicker_prayer) {
