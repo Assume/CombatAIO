@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.threading;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.ABCUtil;
+import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
@@ -22,7 +23,6 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.api.xml.XMLWriter;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
@@ -70,7 +70,6 @@ public class Dispatcher {
 	private PriceUpdater price_updater_task;
 	private PKAvoider pk_avoider;
 	private BaseCombat main_class;
-	private long hash_id;
 	private ABCUtil abc_util;
 	private CProgressionHandler handler;
 	private Banker banker;
@@ -83,7 +82,6 @@ public class Dispatcher {
 		this.consumption_task = new ConsumptionTask();
 		this.pk_avoider = new PKAvoider(true);
 		this.price_updater_task = new PriceUpdater();
-		this.hash_id = hash_id != 0 ? this.hash_id : XMLWriter.generateHash();
 		this.abc_util = new ABCUtil();
 		this.handler = new CProgressionHandler();
 		this.banker = new Banker();
@@ -325,8 +323,12 @@ public class Dispatcher {
 		return dispatcher != null;
 	}
 
-	public void stop() {
+	public void stop(String reason) {
 		this.run = false;
+		Login.logout();
+		this.main_class.setLoginBotState(false);
+		throw new RuntimeException(
+				reason);
 	}
 
 	public int getRepoID() {

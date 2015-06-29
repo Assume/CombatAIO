@@ -44,9 +44,6 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
-import scripts.CombatAIO.com.base.api.general.walking.WalkingManager;
-import scripts.CombatAIO.com.base.api.general.walking.custom.background.bgui.BMainGui;
-import scripts.CombatAIO.com.base.api.general.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.helper.Banker;
 import scripts.CombatAIO.com.base.api.threading.types.Value;
@@ -55,6 +52,8 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.walking.WalkingManager;
+import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
@@ -277,7 +276,7 @@ public class BaseGUI extends JFrame {
 					showPremiumMessageDialog("Custom walking");
 					return;
 				}
-				BMainGui bmaingui = new BMainGui();
+				CustomWalkingGUI bmaingui = new CustomWalkingGUI();
 				bmaingui.setVisible(true);
 			}
 		});
@@ -373,8 +372,8 @@ public class BaseGUI extends JFrame {
 		lbl_cannon_tile.setBounds(321, 88, 121, 14);
 		tab_three_panel.add(lbl_cannon_tile);
 
-		JButton btnNewButton_2 = new JButton("Set");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton btn_cannon_tile = new JButton("Set");
+		btn_cannon_tile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Dispatcher.get().isLiteMode()) {
 					showPremiumMessageDialog("Cannon");
@@ -386,8 +385,8 @@ public class BaseGUI extends JFrame {
 							+ cannon_tile.toString());
 			}
 		});
-		btnNewButton_2.setBounds(234, 85, 77, 20);
-		tab_three_panel.add(btnNewButton_2);
+		btn_cannon_tile.setBounds(234, 85, 77, 20);
+		tab_three_panel.add(btn_cannon_tile);
 
 		// TODO
 		combo_box_food = new JComboBox<Food>(Food.values());
@@ -787,10 +786,8 @@ public class BaseGUI extends JFrame {
 			oos.flush();
 			oos.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -807,7 +804,6 @@ public class BaseGUI extends JFrame {
 			fis.close();
 			ois.close();
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

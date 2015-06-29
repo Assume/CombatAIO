@@ -2,12 +2,16 @@ package scripts.CombatAIO.com.base.main;
 
 import java.awt.Desktop;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.tribot.api.General;
@@ -19,6 +23,7 @@ import org.tribot.script.interfaces.Arguments;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.MouseActions;
+import org.tribot.script.interfaces.MousePainting;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
@@ -28,15 +33,17 @@ import scripts.CombatAIO.com.base.api.threading.threads.TrackingUpdater;
 import scripts.CombatAIO.com.base.api.types.enums.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
-public class BaseCombat extends Script implements Painting, MouseActions,
-		Arguments, MessageListening07, Ending {
+public class BaseCombat extends Script implements Painting, MousePainting,
+		MouseActions, Arguments, MessageListening07, Ending {
 
-	public static final String VERSION_NUMBER = "2.0.7_1";
+	public static final String VERSION_NUMBER = "2.0.7_2";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
 	private String name;
+
+	private Image cursor;
 
 	public boolean isRunning() {
 		return this.run;
@@ -44,15 +51,11 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 
 	@Override
 	public void run() {
-		// GUI done and what not
+		this.cursor = getCursor();
 		this.paint_handler = new TotalPaintHandler(VERSION_NUMBER);
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this, 0);
 		Dispatcher.get().start(name);
-		// XMLWriter writer = new XMLWriter(Dispatcher.get());
-		// writer.save(new File(Util.getAppDataDirectory() + File.separator
-		// + "base_aio" + File.separator + "test.dat"), false,
-		// Dispatcher.get());
 		SkillData.updateAll();
 		PaintData.updateAll();
 		this.updater = new Thread(new TrackingUpdater(this));
@@ -182,6 +185,26 @@ public class BaseCombat extends Script implements Painting, MouseActions,
 							"If you like this script, please check out CombatAIO Premium");
 		}
 
+	}
+
+	private static Image getCursor() {
+		try {
+			URL url = new URL(
+					"http://telcontar.net/Misc/screeniecursors/Cursor%20arrow%20white.png");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestProperty("User-Agent",
+					"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1");
+			con.connect();
+			return ImageIO.read(url.openStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void paintMouse(Graphics arg0, Point arg1, Point arg2) {
+		arg0.drawImage(this.cursor, arg1.x, arg1.y, null, null);
 	}
 
 }

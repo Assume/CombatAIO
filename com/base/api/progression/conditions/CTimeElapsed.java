@@ -8,17 +8,17 @@ import scripts.CombatAIO.com.base.api.threading.types.ValueType;
 
 public class CTimeElapsed extends CProgressionCondition {
 
-	private long time;
+	private long time_in_milliseconds;
 
-	public CTimeElapsed(int hours) {
-		long temp = (long) (hours * 3600);
-		this.time = (long) General.randomDouble(temp - (temp * .05), temp
+	public CTimeElapsed(int minutes) {
+		long temp = (long) (minutes * 60000);
+		this.time_in_milliseconds = (long) General.randomDouble(temp - (temp * .05), temp
 				+ (temp * .05));
 	}
 
 	@Override
 	protected boolean should_progress() {
-		return (Long) Dispatcher.get().get(ValueType.RUN_TIME).getValue() >= time;
+		return (Long) Dispatcher.get().get(ValueType.RUN_TIME).getValue() >= time_in_milliseconds;
 	}
 
 }

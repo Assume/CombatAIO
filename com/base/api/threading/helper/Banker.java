@@ -15,9 +15,6 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.CombatAIO.com.base.api.general.walking.CWalking;
-import scripts.CombatAIO.com.base.api.general.walking.types.Jewelery;
-import scripts.CombatAIO.com.base.api.general.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.threading.types.PauseType;
@@ -29,6 +26,9 @@ import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.walking.CWalking;
+import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
+import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class Banker {
@@ -59,9 +59,9 @@ public class Banker {
 	public void bank(boolean world_hop) {
 		Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
-			Login.logout();
-			Dispatcher.get().stop();
-			throw new RuntimeException();
+			Dispatcher
+					.get()
+					.stop("Stopping script due to needing to bank and being in lite mode");
 		}
 		executeBanking(world_hop);
 	}
@@ -107,7 +107,7 @@ public class Banker {
 				.getJewelery());
 		Banking.close();
 		if (withdraw_jewelery)
-			scripts.CombatAIO.com.base.api.general.walking.custom.background.CEquipment
+			scripts.CombatAIO.com.base.api.walking.types.CEquipment
 					.equip(teleport.getJewelery().getIDs());
 	}
 

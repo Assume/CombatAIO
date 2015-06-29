@@ -12,8 +12,11 @@ public enum CConditions {
 	TIME_ELAPSED {
 		@Override
 		CProgressionCondition make() {
-			// TODO Auto-generated method stub
-			return null;
+			int time_in_minutes = parse(JOptionPane.showInputDialog(null,
+					"Enter time in minutes that shall have passed"));
+			if (time_in_minutes == -1)
+				return null;
+			return new CTimeElapsed(time_in_minutes);
 		}
 	},
 	CURRENT_LEVEL {
@@ -25,12 +28,24 @@ public enum CConditions {
 			JOptionPane.showMessageDialog(null, jcb, "Select skill to track",
 					JOptionPane.QUESTION_MESSAGE, null);
 			SKILLS skill = (SKILLS) jcb.getSelectedItem();
-			int level = Integer.parseInt(JOptionPane.showInputDialog(
-					"Enter level: ").replaceAll("[^0-9]", ""));
-			return null;
+			int level = parse(JOptionPane.showInputDialog("Enter level: "));
+			return new CCurrentLevel(skill, level);
 		}
+	},
+	COutOfFoodInBank {
+		@Override
+		CProgressionCondition make() {
+			return new COutOfFoodInBank();
+		}
+
 	};
 
 	abstract CProgressionCondition make();
+
+	private static int parse(String parse) {
+		if (parse == null)
+			return -1;
+		return Integer.parseInt(parse.replaceAll("[^0-9]", ""));
+	}
 
 }
