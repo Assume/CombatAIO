@@ -387,6 +387,8 @@ public class BaseGUI extends JFrame {
 		});
 		btn_cannon_tile.setBounds(234, 85, 77, 20);
 		tab_three_panel.add(btn_cannon_tile);
+		if (Dispatcher.get().isLiteMode())
+			btn_cannon_tile.setEnabled(false);
 
 		// TODO
 		combo_box_food = new JComboBox<Food>(Food.values());
