@@ -10,9 +10,9 @@ import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.paint.types.LootedItemsDisplay;
-import scripts.CombatAIO.com.base.api.paint.types.PaintData;
-import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
+import scripts.api.paint.LootedItemsDisplay;
+import scripts.api.paint.PaintData;
+import scripts.api.paint.PaintHandler;
 
 final class LootPaintHandler extends PaintHandler {
 
@@ -38,7 +38,7 @@ final class LootPaintHandler extends PaintHandler {
 		 * (String y : unique_names) g.drawString(y, tile.getX(), tile.getY() +
 		 * (i * 10)); }
 		 */
-		this.loot_item_display.draw(g);
+		this.loot_item_display.draw(g, l);
 
 	}
 

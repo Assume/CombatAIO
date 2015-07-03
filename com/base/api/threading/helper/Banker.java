@@ -187,7 +187,10 @@ public class Banker {
 		if (task.isUsingProtectionPrayer()
 				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
 			return true;
-		if (food == Food.BonesToPeaches)
+		if (food == Food.BonesToPeaches
+				&& Inventory.find("Bones to peaches").length == 0)
+			return true;
+		else if (food == Food.BonesToPeaches)
 			return false;
 		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
 				&& food_length > 0)

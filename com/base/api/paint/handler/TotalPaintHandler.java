@@ -2,12 +2,14 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
 
-import scripts.CombatAIO.com.base.api.paint.types.ButtonDisplay;
-import scripts.CombatAIO.com.base.api.paint.types.DataDisplay;
-import scripts.CombatAIO.com.base.api.paint.types.PaintData;
-import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
-import scripts.CombatAIO.com.base.api.paint.types.Paintable;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.api.paint.ButtonDisplay;
+import scripts.api.paint.DataDisplay;
+import scripts.api.paint.ExperienceDisplay;
+import scripts.api.paint.PaintData;
+import scripts.api.paint.PaintHandler;
+import scripts.api.paint.Paintable;
+import scripts.api.paint.SkillData;
 
 public class TotalPaintHandler extends PaintHandler {
 
@@ -15,34 +17,35 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private LootPaintHandler loot_paint_handler;
 
-	private ExperiencePaintHandler experience_paint_handler;
-
 	private ButtonDisplay show_gui_button;
 
 	private ButtonDisplay hide_paint_button;
 
 	private DataDisplay generic_data_display;
 
-	private boolean show_paint = true;
+	private ExperienceDisplay experience_display;
 
 	private String version;
 
 	public TotalPaintHandler(String version) {
 		this.version = version;
-		this.experience_paint_handler = new ExperiencePaintHandler();
+		this.experience_display = new ExperienceDisplay(SkillData.COMBAT_TYPE);
 		this.monster_paint_handler = new MonsterPaintHandler();
 		this.loot_paint_handler = new LootPaintHandler();
-		this.show_gui_button = (new ButtonDisplay("Show GUI", 255, 428, 12) {
+		this.show_gui_button = (new ButtonDisplay(true, "Show GUI", 255, 428,
+				57, 12) {
 			@Override
 			protected void onClick() {
 				Dispatcher.get().getGUI().setVisible(true);
 			}
 		});
 
-		this.hide_paint_button = (new ButtonDisplay("Hide", 320, 428, 12) {
+		this.hide_paint_button = (new ButtonDisplay(false, "Hide", 320, 428,
+				28, 12) {
 			@Override
 			protected void onClick() {
-				setShowPaint();
+				Paintable.setHide(!Paintable.getHide());
+				hide_paint_button.update(Paintable.getHide() ? "Show" : "Hide");
 			}
 		});
 
@@ -66,11 +69,6 @@ public class TotalPaintHandler extends PaintHandler {
 
 	public void updateLoot() {
 		this.loot_paint_handler.update();
-	}
-
-	private void setShowPaint() {
-		this.show_paint = !show_paint;
-		this.hide_paint_button.update(this.show_paint ? "Hide" : "Show");
 	}
 
 	private String[] getGenericDataDisplay(long run_time) {
@@ -111,15 +109,9 @@ public class TotalPaintHandler extends PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
-		this.hide_paint_button.draw(g);
-		if (!this.show_paint)
-			return;
-		this.show_gui_button.draw(g);
-		this.generic_data_display.draw(g);
+		Paintable.drawAll(g, l);
 		this.monster_paint_handler.draw(g, l);
 		this.loot_paint_handler.draw(g, l);
-		this.experience_paint_handler.draw(g, l);
-
 	}
 
 	@Override

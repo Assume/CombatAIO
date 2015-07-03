@@ -35,20 +35,24 @@ public class ConsumptionTask extends Threadable {
 		while (true) {
 			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
 					.next() && food != Food.None) {
-				Logger.getLogger().print(Logger.SCRIPTER_ONLY,"CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				executeBonesToPeaches();
 				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
-				Logger.getLogger().print(Logger.SCRIPTER_ONLY,"CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			if (!Dispatcher.get().isLiteMode()
 					&& Potions.getPotionsRequired().length > 0) {
-				Logger.getLogger().print(Logger.SCRIPTER_ONLY,"CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"CONSUMPTION_THREAD IS CALLING PAUSE ON POTIONS");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				drink();
-				Logger.getLogger().print(Logger.SCRIPTER_ONLY,"CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"CONSUMPTION_THREAD IS CALLING UNPAUSE ON POTION");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
 			}
 			General.sleep(500);
@@ -82,10 +86,10 @@ public class ConsumptionTask extends Threadable {
 	private void executeBonesToPeaches() {
 		if (food == Food.BonesToPeaches) {
 			RSItem[] food = Inventory.find("Peach");
-			if (food.length < 3) {
+			if (food.length <= 3) {
 				RSItem[] bones = Inventory.find("Bones");
 				if (bones.length > 0) {
-					RSItem[] tab = Inventory.find("Bones To Peaches");
+					RSItem[] tab = Inventory.find("Bones to peaches");
 					if (tab.length > 0)
 						tab[0].click("Break");
 					else if (NormalSpell.BONES_TO_PEACHES.canCast())
@@ -107,6 +111,5 @@ public class ConsumptionTask extends Threadable {
 	public boolean hasPauseType(PauseType type) {
 		return false;
 	}
-
 
 }

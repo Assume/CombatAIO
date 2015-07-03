@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.paint.types.MonsterDisplay;
-import scripts.CombatAIO.com.base.api.paint.types.PaintData;
-import scripts.CombatAIO.com.base.api.paint.types.PaintHandler;
+import scripts.api.paint.MonsterDisplay;
+import scripts.api.paint.PaintData;
+import scripts.api.paint.PaintHandler;
 
 final class MonsterPaintHandler extends PaintHandler {
 

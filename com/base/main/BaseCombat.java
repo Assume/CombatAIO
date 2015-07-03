@@ -27,10 +27,10 @@ import org.tribot.script.interfaces.MousePainting;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
-import scripts.CombatAIO.com.base.api.paint.types.PaintData;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.TrackingUpdater;
-import scripts.CombatAIO.com.base.api.types.enums.SkillData;
+import scripts.api.paint.PaintData;
+import scripts.api.paint.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MousePainting,
