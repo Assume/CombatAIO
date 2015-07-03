@@ -3,13 +3,13 @@ package scripts.CombatAIO.com.base.api.paint.handler;
 import java.awt.Graphics;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.api.paint.ButtonDisplay;
-import scripts.api.paint.DataDisplay;
-import scripts.api.paint.ExperienceDisplay;
-import scripts.api.paint.PaintData;
-import scripts.api.paint.PaintHandler;
-import scripts.api.paint.Paintable;
-import scripts.api.paint.SkillData;
+import scripts.api.scriptapi.paint.ButtonDisplay;
+import scripts.api.scriptapi.paint.DataDisplay;
+import scripts.api.scriptapi.paint.ExperienceDisplay;
+import scripts.api.scriptapi.paint.PaintData;
+import scripts.api.scriptapi.paint.PaintHandler;
+import scripts.api.scriptapi.paint.Paintable;
+import scripts.api.scriptapi.paint.SkillData;
 
 public class TotalPaintHandler extends PaintHandler {
 

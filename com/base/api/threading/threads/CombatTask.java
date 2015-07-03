@@ -31,7 +31,7 @@ import scripts.CombatAIO.com.base.api.threading.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
-import scripts.api.paint.SkillData;
+import scripts.api.scriptapi.paint.SkillData;
 
 public class CombatTask extends Threadable implements Pauseable {
 

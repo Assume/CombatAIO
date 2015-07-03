@@ -10,9 +10,9 @@ import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.api.paint.LootedItemsDisplay;
-import scripts.api.paint.PaintData;
-import scripts.api.paint.PaintHandler;
+import scripts.api.scriptapi.paint.LootedItemsDisplay;
+import scripts.api.scriptapi.paint.PaintData;
+import scripts.api.scriptapi.paint.PaintHandler;
 
 final class LootPaintHandler extends PaintHandler {
 
