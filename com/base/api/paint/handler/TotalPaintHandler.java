@@ -1,6 +1,7 @@
 package scripts.CombatAIO.com.base.api.paint.handler;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.api.scriptapi.paint.ButtonDisplay;
@@ -10,6 +11,7 @@ import scripts.api.scriptapi.paint.PaintData;
 import scripts.api.scriptapi.paint.PaintHandler;
 import scripts.api.scriptapi.paint.Paintable;
 import scripts.api.scriptapi.paint.SkillData;
+import scripts.api.scriptapi.paint.generic.ShowGUIButton;
 
 public class TotalPaintHandler extends PaintHandler {
 
@@ -32,22 +34,9 @@ public class TotalPaintHandler extends PaintHandler {
 		this.experience_display = new ExperienceDisplay(SkillData.COMBAT_TYPE);
 		this.monster_paint_handler = new MonsterPaintHandler();
 		this.loot_paint_handler = new LootPaintHandler();
-		this.show_gui_button = (new ButtonDisplay(true, "Show GUI", 255, 428,
-				57, 12) {
-			@Override
-			protected void onClick() {
-				Dispatcher.get().getGUI().setVisible(true);
-			}
-		});
-
-		this.hide_paint_button = (new ButtonDisplay(false, "Hide", 320, 428,
-				28, 12) {
-			@Override
-			protected void onClick() {
-				Paintable.setHide(!Paintable.getHide());
-				hide_paint_button.update(Paintable.getHide() ? "Show" : "Hide");
-			}
-		});
+		this.show_gui_button = new ShowGUIButton(255, 428, 12, Dispatcher.get()
+				.getGUI());
+		// this.hide_paint_button = new HidePaintButton(320, 428, 12);
 
 		this.generic_data_display = new DataDisplay(new String[0], 255, 349,
 				240, 76);
@@ -117,6 +106,10 @@ public class TotalPaintHandler extends PaintHandler {
 	@Override
 	public void update() {
 
+	}
+
+	public boolean isInClick(Point p) {
+	return Paintable.isAnyInClick(p);
 	}
 
 }

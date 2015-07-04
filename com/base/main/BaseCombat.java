@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -21,6 +23,7 @@ import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Arguments;
 import org.tribot.script.interfaces.Ending;
+import org.tribot.script.interfaces.EventBlockingOverride;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.MousePainting;
@@ -34,7 +37,7 @@ import scripts.api.scriptapi.paint.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MousePainting,
-		MouseActions, Arguments, MessageListening07, Ending {
+		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
 	public static final String VERSION_NUMBER = "2.0.7_4";
 
@@ -52,10 +55,10 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 	@Override
 	public void run() {
 		this.cursor = getCursor();
-		this.paint_handler = new TotalPaintHandler(VERSION_NUMBER);
 		General.useAntiBanCompliance(true);
 		Dispatcher.create(this, 0);
 		Dispatcher.get().start(name);
+		this.paint_handler = new TotalPaintHandler(VERSION_NUMBER);
 		SkillData.updateAll();
 		PaintData.updateAll();
 		this.updater = new Thread(new TrackingUpdater(this));
@@ -79,30 +82,6 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 		} catch (Exception e) {
 
 		}
-	}
-
-	@Override
-	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
-		if (this.paint_handler != null)
-			this.paint_handler.onClick(arg0);
-	}
-
-	@Override
-	public void mouseDragged(Point arg0, int arg1, boolean arg2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseMoved(Point arg0, boolean arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(Point arg0, int arg1, boolean arg2) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -205,6 +184,24 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 	@Override
 	public void paintMouse(Graphics arg0, Point arg1, Point arg2) {
 		arg0.drawImage(this.cursor, arg1.x, arg1.y, null, null);
+	}
+
+	@Override
+	public OVERRIDE_RETURN overrideKeyEvent(KeyEvent arg0) {
+		return EventBlockingOverride.OVERRIDE_RETURN.SEND;
+	}
+
+	@Override
+	public OVERRIDE_RETURN overrideMouseEvent(MouseEvent arg0) {
+		if (this.paint_handler == null)
+			return EventBlockingOverride.OVERRIDE_RETURN.SEND;
+		if (arg0.getID() == MouseEvent.MOUSE_PRESSED
+				&& arg0.getButton() == MouseEvent.BUTTON1
+				&& this.paint_handler.isInClick(arg0.getPoint())) {
+			this.paint_handler.onClick(arg0.getPoint());
+			return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+		} else
+			return EventBlockingOverride.OVERRIDE_RETURN.SEND;
 	}
 
 }

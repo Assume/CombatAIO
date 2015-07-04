@@ -56,8 +56,9 @@ import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
+import scripts.api.scriptapi.paint.CGUI;
 
-public class BaseGUI extends JFrame {
+public class BaseGUI extends CGUI {
 
 	private JPanel contentPane;
 
@@ -960,4 +961,5 @@ public class BaseGUI extends JFrame {
 		JOptionPane.showMessageDialog(null, feature_name
 				+ " is only available on CombatAIO Premium");
 	}
+
 }

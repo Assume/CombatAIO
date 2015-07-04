@@ -26,6 +26,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.paint.CGUI;
 
 public class Dispatcher {
 
@@ -335,7 +336,7 @@ public class Dispatcher {
 		return this.repo_id;
 	}
 
-	public BaseGUI getGUI() {
+	public CGUI getGUI() {
 		return this.gui;
 	}
 
