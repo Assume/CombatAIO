@@ -29,15 +29,15 @@ import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.MousePainting;
 import org.tribot.script.interfaces.Painting;
 
+import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.threading.Dispatcher;
 import scripts.CombatAIO.com.base.api.threading.threads.TrackingUpdater;
-import scripts.api.scriptapi.paint.PaintData;
 import scripts.api.scriptapi.paint.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MousePainting,
-		Arguments, MessageListening07, Ending, EventBlockingOverride {
+		MouseActions, Arguments, MessageListening07, Ending {
 
 	public static final String VERSION_NUMBER = "2.0.7_4";
 
@@ -70,7 +70,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
 			SkillData.updateAll();
 			PaintData.updateAll();
-			this.paint_handler.updateAll(getRunningTime());
+			this.paint_handler.update(getRunningTime());
 		}
 
 	}
@@ -148,7 +148,8 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 
 	@Override
 	public void onEnd() {
-		Dispatcher.get().getCombatTask().pickupCannon();
+		if (Dispatcher.get().getCombatTask().isUsingCannon())
+			Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
 			try {
 				Desktop.getDesktop()
@@ -187,21 +188,28 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 	}
 
 	@Override
-	public OVERRIDE_RETURN overrideKeyEvent(KeyEvent arg0) {
-		return EventBlockingOverride.OVERRIDE_RETURN.SEND;
+	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
+		if (this.paint_handler != null && !arg2)
+			this.paint_handler.onClick(arg0);
+
 	}
 
 	@Override
-	public OVERRIDE_RETURN overrideMouseEvent(MouseEvent arg0) {
-		if (this.paint_handler == null)
-			return EventBlockingOverride.OVERRIDE_RETURN.SEND;
-		if (arg0.getID() == MouseEvent.MOUSE_PRESSED
-				&& arg0.getButton() == MouseEvent.BUTTON1
-				&& this.paint_handler.isInClick(arg0.getPoint())) {
-			this.paint_handler.onClick(arg0.getPoint());
-			return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
-		} else
-			return EventBlockingOverride.OVERRIDE_RETURN.SEND;
+	public void mouseDragged(Point arg0, int arg1, boolean arg2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseMoved(Point arg0, boolean arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(Point arg0, int arg1, boolean arg2) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

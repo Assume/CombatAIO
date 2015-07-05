@@ -10,8 +10,8 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
 
+import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.main.BaseCombat;
-import scripts.api.scriptapi.paint.PaintData;
 import scripts.api.scriptapi.paint.SkillData;
 
 public class TrackingUpdater implements Runnable {

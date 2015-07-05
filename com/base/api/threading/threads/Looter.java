@@ -191,11 +191,17 @@ public class Looter extends Threadable implements Pauseable {
 	private RSGroundItem[] getLootableItems() {
 		RSGroundItem[] items = GroundItems.find(getAllItemNames());
 		List<RSGroundItem> list = new ArrayList<RSGroundItem>();
+		int ammo_id = (Integer) Dispatcher.get().get(ValueType.AMMO_ID)
+				.getValue();
 		for (RSGroundItem x : items) {
 			LootItem r = this.items_known.get(getRSGroundItemName(x));
 			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
 				continue;
 			if (r != null) {
+				if (r.getId() == ammo_id && this.use_tele_grab)
+					continue;
+				if (r.getId() == ammo_id && x.getStack() < 3)
+					continue;
 				if (r.shouldAlwaysLoot())
 					list.add(x);
 				else if (x.getStack() * r.getPrice() >= this.minimum_price)

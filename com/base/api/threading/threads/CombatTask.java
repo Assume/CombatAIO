@@ -332,6 +332,10 @@ public class CombatTask extends Threadable implements Pauseable {
 		this.helper.pickupCannon();
 	}
 
+	public boolean isUsingCannon() {
+		return this.helper.getUseCannon();
+	}
+
 	public void setUseCannon(boolean value) {
 		this.helper.setUseCannon(value);
 	}

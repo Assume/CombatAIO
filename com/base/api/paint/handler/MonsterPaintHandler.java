@@ -10,9 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.api.scriptapi.paint.MonsterDisplay;
-import scripts.api.scriptapi.paint.PaintData;
 import scripts.api.scriptapi.paint.PaintHandler;
+import scripts.api.scriptapi.paint.paintables.MonsterDisplay;
 
 final class MonsterPaintHandler extends PaintHandler {
 
@@ -26,7 +25,7 @@ final class MonsterPaintHandler extends PaintHandler {
 	}
 
 	@Override
-	public void update() {
+	public void update(long run_time) {
 		if (this.current_target_display == null)
 			this.current_target_display = new MonsterDisplay(
 					this.current_target, true);
