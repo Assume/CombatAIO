@@ -24,11 +24,17 @@ public class TotalPaintHandler extends PaintHandler {
 
 	public TotalPaintHandler(String version) {
 		this.version = version;
-		new ExperienceDisplay(SkillData.COMBAT_TYPE, 8, 320);
-		this.monster_paint_handler = new MonsterPaintHandler();
+
 		this.looted_items_display = new LootedItemsDisplay();
-		new ShowGUIButton(255, 428, 12, Dispatcher.get().getGUI());
 		this.generic_data_display = new DataDisplay();
+
+		Paintable.add(new ExperienceDisplay(SkillData.COMBAT_TYPE, 8, 320));
+		Paintable.add(new ShowGUIButton(Dispatcher.get().getGUI()));
+		Paintable.add(this.looted_items_display);
+		Paintable.add(this.generic_data_display);
+
+		this.monster_paint_handler = new MonsterPaintHandler();
+
 	}
 
 	private String[] getGenericDataDisplay(long run_time) {
