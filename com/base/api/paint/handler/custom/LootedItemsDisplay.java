@@ -68,6 +68,12 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 	}
 
 	@Override
+	protected void onClick() {
+		this.setOpen(false);
+		this.open_button.setOpen(true);
+	}
+
+	@Override
 	protected boolean isInClick(Point p) {
 		int total_looted = getNumberOfItemsThatHaveBeenLooted();
 		if (total_looted == 0)

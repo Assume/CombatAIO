@@ -26,7 +26,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
-import scripts.api.scriptapi.paint.CGUI;
+import scripts.api.scriptapi.paint.types.CGUI;
 
 public class Dispatcher {
 
