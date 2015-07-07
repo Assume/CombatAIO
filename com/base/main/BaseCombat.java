@@ -25,7 +25,6 @@ import org.tribot.script.interfaces.Arguments;
 import org.tribot.script.interfaces.Ending;
 import org.tribot.script.interfaces.EventBlockingOverride;
 import org.tribot.script.interfaces.MessageListening07;
-import org.tribot.script.interfaces.MouseActions;
 import org.tribot.script.interfaces.MousePainting;
 import org.tribot.script.interfaces.Painting;
 
@@ -37,9 +36,9 @@ import scripts.api.scriptapi.paint.SkillData;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MousePainting,
-		MouseActions, Arguments, MessageListening07, Ending {
+		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.0.7_4";
+	public static final String VERSION_NUMBER = "2.0.7_5";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
@@ -188,28 +187,23 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 	}
 
 	@Override
-	public void mouseClicked(Point arg0, int arg1, boolean arg2) {
-		if (this.paint_handler != null)
-			this.paint_handler.onClick(arg0);
-
+	public EventBlockingOverride.OVERRIDE_RETURN overrideKeyEvent(KeyEvent arg0) {
+		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
 	}
 
 	@Override
-	public void mouseDragged(Point arg0, int arg1, boolean arg2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseMoved(Point arg0, boolean arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(Point arg0, int arg1, boolean arg2) {
-		// TODO Auto-generated method stub
-
+	public EventBlockingOverride.OVERRIDE_RETURN overrideMouseEvent(MouseEvent e) {
+		if (this.paint_handler != null
+				&& this.paint_handler.isAnyInClick(e.getPoint())) {
+			if (e.getID() == 500) {
+				e.consume();
+				this.paint_handler.onClick(e.getPoint());
+				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+			} else if (e.getID() == 501) {
+				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+			}
+		}
+		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
 	}
 
 }

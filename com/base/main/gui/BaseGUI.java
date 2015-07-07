@@ -364,13 +364,13 @@ public class BaseGUI extends CGUI {
 		tab_three_panel.add(btnSet);
 
 		chckbx_cannon = new JCheckBox("Cannon");
-		chckbx_cannon.setBounds(131, 84, 141, 23);
+		chckbx_cannon.setBounds(131, 84, 82, 23);
 		tab_three_panel.add(chckbx_cannon);
 		if (Dispatcher.get().isLiteMode())
 			chckbx_cannon.setEnabled(false);
 
 		lbl_cannon_tile = new JLabel("Cannon tile: ");
-		lbl_cannon_tile.setBounds(321, 88, 121, 14);
+		lbl_cannon_tile.setBounds(321, 88, 161, 14);
 		tab_three_panel.add(lbl_cannon_tile);
 
 		JButton btn_cannon_tile = new JButton("Set");

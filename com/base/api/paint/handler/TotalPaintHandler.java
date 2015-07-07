@@ -36,13 +36,13 @@ public class TotalPaintHandler extends PaintHandler {
 		this.generic_data_display = new DataDisplay();
 		this.target_health_display = new RSCharacterHealthDisplay(null);
 
-		new HidePaintButton().register();
-		new ExperienceDisplay(SkillData.COMBAT_TYPE, 8, 320).register();
-		new ShowGUIButton(Dispatcher.get().getGUI()).register();
+		new HidePaintButton().register(this);
+		new ExperienceDisplay(SkillData.COMBAT_TYPE).register(this);
+		new ShowGUIButton(Dispatcher.get().getGUI()).register(this);
 
-		this.looted_items_display.register();
-		this.generic_data_display.register();
-		this.target_health_display.register();
+		this.looted_items_display.register(this);
+		this.generic_data_display.register(this);
+		this.target_health_display.register(this);
 
 		this.monster_paint_handler = new MonsterPaintHandler();
 
@@ -70,7 +70,7 @@ public class TotalPaintHandler extends PaintHandler {
 
 	@Override
 	public void draw(Graphics g, long l) {
-		Paintable.drawAll(g, l);
+		super.drawAll(g, l);
 		this.monster_paint_handler.draw(g, l);
 	}
 
@@ -83,7 +83,7 @@ public class TotalPaintHandler extends PaintHandler {
 	}
 
 	public boolean isInClick(Point p) {
-		return Paintable.isAnyInClick(p);
+		return super.isAnyInClick(p);
 	}
 
 }

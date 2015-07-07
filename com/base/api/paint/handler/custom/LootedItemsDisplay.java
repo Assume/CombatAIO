@@ -68,7 +68,7 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 	}
 
 	@Override
-	protected void onClick() {
+	protected void onClick(Point p) {
 		this.setOpen(false);
 		this.open_button.setOpen(true);
 	}
@@ -94,9 +94,24 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 		}
 		return false;
 	}
+
 	/*
 	 * if (p.x >= x - (41 * i) && p.x <= p.x - (41 * i) - 38 && p.y >= y && p.y
 	 * <= y + (num_items_in_column * 38) + (num_items_in_column * 2)) return
 	 * true; else continue;
 	 */
+
+	@Override
+	public int getWidth() {
+		return getNumberOfItemsThatHaveBeenLooted() * 41;
+	}
+
+	@Override
+	public int getHeight() {
+		int num = getNumberOfItemsThatHaveBeenLooted();
+		if (num >= 8)
+			return 8 * 40;
+		else
+			return num * 40;
+	}
 }
