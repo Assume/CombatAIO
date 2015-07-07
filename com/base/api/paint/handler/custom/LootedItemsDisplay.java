@@ -68,7 +68,7 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 	}
 
 	@Override
-	protected void onClick(Point p) {
+	public void onClick(Point p) {
 		this.setOpen(false);
 		this.open_button.setOpen(true);
 	}

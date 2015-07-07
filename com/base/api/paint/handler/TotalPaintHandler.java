@@ -13,6 +13,8 @@ import scripts.api.scriptapi.paint.Paintable;
 import scripts.api.scriptapi.paint.SkillData;
 import scripts.api.scriptapi.paint.paintables.DataDisplay;
 import scripts.api.scriptapi.paint.paintables.ExperienceDisplay;
+import scripts.api.scriptapi.paint.paintables.PaintPanel;
+import scripts.api.scriptapi.paint.paintables.PaintTab;
 import scripts.api.scriptapi.paint.paintables.RSCharacterHealthDisplay;
 import scripts.api.scriptapi.paint.paintables.generic.HidePaintButton;
 import scripts.api.scriptapi.paint.paintables.generic.ShowGUIButton;
@@ -37,12 +39,25 @@ public class TotalPaintHandler extends PaintHandler {
 		this.target_health_display = new RSCharacterHealthDisplay(null);
 
 		new HidePaintButton().register(this);
-		new ExperienceDisplay(SkillData.COMBAT_TYPE).register(this);
+		// new ExperienceDisplay(SkillData.COMBAT_TYPE).register(this);
 		new ShowGUIButton(Dispatcher.get().getGUI()).register(this);
 
 		this.looted_items_display.register(this);
-		this.generic_data_display.register(this);
+		// this.generic_data_display.register(this);
 		this.target_health_display.register(this);
+
+		PaintPanel main_panel = new PaintPanel(230, 325, 265, 118);
+		main_panel.register(this);
+
+		PaintTab generic = new PaintTab("Generic", main_panel);
+		generic.add(this.generic_data_display);
+		generic.setDrawBackground(false);
+
+		PaintTab experience = new PaintTab("Experience", main_panel);
+		experience.add(new ExperienceDisplay(SkillData.COMBAT_TYPE, false));
+
+		main_panel.addTab(generic);
+		main_panel.addTab(experience);
 
 		this.monster_paint_handler = new MonsterPaintHandler();
 
