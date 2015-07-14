@@ -87,7 +87,7 @@ public class ConsumptionTask extends Threadable {
 		if (food == Food.BonesToPeaches) {
 			RSItem[] food = Inventory.find("Peach");
 			if (food.length <= 3) {
-				RSItem[] bones = Inventory.find("Bones");
+				RSItem[] bones = Inventory.find("Bones", "Big Bones");
 				if (bones.length > 0) {
 					RSItem[] tab = Inventory.find("Bones to peaches");
 					if (tab.length > 0)

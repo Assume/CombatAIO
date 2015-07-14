@@ -2,7 +2,11 @@ package scripts.CombatAIO.com.base.api.threading.threads;
 
 import java.util.List;
 
+import org.tribot.api.General;
+import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Players;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSPlayer;
 
@@ -28,6 +32,11 @@ public class PKAvoider extends Threadable {
 	@Override
 	public void run() {
 		while (Dispatcher.get().isRunning()) {
+			if (Combat.getWildernessLevel() == 0) {
+				General.sleep(100);
+				continue;
+			}
+
 			if (this.isBeingAttackedByPlayer()) {
 				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 						"PK_AVOIDER_THREAD IS CALLING PAUSE");
@@ -37,7 +46,26 @@ public class PKAvoider extends Threadable {
 						"PK_AVOIDER_THREAD IS CALLING UNPAUSE");
 				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 			}
+			General.sleep(100);
 		}
+	}
+
+	// TODO
+	private boolean isThreat() {
+		int cb_level = Player.getRSPlayer().getCombatLevel();
+		int wildy_level = Combat.getWildernessLevel();
+		final int maximum_combat = cb_level + wildy_level;
+		final int minimum_combat = cb_level - wildy_level;
+
+		RSPlayer[] players = Players.getAll(new Filter<RSPlayer>() {
+
+			@Override
+			public boolean accept(RSPlayer arg0) {
+				int temp_cb = arg0.getCombatLevel();
+				return temp_cb <= maximum_combat && temp_cb >= minimum_combat;
+			}
+		});
+		return false;
 	}
 
 	private boolean isBeingAttackedByPlayer() {

@@ -38,7 +38,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script implements Painting, MousePainting,
 		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.0.7_5";
+	public static final String VERSION_NUMBER = "2.0.7_8";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
@@ -55,7 +55,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 	public void run() {
 		this.cursor = getCursor();
 		General.useAntiBanCompliance(true);
-		Dispatcher.create(this, 0);
+		Dispatcher.create(this);
 		Dispatcher.get().start(name);
 		this.paint_handler = new TotalPaintHandler(VERSION_NUMBER);
 		SkillData.updateAll();

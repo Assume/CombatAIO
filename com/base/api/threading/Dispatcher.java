@@ -34,8 +34,8 @@ public class Dispatcher {
 
 	public static final int LITE_VERSION_REPO_ID = 64;
 
-	public static void create(BaseCombat main_class, long hash_id) {
-		dispatcher = new Dispatcher(main_class, hash_id);
+	public static void create(BaseCombat main_class) {
+		dispatcher = new Dispatcher(main_class);
 	}
 
 	public static Dispatcher get() {
@@ -76,7 +76,7 @@ public class Dispatcher {
 	private Banker banker;
 	private int repo_id;
 
-	private Dispatcher(BaseCombat main_class, long hash_id) {
+	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
 		this.combat_task = new CombatTask();
 		this.looting_task = new Looter();
@@ -99,8 +99,11 @@ public class Dispatcher {
 		this.pk_avoider.start();
 		this.price_updater_task.start();
 		this.combat_task.setAmmo();
-		if (this.consumption_task.isUsingBonesToPeaches().getValue())
+		if (this.consumption_task.isUsingBonesToPeaches().getValue()) {
 			this.looting_task.addPossibleLootItem(true, "Bones");
+			this.looting_task.addPossibleLootItem(true, "Big bones");
+		}
+
 	}
 
 	/*
@@ -328,8 +331,7 @@ public class Dispatcher {
 		this.run = false;
 		Login.logout();
 		this.main_class.setLoginBotState(false);
-		throw new RuntimeException(
-				reason);
+		throw new RuntimeException(reason);
 	}
 
 	public int getRepoID() {

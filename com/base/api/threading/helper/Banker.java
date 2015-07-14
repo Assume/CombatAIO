@@ -9,7 +9,6 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Login;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
@@ -57,7 +56,8 @@ public class Banker {
 	 */
 
 	public void bank(boolean world_hop) {
-		Dispatcher.get().getCombatTask().pickupCannon();
+		if (Dispatcher.get().getCombatTask().isUsingCannon())
+			Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
 			Dispatcher
 					.get()

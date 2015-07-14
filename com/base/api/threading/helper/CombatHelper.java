@@ -58,8 +58,8 @@ public class CombatHelper {
 	private ArmorHolder armor_holder;
 	private RSTile safe_spot_tile;
 
-	private int ammo_id = -1;
-	private int knife_id = -1;
+	private int ammo_id = -4;
+	private int knife_id = -4;
 
 	private boolean is_ranging = false;
 	private boolean flicker = false;
