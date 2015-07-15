@@ -57,6 +57,7 @@ import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
+import javax.swing.JTextPane;
 
 public class BaseGUI extends CGUI {
 
@@ -283,6 +284,11 @@ public class BaseGUI extends CGUI {
 		});
 		btnNewButton_1.setBounds(10, 56, 122, 23);
 		tab_four_panel.add(btnNewButton_1);
+		
+		JTextPane text_pane_changelog = new JTextPane();
+		text_pane_changelog.setText("Changelog\r\n\r\nV2.0.7_8: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n");
+		text_pane_changelog.setBounds(185, 11, 419, 248);
+		tab_four_panel.add(text_pane_changelog);
 
 		// TODO
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
@@ -961,5 +967,4 @@ public class BaseGUI extends CGUI {
 		JOptionPane.showMessageDialog(null, feature_name
 				+ " is only available on CombatAIO Premium");
 	}
-
 }

@@ -117,11 +117,12 @@ public class Banker {
 						.getId());
 		for (BankItem x : list) {
 			if (Potions.isPotionId(x.getId()))
-				withdrawYofX(x.getAmount(), Potions.getAllIds(x.getId()));
-			Banking.withdraw(x.getAmount(), x.getId());
+				Banking.withdraw(x.getAmount(), Potions.getAllIds(x.getId()));
+			else
+				Banking.withdraw(x.getAmount(), x.getId());
 		}
 		if (jewelery != null && needToWithdrawJewelery(jewelery)) {
-			withdrawYofX(1, jewelery.getIDs());
+			Banking.withdraw(1, jewelery.getIDs());
 			return true;
 		}
 		return false;
@@ -133,8 +134,9 @@ public class Banker {
 			RSItem[] item = Banking.find(ids[i]);
 			if (item.length == 0)
 				continue;
-			Banking.withdraw(amount - tot, ids[i]);
 			tot += item[0].getStack();
+			Banking.withdraw(amount - tot, ids[i]);
+			General.sleep(500, 800);
 		}
 	}
 
