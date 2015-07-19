@@ -21,8 +21,8 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 
 import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 
 public class LootItem implements Comparable<LootItem> {
 

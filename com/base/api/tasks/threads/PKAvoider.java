@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.tasks.threads;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import org.tribot.api2007.Players;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSPlayer;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class PKAvoider extends Threadable {

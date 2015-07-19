@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.helper;
+package scripts.CombatAIO.com.base.api.tasks.helper;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -23,10 +23,10 @@ import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;

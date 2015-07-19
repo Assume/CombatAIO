@@ -2,7 +2,7 @@ package scripts.CombatAIO.com.base.main.gui.elements;
 
 import javax.swing.table.DefaultTableModel;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 
 public class UneditableDefaultTableModel extends DefaultTableModel {
 

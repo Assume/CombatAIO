@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.tasks.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,12 +25,12 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
+import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.main.utils.Logger;

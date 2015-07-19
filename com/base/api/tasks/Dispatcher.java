@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading;
+package scripts.CombatAIO.com.base.api.tasks;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -9,16 +9,16 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
-import scripts.CombatAIO.com.base.api.threading.helper.Banker;
-import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
-import scripts.CombatAIO.com.base.api.threading.threads.ConsumptionTask;
-import scripts.CombatAIO.com.base.api.threading.threads.Looter;
-import scripts.CombatAIO.com.base.api.threading.threads.PKAvoider;
-import scripts.CombatAIO.com.base.api.threading.threads.PriceUpdater;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
+import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
+import scripts.CombatAIO.com.base.api.tasks.threads.ConsumptionTask;
+import scripts.CombatAIO.com.base.api.tasks.threads.Looter;
+import scripts.CombatAIO.com.base.api.tasks.threads.PKAvoider;
+import scripts.CombatAIO.com.base.api.tasks.threads.PriceUpdater;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;

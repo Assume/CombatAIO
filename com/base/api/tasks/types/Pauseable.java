@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.types;
+package scripts.CombatAIO.com.base.api.tasks.types;
 
 public interface Pauseable {
 

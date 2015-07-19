@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.tasks.threads;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,11 @@ import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 
 public class PriceUpdater extends Threadable implements Runnable {

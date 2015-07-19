@@ -1,9 +1,9 @@
 package scripts.CombatAIO.com.base.api.progression.moves;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 
 public class CChangeFoodMove extends CProgressionAction {

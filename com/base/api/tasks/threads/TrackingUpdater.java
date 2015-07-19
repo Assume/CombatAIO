@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.tasks.threads;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

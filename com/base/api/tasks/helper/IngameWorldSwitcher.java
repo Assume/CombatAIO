@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.helper;
+package scripts.CombatAIO.com.base.api.tasks.helper;
 
 import java.awt.Rectangle;
 import java.util.Arrays;

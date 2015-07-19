@@ -44,10 +44,10 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.helper.Banker;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
@@ -57,6 +57,7 @@ import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
+
 import javax.swing.JTextPane;
 
 public class BaseGUI extends CGUI {
@@ -284,11 +285,13 @@ public class BaseGUI extends CGUI {
 		});
 		btnNewButton_1.setBounds(10, 56, 122, 23);
 		tab_four_panel.add(btnNewButton_1);
-		
+
 		JTextPane text_pane_changelog = new JTextPane();
-		text_pane_changelog.setText("Changelog\r\n\r\nV2.0.7_8: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n");
+		text_pane_changelog
+				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n");
 		text_pane_changelog.setBounds(185, 11, 419, 248);
 		tab_four_panel.add(text_pane_changelog);
+		text_pane_changelog.setEditable(false);
 
 		// TODO
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());

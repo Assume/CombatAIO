@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.helper;
+package scripts.CombatAIO.com.base.api.tasks.helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.threads.CombatTask;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;

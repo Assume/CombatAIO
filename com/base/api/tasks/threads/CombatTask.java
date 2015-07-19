@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.threads;
+package scripts.CombatAIO.com.base.api.tasks.threads;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,15 +19,15 @@ import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.helper.Banker;
-import scripts.CombatAIO.com.base.api.threading.helper.CombatHelper;
-import scripts.CombatAIO.com.base.api.threading.helper.IngameWorldSwitcher;
-import scripts.CombatAIO.com.base.api.threading.helper.StaticTargetCalculator;
-import scripts.CombatAIO.com.base.api.threading.types.PauseType;
-import scripts.CombatAIO.com.base.api.threading.types.Pauseable;
-import scripts.CombatAIO.com.base.api.threading.types.Threadable;
-import scripts.CombatAIO.com.base.api.threading.types.Value;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
+import scripts.CombatAIO.com.base.api.tasks.helper.CombatHelper;
+import scripts.CombatAIO.com.base.api.tasks.helper.IngameWorldSwitcher;
+import scripts.CombatAIO.com.base.api.tasks.helper.StaticTargetCalculator;
+import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
+import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
+import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;

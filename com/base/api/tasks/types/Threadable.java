@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.threading.types;
+package scripts.CombatAIO.com.base.api.tasks.types;
 
 import java.util.ArrayList;
 import java.util.List;

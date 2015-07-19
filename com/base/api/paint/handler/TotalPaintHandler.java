@@ -6,8 +6,8 @@ import java.awt.Point;
 import org.tribot.api2007.types.RSCharacter;
 
 import scripts.CombatAIO.com.base.api.paint.handler.custom.LootedItemsDisplay;
-import scripts.CombatAIO.com.base.api.threading.Dispatcher;
-import scripts.CombatAIO.com.base.api.threading.types.ValueType;
+import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.api.scriptapi.paint.PaintHandler;
 import scripts.api.scriptapi.paint.Paintable;
 import scripts.api.scriptapi.paint.SkillData;
