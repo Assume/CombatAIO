@@ -1,8 +1,8 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
 import org.tribot.api.General;
 
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DSleep implements DAction {
 

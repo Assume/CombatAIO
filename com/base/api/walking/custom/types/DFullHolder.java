@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.walking.types;
+package scripts.CombatAIO.com.base.api.walking.custom.types;
 
 import java.io.Serializable;
 import java.util.Arrays;

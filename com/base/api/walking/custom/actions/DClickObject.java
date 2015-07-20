@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
 import org.tribot.api.Clicking;
 import org.tribot.api2007.Camera;
@@ -6,7 +6,7 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
 
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DClickObject implements DAction {
 

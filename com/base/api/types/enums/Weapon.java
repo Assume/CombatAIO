@@ -10,7 +10,7 @@ import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSNPC;
 
 import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
-import scripts.CombatAIO.com.base.api.walking.types.CEquipment;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 
 public enum Weapon {
 

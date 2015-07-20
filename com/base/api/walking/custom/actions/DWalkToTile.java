@@ -1,9 +1,9 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DWalkToTile implements DAction {
 

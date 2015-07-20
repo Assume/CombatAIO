@@ -1,9 +1,9 @@
-package scripts.CombatAIO.com.base.api.walking.conditions;
+package scripts.CombatAIO.com.base.api.walking.custom.conditions;
 
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.walking.types.DCondition;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DCondition;
 
 public class DNPCIsOnScreenCondition implements DCondition {
 

@@ -1,11 +1,11 @@
-package scripts.CombatAIO.com.base.api.walking.conditions;
+package scripts.CombatAIO.com.base.api.walking.custom.conditions;
 
 import javax.swing.JOptionPane;
 
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.walking.types.DCondition;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DCondition;
 
 public enum DConditionMaker {
 

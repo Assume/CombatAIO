@@ -31,7 +31,7 @@ import scripts.CombatAIO.com.base.api.types.ArmorHolder;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.api.walking.types.CEquipment;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {

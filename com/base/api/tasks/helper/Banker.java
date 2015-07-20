@@ -26,6 +26,8 @@ import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.CWalking;
+import scripts.CombatAIO.com.base.api.walking.presets.Preset;
+import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
@@ -34,6 +36,8 @@ public class Banker {
 
 	private List<BankItem> list;
 	private int food_amount;
+
+	private PresetFactory preset;
 
 	public Banker() {
 		list = new ArrayList<BankItem>();
@@ -73,14 +77,22 @@ public class Banker {
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
-		JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
-		if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
-			checkAndRemoveGlory();
-		openBank(world_hop);
-		handleBankWindow(world_hop, teleport);
-		if (world_hop)
-			WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
-		CWalking.walk(MovementType.TO_MONSTER);
+		if (this.preset == PresetFactory.NONE) {
+			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
+			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
+				checkAndRemoveGlory();
+			openBank(world_hop);
+			handleBankWindow(world_hop, teleport);
+			if (world_hop)
+				WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
+			CWalking.walk(MovementType.TO_MONSTER);
+		} else {
+			Preset temp_preset = this.preset.getPreset();
+			temp_preset.executeToBank();
+			openBank(world_hop);
+			handleBankWindow(world_hop, null);
+			temp_preset.executeToMonster();
+		}
 		Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
 	}
 
@@ -107,7 +119,7 @@ public class Banker {
 				.getJewelery());
 		Banking.close();
 		if (withdraw_jewelery)
-			scripts.CombatAIO.com.base.api.walking.types.CEquipment
+			scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment
 					.equip(teleport.getJewelery().getIDs());
 	}
 
@@ -225,5 +237,9 @@ public class Banker {
 
 	public void setFoodWithdrawAmount(int amount) {
 		this.food_amount = amount;
+	}
+
+	public void setPreset(PresetFactory preset) {
+		this.preset = preset;
 	}
 }

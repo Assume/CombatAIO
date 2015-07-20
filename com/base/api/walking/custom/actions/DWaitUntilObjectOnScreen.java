@@ -1,11 +1,11 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.types.RSObject;
 
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DWaitUntilObjectOnScreen implements DAction {
 

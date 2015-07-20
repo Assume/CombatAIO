@@ -5,7 +5,7 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.types.RSItem;
 
-import scripts.CombatAIO.com.base.api.walking.types.CEquipment;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 
 public class ArmorHolder {
 

@@ -1,11 +1,11 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DWaitUntilNPCOnScreen implements DAction {
 

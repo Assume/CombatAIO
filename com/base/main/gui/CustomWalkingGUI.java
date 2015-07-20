@@ -24,13 +24,13 @@ import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
-import scripts.CombatAIO.com.base.api.walking.actions.DActionMaker;
-import scripts.CombatAIO.com.base.api.walking.conditions.DConditionMaker;
-import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
-import scripts.CombatAIO.com.base.api.walking.types.DCondition;
-import scripts.CombatAIO.com.base.api.walking.types.DFullHolder;
-import scripts.CombatAIO.com.base.api.walking.types.DHolder;
+import scripts.CombatAIO.com.base.api.walking.custom.actions.DActionMaker;
+import scripts.CombatAIO.com.base.api.walking.custom.conditions.DConditionMaker;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DCondition;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DFullHolder;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DHolder;
 
 public class CustomWalkingGUI extends JFrame {
 

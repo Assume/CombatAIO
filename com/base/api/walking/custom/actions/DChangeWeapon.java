@@ -1,7 +1,7 @@
-package scripts.CombatAIO.com.base.api.walking.actions;
+package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
-import scripts.CombatAIO.com.base.api.walking.types.CEquipment;
-import scripts.CombatAIO.com.base.api.walking.types.DAction;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
 
 public class DChangeWeapon implements DAction {
 

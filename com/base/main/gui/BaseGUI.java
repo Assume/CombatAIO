@@ -53,7 +53,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
-import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;

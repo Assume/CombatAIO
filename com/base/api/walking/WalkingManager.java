@@ -10,8 +10,8 @@ import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
-import scripts.CombatAIO.com.base.api.walking.types.CustomMovement;
-import scripts.CombatAIO.com.base.api.walking.types.DFullHolder;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
+import scripts.CombatAIO.com.base.api.walking.custom.types.DFullHolder;
 
 public class WalkingManager {
 
