@@ -13,11 +13,11 @@ import scripts.api.scriptapi.paint.Paintable;
 import scripts.api.scriptapi.paint.SkillData;
 import scripts.api.scriptapi.paint.paintables.DataDisplay;
 import scripts.api.scriptapi.paint.paintables.ExperienceDisplay;
-import scripts.api.scriptapi.paint.paintables.PaintPanel;
-import scripts.api.scriptapi.paint.paintables.PaintTab;
 import scripts.api.scriptapi.paint.paintables.RSCharacterHealthDisplay;
 import scripts.api.scriptapi.paint.paintables.generic.HidePaintButton;
 import scripts.api.scriptapi.paint.paintables.generic.ShowGUIButton;
+import scripts.api.scriptapi.paint.paintables.tabs.PaintPanel;
+import scripts.api.scriptapi.paint.paintables.tabs.PaintTab;
 
 public class TotalPaintHandler extends PaintHandler {
 
@@ -36,14 +36,12 @@ public class TotalPaintHandler extends PaintHandler {
 
 		this.looted_items_display = new LootedItemsDisplay();
 		this.generic_data_display = new DataDisplay();
-		this.target_health_display = new RSCharacterHealthDisplay(null);
+		this.target_health_display = new RSCharacterHealthDisplay();
 
 		new HidePaintButton().register(this);
-		// new ExperienceDisplay(SkillData.COMBAT_TYPE).register(this);
 		new ShowGUIButton(Dispatcher.get().getGUI()).register(this);
 
 		this.looted_items_display.register(this);
-		// this.generic_data_display.register(this);
 		this.target_health_display.register(this);
 
 		PaintPanel main_panel = new PaintPanel(230, 325, 265, 118);
