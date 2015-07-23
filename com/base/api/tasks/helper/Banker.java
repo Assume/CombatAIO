@@ -37,8 +37,6 @@ public class Banker {
 	private List<BankItem> list;
 	private int food_amount;
 
-	private PresetFactory preset;
-
 	public Banker() {
 		list = new ArrayList<BankItem>();
 		this.food_amount = 0;
@@ -77,7 +75,7 @@ public class Banker {
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
-		if (this.preset == PresetFactory.NONE) {
+		if (Dispatcher.get().getPreset() == PresetFactory.NONE) {
 			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 				checkAndRemoveGlory();
@@ -87,7 +85,7 @@ public class Banker {
 				WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 			CWalking.walk(MovementType.TO_MONSTER);
 		} else {
-			Preset temp_preset = this.preset.getPreset();
+			Preset temp_preset = Dispatcher.get().getPreset().getPreset();
 			temp_preset.executeToBank();
 			openBank(world_hop);
 			handleBankWindow(world_hop, null);
@@ -239,7 +237,4 @@ public class Banker {
 		this.food_amount = amount;
 	}
 
-	public void setPreset(PresetFactory preset) {
-		this.preset = preset;
-	}
 }

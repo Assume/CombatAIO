@@ -6,14 +6,20 @@ public abstract class Preset {
 
 	private String name;
 	private BankItem[] required_items;
+	private String requirements;
 
-	public Preset(String name, BankItem... required_items) {
+	public Preset(String name, String requirements, BankItem... required_items) {
 		this.name = name;
 		this.required_items = required_items;
+		this.requirements = requirements;
 	}
 
 	public String getName() {
 		return this.name;
+	}
+
+	public String getRequirements() {
+		return requirements;
 	}
 
 	public BankItem[] getRequiredItems() {

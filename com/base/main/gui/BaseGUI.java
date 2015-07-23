@@ -49,6 +49,7 @@ import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.api.types.constants.FileSaveLocations;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
@@ -294,7 +295,7 @@ public class BaseGUI extends CGUI {
 		text_pane_changelog.setEditable(false);
 
 		// TODO
-		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
+		combo_box_prayer = new JComboBox<Prayer>();
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
 		if (Dispatcher.get().isLiteMode())
@@ -304,7 +305,7 @@ public class BaseGUI extends CGUI {
 		lblPrayer.setBounds(10, 11, 46, 14);
 		tab_three_panel.add(lblPrayer);
 
-		chckbx_flicker = new JCheckBox("Flicker *");
+		chckbx_flicker = new JCheckBox("Flicker*");
 		chckbx_flicker.setBounds(10, 58, 97, 23);
 		tab_three_panel.add(chckbx_flicker);
 		if (Dispatcher.get().isLiteMode())
@@ -317,7 +318,7 @@ public class BaseGUI extends CGUI {
 			chckbx_guthans.setEnabled(false);
 
 		lblOnlySome = new JLabel(
-				"* Only piety and chivalry are supported for flicker");
+				"*Only piety and chivalry are supported for flicker");
 		lblOnlySome.setBounds(10, 217, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
@@ -326,7 +327,7 @@ public class BaseGUI extends CGUI {
 		tab_three_panel.add(chckbx_ranged);
 
 		// TODO
-		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
+		combo_box_special_attack = new JComboBox<Weapon>();
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
 		if (Dispatcher.get().isLiteMode())
@@ -358,15 +359,14 @@ public class BaseGUI extends CGUI {
 		JButton btnSet = new JButton("Set");
 		btnSet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				if (Dispatcher.get().isLiteMode()) {
+				if (Dispatcher.get().isLiteMode())
 					showPremiumMessageDialog("Safe spot");
-					return;
+				else {
+					safe_spot_tile = Player.getRSPlayer().getPosition();
+					if (safe_spot_tile != null)
+						lbl_safe_spot.setText("Safe spot: "
+								+ safe_spot_tile.toString());
 				}
-
-				safe_spot_tile = Player.getRSPlayer().getPosition();
-				if (safe_spot_tile != null)
-					lbl_safe_spot.setText("Safe spot: "
-							+ safe_spot_tile.toString());
 			}
 		});
 		btnSet.setBounds(10, 158, 89, 23);
@@ -401,7 +401,7 @@ public class BaseGUI extends CGUI {
 			btn_cannon_tile.setEnabled(false);
 
 		// TODO
-		combo_box_food = new JComboBox<Food>(Food.values());
+		combo_box_food = new JComboBox<Food>();
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
 		if (Dispatcher.get().isLiteMode())
@@ -705,11 +705,11 @@ public class BaseGUI extends CGUI {
 			String cannon_tile_text = this.cannon_tile == null ? "null"
 					: this.cannon_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("cannon_tile", cannon_tile_text);
-			boolean exist = (new File(Util.getWorkingDirectory()
-					+ File.separator + "Base").mkdirs());
+			boolean exist = (new File(FileSaveLocations.getFileLocation())
+					.mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
-					Util.getWorkingDirectory() + File.separator + "Base"
-							+ File.separator + name + ".ini");
+					FileSaveLocations.getFileLocation() + File.separator + name
+							+ ".ini");
 			prop.store(streamO, null);
 			streamO.flush();
 			streamO.close();
@@ -721,8 +721,9 @@ public class BaseGUI extends CGUI {
 
 	public boolean load(String name) {
 		try {
-			FileInputStream in = new FileInputStream(Util.getWorkingDirectory()
-					+ File.separator + "Base" + File.separator + name + ".ini");
+			FileInputStream in = new FileInputStream(
+					FileSaveLocations.getFileLocation() + File.separator + name
+							+ File.separator + name + ".ini");
 			Properties prop = new Properties();
 			prop.load(in);
 			combo_box_food.setSelectedItem(Food.getFoodFromName(prop

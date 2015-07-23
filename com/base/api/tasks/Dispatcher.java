@@ -23,6 +23,7 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
@@ -75,6 +76,8 @@ public class Dispatcher {
 	private CProgressionHandler handler;
 	private Banker banker;
 	private int repo_id;
+
+	private PresetFactory preset;
 
 	private Dispatcher(BaseCombat main_class) {
 		this.main_class = main_class;
@@ -348,6 +351,14 @@ public class Dispatcher {
 
 	public boolean shouldRun() {
 		return this.run;
+	}
+
+	public PresetFactory getPreset() {
+		return this.preset;
+	}
+
+	public boolean isRockCrabs() {
+		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS;
 	}
 
 }

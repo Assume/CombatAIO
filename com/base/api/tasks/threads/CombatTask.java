@@ -28,14 +28,13 @@ import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
+import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.SkillData;
 
 public class CombatTask extends Threadable implements Pauseable {
-
-	private static final String ROCK_CRABS_ASLEEP_NAME = "Rocks";
 
 	private RSNPC current_target;
 	private RSTile home_tile;
@@ -143,8 +142,11 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	private void setTarget(RSNPC[] monsters) {
-		if (monsters.length == 0)
+		if (monsters.length == 0) {
+			if (Dispatcher.get().getRepoID() == ScriptIDs.ASSUMES_GOT_CRABS)
+				this.helper.wakeUpCrabs();
 			return;
+		}
 		if (getAverageDistance(monsters) < 3)
 			this.current_target = monsters[General.random(0,
 					monsters.length - 1)];

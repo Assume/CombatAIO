@@ -11,11 +11,13 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
+import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
@@ -28,10 +30,13 @@ import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
+import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
+import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
+import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {
@@ -73,11 +78,57 @@ public class CombatHelper {
 	private Weapon special_attack_weapon = Weapon.NONE;
 	private RSTile cannon_location;
 
+	private int times_failed_wakeup_crab;
+
 	public CombatHelper(CombatTask task) {
 		this.combat_task = task;
 		this.armor_holder = null;
 		this.fill_cannon_at = General.random(0, 10);
 		this.cannon_location = null;
+	}
+
+	public void wakeUpCrabs() {
+		RSNPC[] idle_crabs = NPCs.findNearest(Filters.NPCs.inArea(MonsterArea
+				.getArea()));
+		if (idle_crabs.length == 0)
+			return;
+		if (times_failed_wakeup_crab >= 5) {
+			resetCrabs();
+			this.times_failed_wakeup_crab = 0;
+		}
+		for (RSNPC crab : idle_crabs) {
+			Walking.walkTo(crab.getPosition());
+			while (Player.isMoving())
+				General.sleep(200);
+			if (isCrabIdle(crab))
+				times_failed_wakeup_crab++;
+			else {
+				this.times_failed_wakeup_crab = 0;
+				return;
+			}
+		}
+	}
+
+	private static final RSTile RELLEKKA_WEST_RESET_TILE = new RSTile(2671,
+			3679);
+
+	private void resetCrabs() {
+		RSTile tile = null;
+		switch (Dispatcher.get().getPreset()) {
+		case RELLEKKA_WEST_ROCK_CRABS:
+			tile = RELLEKKA_WEST_RESET_TILE;
+			return;
+		}
+		new DPathNavigator().traverse(tile);
+		new DPathNavigator().traverse((RSTile) Dispatcher.get()
+				.get(ValueType.HOME_TILE).getValue());
+	}
+
+	private boolean isCrabIdle(RSNPC crab) {
+		for (int x : MonsterIDs.ROCK_CRAB_ASLEEP_IDS)
+			if (crab.getID() == x)
+				return true;
+		return false;
 	}
 
 	public void checkRun() {
