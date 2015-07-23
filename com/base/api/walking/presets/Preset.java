@@ -4,18 +4,12 @@ import scripts.CombatAIO.com.base.api.types.BankItem;
 
 public abstract class Preset {
 
-	private String name;
 	private BankItem[] required_items;
 	private String requirements;
 
-	public Preset(String name, String requirements, BankItem... required_items) {
-		this.name = name;
+	public Preset(String requirements, BankItem... required_items) {
 		this.required_items = required_items;
 		this.requirements = requirements;
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	public String getRequirements() {

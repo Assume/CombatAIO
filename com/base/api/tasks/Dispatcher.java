@@ -90,10 +90,12 @@ public class Dispatcher {
 		this.handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
+		this.preset = PresetFactory.NONE;
 	}
 
 	private void run() {
-		this.combat_task.setHomeTile(Player.getPosition());
+		this.combat_task.setHomeTile(this.preset == PresetFactory.NONE ? Player
+				.getPosition() : this.preset.getHomeTile());
 		Walking.setControlClick(true);
 		this.combat_task.start();
 		this.combat_task.initiate();
@@ -184,6 +186,8 @@ public class Dispatcher {
 			return this.combat_task.getUseCannon();
 		case CANNON_TILE:
 			return this.combat_task.getCannonTile();
+		case ATTACK_MONSTERS_IN_COMBAT:
+			return this.combat_task.getAttackMonstersInCombat();
 		default:
 			break;
 		}
@@ -252,6 +256,10 @@ public class Dispatcher {
 			break;
 		case CANNON_TILE:
 			this.combat_task.setCannonTile((RSTile) val.getValue());
+			break;
+		case ATTACK_MONSTERS_IN_COMBAT:
+			this.combat_task
+					.setAttackMonstersInCombat((Boolean) val.getValue());
 			break;
 		default:
 			break;
@@ -351,6 +359,10 @@ public class Dispatcher {
 
 	public boolean shouldRun() {
 		return this.run;
+	}
+
+	public void setPreset(PresetFactory preset) {
+		this.preset = preset;
 	}
 
 	public PresetFactory getPreset() {

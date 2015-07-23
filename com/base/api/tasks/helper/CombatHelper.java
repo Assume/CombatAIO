@@ -36,7 +36,6 @@ import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
-import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {
@@ -88,18 +87,22 @@ public class CombatHelper {
 	}
 
 	public void wakeUpCrabs() {
-		RSNPC[] idle_crabs = NPCs.findNearest(Filters.NPCs.inArea(MonsterArea
-				.getArea()));
+		RSNPC[] idle_crabs = NPCs.findNearest(Filters.NPCs.inArea(
+				MonsterArea.getArea()).combine(
+				Filters.NPCs.idEquals(MonsterIDs.ROCK_CRAB_ASLEEP_IDS), true));
 		if (idle_crabs.length == 0)
 			return;
+		System.out.println("Waking up crabs");
 		if (times_failed_wakeup_crab >= 5) {
 			resetCrabs();
 			this.times_failed_wakeup_crab = 0;
 		}
 		for (RSNPC crab : idle_crabs) {
 			Walking.walkTo(crab.getPosition());
-			while (Player.isMoving())
+			while (Player.isMoving() && !Player.getRSPlayer().isInCombat())
 				General.sleep(200);
+			if (Player.getRSPlayer().isInCombat())
+				return;
 			if (isCrabIdle(crab))
 				times_failed_wakeup_crab++;
 			else {

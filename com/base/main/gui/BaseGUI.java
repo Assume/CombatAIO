@@ -50,11 +50,13 @@ import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.constants.FileSaveLocations;
+import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
+import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
@@ -69,6 +71,7 @@ public class BaseGUI extends CGUI {
 	private JComboBox<Prayer> combo_box_prayer;
 	private JComboBox<Weapon> combo_box_special_attack;
 	private JComboBox<String> combo_box_settings;
+	private JComboBox<PresetFactory> combo_box_preset;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
@@ -89,6 +92,7 @@ public class BaseGUI extends CGUI {
 	private JCheckBox chckbx_loot_in_combat;
 	private JCheckBox chckbx_telekinetic_grab;
 	private JCheckBox chckbx_cannon;
+	private JCheckBox chckbx_attack_monsters_in_combat;
 
 	private JLabel lblBankItems;
 	private JLabel lblPrayer;
@@ -295,7 +299,7 @@ public class BaseGUI extends CGUI {
 		text_pane_changelog.setEditable(false);
 
 		// TODO
-		combo_box_prayer = new JComboBox<Prayer>();
+		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
 		if (Dispatcher.get().isLiteMode())
@@ -327,7 +331,7 @@ public class BaseGUI extends CGUI {
 		tab_three_panel.add(chckbx_ranged);
 
 		// TODO
-		combo_box_special_attack = new JComboBox<Weapon>();
+		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
 		if (Dispatcher.get().isLiteMode())
@@ -379,7 +383,7 @@ public class BaseGUI extends CGUI {
 			chckbx_cannon.setEnabled(false);
 
 		lbl_cannon_tile = new JLabel("Cannon tile: ");
-		lbl_cannon_tile.setBounds(321, 88, 161, 14);
+		lbl_cannon_tile.setBounds(282, 114, 161, 14);
 		tab_three_panel.add(lbl_cannon_tile);
 
 		JButton btn_cannon_tile = new JButton("Set");
@@ -395,13 +399,18 @@ public class BaseGUI extends CGUI {
 							+ cannon_tile.toString());
 			}
 		});
-		btn_cannon_tile.setBounds(234, 85, 77, 20);
+		btn_cannon_tile.setBounds(195, 111, 77, 20);
 		tab_three_panel.add(btn_cannon_tile);
+
+		chckbx_attack_monsters_in_combat = new JCheckBox(
+				"Attack monsters in combat");
+		chckbx_attack_monsters_in_combat.setBounds(252, 58, 262, 23);
+		tab_three_panel.add(chckbx_attack_monsters_in_combat);
 		if (Dispatcher.get().isLiteMode())
 			btn_cannon_tile.setEnabled(false);
 
 		// TODO
-		combo_box_food = new JComboBox<Food>();
+		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
 		if (Dispatcher.get().isLiteMode())
@@ -543,6 +552,18 @@ public class BaseGUI extends CGUI {
 		tab_one_panel.add(spinner_combat_radius);
 		spinner_combat_radius.setValue(15);
 
+		JLabel lblPreset = new JLabel("Preset");
+		lblPreset.setBounds(10, 123, 46, 14);
+		tab_one_panel.add(lblPreset);
+
+		// TODO
+		combo_box_preset = new JComboBox<PresetFactory>(
+		 PresetFactory.getPresetsForScript() );
+		combo_box_preset.setBounds(10, 148, 121, 20);
+		tab_one_panel.add(combo_box_preset);
+		if (Dispatcher.get().isLiteMode())
+			combo_box_preset.setEnabled(false);
+
 		fillSettingsNames();
 
 	}
@@ -560,13 +581,18 @@ public class BaseGUI extends CGUI {
 	}
 
 	public void set() {
+		Dispatcher.get().setPreset(
+				Dispatcher.get().isLiteMode() ? PresetFactory.NONE
+						: (PresetFactory) this.combo_box_preset
+								.getSelectedItem());
 		Dispatcher.get().set(ValueType.FOOD,
 				new Value<Food>((Food) combo_box_food.getSelectedItem()));
 		Dispatcher.get().set(ValueType.WAIT_FOR_LOOT,
 				new Value<Boolean>(chckbx_wait_for_loot.isSelected()));
 		Dispatcher.get().set(ValueType.LOOT_IN_COMBAT,
 				new Value<Boolean>(chckbx_loot_in_combat.isSelected()));
-		Dispatcher.get().set(ValueType.MONSTER_IDS, getMonsterIDs());
+		// Dispatcher.get().set(ValueType.MONSTER_IDS, getMonsterIDs());
+		setMonsterIDs();
 		Dispatcher.get().set(
 				ValueType.SPECIAL_ATTACK_WEAPON,
 				new Value<Weapon>((Weapon) combo_box_special_attack
@@ -609,6 +635,10 @@ public class BaseGUI extends CGUI {
 						.isSelected()));
 		Dispatcher.get().set(ValueType.CANNON_TILE,
 				new Value<RSTile>(this.cannon_tile));
+		Dispatcher.get().set(
+				ValueType.ATTACK_MONSTERS_IN_COMBAT,
+				new Value<Boolean>(chckbx_attack_monsters_in_combat
+						.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -617,6 +647,16 @@ public class BaseGUI extends CGUI {
 							"[^0-9]", ""))));
 		setBankingList();
 		setLootingList();
+	}
+
+	private void setMonsterIDs() {
+		Value<int[]> value = null;
+		if (Dispatcher.get().isRockCrabs())
+			value = new Value<int[]>(MonsterIDs.ROCK_CRAB_AWAKE_IDS);
+		else
+			value = getMonsterIDs();
+		Dispatcher.get().set(ValueType.MONSTER_IDS, value);
+
 	}
 
 	private void setLootingList() {
@@ -702,9 +742,13 @@ public class BaseGUI extends CGUI {
 			prop.setProperty("use_cannon",
 					Dispatcher.get().get(ValueType.USE_CANNON).getValue()
 							.toString());
+			prop.setProperty("attack_monsters_in_combat",
+					Dispatcher.get().get(ValueType.ATTACK_MONSTERS_IN_COMBAT)
+							.getValue().toString());
 			String cannon_tile_text = this.cannon_tile == null ? "null"
 					: this.cannon_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("cannon_tile", cannon_tile_text);
+			prop.setProperty("preset", Dispatcher.get().getPreset().toString());
 			boolean exist = (new File(FileSaveLocations.getFileLocation())
 					.mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -761,6 +805,11 @@ public class BaseGUI extends CGUI {
 							.parseInt(prop.getProperty("world_hop_tolerance")));
 			chckbx_ranged.setSelected(Dispatcher.get().isLiteMode() ? false
 					: Boolean.parseBoolean("tele_grab"));
+			combo_box_preset.setSelectedItem(PresetFactory
+					.getPresetForName(prop.getProperty("preset")));
+			chckbx_attack_monsters_in_combat
+					.setSelected(Boolean.parseBoolean(prop
+							.getProperty("attack_monsters_in_combat")));
 			if (Dispatcher.get().isLiteMode())
 				this.safe_spot_tile = null;
 			else

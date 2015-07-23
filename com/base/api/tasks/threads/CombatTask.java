@@ -28,7 +28,6 @@ import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
-import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
@@ -48,6 +47,8 @@ public class CombatTask extends Threadable implements Pauseable {
 	private long last_attack_time = System.currentTimeMillis();
 
 	private CombatHelper helper;
+
+	private boolean attack_monsters_already_in_combat;
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -133,7 +134,7 @@ public class CombatTask extends Threadable implements Pauseable {
 			}
 		}
 		setTarget(monsters);
-		if (!StaticTargetCalculator.verifyTarget(this.current_target))
+		if (!verifyTarget(this.current_target))
 			return;
 		if (this.helper.getSafeSpotTile() == null)
 			moveToTarget(this.current_target);
@@ -141,9 +142,18 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	}
 
+	public boolean verifyTarget(RSNPC current_target) {
+		if (current_target == null)
+			return false;
+		return this.attack_monsters_already_in_combat
+				|| (!current_target.isInCombat() && !StaticTargetCalculator
+						.isBeingSplashed(current_target));
+
+	}
+
 	private void setTarget(RSNPC[] monsters) {
 		if (monsters.length == 0) {
-			if (Dispatcher.get().getRepoID() == ScriptIDs.ASSUMES_GOT_CRABS)
+			if (Dispatcher.get().isRockCrabs())
 				this.helper.wakeUpCrabs();
 			return;
 		}
@@ -175,8 +185,7 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	private void attackTarget(RSNPC target) {
-		if (target == null
-				|| (target.isInCombat() && !target.isInteractingWithMe()))
+		if (target == null)
 			return;
 		if (Clicking.click("Attack " + target.getName(), target)) {
 			int distance = Player.getPosition().distanceTo(target);
@@ -340,6 +349,14 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	public void setUseCannon(boolean value) {
 		this.helper.setUseCannon(value);
+	}
+
+	public void setAttackMonstersInCombat(boolean value) {
+		this.attack_monsters_already_in_combat = value;
+	}
+
+	public Value<Boolean> getAttackMonstersInCombat() {
+		return new Value<Boolean>(this.attack_monsters_already_in_combat);
 	}
 
 	public void setCannonTile(RSTile value) {

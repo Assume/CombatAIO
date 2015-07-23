@@ -75,7 +75,8 @@ public class Banker {
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
-		if (Dispatcher.get().getPreset() == PresetFactory.NONE) {
+		if (Dispatcher.get().getPreset() == PresetFactory.NONE
+				|| Dispatcher.get().getPreset().get() == null) {
 			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 				checkAndRemoveGlory();
@@ -85,7 +86,7 @@ public class Banker {
 				WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
 			CWalking.walk(MovementType.TO_MONSTER);
 		} else {
-			Preset temp_preset = Dispatcher.get().getPreset().getPreset();
+			Preset temp_preset = Dispatcher.get().getPreset().get();
 			temp_preset.executeToBank();
 			openBank(world_hop);
 			handleBankWindow(world_hop, null);

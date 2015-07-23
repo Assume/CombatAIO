@@ -48,7 +48,7 @@ public class StaticTargetCalculator {
 				.getValue();
 	}
 
-	private static boolean isBeingSplashed(RSNPC n) {
+	public static boolean isBeingSplashed(RSNPC n) {
 		return n.getInteractingCharacter() != null;
 	}
 
@@ -70,7 +70,12 @@ public class StaticTargetCalculator {
 				if (PathFinding.canReach(x, false))
 					return new RSNPC[] { x };
 			if (home_tile.distanceTo(x) < radius) {
-				if (!x.isInCombat() && !isBeingSplashed(x)) {
+				if ((Boolean) Dispatcher.get()
+						.get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
+						|| (!x.isInCombat() && !isBeingSplashed(x))) {
+					if (x.isInCombat())
+						if (getNPCHPPercent(x) <= 50)
+							continue;
 					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
 							.getValue()) {
 						possible_npcs.add(x);
@@ -85,6 +90,19 @@ public class StaticTargetCalculator {
 		}
 		return NPCs.sortByDistance(Player.getPosition(),
 				possible_npcs.toArray(new RSNPC[possible_npcs.size()]));
+	}
+
+	private static int getNPCHPPercent(RSNPC current_tar) {
+		try {
+			if (current_tar == null)
+				return -1;
+			int health = current_tar.getMaxHealth();
+			if (health == 0)
+				return 0;
+			return ((current_tar.getHealth() / health) * 100);
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 
 	private static RSNPC[] filter_two(RSNPC[] npcs) {
@@ -104,8 +122,4 @@ public class StaticTargetCalculator {
 		return npc.getCombatLevel() > 0;
 	}
 
-	public static boolean verifyTarget(RSNPC current_target) {
-		return current_target != null && !current_target.isInCombat()
-				&& !isBeingSplashed(current_target);
-	}
 }

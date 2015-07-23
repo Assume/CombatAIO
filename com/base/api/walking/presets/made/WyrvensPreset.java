@@ -11,8 +11,8 @@ public class WyrvensPreset extends Preset {
 
 	public static final BankItem HOUSE_TELEPORT = new BankItem(8013, 1);
 
-	public WyrvensPreset(String name, BankItem... required_items) {
-		super(name, null, required_items);
+	public WyrvensPreset(BankItem... required_items) {
+		super(null, required_items);
 	}
 
 	@Override
