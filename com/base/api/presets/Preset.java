@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.walking.presets;
+package scripts.CombatAIO.com.base.api.presets;
 
 import scripts.CombatAIO.com.base.api.types.BankItem;
 

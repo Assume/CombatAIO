@@ -24,6 +24,7 @@ import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.helper.CombatHelper;
 import scripts.CombatAIO.com.base.api.tasks.helper.IngameWorldSwitcher;
 import scripts.CombatAIO.com.base.api.tasks.helper.StaticTargetCalculator;
+import scripts.CombatAIO.com.base.api.tasks.helper.scriptspecific.RockCrabsHelper;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
@@ -128,10 +129,12 @@ public class CombatTask extends Threadable implements Pauseable {
 		if ((monsters.length == 0 && NPCs.find(this.monster_ids).length >= 0 && Player
 				.getPosition().distanceTo(home_tile) >= combat_distance)
 				|| Timing.timeFromMark(this.last_attack_time) >= 10000) {
-			if (Player.getPosition().distanceTo(home_tile) >= 5) {
+			if (Player.getPosition().distanceTo(home_tile) >= 5
+					&& !Dispatcher.get().isRockCrabs()) {
 				new DPathNavigator().traverse(this.home_tile);
 				this.last_attack_time = System.currentTimeMillis();
-			}
+			} else
+				RockCrabsHelper.wakeUpCrabs();
 		}
 		setTarget(monsters);
 		if (!verifyTarget(this.current_target))
@@ -152,11 +155,8 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	private void setTarget(RSNPC[] monsters) {
-		if (monsters.length == 0) {
-			if (Dispatcher.get().isRockCrabs())
-				this.helper.wakeUpCrabs();
+		if (monsters.length == 0) 
 			return;
-		}
 		if (getAverageDistance(monsters) < 3)
 			this.current_target = monsters[General.random(0,
 					monsters.length - 1)];

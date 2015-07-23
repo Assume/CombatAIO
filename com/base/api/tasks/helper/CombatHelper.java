@@ -77,61 +77,13 @@ public class CombatHelper {
 	private Weapon special_attack_weapon = Weapon.NONE;
 	private RSTile cannon_location;
 
-	private int times_failed_wakeup_crab;
+
 
 	public CombatHelper(CombatTask task) {
 		this.combat_task = task;
 		this.armor_holder = null;
 		this.fill_cannon_at = General.random(0, 10);
 		this.cannon_location = null;
-	}
-
-	public void wakeUpCrabs() {
-		RSNPC[] idle_crabs = NPCs.findNearest(Filters.NPCs.inArea(
-				MonsterArea.getArea()).combine(
-				Filters.NPCs.idEquals(MonsterIDs.ROCK_CRAB_ASLEEP_IDS), true));
-		if (idle_crabs.length == 0)
-			return;
-		System.out.println("Waking up crabs");
-		if (times_failed_wakeup_crab >= 5) {
-			resetCrabs();
-			this.times_failed_wakeup_crab = 0;
-		}
-		for (RSNPC crab : idle_crabs) {
-			Walking.walkTo(crab.getPosition());
-			while (Player.isMoving() && !Player.getRSPlayer().isInCombat())
-				General.sleep(200);
-			if (Player.getRSPlayer().isInCombat())
-				return;
-			if (isCrabIdle(crab))
-				times_failed_wakeup_crab++;
-			else {
-				this.times_failed_wakeup_crab = 0;
-				return;
-			}
-		}
-	}
-
-	private static final RSTile RELLEKKA_WEST_RESET_TILE = new RSTile(2671,
-			3679);
-
-	private void resetCrabs() {
-		RSTile tile = null;
-		switch (Dispatcher.get().getPreset()) {
-		case RELLEKKA_WEST_ROCK_CRABS:
-			tile = RELLEKKA_WEST_RESET_TILE;
-			return;
-		}
-		new DPathNavigator().traverse(tile);
-		new DPathNavigator().traverse((RSTile) Dispatcher.get()
-				.get(ValueType.HOME_TILE).getValue());
-	}
-
-	private boolean isCrabIdle(RSNPC crab) {
-		for (int x : MonsterIDs.ROCK_CRAB_ASLEEP_IDS)
-			if (crab.getID() == x)
-				return true;
-		return false;
 	}
 
 	public void checkRun() {

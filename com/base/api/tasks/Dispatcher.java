@@ -8,6 +8,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.progression.CProgressionHandler;
 import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
@@ -23,7 +24,6 @@ import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
@@ -371,7 +371,7 @@ public class Dispatcher {
 	}
 
 	public boolean isRockCrabs() {
-		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS;
+		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS || this.preset == PresetFactory.RELLEKKA_EAST_ROCK_CRABS;
 	}
 
 }

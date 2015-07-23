@@ -44,6 +44,7 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
+import scripts.CombatAIO.com.base.api.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
@@ -56,7 +57,6 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
-import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
@@ -553,14 +553,18 @@ public class BaseGUI extends CGUI {
 		spinner_combat_radius.setValue(15);
 
 		JLabel lblPreset = new JLabel("Preset");
-		lblPreset.setBounds(10, 123, 46, 14);
+		lblPreset.setBounds(10, 123, 59, 14);
 		tab_one_panel.add(lblPreset);
 
 		// TODO
 		combo_box_preset = new JComboBox<PresetFactory>(
-		 PresetFactory.getPresetsForScript() );
+				PresetFactory.getPresetsForScript());
 		combo_box_preset.setBounds(10, 148, 121, 20);
 		tab_one_panel.add(combo_box_preset);
+
+		lblProfile = new JLabel("Profile");
+		lblProfile.setBounds(10, 183, 59, 14);
+		tab_one_panel.add(lblProfile);
 		if (Dispatcher.get().isLiteMode())
 			combo_box_preset.setEnabled(false);
 
@@ -834,6 +838,7 @@ public class BaseGUI extends CGUI {
 
 	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
 			+ File.separator + "Base" + File.separator + "movements";
+	private JLabel lblProfile;
 
 	private void saveMovements(String name) {
 		boolean exist = (new File(MOVEMENT_PATH).mkdirs());

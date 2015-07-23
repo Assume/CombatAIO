@@ -14,6 +14,8 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 
+import scripts.CombatAIO.com.base.api.presets.Preset;
+import scripts.CombatAIO.com.base.api.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
@@ -26,8 +28,6 @@ import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.CWalking;
-import scripts.CombatAIO.com.base.api.walking.presets.Preset;
-import scripts.CombatAIO.com.base.api.walking.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
