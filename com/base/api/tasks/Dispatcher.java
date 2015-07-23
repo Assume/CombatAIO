@@ -96,6 +96,7 @@ public class Dispatcher {
 	private void run() {
 		this.combat_task.setHomeTile(this.preset == PresetFactory.NONE ? Player
 				.getPosition() : this.preset.getHomeTile());
+		this.preset.addBankItems();
 		Walking.setControlClick(true);
 		this.combat_task.start();
 		this.combat_task.initiate();

@@ -4,6 +4,7 @@ import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.constants.HomeTiles;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
 import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
@@ -66,6 +67,15 @@ public enum PresetFactory {
 			if (x.toString().equalsIgnoreCase(property))
 				return x;
 		return null;
+	}
+
+	public void addBankItems() {
+		if (this.get() == null)
+			return;
+		else
+			for (BankItem x : this.get().getRequiredItems())
+				Dispatcher.get().getBanker().addBankItem(x);
+
 	}
 
 }

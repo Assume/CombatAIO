@@ -213,7 +213,11 @@ public class Banker {
 	}
 
 	public void addBankItem(int id, int amount) {
-		this.list.add(new BankItem(id, amount));
+		this.addBankItem(new BankItem(id, amount));
+	}
+
+	public void addBankItem(BankItem item) {
+		this.list.add(item);
 	}
 
 	public int[] getItemIds() {
