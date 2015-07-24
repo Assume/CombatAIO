@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.presets;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.presets.made.WaterfallFireGiantsPreset;
 import scripts.CombatAIO.com.base.api.presets.made.WyrvensPreset;
 import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.types.BankItem;
@@ -12,12 +13,32 @@ import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 
 public enum PresetFactory {
 
-	NONE("None", null, null, null), WYRVENS_HOUSE_TELEPORT("Wyrvens",
-			new WyrvensPreset(WyrvensPreset.HOUSE_TELEPORT), null, null), RELLEKKA_WEST_ROCK_CRABS(
-			"Rock Crabs West", null, HomeTiles.ROCK_CRABS_WEST_HOME_TILE,
-			MonsterArea.RELLEKKA_ROCK_CRABS_WEST), RELLEKKA_EAST_ROCK_CRABS(
-			"Rock Crabs East", null, HomeTiles.ROCK_CRABS_EAST_HOME_TILE,
-			MonsterArea.RELLEKKA_ROCK_CRABS_EAST);
+	NONE("None", null, null, null),
+
+	WYRVENS_HOUSE_TELEPORT("Wyrvens", new WyrvensPreset(
+			WyrvensPreset.HOUSE_TELEPORT), null, null),
+
+	RELLEKKA_WEST_ROCK_CRABS("Rock Crabs West", null,
+			HomeTiles.ROCK_CRABS_WEST_HOME_TILE,
+			MonsterArea.RELLEKKA_ROCK_CRABS_WEST),
+
+	RELLEKKA_EAST_ROCK_CRABS("Rock Crabs East", null,
+			HomeTiles.ROCK_CRABS_EAST_HOME_TILE,
+			MonsterArea.RELLEKKA_ROCK_CRABS_EAST),
+
+	FIRE_GIANTS_WATERFALL_W("Waterfall FGiants W",
+			new WaterfallFireGiantsPreset(
+					WaterfallFireGiantsPreset.REQUIREMENTS,
+					WaterfallFireGiantsPreset.GAMES_NECKLACE,
+					WaterfallFireGiantsPreset.ROPE),
+			HomeTiles.FIRE_GIANTS_WEST_HOME_TILE, null),
+
+	FIRE_GIANTS_WATERFALL_C("Waterfall FGiants C",
+			new WaterfallFireGiantsPreset(
+					WaterfallFireGiantsPreset.REQUIREMENTS,
+					WaterfallFireGiantsPreset.GAMES_NECKLACE,
+					WaterfallFireGiantsPreset.ROPE),
+			HomeTiles.FIRE_GIANTS_CENTER_HOME_TILE, null);
 
 	private Preset preset;
 
@@ -62,7 +83,9 @@ public enum PresetFactory {
 			return new PresetFactory[] { RELLEKKA_WEST_ROCK_CRABS,
 					RELLEKKA_EAST_ROCK_CRABS };
 		default:
-			return new PresetFactory[] { PresetFactory.NONE };
+			return new PresetFactory[] { NONE, RELLEKKA_WEST_ROCK_CRABS,
+					RELLEKKA_EAST_ROCK_CRABS, FIRE_GIANTS_WATERFALL_C,
+					FIRE_GIANTS_WATERFALL_W };
 		}
 	}
 

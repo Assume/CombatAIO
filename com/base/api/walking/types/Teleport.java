@@ -13,17 +13,19 @@ import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public enum Teleport {
 
-	VARROCK_TELEPORT(8007, new RSTile(3212, 3428), NormalSpell.VARROCK_TELEPORT), LUMBRIDGE_TELEPORT(
-			8008, new RSTile(3221, 3219), NormalSpell.LUMBRIDGE_TELEPORT), FALADOR_TELEPORT(
-			8009, new RSTile(2965, 3381), NormalSpell.FALADOR_TELEPORT), CAMELOT_TELEPORT(
-			8010, new RSTile(2757, 3477), NormalSpell.CAMELOT_TELEPORT), HOUSE_TELEPORT(
-			8013, null, null);
+	VARROCK_TELEPORT(8007, new RSTile(3212, 3428),
+			NormalSpell.VARROCK_TELEPORT, null), LUMBRIDGE_TELEPORT(8008,
+			new RSTile(3221, 3219), NormalSpell.LUMBRIDGE_TELEPORT, null), FALADOR_TELEPORT(
+			8009, new RSTile(2965, 3381), NormalSpell.FALADOR_TELEPORT, null), CAMELOT_TELEPORT(
+			8010, new RSTile(2757, 3477), NormalSpell.CAMELOT_TELEPORT, null), HOUSE_TELEPORT(
+			8013, null, null, null);
 
 	private int tab_id;
 	private RSTile spell_location_result;
 	private NormalSpell spell;
 
-	Teleport(int tab_id, RSTile spell_location_result, NormalSpell spell) {
+	Teleport(int tab_id, RSTile spell_location_result, NormalSpell spell,
+			JeweleryTeleport jewelery_teleport) {
 		this.tab_id = tab_id;
 		this.spell_location_result = spell_location_result;
 		this.spell = spell;

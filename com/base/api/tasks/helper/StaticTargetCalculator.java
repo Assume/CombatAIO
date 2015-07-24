@@ -74,7 +74,7 @@ public class StaticTargetCalculator {
 						.get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
 						|| (!x.isInCombat() && !isBeingSplashed(x))) {
 					if (x.isInCombat())
-						if (getNPCHPPercent(x) <= 50)
+						if (getNPCHPPercent(x) <= 30)
 							continue;
 					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
 							.getValue()) {

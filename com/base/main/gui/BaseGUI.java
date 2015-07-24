@@ -260,12 +260,14 @@ public class BaseGUI extends CGUI {
 			this.chckbx_telekinetic_grab.setEnabled(false);
 		tabbedPane.addTab("Combat", tab_three_panel);
 		tab_three_panel.setLayout(null);
-		tabbedPane.addTab("Advanced", tab_four_panel);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tabbedPane.addTab("Advanced", tab_four_panel);
 		tab_four_panel.setLayout(null);
 
 		button = new JButton("Progression");
 		button.setBounds(10, 22, 122, 23);
-		tab_four_panel.add(button);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_four_panel.add(button);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Dispatcher.get().isLiteMode()) {
@@ -289,11 +291,12 @@ public class BaseGUI extends CGUI {
 			}
 		});
 		btnNewButton_1.setBounds(10, 56, 122, 23);
-		tab_four_panel.add(btnNewButton_1);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_four_panel.add(btnNewButton_1);
 
 		JTextPane text_pane_changelog = new JTextPane();
 		text_pane_changelog
-				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n");
+				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East");
 		text_pane_changelog.setBounds(185, 11, 419, 248);
 		tab_four_panel.add(text_pane_changelog);
 		text_pane_changelog.setEditable(false);
@@ -358,7 +361,8 @@ public class BaseGUI extends CGUI {
 
 		lbl_safe_spot = new JLabel("Safe spot: ");
 		lbl_safe_spot.setBounds(109, 162, 141, 14);
-		tab_three_panel.add(lbl_safe_spot);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_three_panel.add(lbl_safe_spot);
 
 		JButton btnSet = new JButton("Set");
 		btnSet.addActionListener(new ActionListener() {
@@ -374,7 +378,8 @@ public class BaseGUI extends CGUI {
 			}
 		});
 		btnSet.setBounds(10, 158, 89, 23);
-		tab_three_panel.add(btnSet);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_three_panel.add(btnSet);
 
 		chckbx_cannon = new JCheckBox("Cannon");
 		chckbx_cannon.setBounds(131, 84, 82, 23);
@@ -477,7 +482,8 @@ public class BaseGUI extends CGUI {
 
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(141, 32, 195, 165);
-		tab_one_panel.add(scrollPane_2);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(scrollPane_2);
 
 		list_possible_monsters = new JList<String>();
 		scrollPane_2.setViewportView(list_possible_monsters);
@@ -485,7 +491,8 @@ public class BaseGUI extends CGUI {
 
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBounds(410, 32, 195, 165);
-		tab_one_panel.add(scrollPane_3);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(scrollPane_3);
 
 		list_selected_monsters = new JList<String>();
 		scrollPane_3.setViewportView(list_selected_monsters);
@@ -504,7 +511,8 @@ public class BaseGUI extends CGUI {
 			}
 		});
 		button_add_to_possible.setBounds(346, 75, 54, 20);
-		tab_one_panel.add(button_add_to_possible);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(button_add_to_possible);
 
 		button_remove_from_possible = new JButton("<");
 		button_remove_from_possible.addActionListener(new ActionListener() {
@@ -516,15 +524,18 @@ public class BaseGUI extends CGUI {
 			}
 		});
 		button_remove_from_possible.setBounds(346, 106, 54, 20);
-		tab_one_panel.add(button_remove_from_possible);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(button_remove_from_possible);
 
 		lblPossible = new JLabel("Possible");
 		lblPossible.setBounds(142, 11, 46, 14);
-		tab_one_panel.add(lblPossible);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(lblPossible);
 
 		lblSelected = new JLabel("Selected");
 		lblSelected.setBounds(410, 11, 46, 14);
-		tab_one_panel.add(lblSelected);
+		if (!Dispatcher.get().isRockCrabsScriptID())
+			tab_one_panel.add(lblSelected);
 
 		btnNewButton = new JButton("Refresh");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -655,8 +666,10 @@ public class BaseGUI extends CGUI {
 
 	private void setMonsterIDs() {
 		Value<int[]> value = null;
-		if (Dispatcher.get().isRockCrabs())
+		if (Dispatcher.get().isRockCrabsPreset())
 			value = new Value<int[]>(MonsterIDs.ROCK_CRAB_AWAKE_IDS);
+		else if (Dispatcher.get().isFireGiantsPreset())
+			value = new Value<int[]>(MonsterIDs.FIRE_GIANT);
 		else
 			value = getMonsterIDs();
 		Dispatcher.get().set(ValueType.MONSTER_IDS, value);

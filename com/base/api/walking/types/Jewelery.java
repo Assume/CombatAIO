@@ -10,6 +10,8 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.types.enums.Potions;
+
 public enum Jewelery {
 
 	RING_OF_DUELING(
@@ -101,5 +103,38 @@ public enum Jewelery {
 
 	public int[] getIDs() {
 		return this.ids;
+	}
+
+	
+	protected static int[] combineIDs(Jewelery... jewelery) {
+		int total_index = 0;
+		for (Jewelery x : jewelery)
+			total_index += x.getIDs().length;
+		int[] all = new int[total_index];
+		int index = 0;
+		for (int m = 0; m < jewelery.length; m++) {
+			int[] ids = jewelery[m].getIDs();
+			for (int i = 0; i < ids.length; i++)
+				all[index++] = ids[i];
+		}
+		return all;
+	}
+	
+	
+	
+	public static boolean isJeweleryId(int id) {
+		int[] ids = combineIDs(Jewelery.values());
+		for (int x : ids)
+			if (x == id)
+				return true;
+		return false;
+	}
+
+	public static int[] getAllIds(int id) {
+		for (Jewelery x : values())
+			for (int y : x.ids)
+				if (y == id)
+					return x.getIDs();
+		return new int[0];
 	}
 }

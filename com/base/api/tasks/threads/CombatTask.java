@@ -130,7 +130,7 @@ public class CombatTask extends Threadable implements Pauseable {
 				.getPosition().distanceTo(home_tile) >= combat_distance)
 				|| Timing.timeFromMark(this.last_attack_time) >= 10000) {
 			if (Player.getPosition().distanceTo(home_tile) >= 5
-					&& !Dispatcher.get().isRockCrabs()) {
+					&& !Dispatcher.get().isRockCrabsPreset()) {
 				new DPathNavigator().traverse(this.home_tile);
 				this.last_attack_time = System.currentTimeMillis();
 			} else

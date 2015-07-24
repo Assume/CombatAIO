@@ -54,7 +54,10 @@ public enum Bank {
 
 	ROGUE_DEN(new RSArea(new RSTile(3040, 4975, 1), new RSTile(3049, 4969, 1))),
 
-	ELF_BANK(new RSArea(new RSTile(2350, 3163), new RSTile(2353, 3161)));
+	ELF_BANK(new RSArea(new RSTile(2350, 3163), new RSTile(2353, 3161))),
+
+	BARBARIAN_OUTPOST(
+			new RSArea(new RSTile(2538, 3577), new RSTile(2531, 3570)));
 
 	private RSArea area;
 

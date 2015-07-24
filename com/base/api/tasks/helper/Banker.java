@@ -28,6 +28,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.CWalking;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
@@ -117,9 +118,10 @@ public class Banker {
 		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
 				.getJewelery());
 		Banking.close();
-		if (withdraw_jewelery)
-			scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment
-					.equip(teleport.getJewelery().getIDs());
+		if (withdraw_jewelery
+				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
+				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)
+			CEquipment.equip(teleport.getJewelery().getIDs());
 	}
 
 	private boolean withdraw(Jewelery jewelery) {
@@ -129,6 +131,8 @@ public class Banker {
 		for (BankItem x : list) {
 			if (Potions.isPotionId(x.getId()))
 				Banking.withdraw(x.getAmount(), Potions.getAllIds(x.getId()));
+			else if (Jewelery.isJeweleryId(x.getId()))
+				Banking.withdraw(1, Jewelery.getAllIds(x.getId()));
 			else
 				Banking.withdraw(x.getAmount(), x.getId());
 		}
@@ -179,7 +183,8 @@ public class Banker {
 	private boolean needToWithdrawJewelery(Jewelery teleport) {
 		switch (teleport) {
 		case GLORY:
-			return Equipment.find(teleport.getIDs()).length == 0;
+			return Equipment.find(teleport.getIDs()).length == 0
+					&& Inventory.find(teleport.getIDs()).length == 0;
 		case RING_OF_DUELING:
 		case GAMES_NECKLACE:
 			return Equipment.find(teleport.getIDs()).length == 0

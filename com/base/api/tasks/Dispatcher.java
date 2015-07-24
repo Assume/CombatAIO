@@ -21,6 +21,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
@@ -370,8 +371,18 @@ public class Dispatcher {
 		return this.preset;
 	}
 
-	public boolean isRockCrabs() {
-		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS || this.preset == PresetFactory.RELLEKKA_EAST_ROCK_CRABS;
+	public boolean isRockCrabsPreset() {
+		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS
+				|| this.preset == PresetFactory.RELLEKKA_EAST_ROCK_CRABS;
+	}
+
+	public boolean isRockCrabsScriptID() {
+		return getRepoID() == ScriptIDs.ASSUMES_GOT_CRABS;
+	}
+
+	public boolean isFireGiantsPreset() {
+		return this.preset == PresetFactory.FIRE_GIANTS_WATERFALL_C
+				|| this.preset == PresetFactory.FIRE_GIANTS_WATERFALL_W;
 	}
 
 }
