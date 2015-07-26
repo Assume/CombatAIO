@@ -13,7 +13,7 @@ import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 
 public enum PresetFactory {
 
-	NONE("None", null, null, null),
+	Automatic("Automatic", null, null, null),
 
 	WYRVENS_HOUSE_TELEPORT("Wyrvens", new WyrvensPreset(
 			WyrvensPreset.HOUSE_TELEPORT), null, null),
@@ -78,12 +78,12 @@ public enum PresetFactory {
 	public static PresetFactory[] getPresetsForScript() {
 		switch (Dispatcher.get().getRepoID()) {
 		case ScriptIDs.COMBAT_AIO_LITE:
-			return new PresetFactory[] { PresetFactory.NONE };
+			return new PresetFactory[] { PresetFactory.Automatic };
 		case ScriptIDs.ASSUMES_GOT_CRABS:
 			return new PresetFactory[] { RELLEKKA_WEST_ROCK_CRABS,
 					RELLEKKA_EAST_ROCK_CRABS };
 		default:
-			return new PresetFactory[] { NONE, RELLEKKA_WEST_ROCK_CRABS,
+			return new PresetFactory[] { Automatic, RELLEKKA_WEST_ROCK_CRABS,
 					RELLEKKA_EAST_ROCK_CRABS, FIRE_GIANTS_WATERFALL_C,
 					FIRE_GIANTS_WATERFALL_W };
 		}

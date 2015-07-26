@@ -91,11 +91,11 @@ public class Dispatcher {
 		this.handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
-		this.preset = PresetFactory.NONE;
+		this.preset = PresetFactory.Automatic;
 	}
 
 	private void run() {
-		this.combat_task.setHomeTile(this.preset == PresetFactory.NONE ? Player
+		this.combat_task.setHomeTile(this.preset == PresetFactory.Automatic ? Player
 				.getPosition() : this.preset.getHomeTile());
 		this.preset.addBankItems();
 		Walking.setControlClick(true);

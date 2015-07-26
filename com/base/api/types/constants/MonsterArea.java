@@ -25,7 +25,7 @@ public class MonsterArea {
 			return RELLEKKA_ROCK_CRABS_WEST;
 		case RELLEKKA_EAST_ROCK_CRABS:
 			return RELLEKKA_ROCK_CRABS_EAST;
-		case NONE:
+		case Automatic:
 			break;
 		case WYRVENS_HOUSE_TELEPORT:
 			break;

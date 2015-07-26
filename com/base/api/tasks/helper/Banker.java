@@ -71,12 +71,10 @@ public class Banker {
 
 	private void executeBanking(boolean world_hop) {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-		Camera.setCameraRotation(General.random(Camera.getCameraAngle() - 15,
-				Camera.getCameraAngle() + 15));
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
-		if (Dispatcher.get().getPreset() == PresetFactory.NONE
+		if (Dispatcher.get().getPreset() == PresetFactory.Automatic
 				|| Dispatcher.get().getPreset().get() == null) {
 			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
@@ -115,16 +113,45 @@ public class Banker {
 						new int[] { CombatHelper.CANNON_BALL_ID }));
 		}
 
-		boolean withdraw_jewelery = withdraw(teleport == null ? null : teleport
-				.getJewelery());
+		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list
+				.size()]), teleport == null ? null : teleport.getJewelery());
 		Banking.close();
+		BankItem[] items_failed_to_withdraw = getItemsFailedToWithdraw();
+		if (items_failed_to_withdraw.length > 0) {
+			openBank(false);
+			withdraw(items_failed_to_withdraw, null);
+			Banking.close();
+		}
+		if (getItemsFailedToWithdraw().length > 0) {
+			Dispatcher.get().stop(
+					"Failed to withdraw items asked for, script stopping");
+			return;
+		}
 		if (withdraw_jewelery
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)
 			CEquipment.equip(teleport.getJewelery().getIDs());
 	}
 
-	private boolean withdraw(Jewelery jewelery) {
+	private BankItem[] getItemsFailedToWithdraw() {
+		List<BankItem> temp_list = new ArrayList<BankItem>();
+		for (BankItem x : list) {
+			if (Jewelery.isJeweleryId(x.getId())) {
+				boolean has = false;
+				for (int y : Jewelery.getAllIds(x.getId()))
+					if (y == x.getId()) {
+						has = true;
+						break;
+					}
+				if (!has)
+					temp_list.add(x);
+			} else if (Inventory.find(x.getId()).length == 0)
+				temp_list.add(x);
+		}
+		return temp_list.toArray(new BankItem[temp_list.size()]);
+	}
+
+	private boolean withdraw(BankItem[] items, Jewelery jewelery) {
 		Banking.withdraw(this.food_amount,
 				((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
 						.getId());

@@ -597,7 +597,7 @@ public class BaseGUI extends CGUI {
 
 	public void set() {
 		Dispatcher.get().setPreset(
-				Dispatcher.get().isLiteMode() ? PresetFactory.NONE
+				Dispatcher.get().isLiteMode() ? PresetFactory.Automatic
 						: (PresetFactory) this.combo_box_preset
 								.getSelectedItem());
 		Dispatcher.get().set(ValueType.FOOD,

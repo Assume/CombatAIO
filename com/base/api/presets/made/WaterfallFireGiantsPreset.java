@@ -39,9 +39,15 @@ public class WaterfallFireGiantsPreset extends Preset {
 
 	private static final int RAFT_ID = 1987;
 
-	private static final RSTile ISLAND_INITIAL_TILE = new RSTile(2512, 3481);
+	private static final RSTile FIRST_ISLAND_INITIAL_TILE = new RSTile(2512,
+			3481);
 
-	private static final RSTile ISLAND_END_TILE = new RSTile(2512, 3478);
+	private static final RSTile FIRST_ISLAND_END_TILE = new RSTile(2512, 3478);
+
+	private static final RSTile SECOND_ISLAND_FIRST_TILE = new RSTile(2513,
+			3468);
+
+	private static final RSTile LEDGE_TILE = new RSTile(2511, 3463);
 
 	private static final int ROCK_ID = 1996;
 
@@ -62,7 +68,6 @@ public class WaterfallFireGiantsPreset extends Preset {
 				JEWELERY_TELEPORT_LOCATIONS.BARBARIAN_OUTPOST).operate();
 		WalkingManager.walk(MovementType.TO_BANK,
 				Bank.BARBARIAN_OUTPOST.getTile());
-
 	}
 
 	@Override
@@ -71,29 +76,21 @@ public class WaterfallFireGiantsPreset extends Preset {
 		new DPathNavigator().traverse(RAFT_TILE);
 		while (Player.isMoving())
 			General.sleep(100);
-		DMethods.clickObject(RAFT_ID, "Board Log raft");
-		Timing.waitCondition(new Condition() {
-			@Override
-			public boolean active() {
-				return Player.getPosition().distanceTo(ISLAND_INITIAL_TILE) < 3;
-			}
-		}, 10000);
-		// Walking.walkScreenPath(Walking
-		// .generateStraightScreenPath((ISLAND_END_TILE)));
-		Camera.setCameraAngle(25);
-		int rotation = Camera.getCameraRotation();
-		if (rotation < 150 || rotation > 210)
-			Camera.setCameraRotation(General.random(150, 210));
-		if (!useRopeOnObject(ROCK_ID)) {
-			Dispatcher.get().stop("You don't have a rope");
+		clickBoat();
+		if (!Player.getPosition().equals(FIRST_ISLAND_INITIAL_TILE))
+			clickBoat();
+		if (clickRock()) {
+			if (!Player.getPosition().equals(SECOND_ISLAND_FIRST_TILE))
+				clickRock();
+		} else
 			return;
-		}
-		General.sleep(6000, 8000);
-		if (!useRopeOnObject(TREE_ID)) {
-			Dispatcher.get().stop("Unable to find tree");
+		if (clickTree()) {
+			if (!Player.getPosition().equals(LEDGE_TILE))
+				clickTree();
+		} else
 			return;
-		}
-		General.sleep(6000, 8000);
+		General.sleep(2000, 3000);
+		Camera.setCameraRotation(General.random(0, 50));
 		DMethods.clickObject(LEDGE_ID, "Open Ledge");
 		General.sleep(3000, 6000);
 		new DPathNavigator().traverse(Dispatcher.get().getPreset()
@@ -101,8 +98,51 @@ public class WaterfallFireGiantsPreset extends Preset {
 
 	}
 
+	private void clickBoat() {
+		DMethods.clickObject(RAFT_ID, "Board Log raft");
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Player.getPosition().distanceTo(
+						FIRST_ISLAND_INITIAL_TILE) < 3;
+			}
+		}, 10000);
+	}
+
+	private boolean clickRock() {
+		Camera.setCameraAngle(25);
+		int rotation = Camera.getCameraRotation();
+		if (rotation < 150 || rotation > 210)
+			Camera.setCameraRotation(General.random(150, 210));
+		if (!useRopeOnObject(ROCK_ID)) {
+			Dispatcher.get().stop("You don't have a rope");
+			return false;
+		}
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Player.getPosition().equals(SECOND_ISLAND_FIRST_TILE);
+			}
+		}, 16000);
+		return true;
+	}
+
+	private boolean clickTree() {
+		if (!useRopeOnObject(TREE_ID)) {
+			Dispatcher.get().stop("Unable to find tree");
+			return false;
+		}
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Player.getPosition().equals(LEDGE_TILE);
+			}
+		}, 16000);
+		return true;
+	}
+
 	private boolean useRopeOnObject(int id) {
-		RSItem[] rope = Inventory.find(id);
+		RSItem[] rope = Inventory.find(ROPE.getId());
 		if (rope.length == 0)
 			return false;
 		RSObject[] ob = Objects.find(999, id);

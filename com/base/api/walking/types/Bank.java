@@ -57,7 +57,7 @@ public enum Bank {
 	ELF_BANK(new RSArea(new RSTile(2350, 3163), new RSTile(2353, 3161))),
 
 	BARBARIAN_OUTPOST(
-			new RSArea(new RSTile(2538, 3577), new RSTile(2531, 3570)));
+			new RSArea(new RSTile(2533, 3576), new RSTile(2536, 3570)));
 
 	private RSArea area;
 
