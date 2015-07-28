@@ -296,7 +296,10 @@ public class BaseGUI extends CGUI {
 
 		JTextPane text_pane_changelog = new JTextPane();
 		text_pane_changelog
-				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East");
+				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
+						+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
+						+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
+						+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay");
 		text_pane_changelog.setBounds(185, 11, 419, 248);
 		tab_four_panel.add(text_pane_changelog);
 		text_pane_changelog.setEditable(false);

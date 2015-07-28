@@ -155,7 +155,7 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	private void setTarget(RSNPC[] monsters) {
-		if (monsters.length == 0) 
+		if (monsters.length == 0)
 			return;
 		if (getAverageDistance(monsters) < 3)
 			this.current_target = monsters[General.random(0,
@@ -370,6 +370,10 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	public Value<RSTile> getCannonTile() {
 		return new Value<RSTile>(this.helper.getCannonTile());
+	}
+
+	public void setCannonDecayed() {
+		this.helper.setPickupCannon();
 	}
 
 }

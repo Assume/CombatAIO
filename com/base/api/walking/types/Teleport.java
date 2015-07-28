@@ -18,7 +18,7 @@ public enum Teleport {
 			new RSTile(3221, 3219), NormalSpell.LUMBRIDGE_TELEPORT, null), FALADOR_TELEPORT(
 			8009, new RSTile(2965, 3381), NormalSpell.FALADOR_TELEPORT, null), CAMELOT_TELEPORT(
 			8010, new RSTile(2757, 3477), NormalSpell.CAMELOT_TELEPORT, null), HOUSE_TELEPORT(
-			8013, null, null, null);
+			8013, new RSTile(-9999, -9999), null, null);
 
 	private int tab_id;
 	private RSTile spell_location_result;

@@ -77,7 +77,7 @@ public class CombatHelper {
 	private Weapon special_attack_weapon = Weapon.NONE;
 	private RSTile cannon_location;
 
-
+	private boolean pick_up_cannon = false;
 
 	public CombatHelper(CombatTask task) {
 		this.combat_task = task;
@@ -356,10 +356,18 @@ public class CombatHelper {
 	public void runDefaultChecks() {
 		checkRun();
 		checkUse();
+		checkDecayCannon();
 		setupCannon();
 		fireCannon();
 		Dispatcher.get().getLooter().alch();
 		usePrayer(this.prayer);
+	}
+
+	private void checkDecayCannon() {
+		if (this.pick_up_cannon) {
+			this.pickupCannon();
+			this.pick_up_cannon = false;
+		}
 	}
 
 	public RSTile getSafeSpotTile() {
@@ -438,6 +446,10 @@ public class CombatHelper {
 
 	public RSTile getCannonTile() {
 		return this.cannon_location;
+	}
+
+	public void setPickupCannon() {
+		this.pick_up_cannon = true;
 	}
 
 }
