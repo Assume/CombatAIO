@@ -39,7 +39,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script implements Painting, MousePainting,
 		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.0.8_0";
+	public static final String VERSION_NUMBER = "2.0.8_3";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
@@ -137,7 +137,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
 			}
 		if (arg0.contains("decay"))
-			Dispatcher.get().getCombatTask().pickupCannon();
+			Dispatcher.get().getCombatTask().setCannonDecayed();
 
 	}
 

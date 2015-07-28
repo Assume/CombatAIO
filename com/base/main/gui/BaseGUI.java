@@ -299,7 +299,8 @@ public class BaseGUI extends CGUI {
 				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
 						+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
 						+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
-						+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay");
+						+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
+						+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added");
 		text_pane_changelog.setBounds(185, 11, 419, 248);
 		tab_four_panel.add(text_pane_changelog);
 		text_pane_changelog.setEditable(false);
@@ -422,7 +423,7 @@ public class BaseGUI extends CGUI {
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
 		if (Dispatcher.get().isLiteMode())
-			combo_box_food.removeItemAt(2);
+			combo_box_food.removeItemAt(9);
 
 		JLabel lblFood = new JLabel("Food");
 		lblFood.setBounds(10, 11, 46, 14);
