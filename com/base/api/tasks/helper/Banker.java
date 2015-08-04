@@ -16,7 +16,6 @@ import org.tribot.api2007.types.RSItem;
 
 import scripts.CombatAIO.com.base.api.presets.Preset;
 import scripts.CombatAIO.com.base.api.presets.PresetFactory;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
@@ -31,6 +30,7 @@ import scripts.CombatAIO.com.base.api.walking.CWalking;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
 public class Banker {

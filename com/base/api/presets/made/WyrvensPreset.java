@@ -1,9 +1,9 @@
 package scripts.CombatAIO.com.base.api.presets.made;
 
 import scripts.CombatAIO.com.base.api.presets.Preset;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.walking.types.Teleport;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class WyrvensPreset extends Preset {
 

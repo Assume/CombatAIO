@@ -5,11 +5,11 @@ import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.presets.made.WaterfallFireGiantsPreset;
 import scripts.CombatAIO.com.base.api.presets.made.WyrvensPreset;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.constants.HomeTiles;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
 import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public enum PresetFactory {
 

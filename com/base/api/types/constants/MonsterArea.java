@@ -3,7 +3,7 @@ package scripts.CombatAIO.com.base.api.types.constants;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class MonsterArea {
 

@@ -19,7 +19,6 @@ import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.helper.CombatHelper;
 import scripts.CombatAIO.com.base.api.tasks.helper.IngameWorldSwitcher;
@@ -31,6 +30,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.SkillData;
 
@@ -374,6 +374,15 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	public void setCannonDecayed() {
 		this.helper.setPickupCannon();
+	}
+
+	public Value<Boolean> getBuryBones() {
+		return this.helper.getBuryBones();
+	}
+
+	public void setBuryBones(boolean value) {
+		this.helper.setBuryBones(value);
+
 	}
 
 }

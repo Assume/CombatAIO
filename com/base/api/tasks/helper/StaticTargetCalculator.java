@@ -12,8 +12,8 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class StaticTargetCalculator {
 

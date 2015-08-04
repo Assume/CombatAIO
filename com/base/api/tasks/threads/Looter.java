@@ -25,7 +25,6 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
@@ -33,6 +32,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class Looter extends Threadable implements Pauseable {
@@ -196,6 +196,8 @@ public class Looter extends Threadable implements Pauseable {
 		for (RSGroundItem x : items) {
 			LootItem r = this.items_known.get(getRSGroundItemName(x));
 			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
+				continue;
+			if (Player.getPosition().distanceTo(x) > 8)
 				continue;
 			if (r != null) {
 				if (r.getId() == ammo_id && this.use_tele_grab)

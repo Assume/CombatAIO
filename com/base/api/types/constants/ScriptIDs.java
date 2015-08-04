@@ -6,6 +6,6 @@ public class ScriptIDs {
 
 	public static final int COMBAT_AIO_LITE = 64;
 
-	public static final int ASSUMES_GOT_CRABS = -2;
+	public static final int ASSUMES_GOT_CRABS = -3;
 
 }

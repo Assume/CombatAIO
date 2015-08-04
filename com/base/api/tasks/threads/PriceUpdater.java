@@ -8,12 +8,12 @@ import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItemDefinition;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class PriceUpdater extends Threadable implements Runnable {
 

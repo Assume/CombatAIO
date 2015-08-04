@@ -1,4 +1,4 @@
-package scripts.CombatAIO.com.base.api.tasks;
+package scripts.CombatAIO.com.base.main;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -25,7 +25,6 @@ import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.main.BaseCombat;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 import scripts.api.scriptapi.paint.types.CGUI;
@@ -190,6 +189,8 @@ public class Dispatcher {
 			return this.combat_task.getCannonTile();
 		case ATTACK_MONSTERS_IN_COMBAT:
 			return this.combat_task.getAttackMonstersInCombat();
+		case BURY_BONES:
+			return this.combat_task.getBuryBones();
 		default:
 			break;
 		}
@@ -262,6 +263,9 @@ public class Dispatcher {
 		case ATTACK_MONSTERS_IN_COMBAT:
 			this.combat_task
 					.setAttackMonstersInCombat((Boolean) val.getValue());
+			break;
+		case BURY_BONES:
+			this.combat_task.setBuryBones((Boolean) val.getValue());
 			break;
 		default:
 			break;

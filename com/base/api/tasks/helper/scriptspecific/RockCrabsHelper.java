@@ -13,10 +13,10 @@ import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class RockCrabsHelper {
 

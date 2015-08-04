@@ -31,7 +31,6 @@ import org.tribot.script.interfaces.Painting;
 
 import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.threads.TrackingUpdater;
 import scripts.api.scriptapi.paint.SkillData;
 
@@ -39,7 +38,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script implements Painting, MousePainting,
 		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.0.8_3";
+	public static final String VERSION_NUMBER = "2.0.8_4";
 
 	private TotalPaintHandler paint_handler;
 	private Thread updater;

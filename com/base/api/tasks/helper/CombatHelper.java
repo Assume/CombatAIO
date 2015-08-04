@@ -11,13 +11,11 @@ import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
-import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSNPC;
@@ -25,17 +23,15 @@ import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.threads.CombatTask;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.ArmorHolder;
-import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
-import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {
@@ -56,6 +52,8 @@ public class CombatHelper {
 	public static final int[] CANNON_IDS = { 6, 7, 8, 10, 12 };
 
 	public static final int CANNON_BALL_ID = 2;
+
+	private static final int[] BONES_IDS = { 526, 536, 532 };
 
 	private CombatTask combat_task;
 
@@ -79,6 +77,8 @@ public class CombatHelper {
 
 	private boolean pick_up_cannon = false;
 
+	private boolean bury_bones;
+
 	public CombatHelper(CombatTask task) {
 		this.combat_task = task;
 		this.armor_holder = null;
@@ -91,6 +91,18 @@ public class CombatHelper {
 				.next() && !Game.isRunOn()) {
 			Options.setRunOn(true);
 			Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_RUN_AT.reset();
+		}
+	}
+
+	public void buryBones() {
+		if (!this.bury_bones)
+			return;
+		RSItem[] bones = Inventory.find(BONES_IDS);
+		if (bones.length == 0)
+			return;
+		for (RSItem x : bones) {
+			x.click("Bury");
+			General.sleep(800, 1500);
 		}
 	}
 
@@ -359,6 +371,7 @@ public class CombatHelper {
 		checkDecayCannon();
 		setupCannon();
 		fireCannon();
+		buryBones();
 		Dispatcher.get().getLooter().alch();
 		usePrayer(this.prayer);
 	}
@@ -450,6 +463,15 @@ public class CombatHelper {
 
 	public void setPickupCannon() {
 		this.pick_up_cannon = true;
+	}
+
+	public Value<Boolean> getBuryBones() {
+		return new Value<Boolean>(this.bury_bones);
+	}
+
+	public void setBuryBones(boolean value) {
+		this.bury_bones = value;
+
 	}
 
 }

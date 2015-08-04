@@ -3,8 +3,8 @@ package scripts.CombatAIO.com.base.api.progression;
 import java.util.ArrayList;
 import java.util.List;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class CProgressionHandler {
 

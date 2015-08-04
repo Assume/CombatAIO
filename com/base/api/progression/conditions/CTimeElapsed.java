@@ -3,8 +3,8 @@ package scripts.CombatAIO.com.base.api.progression.conditions;
 import org.tribot.api.General;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionCondition;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class CTimeElapsed extends CProgressionCondition {
 

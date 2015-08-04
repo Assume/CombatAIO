@@ -45,7 +45,6 @@ import org.tribot.api2007.types.RSTile;
 import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.presets.PresetFactory;
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
@@ -57,6 +56,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
@@ -93,6 +93,7 @@ public class BaseGUI extends CGUI {
 	private JCheckBox chckbx_telekinetic_grab;
 	private JCheckBox chckbx_cannon;
 	private JCheckBox chckbx_attack_monsters_in_combat;
+	private JCheckBox chckbx_bury_bones;
 
 	private JLabel lblBankItems;
 	private JLabel lblPrayer;
@@ -300,7 +301,8 @@ public class BaseGUI extends CGUI {
 						+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
 						+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
 						+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
-						+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added");
+						+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added"
+						+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers");
 		text_pane_changelog.setBounds(185, 11, 419, 248);
 		tab_four_panel.add(text_pane_changelog);
 		text_pane_changelog.setEditable(false);
@@ -349,11 +351,11 @@ public class BaseGUI extends CGUI {
 		tab_three_panel.add(lblSpecialAttack);
 
 		JLabel lblWorldHopTolerance = new JLabel("World hop tolerance**");
-		lblWorldHopTolerance.setBounds(10, 114, 121, 14);
+		lblWorldHopTolerance.setBounds(10, 117, 121, 14);
 		tab_three_panel.add(lblWorldHopTolerance);
 
 		spinner_world_hop_tolerance = new JSpinner();
-		spinner_world_hop_tolerance.setBounds(131, 111, 39, 20);
+		spinner_world_hop_tolerance.setBounds(131, 114, 39, 20);
 		tab_three_panel.add(spinner_world_hop_tolerance);
 		spinner_world_hop_tolerance.setValue(-1);
 		if (Dispatcher.get().isLiteMode())
@@ -392,7 +394,7 @@ public class BaseGUI extends CGUI {
 			chckbx_cannon.setEnabled(false);
 
 		lbl_cannon_tile = new JLabel("Cannon tile: ");
-		lbl_cannon_tile.setBounds(282, 114, 161, 14);
+		lbl_cannon_tile.setBounds(282, 117, 161, 14);
 		tab_three_panel.add(lbl_cannon_tile);
 
 		JButton btn_cannon_tile = new JButton("Set");
@@ -408,13 +410,20 @@ public class BaseGUI extends CGUI {
 							+ cannon_tile.toString());
 			}
 		});
-		btn_cannon_tile.setBounds(195, 111, 77, 20);
+		btn_cannon_tile.setBounds(195, 114, 77, 20);
 		tab_three_panel.add(btn_cannon_tile);
 
 		chckbx_attack_monsters_in_combat = new JCheckBox(
 				"Attack monsters in combat");
 		chckbx_attack_monsters_in_combat.setBounds(252, 58, 262, 23);
 		tab_three_panel.add(chckbx_attack_monsters_in_combat);
+
+		chckbx_bury_bones = new JCheckBox("Bury bones");
+		chckbx_bury_bones.setBounds(252, 84, 97, 23);
+		tab_three_panel.add(chckbx_bury_bones);
+		if (Dispatcher.get().isLiteMode())
+			chckbx_bury_bones.setEnabled(false);
+
 		if (Dispatcher.get().isLiteMode())
 			btn_cannon_tile.setEnabled(false);
 
@@ -658,6 +667,10 @@ public class BaseGUI extends CGUI {
 				ValueType.ATTACK_MONSTERS_IN_COMBAT,
 				new Value<Boolean>(chckbx_attack_monsters_in_combat
 						.isSelected()));
+		Dispatcher.get().set(
+				ValueType.BURY_BONES,
+				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
+						: chckbx_bury_bones.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -752,6 +765,7 @@ public class BaseGUI extends CGUI {
 			prop.setProperty("world_hop_tolerance",
 					Dispatcher.get().get(ValueType.WORLD_HOP_TOLERANCE)
 							.getValue().toString());
+
 			String safe_spot_tile_text = this.safe_spot_tile == null ? "null"
 					: this.safe_spot_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("safe_spot_tile", safe_spot_tile_text);
@@ -770,6 +784,9 @@ public class BaseGUI extends CGUI {
 					: this.cannon_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("cannon_tile", cannon_tile_text);
 			prop.setProperty("preset", Dispatcher.get().getPreset().toString());
+			prop.setProperty("bury_bines",
+					Dispatcher.get().get(ValueType.BURY_BONES).getValue()
+							.toString());
 			boolean exist = (new File(FileSaveLocations.getFileLocation())
 					.mkdirs());
 			FileOutputStream streamO = new FileOutputStream(
@@ -831,6 +848,8 @@ public class BaseGUI extends CGUI {
 			chckbx_attack_monsters_in_combat
 					.setSelected(Boolean.parseBoolean(prop
 							.getProperty("attack_monsters_in_combat")));
+			chckbx_bury_bones.setSelected(Dispatcher.get().isLiteMode() ? false
+					: Boolean.parseBoolean(prop.getProperty("bury_bones")));
 			if (Dispatcher.get().isLiteMode())
 				this.safe_spot_tile = null;
 			else

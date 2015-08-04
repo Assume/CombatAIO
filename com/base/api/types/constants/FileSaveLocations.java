@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.tribot.util.Util;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class FileSaveLocations {
 

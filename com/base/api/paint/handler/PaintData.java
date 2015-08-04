@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSNPC;
 
-import scripts.CombatAIO.com.base.api.tasks.Dispatcher;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class PaintData {
 
