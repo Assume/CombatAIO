@@ -37,7 +37,9 @@ public class LootItem implements Comparable<LootItem> {
 	public LootItem(String name, boolean always_loot, boolean alch) {
 		this.price = 0;
 		this.amount_looted = 0;
-		this.name = name;
+		char[] ar = name.toLowerCase().toCharArray();
+		ar[0] = Character.toUpperCase(ar[0]);
+		this.name = new String(ar);
 		this.alch = alch;
 		this.id = -1;
 		this.icon = null;

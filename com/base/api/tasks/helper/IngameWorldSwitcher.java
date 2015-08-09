@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.tasks.helper;
 import java.awt.Rectangle;
 import java.util.Arrays;
 
+import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
@@ -17,6 +18,11 @@ import org.tribot.api2007.types.RSInterface;
 
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
+/**
+ * 
+ * @author Not ErickHo
+ */
+
 public class IngameWorldSwitcher {
 
 	public static boolean isHopping = false;
@@ -27,13 +33,16 @@ public class IngameWorldSwitcher {
 	private static final int NPC_CHAT_PARENT_ID = 219;
 	private static final int NPC_CHAT_TITLE_CHILD_ID = 0;
 	private static final long SWITCH_TIMEOUT = 30000;
+	private static final int LOGOUT_ID = 19;
+
+	private static final int WORLD_INTERFACE_SKIP = 6;
 
 	private static final Rectangle CONTAINING_BOX = new Rectangle(547, 229,
 			190, 204);
 
-	private static final int[] NON_EXISTANT_WORLDS = new int[] { 7, 15, 23, 24,
-			31, 32, 39, 40, 47, 48, 55, 56, 63, 64, 71, 72, 79, 80, 87, 88, 89,
-			90, 91, 92 };
+	private static final int[] NON_EXISTANT_WORLDS = new int[] { 307, 315, 323,
+			324, 331, 332, 339, 340, 347, 348, 352, 355, 356, 363, 364, 371,
+			372, 379, 380, 387, 388, 389, 390, 391, 392 };
 
 	private static final int[] P2P_WORLDS = { 2, 3, 4, 5, 6, 9, 10, 11, 12, 13,
 			14, 17, 18, 19, 20, 21, 22, 27, 28, 29, 30, 33, 34, 36, 38, 41, 42,
@@ -43,10 +52,63 @@ public class IngameWorldSwitcher {
 	private static final int[] F2P_WORLDS = { 1, 8, 16, 26, 35, 81, 82, 83, 84,
 			93, 94 };
 
+	private static RSInterface getWorldInterface(int world) {
+		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID, 7);
+		return child != null ? child.getChild(getInterfaceID(world)) : null;
+	}
+
+	public static boolean switchToRandomWorld() {
+		if (ArrayUtil.contains(Game.getCurrentWorld() - 300, F2P_WORLDS))
+			return switchWorld(F2P_WORLDS[General.random(0,
+					F2P_WORLDS.length - 1)]);
+		return switchWorld(P2P_WORLDS[General.random(0, P2P_WORLDS.length - 1)]);
+	}
+
+	public static boolean needToSortWorlds() {
+
+		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID, 7);
+		if (child == null)
+			return false;
+
+		RSInterface worldOne = child.getChild(getInterfaceID(1) + 2);
+		if (worldOne == null)
+			return false;
+
+		String worldOneText = worldOne.getText();
+
+		RSInterface worldTwo = child.getChild(getInterfaceID(2) + 2);
+		if (worldTwo == null)
+			return false;
+
+		String worldTwoText = worldTwo.getText();
+
+		General.println(worldTwoText);
+		return worldOneText != null && !worldOneText.equals("1")
+				|| worldTwoText != null && !worldTwoText.equals("2");
+	}
+
+	public static boolean sortWorlds() {
+		if (Clicking.click(Interfaces.get(SWITCHER_PARENT_ID, 10))) {
+			return Timing.waitCondition(new Condition() {
+				@Override
+				public boolean active() {
+					General.sleep(50, 100);
+					return !needToSortWorlds();
+				}
+			}, General.random(700, 1200));
+		}
+		return false;
+	}
+
+	public static int getInterfaceID(int world) {
+		return ((world - getWorldSkipDifference(world)) * WORLD_INTERFACE_SKIP)
+				- WORLD_INTERFACE_SKIP;
+	}
+
 	private static int getWorldSkipDifference(int world) {
 		int diff = 0;
 		for (int i : NON_EXISTANT_WORLDS) {
-			if (world > i)
+			if (world > i - 300)
 				diff++;
 		}
 		return diff;
@@ -69,16 +131,8 @@ public class IngameWorldSwitcher {
 			String number = text.substring(16, world > 9 ? 18 : 17);
 			return Integer.parseInt(number) == world;
 		} catch (Exception e) {
-
 		}
 		return false;
-	}
-
-	public static boolean switchToRandomWorld() {
-		if (ArrayUtil.contains(Game.getCurrentWorld() - 300, F2P_WORLDS))
-			return switchWorld(F2P_WORLDS[General.random(0,
-					F2P_WORLDS.length - 1)]);
-		return switchWorld(P2P_WORLDS[General.random(0, P2P_WORLDS.length - 1)]);
 	}
 
 	public static boolean switchWorld(final int world) {
@@ -116,6 +170,8 @@ public class IngameWorldSwitcher {
 				}
 			} else if (!isOpen()) {
 				open();
+			} else if (needToSortWorlds()) {
+				sortWorlds();
 			} else if (needToScroll(world)) {
 				scroll(world);
 			} else {
@@ -125,12 +181,12 @@ public class IngameWorldSwitcher {
 		}
 		isHopping = false;
 		return Game.getCurrentWorld() == world + 300
-				&& (Game.getGameState() == 30 || Game.getGameState() == 10);
+				&& (Game.getGameState() == 30 || Game.getGameState() == 10)
+				&& !isOpen();
 	}
 
 	private static boolean needToScrollUp(int world) {
-		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID,
-				(world - getWorldSkipDifference(world)) + 12);
+		RSInterface child = getWorldInterface(world);
 		if (child == null)
 			return false;
 
@@ -144,8 +200,7 @@ public class IngameWorldSwitcher {
 	private static boolean scrollUp(int world) {
 		int ticks = 0;
 
-		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID,
-				(world - getWorldSkipDifference(world)) + 12);
+		RSInterface child = getWorldInterface(world);
 		if (child == null)
 			return false;
 
@@ -170,8 +225,7 @@ public class IngameWorldSwitcher {
 	}
 
 	private static boolean needToScrollDown(int world) {
-		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID,
-				(world - getWorldSkipDifference(world)) + 12);
+		RSInterface child = getWorldInterface(world);
 		if (child == null)
 			return false;
 
@@ -185,8 +239,7 @@ public class IngameWorldSwitcher {
 	private static boolean scrollDown(int world) {
 		int ticks = 0;
 
-		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID,
-				(world - getWorldSkipDifference(world)) + 12);
+		RSInterface child = getWorldInterface(world);
 		if (child == null)
 			return false;
 
@@ -214,7 +267,6 @@ public class IngameWorldSwitcher {
 	}
 
 	public static boolean scroll(int world) {
-
 		if (!CONTAINING_BOX.contains(Mouse.getPos())) {
 			Mouse.moveBox(CONTAINING_BOX);
 		} else if (needToScrollDown(world)) {
@@ -226,8 +278,7 @@ public class IngameWorldSwitcher {
 	}
 
 	private static boolean clickWorld(final int world) {
-		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID,
-				(world - getWorldSkipDifference(world)) + 12);
+		RSInterface child = getWorldInterface(world);
 		if (child == null)
 			return false;
 
@@ -245,7 +296,7 @@ public class IngameWorldSwitcher {
 	}
 
 	public static boolean isSelected() {
-		return Interfaces.isInterfaceValid(69);
+		return Interfaces.isInterfaceValid(SWITCHER_PARENT_ID);
 	}
 
 	public static boolean isOpen() {
@@ -253,7 +304,6 @@ public class IngameWorldSwitcher {
 	}
 
 	public static boolean open() {
-
 		if (!TABS.LOGOUT.isOpen()) {
 			if (!TABS.LOGOUT.open())
 				return false;
@@ -283,7 +333,6 @@ public class IngameWorldSwitcher {
 	}
 
 	public static boolean close() {
-
 		RSInterface close = Interfaces.get(SWITCHER_PARENT_ID,
 				SWITCHER_CLOSE_CHILD_ID);
 		if (close == null)
@@ -291,11 +340,28 @@ public class IngameWorldSwitcher {
 
 		if (close.click())
 			return Timing.waitCondition(new Condition() {
-
 				@Override
 				public boolean active() {
 					General.sleep(50, 100);
 					return !isOpen();
+				}
+			}, General.random(1000, 2000));
+
+		return false;
+	}
+
+	public static boolean logout() {
+		RSInterface logout = Interfaces.get(SWITCHER_PARENT_ID, LOGOUT_ID);
+		if (logout == null)
+			return false;
+
+		if (logout.click())
+			return Timing.waitCondition(new Condition() {
+
+				@Override
+				public boolean active() {
+					General.sleep(50, 100);
+					return Game.getGameState() == 10;
 				}
 			}, General.random(1000, 2000));
 

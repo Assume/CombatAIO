@@ -65,6 +65,15 @@ import javax.swing.JTextPane;
 
 public class BaseGUI extends CGUI {
 
+	private static final String CHANGELOG = "Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
+			+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
+			+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
+			+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
+			+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added"
+			+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers"
+			+ "\r\n\r\nV2.0.8_5: Fixed an issue where profiles wouldn't load"
+			+ "\r\n\r\nV2.0.8_6: Updated the ingame world hopper and fixed an issue with loading";
+
 	private JPanel contentPane;
 
 	private JComboBox<Food> combo_box_food;
@@ -295,16 +304,13 @@ public class BaseGUI extends CGUI {
 		if (!Dispatcher.get().isRockCrabsScriptID())
 			tab_four_panel.add(btnNewButton_1);
 
+		scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(185, 11, 419, 248);
+		tab_four_panel.add(scrollPane_4);
+
 		JTextPane text_pane_changelog = new JTextPane();
-		text_pane_changelog
-				.setText("Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
-						+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
-						+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
-						+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
-						+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added"
-						+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers");
-		text_pane_changelog.setBounds(185, 11, 419, 248);
-		tab_four_panel.add(text_pane_changelog);
+		scrollPane_4.setViewportView(text_pane_changelog);
+		text_pane_changelog.setText(CHANGELOG);
 		text_pane_changelog.setEditable(false);
 
 		// TODO
@@ -469,11 +475,17 @@ public class BaseGUI extends CGUI {
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String name = combo_box_settings.getSelectedItem().toString();
-				if (name == null)
-					return;
-				load(name);
-				loadMovements(name);
+				try {
+					String name = combo_box_settings.getSelectedItem()
+							.toString();
+					if (name == null)
+						return;
+					load(name);
+					loadMovements(name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 			}
 		});
 		btnLoad.setBounds(39, 236, 89, 23);
@@ -784,7 +796,7 @@ public class BaseGUI extends CGUI {
 					: this.cannon_tile.toString().replaceAll("[^0-9,]", "");
 			prop.setProperty("cannon_tile", cannon_tile_text);
 			prop.setProperty("preset", Dispatcher.get().getPreset().toString());
-			prop.setProperty("bury_bines",
+			prop.setProperty("bury_bones",
 					Dispatcher.get().get(ValueType.BURY_BONES).getValue()
 							.toString());
 			boolean exist = (new File(FileSaveLocations.getFileLocation())
@@ -805,7 +817,7 @@ public class BaseGUI extends CGUI {
 		try {
 			FileInputStream in = new FileInputStream(
 					FileSaveLocations.getFileLocation() + File.separator + name
-							+ File.separator + name + ".ini");
+							+ ".ini");
 			Properties prop = new Properties();
 			prop.load(in);
 			combo_box_food.setSelectedItem(Food.getFoodFromName(prop
@@ -867,6 +879,7 @@ public class BaseGUI extends CGUI {
 						+ this.cannon_tile.toString());
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -875,6 +888,7 @@ public class BaseGUI extends CGUI {
 	private static final String MOVEMENT_PATH = Util.getWorkingDirectory()
 			+ File.separator + "Base" + File.separator + "movements";
 	private JLabel lblProfile;
+	private JScrollPane scrollPane_4;
 
 	private void saveMovements(String name) {
 		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
@@ -906,7 +920,7 @@ public class BaseGUI extends CGUI {
 			WalkingManager.setMovements(cmovements);
 			fis.close();
 			ois.close();
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -21,8 +21,8 @@ public class FileSaveLocations {
 			return COMBAT_AIO;
 		case ScriptIDs.ASSUMES_GOT_CRABS:
 			return ASSUMES_GOT_CRABS;
+		default:
+			return COMBAT_AIO;
 		}
-		return null;
 	}
-
 }
