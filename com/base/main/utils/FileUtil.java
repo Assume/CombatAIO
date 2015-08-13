@@ -305,6 +305,7 @@ public class FileUtil {
 				while (scanner.hasNext()) {
 					contents += scanner.next();
 				}
+				scanner.close();
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -329,6 +330,7 @@ public class FileUtil {
 					lineNumber++;
 					traversable.traverseNext(scanner.nextLine(), lineNumber);
 				}
+				scanner.close();
 			} catch (FileNotFoundException e) {
 
 			}

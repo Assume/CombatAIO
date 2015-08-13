@@ -12,7 +12,6 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
-import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.GroundItems;
@@ -174,18 +173,23 @@ public class Looter extends Threadable implements Pauseable {
 				Clicking.click("Cast Telekinetic Grab -> " + name, x);
 			else
 				Clicking.click("Take " + name, x);
-			Timing.waitCondition(new Condition() {
+			if (Timing.waitCondition(new Condition() {
 				@Override
 				public boolean active() {
 					return getTotalInventoryCount() != total_items_in_inventory;
 				}
-			}, General.random(2000, 3000));
-			General.sleep(250, 450);
-			LootItem update = items_known.get(name);
-			if (update.getId() == -1)
-				update.setId(x.getID());
-			update.incrementAmountLooted(getInventoryCountOfItem(name)
-					- total_item_in_inventory);
+			}, General.random(2000, 3000))) {
+				LootItem update = items_known.get(name);
+				if (update.getId() == -1)
+					update.setId(x.getID());
+				update.incrementAmountLooted(getInventoryCountOfItem(name)
+						- total_item_in_inventory);
+				General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.ITEM_INTERACTION
+						.next());
+				Dispatcher.get().getABCUtil().DELAY_TRACKER.ITEM_INTERACTION
+						.reset();
+			}
+
 		}
 	}
 

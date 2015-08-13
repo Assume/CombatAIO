@@ -116,17 +116,13 @@ public class Banker {
 		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list
 				.size()]), teleport == null ? null : teleport.getJewelery());
 		Banking.close();
-		BankItem[] items_failed_to_withdraw = getItemsFailedToWithdraw();
-		if (items_failed_to_withdraw.length > 0) {
-			openBank(false);
-			withdraw(items_failed_to_withdraw, null);
-			Banking.close();
-		}
-		if (getItemsFailedToWithdraw().length > 0) {
-			Dispatcher.get().stop(
-					"Failed to withdraw items asked for, script stopping");
-			return;
-		}
+		/*
+		 * BankItem[] items_failed_to_withdraw = getItemsFailedToWithdraw(); if
+		 * (items_failed_to_withdraw.length > 0) { openBank(false);
+		 * withdraw(items_failed_to_withdraw, null); Banking.close(); } if
+		 * (getItemsFailedToWithdraw().length > 0) { Dispatcher.get().stop(
+		 * "Failed to withdraw items asked for, script stopping"); return; }
+		 */
 		if (withdraw_jewelery
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)

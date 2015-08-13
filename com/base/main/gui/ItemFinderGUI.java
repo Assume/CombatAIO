@@ -16,6 +16,8 @@ import scripts.CombatAIO.com.base.main.utils.Items07;
 
 public class ItemFinderGUI extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 
 	private SearchBox<DumpItem> combo_box_items;

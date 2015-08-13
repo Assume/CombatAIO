@@ -41,10 +41,9 @@ public class PriceUpdater extends Threadable implements Runnable {
 				if (checked_items.contains(id))
 					continue;
 				checked_items.add(id);
-				RSItemDefinition def = x.getDefinition();
-				if (def == null)
+				String name = getItemNameFromRSItem(x);
+				if (name == null)
 					continue;
-				String name = def.getName();
 				if (Dispatcher.get().get(ValueType.LOOT_ITEM, name).getValue() != null)
 					continue;
 				int price = LootItem.getPrice(id);
@@ -56,5 +55,12 @@ public class PriceUpdater extends Threadable implements Runnable {
 			}
 			General.sleep(1000);
 		}
+	}
+
+	private String getItemNameFromRSItem(RSGroundItem x) {
+		if (x == null)
+			return null;
+		RSItemDefinition def = x.getDefinition();
+		return def == null ? null : def.getName();
 	}
 }

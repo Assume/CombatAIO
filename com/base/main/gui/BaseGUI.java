@@ -13,11 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -34,6 +31,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -61,9 +59,9 @@ import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.api.scriptapi.paint.types.CGUI;
 
-import javax.swing.JTextPane;
-
 public class BaseGUI extends CGUI {
+
+	private static final long serialVersionUID = 1L;
 
 	private static final String CHANGELOG = "Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
 			+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
@@ -72,7 +70,8 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added"
 			+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers"
 			+ "\r\n\r\nV2.0.8_5: Fixed an issue where profiles wouldn't load"
-			+ "\r\n\r\nV2.0.8_6: Updated the ingame world hopper and fixed an issue with loading";
+			+ "\r\n\r\nV2.0.8_6: Updated the ingame world hopper and fixed an issue with loading"
+			+ "\r\n\r\nV2.0.8_7: Fixed an issue with banking when also withdrawing other items";
 
 	private JPanel contentPane;
 
@@ -202,6 +201,11 @@ public class BaseGUI extends CGUI {
 		};
 
 		table_loot = new JTable(uneditable_default_table_model) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer,
 					int row, int col) {
@@ -553,12 +557,12 @@ public class BaseGUI extends CGUI {
 			tab_one_panel.add(button_remove_from_possible);
 
 		lblPossible = new JLabel("Possible");
-		lblPossible.setBounds(142, 11, 46, 14);
+		lblPossible.setBounds(142, 11, 70, 14);
 		if (!Dispatcher.get().isRockCrabsScriptID())
 			tab_one_panel.add(lblPossible);
 
 		lblSelected = new JLabel("Selected");
-		lblSelected.setBounds(410, 11, 46, 14);
+		lblSelected.setBounds(410, 11, 70, 14);
 		if (!Dispatcher.get().isRockCrabsScriptID())
 			tab_one_panel.add(lblSelected);
 
@@ -799,8 +803,7 @@ public class BaseGUI extends CGUI {
 			prop.setProperty("bury_bones",
 					Dispatcher.get().get(ValueType.BURY_BONES).getValue()
 							.toString());
-			boolean exist = (new File(FileSaveLocations.getFileLocation())
-					.mkdirs());
+			new File(FileSaveLocations.getFileLocation()).mkdirs();
 			FileOutputStream streamO = new FileOutputStream(
 					FileSaveLocations.getFileLocation() + File.separator + name
 							+ ".ini");
@@ -891,7 +894,7 @@ public class BaseGUI extends CGUI {
 	private JScrollPane scrollPane_4;
 
 	private void saveMovements(String name) {
-		boolean exist = (new File(MOVEMENT_PATH).mkdirs());
+		new File(MOVEMENT_PATH).mkdirs();
 		List<CustomMovement> movements = WalkingManager.getMovements();
 		try {
 			FileOutputStream fout = new FileOutputStream(MOVEMENT_PATH
@@ -950,17 +953,6 @@ public class BaseGUI extends CGUI {
 				else
 					b.append(items[i].getName());
 			}
-		}
-		return b.toString();
-	}
-
-	private String stringArrayToString(String[] strings) {
-		StringBuilder b = new StringBuilder();
-		for (int i = 0; i < strings.length; i++) {
-			if (i < strings.length - 1)
-				b.append(strings[i] + ",");
-			else
-				b.append(strings[i]);
 		}
 		return b.toString();
 	}
@@ -1038,16 +1030,6 @@ public class BaseGUI extends CGUI {
 				table_loot.setValueAt(name, i, 0);
 		}
 
-	}
-
-	private static Map<Integer, String> convertStringToHashMap(String text) {
-		Map<Integer, String> data = new HashMap<Integer, String>();
-		Pattern p = Pattern.compile("[\\{\\}\\=\\, ]++");
-		String[] split = p.split(text);
-		for (int i = 1; i + 2 <= split.length; i += 2) {
-			data.put(Integer.parseInt(split[i]), split[i + 1]);
-		}
-		return data;
 	}
 
 	private Value<int[]> getMonsterIDs() {

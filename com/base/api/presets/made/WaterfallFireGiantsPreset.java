@@ -7,7 +7,6 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
@@ -42,8 +41,6 @@ public class WaterfallFireGiantsPreset extends Preset {
 	private static final RSTile FIRST_ISLAND_INITIAL_TILE = new RSTile(2512,
 			3481);
 
-	private static final RSTile FIRST_ISLAND_END_TILE = new RSTile(2512, 3478);
-
 	private static final RSTile SECOND_ISLAND_FIRST_TILE = new RSTile(2513,
 			3468);
 
@@ -54,8 +51,6 @@ public class WaterfallFireGiantsPreset extends Preset {
 	private static final int TREE_ID = 2020;
 
 	private static final int LEDGE_ID = 2010;
-
-	// public static final BankItem[] REQUIRED_ITEMS = {
 
 	public WaterfallFireGiantsPreset(String requirements,
 			BankItem... required_items) {

@@ -1,6 +1,8 @@
 package scripts.CombatAIO.com.base.api.types.enums;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
+import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Prayer.PRAYERS;
@@ -51,12 +53,17 @@ public enum Prayer {
 	public void flicker() {
 		if (this == PIETY || this == CHIVALRY)
 			if (!isActivated()) {
-				int xp = Skills.getXP(Skills.SKILLS.HITPOINTS);
+				final int xp = Skills.getXP(Skills.SKILLS.HITPOINTS);
 				activate();
-				for (int fsafe = 0; Skills.getXP(Skills.SKILLS.HITPOINTS) == xp
-						&& !(Player.getRSPlayer().getInteractingCharacter() == null)
-						&& fsafe < 40; fsafe++)
-					General.sleep(15);
+				Timing.waitCondition(new Condition() {
+
+					@Override
+					public boolean active() {
+						return Skills.getXP(Skills.SKILLS.HITPOINTS) == xp
+								&& Player.getRSPlayer()
+										.getInteractingCharacter() != null;
+					}
+				}, General.random(500, 700));
 				disable();
 			} else {
 				disable();

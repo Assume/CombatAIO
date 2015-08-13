@@ -10,6 +10,7 @@ import java.util.List;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.util.Util;
+
 /**
  * The Items07 class is a utility class that provides methods related to
  * RSItem's.
@@ -99,6 +100,7 @@ public class Items07 {
 			while ((ln = br.readLine()) != null) {
 				dumpData.add(ln);
 			}
+			br.close();
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
@@ -127,6 +129,7 @@ public class Items07 {
 					while ((ln = br.readLine()) != null) {
 						DUMP_DATA.add(DumpItem.fromString(ln));
 					}
+					br.close();
 				} catch (FileNotFoundException ex) {
 					ex.printStackTrace();
 				} catch (IOException ex) {

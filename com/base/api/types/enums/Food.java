@@ -18,6 +18,10 @@ public enum Food {
 		return this.id;
 	}
 
+	public int getHealAmount() {
+		return this.heal_value;
+	}
+
 	public static Food getFoodFromName(String name) {
 		for (Food x : Food.values())
 			if (x.toString().equalsIgnoreCase(name))

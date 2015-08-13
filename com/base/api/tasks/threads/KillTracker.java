@@ -10,7 +10,6 @@ import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class KillTracker extends Threadable {
-	// TODO FIGURE OUT
 
 	public KillTracker(CombatTask combat_thread) {
 		super(null);

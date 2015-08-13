@@ -47,7 +47,7 @@ public class TotalPaintHandler extends PaintHandler {
 		PaintPanel main_panel = new PaintPanel(230, 325, 265, 118);
 		main_panel.register(this);
 
-		PaintTab generic = new PaintTab("Generic", main_panel);
+		PaintTab generic = new PaintTab("General", main_panel);
 		generic.add(this.generic_data_display);
 		generic.setDrawBackground(false);
 

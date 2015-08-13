@@ -11,8 +11,6 @@ import scripts.api.scriptapi.paint.Paintable;
 
 public class LootedItemsDisplay extends Paintable<LootItem[]> {
 
-	private boolean draw_per_hour;
-
 	private boolean move_left_on_overflow;
 
 	public LootedItemsDisplay() {
@@ -22,7 +20,6 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 	public LootedItemsDisplay(LootItem[] t, int x, int y,
 			boolean move_left_on_overflow) {
 		super(t, x, y, true);
-		this.draw_per_hour = false;
 		this.x = x;
 		this.y = y;
 		this.move_left_on_overflow = move_left_on_overflow;

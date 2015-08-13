@@ -2,7 +2,6 @@ package scripts.CombatAIO.com.base.main.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -20,7 +19,6 @@ import javax.swing.event.ChangeListener;
 
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
-import org.tribot.util.Util;
 
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
@@ -34,15 +32,13 @@ import scripts.CombatAIO.com.base.api.walking.custom.types.DHolder;
 
 public class CustomWalkingGUI extends JFrame {
 
+	private static final long serialVersionUID = -6763519473522357384L;
+
 	private JPanel contentPane;
 	private MovementType type;
 
 	private JComboBox<MovementType> combo_box_movement_type;
 	private JSpinner spinner;
-
-	private static final String PATH = Util.getAppDataDirectory()
-			+ File.separator + "Base" + File.separator + File.separator
-			+ "movements" + "NAME" + ".dat";
 
 	private RSTile center_tile;
 	private boolean changed = false;
@@ -94,19 +90,21 @@ public class CustomWalkingGUI extends JFrame {
 		lblConditions.setBounds(324, 231, 77, 14);
 		contentPane.add(lblConditions);
 		// TODO
-		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(DConditionMaker.values());
+		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(
+				DConditionMaker.values());
 		comboBoxConditions.setBounds(324, 421, 191, 20);
 		contentPane.add(comboBoxConditions);
 		// TODO
-		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(DActionMaker.values());
+		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(
+				DActionMaker.values());
 		comboBoxActions.setBounds(10, 421, 191, 20);
 		contentPane.add(comboBoxActions);
 
 		JButton btnAddAction = new JButton("Add");
 		btnAddAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DAction ac = ((DActionMaker) comboBoxActions
-						.getSelectedItem()).make();
+				DAction ac = ((DActionMaker) comboBoxActions.getSelectedItem())
+						.make();
 				action_list_model.addElement(ac);
 			}
 		});
@@ -226,7 +224,8 @@ public class CustomWalkingGUI extends JFrame {
 		btnRemove.setBounds(525, 222, 89, 23);
 		contentPane.add(btnRemove);
 		// TODO
-		combo_box_movement_type = new JComboBox<MovementType>(MovementType.values());
+		combo_box_movement_type = new JComboBox<MovementType>(
+				MovementType.values());
 		combo_box_movement_type.setBounds(385, 518, 130, 20);
 		contentPane.add(combo_box_movement_type);
 
@@ -244,7 +243,8 @@ public class CustomWalkingGUI extends JFrame {
 			}
 		});
 		// TODO
-		final JComboBox<String> combo_box_movements = new JComboBox<String>(WalkingManager.getAllNames());
+		final JComboBox<String> combo_box_movements = new JComboBox<String>(
+				WalkingManager.getAllNames());
 		combo_box_movements.setBounds(10, 518, 130, 20);
 		contentPane.add(combo_box_movements);
 
