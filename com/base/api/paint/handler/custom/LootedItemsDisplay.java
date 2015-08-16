@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.util.Arrays;
 
 import scripts.CombatAIO.com.base.api.types.LootItem;
+import scripts.api.scriptapi.paint.Calculations;
 import scripts.api.scriptapi.paint.Paintable;
 
 public class LootedItemsDisplay extends Paintable<LootItem[]> {
@@ -48,7 +49,7 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 				g.drawRect(temp_x, y + (40 * space), 38, 38);
 				g.drawImage(loot_item.getIcon(), temp_x + 4, y + 3
 						+ (40 * space), null, null);
-				g.drawString(formatNumber(loot_item.getAmountLooted()),
+				g.drawString(Calculations.formatNumber(loot_item.getAmountLooted()),
 						temp_x + 4, y + 12 + (40 * space));
 				tot_drawn++;
 				space++;

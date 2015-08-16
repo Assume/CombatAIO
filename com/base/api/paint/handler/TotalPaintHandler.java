@@ -8,8 +8,8 @@ import org.tribot.api2007.types.RSCharacter;
 import scripts.CombatAIO.com.base.api.paint.handler.custom.LootedItemsDisplay;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.api.scriptapi.paint.Calculations;
 import scripts.api.scriptapi.paint.PaintHandler;
-import scripts.api.scriptapi.paint.Paintable;
 import scripts.api.scriptapi.paint.SkillData;
 import scripts.api.scriptapi.paint.paintables.DataDisplay;
 import scripts.api.scriptapi.paint.paintables.ExperienceDisplay;
@@ -47,15 +47,15 @@ public class TotalPaintHandler extends PaintHandler {
 		PaintPanel main_panel = new PaintPanel(230, 325, 265, 118);
 		main_panel.register(this);
 
-		PaintTab generic = new PaintTab("General", main_panel);
-		generic.add(this.generic_data_display);
-		generic.setDrawBackground(false);
+		PaintTab tab_general = new PaintTab("General", main_panel);
+		tab_general.add(this.generic_data_display);
+		tab_general.setDrawBackground(false);
 
-		PaintTab experience = new PaintTab("Experience", main_panel);
-		experience.add(new ExperienceDisplay(SkillData.COMBAT_TYPE, false));
+		PaintTab tab_experience = new PaintTab("Experience", main_panel);
+		tab_experience.add(new ExperienceDisplay(SkillData.COMBAT_TYPE, false));
 
-		main_panel.addTab(generic);
-		main_panel.addTab(experience);
+		main_panel.addTab(tab_general);
+		main_panel.addTab(tab_experience);
 
 		this.monster_paint_handler = new MonsterPaintHandler();
 
@@ -64,19 +64,25 @@ public class TotalPaintHandler extends PaintHandler {
 	private String[] getGenericDataDisplay(long run_time) {
 		int kill_count = PaintData.getMonsterKills();
 		int total_profit = PaintData.getProfit();
+		int total_experience = SkillData.getTotalExperienceGained();
 
 		String[] info_array = {
 				"Runtime: " + getFormattedTime(run_time),
 				"Kills: " + kill_count + " ("
 						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
 				"Profit: "
-						+ Paintable.formatNumber(total_profit)
+						+ Calculations.formatNumber(total_profit)
 						+ " ("
-						+ Paintable
+						+ Calculations
 								.formatNumber((int) ((3600000.0 / run_time) * total_profit))
 						+ "/HR)",
 				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
-						+ version };
+						+ version,
+				"Experience: "
+						+ Calculations.formatNumber(total_experience)
+						+ " ("
+						+ Calculations.formatNumber(Calculations.getPerHour(
+								total_experience, run_time)) + "/HR)" };
 		return info_array;
 
 	}

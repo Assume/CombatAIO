@@ -71,7 +71,8 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers"
 			+ "\r\n\r\nV2.0.8_5: Fixed an issue where profiles wouldn't load"
 			+ "\r\n\r\nV2.0.8_6: Updated the ingame world hopper and fixed an issue with loading"
-			+ "\r\n\r\nV2.0.8_7: Fixed an issue with banking when also withdrawing other items";
+			+ "\r\n\r\nV2.0.8_7: Fixed an issue with banking when also withdrawing other items"
+			+ "\r\n\r\nV2.0.8_8: Minor changes to the paint";
 
 	private JPanel contentPane;
 
@@ -546,10 +547,10 @@ public class BaseGUI extends CGUI {
 		button_remove_from_possible = new JButton("<");
 		button_remove_from_possible.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int selected = list_selected_monsters.getSelectedIndex();
-				if (selected == -1)
-					return;
-				model_selected_monsters.remove(selected);
+				List<String> selected = list_selected_monsters
+						.getSelectedValuesList();
+				for (String x : selected)
+					model_selected_monsters.removeElement(x);
 			}
 		});
 		button_remove_from_possible.setBounds(346, 106, 54, 20);
