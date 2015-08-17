@@ -21,7 +21,7 @@ public enum Weapon {
 			50, 11694), BANDOS_GODSWORD(-1, -1, 100, 11804), SARADOMIN_GODSWORD(
 			-1, -1, 50, 11698), ZAMORAK_GODSWORD(-1, -1, 60, 11700), DARK_BOW(
 			-1, -1, 55, 11235), SARADOMIN_SWORD(-1, -1, 100, 11739), EXCALIBUR(
-			-1, -1, 100, 35);
+			-1, -1, 100, 35), BLOWPIPE(-1, -1, 50, 12926);
 
 	private long attack_speed_ms;
 	private int animation_id;
@@ -61,7 +61,7 @@ public enum Weapon {
 				return getSpecialPercent() < start_special;
 			}
 		}, 3500);
-		RSNPC curr_atr =  task.getCurrentTarget().getValue();
+		RSNPC curr_atr = task.getCurrentTarget().getValue();
 		if (this.getSpecialPercent() >= this.getSpecialUsage()
 				&& curr_atr != null && curr_atr.isValid())
 			this.useSpecial(task, wep_id, shield_id);

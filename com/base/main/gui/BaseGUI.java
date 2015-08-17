@@ -72,7 +72,7 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.8_5: Fixed an issue where profiles wouldn't load"
 			+ "\r\n\r\nV2.0.8_6: Updated the ingame world hopper and fixed an issue with loading"
 			+ "\r\n\r\nV2.0.8_7: Fixed an issue with banking when also withdrawing other items"
-			+ "\r\n\r\nV2.0.8_8: Minor changes to the paint";
+			+ "\r\n\r\nV2.0.8_8: Blowpipe special added, minor changes to the paint";
 
 	private JPanel contentPane;
 
