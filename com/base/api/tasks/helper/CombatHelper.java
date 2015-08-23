@@ -154,7 +154,7 @@ public class CombatHelper {
 	}
 
 	private void clickCannon(String option) {
-		RSObject[] obj = Objects.find(25, CANNON_IDS);
+		RSObject[] obj = sortCannon(Objects.find(25, CANNON_IDS));
 		if (obj.length == 0)
 			return;
 		if (!obj[0].isOnScreen())
@@ -164,6 +164,25 @@ public class CombatHelper {
 		Clicking.click(option, obj[0]);
 		while (Player.isMoving())
 			General.sleep(25);
+	}
+
+	public RSObject[] sortCannon(RSObject[] obj) {
+		int j;
+		boolean flag = true;
+		RSObject temp;
+		while (flag) {
+			for (j = 0; j < obj.length - 1; j++) {
+				flag = false;
+				if (obj[j].getPosition().distanceTo(cannon_location) < obj[j + 1]
+						.getPosition().distanceTo(cannon_location)) {
+					temp = obj[j];
+					obj[j] = obj[j + 1];
+					obj[j + 1] = temp;
+					flag = true;
+				}
+			}
+		}
+		return obj;
 	}
 
 	public void pickupCannon() {
