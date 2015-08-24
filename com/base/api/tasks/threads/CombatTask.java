@@ -82,7 +82,8 @@ public class CombatTask extends Threadable implements Pauseable {
 			Dispatcher.get().getBanker().bank(false);
 		this.helper.runDefaultChecks();
 		if (this.shouldChangeWorld() && !Player.getRSPlayer().isInCombat()) {
-			this.helper.pickupCannon();
+			if (this.helper.getUseCannon())
+				this.helper.pickupCannon();
 			IngameWorldSwitcher.switchToRandomWorld();
 		}
 		this.helper.safeSpotCheck();

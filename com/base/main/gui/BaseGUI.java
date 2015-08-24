@@ -74,7 +74,9 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.8_7: Fixed an issue with banking when also withdrawing other items"
 			+ "\r\n\r\nV2.0.8_8: Blowpipe special added, minor changes to the paint"
 			+ "\r\n\r\nV2.0.8_9: Updated world hopper for skill worlds"
-			+ "\r\n\r\nV2.0.9_0: Improved cannon handling";
+			+ "\r\n\r\nV2.0.9_0: Improved cannon handling"
+			+ "\r\n\r\nV2.0.9_1: Fixed an issue with pickup cannon on world hop"
+			+ "\r\n\r\nV2.0.9_2: Fixed an issue with Bones2Peaches";
 
 	private JPanel contentPane;
 
