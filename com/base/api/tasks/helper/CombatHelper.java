@@ -46,8 +46,8 @@ public class CombatHelper {
 	public static final int[] GUTHANS_WARSPEAR_IDS = { 4726, 4910, 4911, 4912,
 			4913 };
 
-	public static final int TRASH_ITEM_IDS[] = { 117, 9978, 10115, 10125,
-			10127, 229, 592 };
+	public static final int TRASH_ITEM_IDS[] = { 9978, 10115, 10125, 10127,
+			229, 592 };
 
 	public static final int[] CANNON_IDS = { 6, 7, 8, 10, 12 };
 

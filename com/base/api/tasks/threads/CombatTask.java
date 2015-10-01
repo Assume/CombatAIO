@@ -32,6 +32,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 import scripts.api.scriptapi.paint.SkillData;
 
 public class CombatTask extends Threadable implements Pauseable {
@@ -72,8 +73,10 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	@Override
 	public void run() {
-		while (Dispatcher.get().isRunning())
+		while (Dispatcher.get().isRunning()) {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Calling fight in CombatTask#run");
 			fight();
+		}
 
 	}
 
@@ -91,8 +94,10 @@ public class CombatTask extends Threadable implements Pauseable {
 				&& Player.getRSPlayer().getInteractingCharacter() == null)
 			this.current_target = null;
 		if (current_target == null) {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Calling this.executeNoTarget in CombatTask#fight");
 			this.executeNoTarget();
 		} else {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Calling executeHasTarget in CombatTask#fight");
 			executeHasTarget();
 		}
 	}
@@ -104,6 +109,7 @@ public class CombatTask extends Threadable implements Pauseable {
 		General.sleep(time);
 		Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT.reset();
 		this.setMonsters(StaticTargetCalculator.calculate());
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Calling #fight in CombatTask#executeNoTarget");
 		fight(this.possible_monsters);
 	}
 
@@ -140,6 +146,7 @@ public class CombatTask extends Threadable implements Pauseable {
 		setTarget(monsters);
 		if (!verifyTarget(this.current_target))
 			return;
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "past if (!verifyTarget(this.current_target)) in #fight(RSNPC[] monsters)");
 		if (this.helper.getSafeSpotTile() == null)
 			moveToTarget(this.current_target);
 		attackTarget(this.current_target);

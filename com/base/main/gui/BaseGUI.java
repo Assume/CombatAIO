@@ -76,7 +76,10 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.8_9: Updated world hopper for skill worlds"
 			+ "\r\n\r\nV2.0.9_0: Improved cannon handling"
 			+ "\r\n\r\nV2.0.9_1: Fixed an issue with pickup cannon on world hop"
-			+ "\r\n\r\nV2.0.9_2: Fixed an issue with Bones2Peaches";
+			+ "\r\n\r\nV2.0.9_2: Fixed an issue with Bones2Peaches"
+			+ "\r\n\r\nV2.0.9_3: Removed strength potions from trash list"
+			+ "\r\n\r\nV2.0.9_4: Fixed an issue Bones2Peaches and eating for space"
+			+ "\r\n\r\nV2.0.9_5: Improvements to combat, possiblity of idle issue being fixed";
 
 	private JPanel contentPane;
 

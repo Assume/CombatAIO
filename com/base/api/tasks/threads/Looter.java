@@ -236,7 +236,7 @@ public class Looter extends Threadable implements Pauseable {
 		if ((Boolean) Dispatcher.get().get(ValueType.IS_BONES_TO_PEACHES)
 				.getValue()) {
 			RSItemDefinition def = x.getDefinition();
-			if (def != null && def.getName().contains("bones"))
+			if (def != null && def.getName().toLowerCase().contains("bones"))
 				return true;
 		}
 		if (itemIsStackableAndInInventory(x))

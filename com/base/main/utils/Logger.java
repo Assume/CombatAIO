@@ -29,7 +29,7 @@ public class Logger {
 		if (level < warning_level)
 			return;
 		int id = General.getTRiBotUserID();
-		if (level == SCRIPTER_ONLY && (id != 10385 || id != 5359))
+		if (level == SCRIPTER_ONLY && (id != 10385 && id != 5359))
 			return;
 		System.out.println(message == null ? "null" : message.toString());
 	}
