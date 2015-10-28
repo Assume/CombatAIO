@@ -130,7 +130,8 @@ public class CombatHelper {
 				public boolean active() {
 					return Inventory.find(CANNON_IDS).length == 0;
 				}
-			}, General.random(6000, 7000));
+			}, General.random(10000, 12000));
+			General.sleep(800, 1500);
 			if (Inventory.find(CANNON_IDS).length != 0)
 				pickupCannon();
 			else
@@ -139,22 +140,26 @@ public class CombatHelper {
 	}
 
 	private void fireCannon() {
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling  fireCannon");
 		if (!this.use_cannon)
 			return;
 		if (Inventory.find(CANNON_BALL_ID).length == 0) {
 			this.pickupCannon();
 			return;
 		}
-		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0)
-			clickCannon("Fire");
+		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0) {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling clickCannon(Fire)");
+			clickCannon("Fire ");
+		}
 		else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
-			clickCannon("Fire");
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling clickCannon(Fire)");
+			clickCannon("Fire ");
 			this.fill_cannon_at = General.random(0, 10);
 		}
 	}
 
 	private void clickCannon(String option) {
-		RSObject[] obj = sortCannon(Objects.find(25, CANNON_IDS));
+		RSObject[] obj = Objects.find(25, CANNON_IDS);
 		if (obj.length == 0)
 			return;
 		if (!obj[0].isOnScreen())
@@ -162,7 +167,7 @@ public class CombatHelper {
 		if (!obj[0].isOnScreen())
 			new DPathNavigator().traverse(obj[0]);
 		Clicking.click(option, obj[0]);
-		while (Player.isMoving())
+		while(Player.isMoving())
 			General.sleep(25);
 	}
 
@@ -197,14 +202,7 @@ public class CombatHelper {
 				return;
 			}
 		}
-		RSObject[] obj = Objects.find(25, CANNON_IDS);
-		if (obj.length == 0)
-			return;
-		if (!obj[0].isOnScreen())
-			Camera.turnToTile(obj[0]);
-		if (!obj[0].isOnScreen())
-			new DPathNavigator().traverse(obj[0]);
-		Clicking.click("Pick-up ", obj[0]);
+		clickCannon("Pick-up ");
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {

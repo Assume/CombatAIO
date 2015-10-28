@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.Skills.SKILLS;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.util.ThreadSettings;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
@@ -38,7 +39,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script implements Painting, MousePainting,
 		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.0.9_5";
+	public static final String VERSION_NUMBER = "2.0.9_7";
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
@@ -63,6 +64,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 		this.updater = new Thread(new TrackingUpdater(this));
 		this.updater.setName("TRACKING UPDATER");
 		this.updater.start();
+		Walking.setWalkingTimeout(5000);
 		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();

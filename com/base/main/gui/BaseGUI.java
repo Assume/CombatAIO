@@ -79,7 +79,9 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.9_2: Fixed an issue with Bones2Peaches"
 			+ "\r\n\r\nV2.0.9_3: Removed strength potions from trash list"
 			+ "\r\n\r\nV2.0.9_4: Fixed an issue Bones2Peaches and eating for space"
-			+ "\r\n\r\nV2.0.9_5: Improvements to combat, possiblity of idle issue being fixed";
+			+ "\r\n\r\nV2.0.9_5: Improvements to combat, possiblity of idle issue being fixed"
+			+ "\r\n\r\nV2.0.9_6: Fixed an issue with the cannon"
+			+ "\r\n\r\nV2.0.9_7: Updated ID for Saradomin Godsword";
 
 	private JPanel contentPane;
 
