@@ -8,6 +8,7 @@ import org.tribot.api2007.types.RSCharacter;
 import scripts.CombatAIO.com.base.api.paint.handler.custom.LootedItemsDisplay;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.Logger;
 import scripts.api.scriptapi.paint.Calculations;
 import scripts.api.scriptapi.paint.PaintHandler;
 import scripts.api.scriptapi.paint.SkillData;
@@ -29,6 +30,8 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private RSCharacterHealthDisplay target_health_display;
 
+	private DataDisplay logs_data_display;
+
 	private String version;
 
 	public TotalPaintHandler(String version) {
@@ -37,6 +40,7 @@ public class TotalPaintHandler extends PaintHandler {
 		this.looted_items_display = new LootedItemsDisplay();
 		this.generic_data_display = new DataDisplay();
 		this.target_health_display = new RSCharacterHealthDisplay();
+		this.logs_data_display = new DataDisplay();
 
 		new HidePaintButton().register(this);
 		new ShowGUIButton(Dispatcher.get().getGUI()).register(this);
@@ -57,8 +61,21 @@ public class TotalPaintHandler extends PaintHandler {
 		main_panel.addTab(tab_general);
 		main_panel.addTab(tab_experience);
 
+		PaintPanel scripter_panel = new PaintPanel(8, 50, 180, 350);
+		if (Logger.isScripter())
+			scripter_panel.register(this);
+		PaintTab tab_logger = new PaintTab("Logger", scripter_panel);
+		tab_logger.add(this.logs_data_display);
+		tab_logger.setDrawBackground(false);
+
+		scripter_panel.addTab(tab_logger);
+
 		this.monster_paint_handler = new MonsterPaintHandler();
 
+	}
+
+	private String[] getLoggerMessages() {
+		return Logger.getLogger().getAllLogsAsString(Logger.SCRIPTER_ONLY, 15);
 	}
 
 	private String[] getGenericDataDisplay(long run_time) {
@@ -99,6 +116,7 @@ public class TotalPaintHandler extends PaintHandler {
 		this.looted_items_display.update(PaintData.getLootItems());
 		this.target_health_display.update((RSCharacter) Dispatcher.get()
 				.get(ValueType.CURRENT_TARGET).getValue());
+		this.logs_data_display.update(getLoggerMessages());
 	}
 
 	public boolean isInClick(Point p) {
