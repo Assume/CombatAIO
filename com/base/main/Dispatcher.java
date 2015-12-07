@@ -94,8 +94,9 @@ public class Dispatcher {
 	}
 
 	private void run() {
-		this.combat_task.setHomeTile(this.preset == PresetFactory.Automatic ? Player
-				.getPosition() : this.preset.getHomeTile());
+		this.combat_task
+				.setHomeTile(this.preset == PresetFactory.Automatic ? Player
+						.getPosition() : this.preset.getHomeTile());
 		this.preset.addBankItems();
 		Walking.setControlClick(true);
 		this.combat_task.start();
@@ -191,6 +192,8 @@ public class Dispatcher {
 			return this.combat_task.getAttackMonstersInCombat();
 		case BURY_BONES:
 			return this.combat_task.getBuryBones();
+		case LOG_WHEN_OUT_OF_FOOD:
+			return this.banker.getLogOutWhenOutOfFood();
 		default:
 			break;
 		}
@@ -267,6 +270,8 @@ public class Dispatcher {
 		case BURY_BONES:
 			this.combat_task.setBuryBones((Boolean) val.getValue());
 			break;
+		case LOG_WHEN_OUT_OF_FOOD:
+			this.banker.setLogOutWhenOutOFood((Boolean)val.getValue());
 		default:
 			break;
 		}

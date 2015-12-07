@@ -140,9 +140,9 @@ public class CombatHelper {
 	}
 
 	private void fireCannon() {
-		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling  fireCannon");
 		if (!this.use_cannon)
 			return;
+		Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling  fireCannon");
 		if (Inventory.find(CANNON_BALL_ID).length == 0) {
 			this.pickupCannon();
 			return;

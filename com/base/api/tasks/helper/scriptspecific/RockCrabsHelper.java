@@ -85,6 +85,12 @@ public class RockCrabsHelper {
 				return Objects.find(100, RELLEKKA_EAST_CAVE_OUTSIDE_ID).length == 0;
 			}
 		}, 6000);
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Objects.find(100, RELLEKKA_EAST_CAVE_INSIDE_ID).length > 0;
+			}
+		}, 3000);
 		obs = Objects.find(100, RELLEKKA_EAST_CAVE_INSIDE_ID);
 		if (obs.length == 0)
 			return;
@@ -92,7 +98,7 @@ public class RockCrabsHelper {
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
-				return Objects.find(100, RELLEKKA_EAST_CAVE_INSIDE_ID).length == 0;
+				return Objects.find(100, RELLEKKA_EAST_CAVE_OUTSIDE_ID).length > 0;
 			}
 		}, 6000);
 		new DPathNavigator().traverse((RSTile) Dispatcher.get()

@@ -8,6 +8,7 @@ import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
@@ -36,6 +37,10 @@ public class Banker {
 
 	private List<BankItem> list;
 	private int food_amount;
+
+	private boolean log_when_out_of_food = false;
+
+	private static long retry_time = System.currentTimeMillis();
 
 	public Banker() {
 		list = new ArrayList<BankItem>();
@@ -70,6 +75,12 @@ public class Banker {
 
 	private void executeBanking(boolean world_hop) {
 		Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
+		if (this.log_when_out_of_food)
+			if (Player.getRSPlayer().isInCombat()) {
+				Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING);
+				this.retry_time = System.currentTimeMillis() + 10000;
+				return;
+			}
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
@@ -217,6 +228,8 @@ public class Banker {
 	}
 
 	public static boolean shouldBank(CombatTask task) {
+		if (retry_time > System.currentTimeMillis())
+			return false;
 		Food food = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue());
 		if (food.getId() == -1 && Inventory.isFull()
 				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
@@ -267,6 +280,15 @@ public class Banker {
 
 	public void setFoodWithdrawAmount(int amount) {
 		this.food_amount = amount;
+	}
+
+	public Value<?> getLogOutWhenOutOfFood() {
+		return new Value<Boolean>(this.log_when_out_of_food);
+	}
+
+	public void setLogOutWhenOutOFood(boolean value) {
+		this.log_when_out_of_food = value;
+
 	}
 
 }

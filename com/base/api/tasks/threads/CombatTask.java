@@ -77,7 +77,6 @@ public class CombatTask extends Threadable implements Pauseable {
 			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "Calling fight in CombatTask#run");
 			fight();
 		}
-
 	}
 
 	public void fight() {

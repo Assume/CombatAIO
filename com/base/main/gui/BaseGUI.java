@@ -112,6 +112,7 @@ public class BaseGUI extends CGUI {
 	private JCheckBox chckbx_cannon;
 	private JCheckBox chckbx_attack_monsters_in_combat;
 	private JCheckBox chckbx_bury_bones;
+	private final JCheckBox chckbx_log_when_out_of_food;
 
 	private JLabel lblBankItems;
 	private JLabel lblPrayer;
@@ -146,7 +147,7 @@ public class BaseGUI extends CGUI {
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 645, 347);
+		setBounds(100, 100, 645, 368);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -280,6 +281,17 @@ public class BaseGUI extends CGUI {
 		chckbx_telekinetic_grab = new JCheckBox("Telekinetic Grab");
 		chckbx_telekinetic_grab.setBounds(198, 142, 116, 23);
 		tab_two_panel.add(chckbx_telekinetic_grab);
+
+		chckbx_log_when_out_of_food = new JCheckBox("Logout when out of food");
+		chckbx_log_when_out_of_food.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (chckbx_log_when_out_of_food.isSelected())
+					JOptionPane.showMessageDialog(null,
+							"Do not use if fighting aggressive monsters");
+			}
+		});
+		chckbx_log_when_out_of_food.setBounds(10, 265, 198, 23);
+		tab_two_panel.add(chckbx_log_when_out_of_food);
 		if (Dispatcher.get().isLiteMode())
 			this.chckbx_telekinetic_grab.setEnabled(false);
 		tabbedPane.addTab("Combat", tab_three_panel);
@@ -327,7 +339,7 @@ public class BaseGUI extends CGUI {
 		text_pane_changelog.setText(CHANGELOG);
 		text_pane_changelog.setEditable(false);
 
-		// TODO
+		// TODO Prayer.values()
 		combo_box_prayer = new JComboBox<Prayer>(Prayer.values());
 		combo_box_prayer.setBounds(10, 31, 121, 20);
 		tab_three_panel.add(combo_box_prayer);
@@ -352,14 +364,14 @@ public class BaseGUI extends CGUI {
 
 		lblOnlySome = new JLabel(
 				"*Only piety and chivalry are supported for flicker");
-		lblOnlySome.setBounds(10, 217, 262, 14);
+		lblOnlySome.setBounds(10, 241, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
 		chckbx_ranged = new JCheckBox("Ranged/Magic");
 		chckbx_ranged.setBounds(131, 58, 119, 23);
 		tab_three_panel.add(chckbx_ranged);
 
-		// TODO
+		// TODO Weapon.values()
 		combo_box_special_attack = new JComboBox<Weapon>(Weapon.values());
 		combo_box_special_attack.setBounds(151, 31, 121, 20);
 		tab_three_panel.add(combo_box_special_attack);
@@ -382,7 +394,7 @@ public class BaseGUI extends CGUI {
 			spinner_world_hop_tolerance.setEnabled(false);
 
 		lbl_worldhopping_info = new JLabel("** Leave at -1 for no hopping");
-		lbl_worldhopping_info.setBounds(10, 242, 240, 14);
+		lbl_worldhopping_info.setBounds(10, 266, 240, 14);
 		tab_three_panel.add(lbl_worldhopping_info);
 
 		lbl_safe_spot = new JLabel("Safe spot: ");
@@ -408,6 +420,13 @@ public class BaseGUI extends CGUI {
 			tab_three_panel.add(btnSet);
 
 		chckbx_cannon = new JCheckBox("Cannon");
+		chckbx_cannon.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (chckbx_cannon.isSelected() && cannon_tile == null)
+					JOptionPane.showMessageDialog(null,
+							"Please now set a cannon tile");
+			}
+		});
 		chckbx_cannon.setBounds(131, 84, 82, 23);
 		tab_three_panel.add(chckbx_cannon);
 		if (Dispatcher.get().isLiteMode())
@@ -447,7 +466,7 @@ public class BaseGUI extends CGUI {
 		if (Dispatcher.get().isLiteMode())
 			btn_cannon_tile.setEnabled(false);
 
-		// TODO
+		// TODO Food.values()
 		combo_box_food = new JComboBox<Food>(Food.values());
 		combo_box_food.setBounds(10, 31, 121, 20);
 		tab_one_panel.add(combo_box_food);
@@ -606,7 +625,7 @@ public class BaseGUI extends CGUI {
 		lblPreset.setBounds(10, 123, 59, 14);
 		tab_one_panel.add(lblPreset);
 
-		// TODO
+		// TODO PresetFactory.getPresetsForScript()
 		combo_box_preset = new JComboBox<PresetFactory>(
 				PresetFactory.getPresetsForScript());
 		combo_box_preset.setBounds(10, 148, 121, 20);
@@ -697,6 +716,8 @@ public class BaseGUI extends CGUI {
 				ValueType.BURY_BONES,
 				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
 						: chckbx_bury_bones.isSelected()));
+		Dispatcher.get().set(ValueType.LOG_WHEN_OUT_OF_FOOD,
+				new Value<Boolean>(chckbx_log_when_out_of_food.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
 		if (loot_over_x != null && loot_over_x.length() != 0)
 			Dispatcher.get().set(
@@ -813,6 +834,9 @@ public class BaseGUI extends CGUI {
 			prop.setProperty("bury_bones",
 					Dispatcher.get().get(ValueType.BURY_BONES).getValue()
 							.toString());
+			prop.setProperty("log_out_when_out_of_food",
+					Dispatcher.get().get(ValueType.LOG_WHEN_OUT_OF_FOOD)
+							.getValue().toString());
 			new File(FileSaveLocations.getFileLocation()).mkdirs();
 			FileOutputStream streamO = new FileOutputStream(
 					FileSaveLocations.getFileLocation() + File.separator + name
@@ -875,6 +899,8 @@ public class BaseGUI extends CGUI {
 							.getProperty("attack_monsters_in_combat")));
 			chckbx_bury_bones.setSelected(Dispatcher.get().isLiteMode() ? false
 					: Boolean.parseBoolean(prop.getProperty("bury_bones")));
+			chckbx_log_when_out_of_food.setSelected(Boolean.parseBoolean(prop
+					.getProperty("log_out_when_out_of_food")));
 			if (Dispatcher.get().isLiteMode())
 				this.safe_spot_tile = null;
 			else
