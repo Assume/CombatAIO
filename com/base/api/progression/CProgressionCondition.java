@@ -1,6 +1,8 @@
 package scripts.CombatAIO.com.base.api.progression;
 
-public abstract class CProgressionCondition {
+import java.io.Serializable;
+
+public abstract class CProgressionCondition implements Serializable {
 
 	private boolean deactivated;
 

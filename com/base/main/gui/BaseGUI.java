@@ -81,7 +81,9 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.9_4: Fixed an issue Bones2Peaches and eating for space"
 			+ "\r\n\r\nV2.0.9_5: Improvements to combat, possiblity of idle issue being fixed"
 			+ "\r\n\r\nV2.0.9_6: Fixed an issue with the cannon"
-			+ "\r\n\r\nV2.0.9_7: Updated ID for Saradomin Godsword";
+			+ "\r\n\r\nV2.0.9_7: Updated ID for Saradomin Godsword"
+			+ "\r\n\r\nV2.0.9_8: Minor improvements to combat and bug fixes at East Rock Crabs"
+			+ "\r\n\r\nV2.1.0_0: Progression mode released";
 
 	private JPanel contentPane;
 
@@ -310,8 +312,7 @@ public class BaseGUI extends CGUI {
 					showPremiumMessageDialog("Progression");
 					return;
 				} else
-					JOptionPane.showMessageDialog(null,
-							"This option is not currently available");
+					new ProgressionGUI().setVisible(true);
 			}
 		});
 

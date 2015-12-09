@@ -61,7 +61,7 @@ public class TotalPaintHandler extends PaintHandler {
 		main_panel.addTab(tab_general);
 		main_panel.addTab(tab_experience);
 
-		PaintPanel scripter_panel = new PaintPanel(8, 50, 180, 350);
+		PaintPanel scripter_panel = new PaintPanel(5, 50, 180, 350);
 		if (Logger.isScripter())
 			scripter_panel.register(this);
 		PaintTab tab_logger = new PaintTab("Logger", scripter_panel);

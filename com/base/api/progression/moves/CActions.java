@@ -10,7 +10,7 @@ public enum CActions {
 
 	ATTACK_STYLE_CHANGE {
 		@Override
-		CProgressionAction make() {
+		public CProgressionAction make() {
 			int index = parse(JOptionPane
 					.showInputDialog("Enter the index of the style you wish to switch to. Indexes start at 1"));
 			if (index > 0 && index < 5)
@@ -21,7 +21,7 @@ public enum CActions {
 	},
 	FOOD_CHANGE {
 		@Override
-		CProgressionAction make() {
+		public CProgressionAction make() {
 			JComboBox<Food> jcb = new JComboBox<Food>(Food.values());
 			JOptionPane.showMessageDialog(null, jcb,
 					"Select a food to change to", JOptionPane.QUESTION_MESSAGE,
@@ -32,12 +32,12 @@ public enum CActions {
 	},
 	STOP_SCRIPT {
 		@Override
-		CProgressionAction make() {
+		public CProgressionAction make() {
 			return new CStopScriptMove();
 		}
 	};
 
-	abstract CProgressionAction make();
+	public abstract CProgressionAction make();
 
 	private static int parse(String parse) {
 		if (parse == null)

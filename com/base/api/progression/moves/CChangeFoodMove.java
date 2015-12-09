@@ -8,6 +8,8 @@ import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class CChangeFoodMove extends CProgressionAction {
 
+	private static final long serialVersionUID = -1584008751599697583L;
+	
 	private Food food;
 
 	public CChangeFoodMove(Food food) {
@@ -17,6 +19,11 @@ public class CChangeFoodMove extends CProgressionAction {
 	@Override
 	public void execute() {
 		Dispatcher.get().set(ValueType.FOOD, new Value<Food>(food));
+	}
+
+	@Override
+	public String toString() {
+		return "change food to " + food.toString();
 	}
 
 }

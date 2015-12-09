@@ -11,7 +11,7 @@ public enum CConditions {
 
 	TIME_ELAPSED {
 		@Override
-		CProgressionCondition make() {
+		public CProgressionCondition make() {
 			int time_in_minutes = parse(JOptionPane.showInputDialog(null,
 					"Enter time in minutes that shall have passed"));
 			if (time_in_minutes == -1)
@@ -21,7 +21,7 @@ public enum CConditions {
 	},
 	CURRENT_LEVEL {
 		@Override
-		CProgressionCondition make() {
+		public CProgressionCondition make() {
 			JComboBox<SKILLS> jcb = new JComboBox<SKILLS>(new SKILLS[] {
 					SKILLS.ATTACK, SKILLS.STRENGTH, SKILLS.HITPOINTS,
 					SKILLS.RANGED, SKILLS.HITPOINTS });
@@ -32,15 +32,15 @@ public enum CConditions {
 			return new CCurrentLevel(skill, level);
 		}
 	},
-	COutOfFoodInBank {
+	OUT_OF_FOOD_IN_BANK {
 		@Override
-		CProgressionCondition make() {
+		public CProgressionCondition make() {
 			return new COutOfFoodInBank();
 		}
 
 	};
 
-	abstract CProgressionCondition make();
+	public abstract CProgressionCondition make();
 
 	private static int parse(String parse) {
 		if (parse == null)

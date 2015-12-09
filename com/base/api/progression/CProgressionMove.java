@@ -1,7 +1,10 @@
 package scripts.CombatAIO.com.base.api.progression;
 
+import java.io.Serializable;
 
-public class CProgressionMove {
+public class CProgressionMove implements Serializable {
+
+	private static final long serialVersionUID = 3522615222676233364L;
 
 	private CProgressionCondition con;
 
@@ -21,5 +24,9 @@ public class CProgressionMove {
 		this.con.deactivate();
 	}
 
+	@Override
+	public String toString() {
+		return "if " + this.con.toString() + " then " + this.action.toString();
+	}
 
 }

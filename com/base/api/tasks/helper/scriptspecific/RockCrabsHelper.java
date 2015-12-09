@@ -85,6 +85,7 @@ public class RockCrabsHelper {
 				return Objects.find(100, RELLEKKA_EAST_CAVE_OUTSIDE_ID).length == 0;
 			}
 		}, 6000);
+		General.sleep(800, 2000);
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
@@ -95,6 +96,7 @@ public class RockCrabsHelper {
 		if (obs.length == 0)
 			return;
 		obs[0].click("Enter Tunnel");
+		General.sleep(800, 2000);
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {

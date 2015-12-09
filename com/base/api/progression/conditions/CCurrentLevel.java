@@ -6,6 +6,8 @@ import scripts.CombatAIO.com.base.api.progression.CProgressionCondition;
 
 public class CCurrentLevel extends CProgressionCondition {
 
+	private static final long serialVersionUID = -3345425399651236085L;
+	
 	private SKILLS skill;
 	private int level;
 
@@ -25,6 +27,11 @@ public class CCurrentLevel extends CProgressionCondition {
 
 	public SKILLS getSkill() {
 		return this.skill;
+	}
+
+	@Override
+	public String toString() {
+		return skill.toString() + " is level " + level;
 	}
 
 }

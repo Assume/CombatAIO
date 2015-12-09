@@ -48,6 +48,8 @@ public class CProgressionHandler {
 	}
 
 	public void addProgressionMove(CProgressionMove move) {
+		if (move == null)
+			return;
 		this.moves.add(move);
 	}
 
@@ -80,6 +82,20 @@ public class CProgressionHandler {
 	@Override
 	public String toString() {
 		return this.name;
+	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void load() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<CProgressionMove> getAllMoves() {
+		return moves;
 	}
 
 }

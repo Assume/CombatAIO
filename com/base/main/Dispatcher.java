@@ -73,7 +73,7 @@ public class Dispatcher {
 	private PKAvoider pk_avoider;
 	private BaseCombat main_class;
 	private ABCUtil abc_util;
-	private CProgressionHandler handler;
+	private CProgressionHandler progression_handler;
 	private Banker banker;
 	private int repo_id;
 
@@ -87,7 +87,7 @@ public class Dispatcher {
 		this.pk_avoider = new PKAvoider(true);
 		this.price_updater_task = new PriceUpdater();
 		this.abc_util = new ABCUtil();
-		this.handler = new CProgressionHandler();
+		this.progression_handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
 		this.preset = PresetFactory.Automatic;
@@ -271,7 +271,7 @@ public class Dispatcher {
 			this.combat_task.setBuryBones((Boolean) val.getValue());
 			break;
 		case LOG_WHEN_OUT_OF_FOOD:
-			this.banker.setLogOutWhenOutOFood((Boolean)val.getValue());
+			this.banker.setLogOutWhenOutOFood((Boolean) val.getValue());
 		default:
 			break;
 		}
@@ -317,7 +317,7 @@ public class Dispatcher {
 	}
 
 	public void checkThreads() {
-		this.handler.checkAndExecute();
+		this.progression_handler.checkAndExecute();
 		if (this.combat_task.isPaused()
 				&& Timing.timeFromMark(this.combat_task.getPauseTime()) > 30000) {
 			this.combat_task.resume();
@@ -326,7 +326,7 @@ public class Dispatcher {
 	}
 
 	public void checkAndExecuteProgression() {
-		this.handler.checkAndExecute();
+		this.progression_handler.checkAndExecute();
 	}
 
 	public boolean isRunning() {
@@ -362,6 +362,10 @@ public class Dispatcher {
 
 	public CGUI getGUI() {
 		return this.gui;
+	}
+
+	public CProgressionHandler getProgressionHandler() {
+		return this.progression_handler;
 	}
 
 	public boolean isLiteMode() {

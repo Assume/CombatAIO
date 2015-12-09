@@ -1,6 +1,8 @@
 package scripts.CombatAIO.com.base.api.progression;
 
-public abstract class CProgressionAction {
+import java.io.Serializable;
+
+public abstract class CProgressionAction implements Serializable {
 
 	public abstract void execute();
 	
