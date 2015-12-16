@@ -1,12 +1,26 @@
 package scripts.CombatAIO.com.base.api.progression;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tribot.util.Util;
+
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
+import scripts.CombatAIO.com.base.api.walking.WalkingManager;
+import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 
 public class CProgressionHandler {
+
+	private static final String SAVE_PATH = Util.getWorkingDirectory()
+			+ File.separator + "Base" + File.separator + "progression";
 
 	private List<CProgressionMove> moves = new ArrayList<CProgressionMove>();
 	private String name;
@@ -84,14 +98,39 @@ public class CProgressionHandler {
 		return this.name;
 	}
 
-	public void save() {
-		// TODO Auto-generated method stub
-
+	public void save(String name) {
+		new File(SAVE_PATH).mkdirs();
+		List<CProgressionMove> movements = this.getAllMoves();
+		try {
+			FileOutputStream fout = new FileOutputStream(SAVE_PATH
+					+ File.separator + name + ".cprg");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(movements);
+			fout.flush();
+			fout.close();
+			oos.flush();
+			oos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void load() {
-		// TODO Auto-generated method stub
-
+	public void load(String name) {
+		try {
+			FileInputStream fis = new FileInputStream(SAVE_PATH
+					+ File.separator + name + ".cprg");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			@SuppressWarnings("unchecked")
+			List<CProgressionMove> movements = (List<CProgressionMove>) ois
+					.readObject();
+			this.moves = movements;
+			fis.close();
+			ois.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<CProgressionMove> getAllMoves() {

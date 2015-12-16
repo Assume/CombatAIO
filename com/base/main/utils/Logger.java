@@ -29,7 +29,7 @@ public class Logger {
 	}
 
 	private Logger() {
-		this.warning_level = 0;
+		this.warning_level = 4;
 		this.logs = new ArrayList<ScriptLog>();
 	}
 

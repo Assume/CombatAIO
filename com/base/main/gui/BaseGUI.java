@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -83,7 +85,8 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.9_6: Fixed an issue with the cannon"
 			+ "\r\n\r\nV2.0.9_7: Updated ID for Saradomin Godsword"
 			+ "\r\n\r\nV2.0.9_8: Minor improvements to combat and bug fixes at East Rock Crabs"
-			+ "\r\n\r\nV2.1.0_0: Progression mode released";
+			+ "\r\n\r\nV2.1.0_0: Progression mode released"
+			+ "\r\n\r\nV2.1.0_1: Saving added to progression mode";
 
 	private JPanel contentPane;
 
@@ -126,7 +129,7 @@ public class BaseGUI extends CGUI {
 	private JLabel lbl_worldhopping_info;
 	private JLabel lbl_safe_spot;
 
-	private JButton btnNewButton;
+	private JButton button_refresh;
 	private JButton button;
 	private JButton button_add_to_possible;
 	private JButton button_remove_from_possible;
@@ -596,8 +599,8 @@ public class BaseGUI extends CGUI {
 		if (!Dispatcher.get().isRockCrabsScriptID())
 			tab_one_panel.add(lblSelected);
 
-		btnNewButton = new JButton("Refresh");
-		btnNewButton.addActionListener(new ActionListener() {
+		button_refresh = new JButton("Refresh");
+		button_refresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for (RSNPC n : NPCs.getAll())
 					if (n.getCombatLevel() > 0
@@ -610,8 +613,8 @@ public class BaseGUI extends CGUI {
 								+ n.getName() + " (" + n.getCombatLevel() + ")");
 			}
 		});
-		btnNewButton.setBounds(248, 207, 89, 23);
-		tab_one_panel.add(btnNewButton);
+		button_refresh.setBounds(248, 207, 89, 23);
+		tab_one_panel.add(button_refresh);
 
 		JLabel lblRadius = new JLabel("Radius");
 		lblRadius.setBounds(10, 90, 46, 14);
@@ -631,6 +634,28 @@ public class BaseGUI extends CGUI {
 				PresetFactory.getPresetsForScript());
 		combo_box_preset.setBounds(10, 148, 121, 20);
 		tab_one_panel.add(combo_box_preset);
+		combo_box_preset.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					if (!combo_box_preset.getSelectedItem().equals(
+							PresetFactory.Automatic)) {
+						button_add_to_possible.setEnabled(false);
+						button_remove_from_possible.setEnabled(false);
+						list_possible_monsters.setEnabled(false);
+						list_selected_monsters.setEnabled(false);
+						button_refresh.setEnabled(false);
+					} else {
+						button_add_to_possible.setEnabled(true);
+						button_remove_from_possible.setEnabled(true);
+						list_possible_monsters.setEnabled(true);
+						list_selected_monsters.setEnabled(true);
+						button_refresh.setEnabled(true);
+					}
+				}
+			}
+		});
 
 		lblProfile = new JLabel("Profile");
 		lblProfile.setBounds(10, 183, 59, 14);

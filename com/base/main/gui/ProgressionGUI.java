@@ -102,21 +102,31 @@ public class ProgressionGUI extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Dispatcher.get().getProgressionHandler().save();
+				String name = JOptionPane
+						.showInputDialog("Enter name for the profile");
+				if (name == null) {
+					JOptionPane.showMessageDialog(null,
+							"Invalid name. Save canceled");
+					return;
+				}
+				Dispatcher.get().getProgressionHandler().save(name);
 			}
 		});
 		btnSave.setBounds(121, 282, 89, 23);
 		contentPane.add(btnSave);
 
 		// TODO
-		JComboBox<String> combo_box_profiles = new JComboBox<String>();
+		final JComboBox<String> combo_box_profiles = new JComboBox<String>();
 		combo_box_profiles.setBounds(10, 248, 200, 23);
 		contentPane.add(combo_box_profiles);
 
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Dispatcher.get().getProgressionHandler().load();
+				String name = (String) combo_box_profiles.getSelectedItem();
+				if (name == null)
+					return;
+				Dispatcher.get().getProgressionHandler().load(name);
 				updateList();
 			}
 		});

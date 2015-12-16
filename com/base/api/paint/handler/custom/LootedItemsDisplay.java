@@ -73,7 +73,7 @@ public class LootedItemsDisplay extends Paintable<LootItem[]> {
 	}
 
 	@Override
-	protected boolean isInClick(Point p) {
+	public boolean isInClick(Point p) {
 		int total_looted = getNumberOfItemsThatHaveBeenLooted();
 		if (total_looted == 0)
 			return false;
