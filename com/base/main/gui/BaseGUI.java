@@ -86,7 +86,8 @@ public class BaseGUI extends CGUI {
 			+ "\r\n\r\nV2.0.9_7: Updated ID for Saradomin Godsword"
 			+ "\r\n\r\nV2.0.9_8: Minor improvements to combat and bug fixes at East Rock Crabs"
 			+ "\r\n\r\nV2.1.0_0: Progression mode released"
-			+ "\r\n\r\nV2.1.0_1: Saving added to progression mode";
+			+ "\r\n\r\nV2.1.0_1: Saving added to progression mode"
+			+ "\r\n\r\nV2.1.0_1: Minor changes to the back end";
 
 	private JPanel contentPane;
 

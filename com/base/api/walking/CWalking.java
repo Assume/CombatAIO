@@ -14,38 +14,6 @@ import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CWalking {
 
-	public static JeweleryTeleport walk(MovementType type) {
-		JeweleryTeleport teleported = null;
-		RSTile end_tile = (type == MovementType.TO_BANK ? Bank.getNearestBank()
-				.getTile() : (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
-				.getValue());
-		Bank nearest = Bank.getNearestBank();
-		Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-				"Nearest bank: " + nearest);
-		if (type == MovementType.TO_BANK && isFasterToTeleport(end_tile)
-				&& Player.getPosition().distanceTo(end_tile) > 100) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-					"It is faster to teleport");
-			teleported = Teleporting.attemptToTeleport(end_tile);
-		}
-		WalkingManager.walk(type, end_tile);
-		return teleported;
-	}
 
-	private static boolean isFasterToTeleport(RSTile end_tile) {
-		Teleport tele = Teleport.getTeleportNearestTo(end_tile);
-		Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-				"Closest teleport: " + tele);
-		JeweleryTeleport jewel = Jewelery.getNearestJewleryTeleport(end_tile);
-		if (tele == null && jewel == null)
-			return false;
-		int distance_tele = tele.getSpellLocationResult().distanceTo(end_tile);
-		int distance_jewel = jewel.getTeleportLocation().getTeleportTile()
-				.distanceTo(end_tile);
-		int distance_walk = Player.getPosition().distanceTo(end_tile);
-		return Player.getPosition().getPlane() != 0
-				|| distance_tele < distance_walk
-				|| distance_jewel < distance_walk;
-	}
 
 }

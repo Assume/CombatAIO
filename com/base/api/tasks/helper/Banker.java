@@ -27,6 +27,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.CWalking;
+import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
@@ -40,27 +41,12 @@ public class Banker {
 
 	private boolean log_when_out_of_food = false;
 
-	private static long retry_time = System.currentTimeMillis();
+	private long retry_time = System.currentTimeMillis();
 
 	public Banker() {
 		list = new ArrayList<BankItem>();
 		this.food_amount = 0;
 	}
-
-	/*
-	 * @Override public void run() { while (Dispatcher.get().isRunning()) { if
-	 * (this.shouldBank()) {
-	 * Dispatcher.get().pause(PauseType.NON_ESSENTIAL_TO_BANKING);
-	 * 
-	 * String[] monster_names = (String[]) Dispatcher.get()
-	 * .get(ValueType.MONSTER_NAMES).getValue(); CustomPaths modified_path =
-	 * getModifiedPath(monster_names); if (modified_path != null) ;
-	 * modified_path.getWebWalkingDeactivationArea (MovementType.TO_BANK);
-	 * 
-	 * TODO make it so it grabs the first modified area to pass to webwalking
-	 * bank(); Dispatcher.get().unpause(PauseType.NON_ESSENTIAL_TO_BANKING); }
-	 * General.sleep(2000); } }
-	 */
 
 	public void bank(boolean world_hop) {
 		if (Dispatcher.get().getCombatTask().isUsingCannon())
@@ -86,14 +72,14 @@ public class Banker {
 			p.disable();
 		if (Dispatcher.get().getPreset() == PresetFactory.Automatic
 				|| Dispatcher.get().getPreset().get() == null) {
-			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
+			JeweleryTeleport teleport = WalkingManager.walk(MovementType.TO_BANK);
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 				checkAndRemoveGlory();
 			openBank(world_hop);
 			handleBankWindow(world_hop, teleport);
 			if (world_hop)
 				WorldHopper.changeWorld(WorldHopper.getRandomWorld(true));
-			CWalking.walk(MovementType.TO_MONSTER);
+			WalkingManager.walk(MovementType.TO_MONSTER);
 		} else {
 			Preset temp_preset = Dispatcher.get().getPreset().get();
 			temp_preset.executeToBank();
@@ -126,13 +112,6 @@ public class Banker {
 		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list
 				.size()]), teleport == null ? null : teleport.getJewelery());
 		Banking.close();
-		/*
-		 * BankItem[] items_failed_to_withdraw = getItemsFailedToWithdraw(); if
-		 * (items_failed_to_withdraw.length > 0) { openBank(false);
-		 * withdraw(items_failed_to_withdraw, null); Banking.close(); } if
-		 * (getItemsFailedToWithdraw().length > 0) { Dispatcher.get().stop(
-		 * "Failed to withdraw items asked for, script stopping"); return; }
-		 */
 		if (withdraw_jewelery
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)
@@ -227,7 +206,7 @@ public class Banker {
 
 	}
 
-	public static boolean shouldBank(CombatTask task) {
+	public boolean shouldBank(CombatTask task) {
 		if (retry_time > System.currentTimeMillis())
 			return false;
 		Food food = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue());

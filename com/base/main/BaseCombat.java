@@ -39,7 +39,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script implements Painting, MousePainting,
 		Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.1.0_0";
+	public static final String VERSION_NUMBER = "2.1.0_1";
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
