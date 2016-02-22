@@ -25,7 +25,7 @@ public class WalkingManager {
 	private static List<CustomMovement> MOVEMENTS = new ArrayList<CustomMovement>();
 
 	public static void addMovement(MovementType type, DFullHolder dfh,
-			RSTile area, String name, String rad) {
+			RSTile area, String name, int rad) {
 		CustomMovement cmovement = getMovementForName(name);
 		if (cmovement != null) {
 			cmovement.setMovementType(type);

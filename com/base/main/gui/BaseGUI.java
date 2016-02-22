@@ -59,9 +59,8 @@ import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.gui.elements.UneditableDefaultTableModel;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
-import scripts.api.scriptapi.paint.types.CGUI;
 
-public class BaseGUI extends CGUI {
+public class BaseGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 

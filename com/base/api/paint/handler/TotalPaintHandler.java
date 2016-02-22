@@ -32,6 +32,8 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private DataDisplay logs_data_display;
 
+	private DataDisplay abc_logs_data_display;
+
 	private String version;
 
 	public TotalPaintHandler(String version) {
@@ -41,6 +43,7 @@ public class TotalPaintHandler extends PaintHandler {
 		this.generic_data_display = new DataDisplay();
 		this.target_health_display = new RSCharacterHealthDisplay();
 		this.logs_data_display = new DataDisplay();
+		this.abc_logs_data_display = new DataDisplay();
 
 		new HidePaintButton().register(this);
 		new ShowGUIButton(Dispatcher.get().getGUI()).register(this);
@@ -58,8 +61,13 @@ public class TotalPaintHandler extends PaintHandler {
 		PaintTab tab_experience = new PaintTab("Experience", main_panel);
 		tab_experience.add(new ExperienceDisplay(SkillData.COMBAT_TYPE, false));
 
+		PaintTab tab_ABCV2_logs = new PaintTab("ABCv2 Logs", main_panel);
+		tab_ABCV2_logs.add(this.abc_logs_data_display);
+		tab_ABCV2_logs.setDrawBackground(false);
+
 		main_panel.addTab(tab_general);
 		main_panel.addTab(tab_experience);
+		main_panel.addTab(tab_ABCV2_logs);
 
 		PaintPanel scripter_panel = new PaintPanel(5, 50, 180, 350);
 		if (Logger.isScripter())
@@ -72,6 +80,10 @@ public class TotalPaintHandler extends PaintHandler {
 
 		this.monster_paint_handler = new MonsterPaintHandler();
 
+	}
+
+	private String[] getABCLogs() {
+		return Logger.getLogger().getAllLogsAsString(Logger.ABC_LOGS, 5);
 	}
 
 	private String[] getLoggerMessages() {
@@ -117,6 +129,7 @@ public class TotalPaintHandler extends PaintHandler {
 		this.target_health_display.update((RSCharacter) Dispatcher.get()
 				.get(ValueType.CURRENT_TARGET).getValue());
 		this.logs_data_display.update(getLoggerMessages());
+		this.abc_logs_data_display.update(getABCLogs());
 	}
 
 	public boolean isInClick(Point p) {

@@ -175,7 +175,7 @@ public class CustomWalkingGUI extends JFrame {
 								.getSelectedItem();
 						String rad = spinner.getValue().toString();
 						WalkingManager.addMovement(type, dfh, center_tile,
-								name, rad);
+								name, Integer.parseInt(rad));
 					}
 					setVisible(false);
 					dispose();
@@ -255,20 +255,25 @@ public class CustomWalkingGUI extends JFrame {
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String name = (String) combo_box_movements.getSelectedItem();
-				if (name == null)
-					return;
-				CustomMovement x = WalkingManager.getMovementForName(name);
-				if (x == null)
-					return;
-				complete_list_model.clear();
-				DFullHolder holder = x.getFullHolder();
-				for (DHolder xy : holder.getHolders())
-					complete_list_model.addElement(xy);
-				spinner.setValue(x.getRadius());
-				combo_box_movement_type.setSelectedItem(x.getMovementType());
-				center_tile = x.getCenterTile();
-				lblCenterTile.setText("Center tile: " + center_tile);
+				try {
+					String name = (String) combo_box_movements
+							.getSelectedItem();
+					if (name == null)
+						return;
+					CustomMovement x = WalkingManager.getMovementForName(name);
+					if (x == null)
+						return;
+					spinner.setValue(x.getRadius());
+					center_tile = x.getCenterTile();
+					lblCenterTile.setText("Center tile: " + center_tile);
+					complete_list_model.clear();
+					DFullHolder holder = x.getFullHolder();
+					for (DHolder xy : holder.getHolders())
+						complete_list_model.addElement(xy);
+					combo_box_movement_type.setSelectedItem(x.getMovementType());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		btnLoad.setBounds(150, 517, 89, 23);

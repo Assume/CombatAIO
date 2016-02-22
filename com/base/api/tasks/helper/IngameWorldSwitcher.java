@@ -18,12 +18,6 @@ import org.tribot.api2007.types.RSInterface;
 
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 
-
-/**
- * 
- * @author Not ErickHo
- */
-
 public class IngameWorldSwitcher {
 
 	public static boolean isHopping = false;
@@ -47,9 +41,9 @@ public class IngameWorldSwitcher {
 			352 };
 
 	private static final int[] P2P_WORLDS = { 2, 3, 4, 5, 6, 9, 10, 11, 12, 13,
-			14, 17, 18, 19, 20, 21, 22, 27, 28, 29, 30, 33, 34, 36, 38, 41, 42,
-			43, 44, 45, 46, 49, 50, 51, 54, 57, 58, 59, 60, 62, 65, 67, 68, 69,
-			70, 74, 75, 76, 77, 78 };
+			14, 17, 18, 19, 20, 22, 27, 28, 29, 30, 33, 34, 36, 38, 41, 42, 43,
+			44, 45, 46, 50, 51, 54, 57, 58, 59, 60, 62, 65, 67, 68, 69, 70, 74,
+			75, 76, 77, 78 };
 
 	private static final int[] F2P_WORLDS = { 1, 8, 16, 26, 35, 81, 82, 83, 84,
 			93, 94 };

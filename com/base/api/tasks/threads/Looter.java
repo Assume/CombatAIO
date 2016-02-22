@@ -33,6 +33,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.LootItem;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.AntiBan;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class Looter extends Threadable implements Pauseable {
@@ -184,10 +185,7 @@ public class Looter extends Threadable implements Pauseable {
 					update.setId(x.getID());
 				update.incrementAmountLooted(getInventoryCountOfItem(name)
 						- total_item_in_inventory);
-				General.sleep(Dispatcher.get().getABCUtil().DELAY_TRACKER.ITEM_INTERACTION
-						.next());
-				Dispatcher.get().getABCUtil().DELAY_TRACKER.ITEM_INTERACTION
-						.reset();
+				AntiBan.sleepReactionTime();
 			}
 
 		}

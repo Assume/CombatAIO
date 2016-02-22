@@ -1,8 +1,9 @@
 package scripts.CombatAIO.com.base.main;
 
+import javax.swing.JFrame;
+
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.util.ABCUtil;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
@@ -27,7 +28,6 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
-import scripts.api.scriptapi.paint.types.CGUI;
 
 public class Dispatcher {
 
@@ -72,7 +72,6 @@ public class Dispatcher {
 	private PriceUpdater price_updater_task;
 	private PKAvoider pk_avoider;
 	private BaseCombat main_class;
-	private ABCUtil abc_util;
 	private CProgressionHandler progression_handler;
 	private Banker banker;
 	private int repo_id;
@@ -86,7 +85,7 @@ public class Dispatcher {
 		this.consumption_task = new ConsumptionTask();
 		this.pk_avoider = new PKAvoider(true);
 		this.price_updater_task = new PriceUpdater();
-		this.abc_util = new ABCUtil();
+		//this.abc_util = new ABCUtil();
 		this.progression_handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
@@ -337,10 +336,6 @@ public class Dispatcher {
 		return this.started;
 	}
 
-	public ABCUtil getABCUtil() {
-		return this.abc_util;
-	}
-
 	public void attackTarget() {
 		this.combat_task.attackCurrentTarget();
 	}
@@ -360,7 +355,7 @@ public class Dispatcher {
 		return this.repo_id;
 	}
 
-	public CGUI getGUI() {
+	public JFrame getGUI() {
 		return this.gui;
 	}
 

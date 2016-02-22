@@ -34,6 +34,7 @@ import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.tasks.threads.TrackingUpdater;
 import scripts.api.scriptapi.paint.SkillData;
+import scripts.starfox.api.AntiBan;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script implements Painting, MousePainting,
@@ -68,7 +69,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
-			Dispatcher.get().getABCUtil().performTimedActions(SKILLS.STRENGTH);
+			AntiBan.timedActions(SKILLS.STRENGTH);
 			SkillData.updateAll();
 			PaintData.updateAll();
 			this.paint_handler.update(getRunningTime());

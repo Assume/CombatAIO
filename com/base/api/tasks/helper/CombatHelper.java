@@ -32,6 +32,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.AntiBan;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class CombatHelper {
@@ -87,11 +88,7 @@ public class CombatHelper {
 	}
 
 	public void checkRun() {
-		if (Game.getRunEnergy() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_RUN_AT
-				.next() && !Game.isRunOn()) {
-			Options.setRunOn(true);
-			Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_RUN_AT.reset();
-		}
+		AntiBan.activateRun();
 	}
 
 	public void buryBones() {
@@ -148,11 +145,12 @@ public class CombatHelper {
 			return;
 		}
 		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling clickCannon(Fire)");
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+					"calling clickCannon(Fire)");
 			clickCannon("Fire ");
-		}
-		else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling clickCannon(Fire)");
+		} else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+					"calling clickCannon(Fire)");
 			clickCannon("Fire ");
 			this.fill_cannon_at = General.random(0, 10);
 		}
@@ -167,7 +165,7 @@ public class CombatHelper {
 		if (!obj[0].isOnScreen())
 			new DPathNavigator().traverse(obj[0]);
 		Clicking.click(option, obj[0]);
-		while(Player.isMoving())
+		while (Player.isMoving())
 			General.sleep(25);
 	}
 
@@ -317,9 +315,8 @@ public class CombatHelper {
 	private void equipAmmo() {
 		RSItem[] ammo = Inventory.find(ammo_id, knife_id);
 		if (ammo.length > 0)
-			if (ammo[0].getStack() >= Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
-					.next()) {
-				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
+			if (ammo[0].getStack() >= AntiBan.eat_at) {
+				AntiBan.eat_at = AntiBan.getABCUtil().generateEatAtHP();
 				ammo[0].click("Wield");
 			}
 	}

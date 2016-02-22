@@ -15,6 +15,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.AntiBan;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
 public class ConsumptionTask extends Threadable {
@@ -33,14 +34,12 @@ public class ConsumptionTask extends Threadable {
 	@Override
 	public void run() {
 		while (true) {
-			if (Combat.getHPRatio() < Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT
-					.next() && food != Food.None) {
+			if (Combat.getHPRatio() < AntiBan.eat_at && food != Food.None) {
 				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 						"CONSUMPTION_THREAD IS CALLING PAUSE ON EAT");
 				Dispatcher.get().pause(PauseType.COULD_INTERFERE_WITH_EATING);
 				eat();
 				executeBonesToPeaches();
-				Dispatcher.get().getABCUtil().INT_TRACKER.NEXT_EAT_AT.reset();
 				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 						"CONSUMPTION_THREAD IS CALLING UNPAUSE ON EAT");
 				Dispatcher.get().unpause(PauseType.COULD_INTERFERE_WITH_EATING);
@@ -63,7 +62,7 @@ public class ConsumptionTask extends Threadable {
 		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
 				.get(ValueType.FOOD).getValue()).getId());
 		if (food.length > 0) {
-			food[0].click("Eat");
+			AntiBan.eat("Eat", food[0]);
 			Dispatcher.get().attackTarget();
 		}
 	}

@@ -7,6 +7,7 @@ import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api.util.abc.preferences.WalkingPreference;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
@@ -19,10 +20,9 @@ import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
-import scripts.CombatAIO.com.base.api.tasks.helper.Banker;
 import scripts.CombatAIO.com.base.api.tasks.helper.CombatHelper;
 import scripts.CombatAIO.com.base.api.tasks.helper.IngameWorldSwitcher;
-import scripts.CombatAIO.com.base.api.tasks.helper.StaticTargetCalculator;
+import scripts.CombatAIO.com.base.api.tasks.helper.TargetFinder;
 import scripts.CombatAIO.com.base.api.tasks.helper.scriptspecific.RockCrabsHelper;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Pauseable;
@@ -31,6 +31,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.AntiBan;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 import scripts.api.scriptapi.paint.SkillData;
@@ -106,11 +107,8 @@ public class CombatTask extends Threadable implements Pauseable {
 
 	private void executeNoTarget() {
 		this.helper.runCheckHasNoTarget();
-		long time = Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT
-				.next();
-		General.sleep(time);
-		Dispatcher.get().getABCUtil().DELAY_TRACKER.NEW_OBJECT_COMBAT.reset();
-		this.setMonsters(StaticTargetCalculator.calculate());
+		AntiBan.sleepReactionTime();
+		this.setMonsters(TargetFinder.calculate());
 		Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 				"Calling #fight in CombatTask#executeNoTarget");
 		fight(this.possible_monsters);
@@ -126,7 +124,7 @@ public class CombatTask extends Threadable implements Pauseable {
 		}
 		if (this.current_target != null && !this.current_target.isValid()) {
 			this.current_target = null;
-			this.setMonsters(StaticTargetCalculator.calculate());
+			this.setMonsters(TargetFinder.calculate());
 			fight(this.possible_monsters);
 		}
 		this.last_attack_time = System.currentTimeMillis();
@@ -162,7 +160,7 @@ public class CombatTask extends Threadable implements Pauseable {
 		if (current_target == null)
 			return false;
 		return this.attack_monsters_already_in_combat
-				|| (!current_target.isInCombat() && !StaticTargetCalculator
+				|| (!current_target.isInCombat() && !TargetFinder
 						.isBeingSplashed(current_target));
 
 	}
@@ -170,11 +168,7 @@ public class CombatTask extends Threadable implements Pauseable {
 	private void setTarget(RSNPC[] monsters) {
 		if (monsters.length == 0)
 			return;
-		if (getAverageDistance(monsters) < 3)
-			this.current_target = monsters[General.random(0,
-					monsters.length - 1)];
-		else
-			this.current_target = monsters[0];
+		this.current_target = AntiBan.selectNextTarget(monsters);
 	}
 
 	private void moveToTarget(RSNPC target) {
@@ -183,9 +177,9 @@ public class CombatTask extends Threadable implements Pauseable {
 		if (!target.isOnScreen()
 				|| (!this.helper.isRanging() && !PathFinding.canReach(target,
 						false))) {
-			if (PathFinding.canReach(target, false))
-				Walking.walkTo(target);
-			else
+			if (PathFinding.canReach(target, false)) {
+				AntiBan.walkToPosition(target);
+			} else
 				new DPathNavigator().traverse(target);
 		}
 	}

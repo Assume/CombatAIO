@@ -19,6 +19,7 @@ public class Logger {
 	public static final int WARNING = 1;
 	public static final int CRITICAL = 2;
 	public static final int SCRIPTER_ONLY = 3;
+	public static final int ABC_LOGS = 4;
 
 	private int warning_level;
 
@@ -58,9 +59,24 @@ public class Logger {
 
 	public String[] getAllLogsAsString(int level, int number) {
 		List<String> temp = new ArrayList<String>();
-		for (int i = this.logs.size() - 1; i > this.logs.size() - number - 1
-				&& i >= 0; i--)
-			temp.add(logs.get(i).toString());
+		for (int i = this.logs.size() - 1; i >= 0 && temp.size() < number; i--) {
+			ScriptLog log = logs.get(i);
+			if (log.getLevel() >= level)
+				temp.add(logs.get(i).toString());
+		}
 		return temp.toArray(new String[temp.size()]);
 	}
+
+	public ScriptLog[] getAllLogs(int level, int number) {
+		List<ScriptLog> temp = new ArrayList<ScriptLog>();
+		for (int i = this.logs.size() - 1; i >= 0 && temp.size() < number; i--) {
+			ScriptLog log = logs.get(i);
+			if (log.getLevel() >= level)
+				temp.add(logs.get(i));
+			else
+				number++;
+		}
+		return temp.toArray(new ScriptLog[temp.size()]);
+	}
+
 }

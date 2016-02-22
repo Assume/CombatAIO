@@ -8,6 +8,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.CombatAIO.com.base.main.utils.AntiBan;
 
 public class KillTracker extends Threadable {
 
@@ -24,11 +25,16 @@ public class KillTracker extends Threadable {
 		while (true) {
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
-			if (target != null && target.getHealth() == 0
-					&& target.isInCombat() && target.isInteractingWithMe()) {
+			if (target != null
+					&& target.getHealth() == 0
+					&& target.isInCombat()
+					&& (target.isInteractingWithMe() || (Boolean) Dispatcher
+							.get().get(ValueType.ATTACK_MONSTERS_IN_COMBAT)
+							.getValue())) {
 				kills++;
 				General.sleep(1000);
 				combat_thread.resetTarget();
+				AntiBan.setLastUnderAttackTime(System.currentTimeMillis());
 			}
 			General.sleep(500);
 		}

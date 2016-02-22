@@ -13,11 +13,11 @@ public class CustomMovement implements Serializable {
 	private DFullHolder holder;
 	private String name;
 	private MovementType type;
-	private String rad;
+	private int rad;
 	private RSTile center_tile;
 
 	public CustomMovement(RSTile center_tile, DFullHolder holder, String name,
-			MovementType type, String rad) {
+			MovementType type, int rad) {
 		this.holder = holder;
 		this.name = name;
 		this.type = type;
@@ -34,7 +34,7 @@ public class CustomMovement implements Serializable {
 	}
 
 	public RSArea getActivationArea() {
-		return new RSArea(center_tile, Integer.parseInt(rad));
+		return new RSArea(center_tile, rad);
 	}
 
 	public void execute() {
@@ -54,11 +54,11 @@ public class CustomMovement implements Serializable {
 		this.holder = dfh;
 	}
 
-	public String getRadius() {
+	public int getRadius() {
 		return this.rad;
 	}
 
-	public void setRadius(String rad) {
+	public void setRadius(int rad) {
 		this.rad = rad;
 	}
 
