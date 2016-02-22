@@ -51,7 +51,7 @@ public class Logger {
 	public void setWarningLevel(int level) {
 		if (level < 0)
 			warning_level = GENERIC;
-		else if (level > 3)
+		else if (level > 4)
 			warning_level = SCRIPTER_ONLY;
 		else
 			warning_level = level;

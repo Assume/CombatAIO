@@ -23,6 +23,7 @@ public class ScriptLog {
 	}
 
 	public Date getDate() {
+		
 		return this.date;
 	}
 
