@@ -61,8 +61,9 @@ public class Logger {
 		List<String> temp = new ArrayList<String>();
 		for (int i = this.logs.size() - 1; i >= 0 && temp.size() < number; i--) {
 			ScriptLog log = logs.get(i);
-			if (log.getLevel() >= level)
-				temp.add(logs.get(i).toString());
+			if (log != null)
+				if (log.getLevel() >= level)
+					temp.add(logs.get(i).toString());
 		}
 		return temp.toArray(new String[temp.size()]);
 	}

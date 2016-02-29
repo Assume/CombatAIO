@@ -87,7 +87,8 @@ public class BaseGUI extends JFrame {
 			+ "\r\n\r\nV2.1.0_0: Progression mode released"
 			+ "\r\n\r\nV2.1.0_1: Saving added to progression mode"
 			+ "\r\n\r\nV2.1.0_1: Minor changes to the back end"
-			+ "\r\n\r\nV2.2.0_0: ABCV2 released at level 10. Small changes to paint and backend systems";
+			+ "\r\n\r\nV2.2.0_0: ABCV2 released at level 10. Small changes to paint and backend systems"
+			+ "\r\n\r\nV2.2.0_1: Fixed an NPE";
 
 	private JPanel contentPane;
 
