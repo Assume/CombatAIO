@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.tribot.api.General;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 

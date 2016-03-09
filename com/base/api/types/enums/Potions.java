@@ -74,6 +74,10 @@ public enum Potions {
 		return potions.toArray(new Potions[potions.size()]);
 	}
 
+	private boolean isPoisoned(){
+		return Game.getSetting(102) > 0;
+	}
+
 	public static int[] getAllIds(int id) {
 		for (Potions x : values())
 			for (int y : x.ids)

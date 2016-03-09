@@ -7,8 +7,10 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Players;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
@@ -49,6 +51,9 @@ public class TargetFinder {
 	}
 
 	public static boolean isBeingSplashed(RSNPC n) {
+		for (RSPlayer p : Players.getAll())
+			if (p.getInteractingIndex() == n.getIndex() && p.isInCombat())
+				return true;
 		return false;
 	}
 
@@ -82,7 +87,8 @@ public class TargetFinder {
 						continue;
 					}
 					if (!reachable
-							|| (Player.getPosition().distanceTo(potential_target) <= radius * 2 && PathFinding
+							|| (Player.getPosition().distanceTo(
+									potential_target) <= radius * 2 && PathFinding
 									.canReach(potential_target, false)))
 						possible_npcs.add(potential_target);
 				}

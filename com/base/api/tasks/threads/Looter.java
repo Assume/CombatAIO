@@ -185,6 +185,7 @@ public class Looter extends Threadable implements Pauseable {
 					update.setId(x.getID());
 				update.incrementAmountLooted(getInventoryCountOfItem(name)
 						- total_item_in_inventory);
+				AntiBan.generateTrackers(1000);
 				AntiBan.sleepReactionTime();
 			}
 
