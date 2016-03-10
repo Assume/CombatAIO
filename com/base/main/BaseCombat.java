@@ -125,7 +125,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 
 	@Override
 	public void playerMessageReceived(String arg0, String arg1) {
-		// TODO Auto-generated method stub
+		Dispatcher.get().setPlayerMessageReceived(true); 
 
 	}
 

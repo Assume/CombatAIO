@@ -15,7 +15,7 @@ public enum Potions {
 			SKILLS.ATTACK, 12695, 12697, 12699, 12701, 9739, 9741, 9743, 9745), RANGING(
 			SKILLS.RANGED, 2444, 169, 171, 173), OVERLOAD(SKILLS.ATTACK), PRAYER(
 			null, 2434, 139, 141, 143), ANTI_POISON(null, 2446, 175, 177, 179,
-			2448, 181, 183, 185), ;
+			2448, 181, 183, 185, 5943, 5945, 5947, 5949, 5952, 5954, 5946, 5958), ;
 
 	private SKILLS skill;
 	private int[] ids;
@@ -74,7 +74,7 @@ public enum Potions {
 		return potions.toArray(new Potions[potions.size()]);
 	}
 
-	private boolean isPoisoned(){
+	private boolean isPoisoned() {
 		return Game.getSetting(102) > 0;
 	}
 

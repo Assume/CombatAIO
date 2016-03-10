@@ -6,17 +6,12 @@ import java.util.List;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api.util.abc.preferences.WalkingPreference;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.Players;
-import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
@@ -30,6 +25,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.types.enums.WorldHoppingCondition;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.CombatAIO.com.base.main.utils.AntiBan;
 import scripts.CombatAIO.com.base.main.utils.ArrayUtil;
@@ -45,13 +41,13 @@ public class CombatTask extends Threadable implements Pauseable {
 	private RSNPC[] possible_monsters;
 	private int[] monster_ids;
 
-	private int world_hop_tolerance = -1;
-
 	private long last_attack_time = System.currentTimeMillis();
 
 	private CombatHelper helper;
 
 	private boolean attack_monsters_already_in_combat;
+
+	private WorldHoppingCondition world_hop_condition;
 
 	public CombatTask() {
 		this(Arrays.asList(new PauseType[] {
@@ -75,9 +71,14 @@ public class CombatTask extends Threadable implements Pauseable {
 	@Override
 	public void run() {
 		while (Dispatcher.get().isRunning()) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-					"Calling fight in CombatTask#run");
-			fight();
+			if (super.isPaused())
+				General.sleep(100);
+			else {
+				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
+						"Calling fight in CombatTask#run");
+				fight();
+			}
+
 		}
 	}
 
@@ -212,13 +213,7 @@ public class CombatTask extends Threadable implements Pauseable {
 	}
 
 	public boolean shouldChangeWorld() {
-		return this.world_hop_tolerance > 0
-				&& Players.find(new Filter<RSPlayer>() {
-					@Override
-					public boolean accept(RSPlayer arg0) {
-						return arg0.getPosition().distanceTo(home_tile) <= combat_distance;
-					}
-				}).length > this.world_hop_tolerance;
+		return this.world_hop_condition.shouldHop();
 	}
 
 	public void setMonsters(RSNPC[] possible_monsters) {
@@ -312,12 +307,12 @@ public class CombatTask extends Threadable implements Pauseable {
 		this.combat_distance = value;
 	}
 
-	public void setWorldHopTolerance(int value) {
-		this.world_hop_tolerance = value;
+	public void setWorldHopCondition(WorldHoppingCondition condition) {
+		this.world_hop_condition = condition;
 	}
 
-	public Value<Integer> getWorldHopTolerance() {
-		return new Value<Integer>(this.world_hop_tolerance);
+	public Value<WorldHoppingCondition> getWorldHopCondition() {
+		return new Value<WorldHoppingCondition>(this.world_hop_condition);
 	}
 
 	public void setSafeSpot(RSTile value) {

@@ -54,6 +54,7 @@ import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.types.enums.WorldHoppingCondition;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CustomMovement;
 import scripts.CombatAIO.com.base.main.Dispatcher;
@@ -97,6 +98,7 @@ public class BaseGUI extends JFrame {
 	private JComboBox<Weapon> combo_box_special_attack;
 	private JComboBox<String> combo_box_settings;
 	private JComboBox<PresetFactory> combo_box_preset;
+	private JComboBox<WorldHoppingCondition> combo_box_world_hopping;
 
 	private DefaultComboBoxModel<String> model_combo_box = new DefaultComboBoxModel<String>();
 
@@ -128,7 +130,6 @@ public class BaseGUI extends JFrame {
 	private JLabel lblSelected;
 	private JLabel lblSpecialAttack;
 	private JLabel lbl_cannon_tile;
-	private JLabel lbl_worldhopping_info;
 	private JLabel lbl_safe_spot;
 
 	private JButton button_refresh;
@@ -146,11 +147,12 @@ public class BaseGUI extends JFrame {
 
 	private JSpinner spinner_food;
 	private JSpinner spinner_combat_radius;
-	private JSpinner spinner_world_hop_tolerance;
 
 	private RSTile safe_spot_tile;
 
 	private RSTile cannon_tile;
+
+	private int world_hop_value;
 
 	public BaseGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -370,7 +372,7 @@ public class BaseGUI extends JFrame {
 
 		lblOnlySome = new JLabel(
 				"*Only piety and chivalry are supported for flicker");
-		lblOnlySome.setBounds(10, 241, 262, 14);
+		lblOnlySome.setBounds(10, 266, 262, 14);
 		tab_three_panel.add(lblOnlySome);
 
 		chckbx_ranged = new JCheckBox("Ranged/Magic");
@@ -388,25 +390,10 @@ public class BaseGUI extends JFrame {
 		lblSpecialAttack.setBounds(151, 11, 77, 14);
 		tab_three_panel.add(lblSpecialAttack);
 
-		JLabel lblWorldHopTolerance = new JLabel("World hop tolerance**");
-		lblWorldHopTolerance.setBounds(10, 117, 121, 14);
-		tab_three_panel.add(lblWorldHopTolerance);
-
-		spinner_world_hop_tolerance = new JSpinner();
-		spinner_world_hop_tolerance.setBounds(131, 114, 39, 20);
-		tab_three_panel.add(spinner_world_hop_tolerance);
-		spinner_world_hop_tolerance.setValue(-1);
-		if (Dispatcher.get().isLiteMode())
-			spinner_world_hop_tolerance.setEnabled(false);
-
-		lbl_worldhopping_info = new JLabel("** Leave at -1 for no hopping");
-		lbl_worldhopping_info.setBounds(10, 266, 240, 14);
-		tab_three_panel.add(lbl_worldhopping_info);
-
 		lbl_safe_spot = new JLabel("Safe spot: ");
-		lbl_safe_spot.setBounds(109, 162, 141, 14);
-		if (!Dispatcher.get().isRockCrabsScriptID())
-			tab_three_panel.add(lbl_safe_spot);
+		lbl_safe_spot.setBounds(131, 172, 141, 14);
+		// if (!Dispatcher.get().isRockCrabsScriptID())
+		tab_three_panel.add(lbl_safe_spot);
 
 		JButton btnSet = new JButton("Set");
 		btnSet.addActionListener(new ActionListener() {
@@ -421,9 +408,9 @@ public class BaseGUI extends JFrame {
 				}
 			}
 		});
-		btnSet.setBounds(10, 158, 89, 23);
-		if (!Dispatcher.get().isRockCrabsScriptID())
-			tab_three_panel.add(btnSet);
+		btnSet.setBounds(10, 168, 77, 20);
+		// if (!Dispatcher.get().isRockCrabsScriptID())
+		tab_three_panel.add(btnSet);
 
 		chckbx_cannon = new JCheckBox("Cannon");
 		chckbx_cannon.addActionListener(new ActionListener() {
@@ -439,7 +426,7 @@ public class BaseGUI extends JFrame {
 			chckbx_cannon.setEnabled(false);
 
 		lbl_cannon_tile = new JLabel("Cannon tile: ");
-		lbl_cannon_tile.setBounds(282, 117, 161, 14);
+		lbl_cannon_tile.setBounds(131, 143, 161, 14);
 		tab_three_panel.add(lbl_cannon_tile);
 
 		JButton btn_cannon_tile = new JButton("Set");
@@ -455,17 +442,41 @@ public class BaseGUI extends JFrame {
 							+ cannon_tile.toString());
 			}
 		});
-		btn_cannon_tile.setBounds(195, 114, 77, 20);
+		btn_cannon_tile.setBounds(10, 140, 77, 20);
 		tab_three_panel.add(btn_cannon_tile);
 
 		chckbx_attack_monsters_in_combat = new JCheckBox(
 				"Attack monsters in combat");
-		chckbx_attack_monsters_in_combat.setBounds(252, 58, 262, 23);
+		chckbx_attack_monsters_in_combat.setBounds(131, 110, 176, 23);
 		tab_three_panel.add(chckbx_attack_monsters_in_combat);
 
 		chckbx_bury_bones = new JCheckBox("Bury bones");
-		chckbx_bury_bones.setBounds(252, 84, 97, 23);
+		chckbx_bury_bones.setBounds(10, 110, 97, 23);
 		tab_three_panel.add(chckbx_bury_bones);
+
+		// TODO WorldHoppingCondition.values()
+		combo_box_world_hopping = new JComboBox<WorldHoppingCondition>(
+				WorldHoppingCondition.values());
+
+		if (Dispatcher.get().isLiteMode())
+			combo_box_world_hopping.setEnabled(false);
+		combo_box_world_hopping.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					if (combo_box_world_hopping.getSelectedIndex() == 1)
+						WorldHoppingCondition.PLAYERS_PRESENT.setValue(getInt(JOptionPane
+								.showInputDialog("Enter number of players at which you should hop: ")));
+				} catch (Exception e) {
+
+				}
+			}
+		});
+		combo_box_world_hopping.setBounds(10, 235, 161, 20);
+		tab_three_panel.add(combo_box_world_hopping);
+
+		JLabel lblworldhopping = new JLabel("World hopping condition");
+		lblworldhopping.setBounds(10, 210, 153, 14);
+		tab_three_panel.add(lblworldhopping);
 		if (Dispatcher.get().isLiteMode())
 			chckbx_bury_bones.setEnabled(false);
 
@@ -718,11 +729,6 @@ public class BaseGUI extends JFrame {
 				ValueType.COMBAT_RADIUS,
 				new Value<Integer>(Integer.parseInt(spinner_combat_radius
 						.getValue().toString())));
-
-		Dispatcher.get().set(
-				ValueType.WORLD_HOP_TOLERANCE,
-				new Value<Integer>(Integer.parseInt(spinner_world_hop_tolerance
-						.getValue().toString())));
 		Dispatcher.get().set(ValueType.SAFE_SPOT_TILE,
 				new Value<RSTile>(this.safe_spot_tile));
 		Dispatcher.get().set(
@@ -744,6 +750,11 @@ public class BaseGUI extends JFrame {
 				ValueType.BURY_BONES,
 				new Value<Boolean>(Dispatcher.get().isLiteMode() ? false
 						: chckbx_bury_bones.isSelected()));
+		Dispatcher.get().set(
+				ValueType.WORLD_HOP_CONDITION,
+				new Value<WorldHoppingCondition>(
+						(WorldHoppingCondition) combo_box_world_hopping
+								.getSelectedItem()));
 		Dispatcher.get().set(ValueType.LOG_WHEN_OUT_OF_FOOD,
 				new Value<Boolean>(chckbx_log_when_out_of_food.isSelected()));
 		String loot_over_x = text_field_loot_over_x.getText();
@@ -837,9 +848,13 @@ public class BaseGUI extends JFrame {
 			prop.setProperty("combat_radius",
 					Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue()
 							.toString());
-			prop.setProperty("world_hop_tolerance",
-					Dispatcher.get().get(ValueType.WORLD_HOP_TOLERANCE)
+			prop.setProperty("world_hop_condition",
+					Dispatcher.get().get(ValueType.WORLD_HOP_CONDITION)
 							.getValue().toString());
+			prop.setProperty("world_hop_value", Integer
+					.toString(((WorldHoppingCondition) Dispatcher.get()
+							.get(ValueType.WORLD_HOP_CONDITION).getValue())
+							.getValue()));
 
 			String safe_spot_tile_text = this.safe_spot_tile == null ? "null"
 					: this.safe_spot_tile.toString().replaceAll("[^0-9,]", "");
@@ -915,9 +930,6 @@ public class BaseGUI extends JFrame {
 					: Boolean.parseBoolean(prop.getProperty("use_guthans")));
 			spinner_combat_radius.setValue(Integer.parseInt(prop
 					.getProperty("combat_radius")));
-			spinner_world_hop_tolerance
-					.setValue(Dispatcher.get().isLiteMode() ? -1 : Integer
-							.parseInt(prop.getProperty("world_hop_tolerance")));
 			chckbx_ranged.setSelected(Dispatcher.get().isLiteMode() ? false
 					: Boolean.parseBoolean("tele_grab"));
 			combo_box_preset.setSelectedItem(PresetFactory
@@ -929,13 +941,17 @@ public class BaseGUI extends JFrame {
 					: Boolean.parseBoolean(prop.getProperty("bury_bones")));
 			chckbx_log_when_out_of_food.setSelected(Boolean.parseBoolean(prop
 					.getProperty("log_out_when_out_of_food")));
+			combo_box_world_hopping.setSelectedItem(WorldHoppingCondition
+					.valueOf(prop.getProperty("world_hop_condition")));
+			WorldHoppingCondition.PLAYERS_PRESENT.setValue(getInt(prop
+					.getProperty("world_hop_value")));
 			if (Dispatcher.get().isLiteMode())
 				this.safe_spot_tile = null;
 			else
 				this.safe_spot_tile = getSafeSpotTile(prop);
 			if (this.safe_spot_tile != null)
-				lbl_safe_spot
-						.setText("Safe spot: " + safe_spot_tile.toString());
+				lbl_safe_spot.setText("Safe spot:        "
+						+ safe_spot_tile.toString());
 			if (Dispatcher.get().isLiteMode()) {
 				this.cannon_tile = null;
 				chckbx_cannon.setSelected(false);

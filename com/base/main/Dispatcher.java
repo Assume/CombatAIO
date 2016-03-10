@@ -1,5 +1,9 @@
 package scripts.CombatAIO.com.base.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.swing.JFrame;
 
 import org.tribot.api.General;
@@ -26,6 +30,7 @@ import scripts.CombatAIO.com.base.api.types.constants.ScriptIDs;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
+import scripts.CombatAIO.com.base.api.types.enums.WorldHoppingCondition;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
 import scripts.CombatAIO.com.base.main.utils.Logger;
 
@@ -76,6 +81,11 @@ public class Dispatcher {
 	private Banker banker;
 	private int repo_id;
 
+	private boolean player_message_received;
+
+	private List<PauseType> current_pause_types = Collections
+			.synchronizedList(new ArrayList<PauseType>());
+
 	private PresetFactory preset;
 
 	private Dispatcher(BaseCombat main_class) {
@@ -85,7 +95,6 @@ public class Dispatcher {
 		this.consumption_task = new ConsumptionTask();
 		this.pk_avoider = new PKAvoider(true);
 		this.price_updater_task = new PriceUpdater();
-		//this.abc_util = new ABCUtil();
 		this.progression_handler = new CProgressionHandler();
 		this.banker = new Banker();
 		this.repo_id = main_class.getRepoID();
@@ -173,8 +182,8 @@ public class Dispatcher {
 			return this.combat_task.getUseGuthans();
 		case COMBAT_RADIUS:
 			return this.combat_task.getCombatRadius();
-		case WORLD_HOP_TOLERANCE:
-			return this.combat_task.getWorldHopTolerance();
+		case WORLD_HOP_CONDITION:
+			return this.combat_task.getWorldHopCondition();
 		case SAFE_SPOT_TILE:
 			return this.combat_task.getSafeSpot();
 		case ARMOR_HOLDER_IDS:
@@ -247,8 +256,9 @@ public class Dispatcher {
 		case COMBAT_RADIUS:
 			this.combat_task.setCombatRadius((Integer) val.getValue());
 			break;
-		case WORLD_HOP_TOLERANCE:
-			this.combat_task.setWorldHopTolerance((Integer) val.getValue());
+		case WORLD_HOP_CONDITION:
+			this.combat_task.setWorldHopCondition((WorldHoppingCondition) val
+					.getValue());
 			break;
 		case SAFE_SPOT_TILE:
 			this.combat_task.setSafeSpot((RSTile) val.getValue());
@@ -300,7 +310,7 @@ public class Dispatcher {
 				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 						x.getName() + " " + x.getId());
 				x.setPaused(true);
-				x.suspend();
+				// x.suspend();
 			}
 
 	}
@@ -310,7 +320,7 @@ public class Dispatcher {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
 				x.setPaused(false);
-				x.resume();
+				// x.resume();
 			}
 
 	}
@@ -319,7 +329,7 @@ public class Dispatcher {
 		this.progression_handler.checkAndExecute();
 		if (this.combat_task.isPaused()
 				&& Timing.timeFromMark(this.combat_task.getPauseTime()) > 30000) {
-			this.combat_task.resume();
+			// this.combat_task.resume();
 			this.combat_task.setPaused(false);
 		}
 	}
@@ -391,6 +401,15 @@ public class Dispatcher {
 	public boolean isFireGiantsPreset() {
 		return this.preset == PresetFactory.FIRE_GIANTS_WATERFALL_C
 				|| this.preset == PresetFactory.FIRE_GIANTS_WATERFALL_W;
+	}
+
+	public void setPlayerMessageReceived(boolean b) {
+		this.player_message_received = b;
+
+	}
+
+	public boolean getPlayerMessageReceived() {
+		return this.player_message_received;
 	}
 
 }

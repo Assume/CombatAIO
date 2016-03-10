@@ -3,6 +3,8 @@ package scripts.CombatAIO.com.base.api.tasks.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import scripts.CombatAIO.com.base.main.utils.Logger;
+
 public abstract class Threadable extends Thread implements Pauseable {
 
 	private static List<Threadable> threadables = new ArrayList<Threadable>();
@@ -18,10 +20,13 @@ public abstract class Threadable extends Thread implements Pauseable {
 		return this.pause;
 	}
 	
+	
 	public abstract void run();
 
 	public void setPaused(boolean set) {
 		this.pause = set;
+		if(pause)
+			Logger.getLogger().print(getClass());
 		if (set)
 			this.pause_time = System.currentTimeMillis();
 		else
@@ -45,5 +50,6 @@ public abstract class Threadable extends Thread implements Pauseable {
 			return false;
 		return this.pause_types.contains(type);
 	}
+	
 
 }

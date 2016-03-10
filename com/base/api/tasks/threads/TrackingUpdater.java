@@ -64,7 +64,6 @@ public class TrackingUpdater implements Runnable {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return returnString;
 	}

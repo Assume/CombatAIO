@@ -12,7 +12,6 @@ import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
-import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Walking;
@@ -160,6 +159,7 @@ public class CombatHelper {
 		RSObject[] obj = Objects.find(25, CANNON_IDS);
 		if (obj.length == 0)
 			return;
+		obj = sortCannon(obj);
 		if (!obj[0].isOnScreen())
 			Camera.turnToTile(obj[0]);
 		if (!obj[0].isOnScreen())

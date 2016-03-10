@@ -87,6 +87,10 @@ public class Looter extends Threadable implements Pauseable {
 	@Override
 	public void run() {
 		while (true) {
+			if (super.isPaused()) {
+				General.sleep(500);
+				continue;
+			}
 			RSNPC target = (RSNPC) Dispatcher.get()
 					.get(ValueType.CURRENT_TARGET).getValue();
 			if (this.loot_in_combat && Combat.getAttackingEntities().length > 0

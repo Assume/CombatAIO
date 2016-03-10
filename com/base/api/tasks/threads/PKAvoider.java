@@ -33,7 +33,7 @@ public class PKAvoider extends Threadable {
 	public void run() {
 		while (Dispatcher.get().isRunning()) {
 			if (Combat.getWildernessLevel() == 0) {
-				General.sleep(100);
+				General.sleep(1000);
 				continue;
 			}
 
