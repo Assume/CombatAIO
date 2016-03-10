@@ -465,6 +465,7 @@ public final class AntiBan {
 	 *            The generic type.
 	 * @Return The target to interact with.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends Positionable> T selectNextTarget(T[] targets) {
 		// noinspection unchecked
 		return (T) getABCUtil().selectNextTarget(targets);

@@ -89,7 +89,8 @@ public class BaseGUI extends JFrame {
 			+ "\r\n\r\nV2.1.0_1: Saving added to progression mode"
 			+ "\r\n\r\nV2.1.0_1: Minor changes to the back end"
 			+ "\r\n\r\nV2.2.0_0: ABCV2 released at level 10. Small changes to paint and backend systems"
-			+ "\r\n\r\nV2.2.0_1: Fixed an NPE";
+			+ "\r\n\r\nV2.2.0_1: Fixed an NPE"
+			+ "\r\n\r\nV2.2.1_0: Added more conditions for world hopping, improved backend, lowered CPU usage, added more antipoison potions";
 
 	private JPanel contentPane;
 
@@ -411,6 +412,8 @@ public class BaseGUI extends JFrame {
 		btnSet.setBounds(10, 168, 77, 20);
 		// if (!Dispatcher.get().isRockCrabsScriptID())
 		tab_three_panel.add(btnSet);
+		if(Dispatcher.get().isLiteMode())
+			btnSet.setEnabled(false);
 
 		chckbx_cannon = new JCheckBox("Cannon");
 		chckbx_cannon.addActionListener(new ActionListener() {

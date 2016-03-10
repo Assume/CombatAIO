@@ -83,9 +83,6 @@ public class Dispatcher {
 
 	private boolean player_message_received;
 
-	private List<PauseType> current_pause_types = Collections
-			.synchronizedList(new ArrayList<PauseType>());
-
 	private PresetFactory preset;
 
 	private Dispatcher(BaseCombat main_class) {
@@ -303,7 +300,6 @@ public class Dispatcher {
 		return this.combat_task;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void pause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
@@ -315,7 +311,6 @@ public class Dispatcher {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void unpause(PauseType pause_type) {
 		for (Threadable x : Threadable.getThreadables())
 			if (x.hasPauseType(pause_type)) {
