@@ -3,6 +3,7 @@ package scripts.CombatAIO.com.base.api.presets;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.CombatAIO.com.base.api.presets.made.WaterbirthRockCrabsPreset;
 import scripts.CombatAIO.com.base.api.presets.made.WaterfallFireGiantsPreset;
 import scripts.CombatAIO.com.base.api.presets.made.WyrvensPreset;
 import scripts.CombatAIO.com.base.api.types.BankItem;
@@ -25,6 +26,11 @@ public enum PresetFactory {
 	RELLEKKA_EAST_ROCK_CRABS("Rock Crabs East", null,
 			HomeTiles.ROCK_CRABS_EAST_HOME_TILE,
 			MonsterArea.RELLEKKA_ROCK_CRABS_EAST),
+
+	WATERBIRTH_ROCK_CRABS("Waterbirth", new WaterbirthRockCrabsPreset(
+			WaterbirthRockCrabsPreset.REQUIREMENTS,
+			WaterbirthRockCrabsPreset.COINS,
+			WaterbirthRockCrabsPreset.CAMELOT_TELEPORT_TAB), null, null),
 
 	FIRE_GIANTS_WATERFALL_W("Waterfall FGiants W",
 			new WaterfallFireGiantsPreset(
@@ -59,6 +65,12 @@ public enum PresetFactory {
 
 	public RSTile getHomeTile() {
 		return this.home_tile;
+	}
+
+	public void setHomeTile(RSTile home_tile) {
+		if (this.home_tile != null)
+			return;
+		this.home_tile = home_tile;
 	}
 
 	public RSArea getArea() {

@@ -1,9 +1,5 @@
 package scripts.CombatAIO.com.base.main;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JFrame;
 
 import org.tribot.api.General;
@@ -99,9 +95,11 @@ public class Dispatcher {
 	}
 
 	private void run() {
-		this.combat_task
-				.setHomeTile(this.preset == PresetFactory.Automatic ? Player
-						.getPosition() : this.preset.getHomeTile());
+		this.combat_task.setHomeTile(this.preset == PresetFactory.Automatic
+				|| this.preset.getHomeTile() == null ? Player.getPosition()
+				: this.preset.getHomeTile());
+		if (this.preset.getHomeTile() == null)
+			this.preset.setHomeTile(this.combat_task.getHomeTile().getValue());
 		this.preset.addBankItems();
 		Walking.setControlClick(true);
 		this.combat_task.start();
@@ -386,7 +384,7 @@ public class Dispatcher {
 
 	public boolean isRockCrabsPreset() {
 		return this.preset == PresetFactory.RELLEKKA_WEST_ROCK_CRABS
-				|| this.preset == PresetFactory.RELLEKKA_EAST_ROCK_CRABS;
+				|| this.preset == PresetFactory.RELLEKKA_EAST_ROCK_CRABS || this.preset == PresetFactory.WATERBIRTH_ROCK_CRABS;
 	}
 
 	public boolean isRockCrabsScriptID() {

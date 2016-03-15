@@ -15,6 +15,7 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
 
+import scripts.CombatAIO.com.base.api.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.tasks.helper.CombatHelper;
 import scripts.CombatAIO.com.base.api.tasks.helper.IngameWorldSwitcher;
 import scripts.CombatAIO.com.base.api.tasks.helper.TargetFinder;
@@ -139,7 +140,8 @@ public class CombatTask extends Threadable implements Pauseable {
 				.getPosition().distanceTo(home_tile) >= combat_distance)
 				|| Timing.timeFromMark(this.last_attack_time) >= 10000) {
 			if (Player.getPosition().distanceTo(home_tile) >= 5
-					&& !Dispatcher.get().isRockCrabsPreset()) {
+					&& (!Dispatcher.get().isRockCrabsPreset() && !(Dispatcher
+							.get().getPreset() != PresetFactory.WATERBIRTH_ROCK_CRABS))) {
 				new DPathNavigator().traverse(this.home_tile);
 				this.last_attack_time = System.currentTimeMillis();
 			} else

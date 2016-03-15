@@ -7,6 +7,7 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
+import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
@@ -65,10 +66,20 @@ public class RockCrabsHelper {
 		case RELLEKKA_EAST_ROCK_CRABS:
 			resetEastCrabs();
 			return;
+		case WATERBIRTH_ROCK_CRABS:
+			resetWaterbirth();
 		default:
 			break;
 		}
 
+	}
+
+	private static final RSTile waterbirth_landing_tile = new RSTile(2547, 3758);
+
+	private static void resetWaterbirth() {
+		WebWalking.walkTo(waterbirth_landing_tile);
+		WebWalking.walkTo((RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
+				.getValue());
 	}
 
 	private static void resetEastCrabs() {

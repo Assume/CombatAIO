@@ -72,4 +72,8 @@ public enum Teleport {
 		}
 		return nearest;
 	}
+
+	public int getTabId() {
+		return this.tab_id;
+	}
 }
