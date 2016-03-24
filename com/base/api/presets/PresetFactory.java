@@ -16,34 +16,25 @@ public enum PresetFactory {
 
 	Automatic("Automatic", null, null, null),
 
-	WYRVENS_HOUSE_TELEPORT("Wyrvens", new WyrvensPreset(
-			WyrvensPreset.HOUSE_TELEPORT), null, null),
+	WYRVENS_HOUSE_TELEPORT("Wyrvens", new WyrvensPreset(WyrvensPreset.HOUSE_TELEPORT), null, null),
 
-	RELLEKKA_WEST_ROCK_CRABS("Rock Crabs West", null,
-			HomeTiles.ROCK_CRABS_WEST_HOME_TILE,
+	RELLEKKA_WEST_ROCK_CRABS("Rock Crabs West", null, HomeTiles.ROCK_CRABS_WEST_HOME_TILE,
 			MonsterArea.RELLEKKA_ROCK_CRABS_WEST),
 
-	RELLEKKA_EAST_ROCK_CRABS("Rock Crabs East", null,
-			HomeTiles.ROCK_CRABS_EAST_HOME_TILE,
+	RELLEKKA_EAST_ROCK_CRABS("Rock Crabs East", null, HomeTiles.ROCK_CRABS_EAST_HOME_TILE,
 			MonsterArea.RELLEKKA_ROCK_CRABS_EAST),
 
-	WATERBIRTH_ROCK_CRABS("Waterbirth", new WaterbirthRockCrabsPreset(
-			WaterbirthRockCrabsPreset.REQUIREMENTS,
-			WaterbirthRockCrabsPreset.COINS,
-			WaterbirthRockCrabsPreset.CAMELOT_TELEPORT_TAB), null, null),
+	WATERBIRTH_ROCK_CRABS("Waterbirth", new WaterbirthRockCrabsPreset(WaterbirthRockCrabsPreset.REQUIREMENTS,
+			WaterbirthRockCrabsPreset.COINS, WaterbirthRockCrabsPreset.CAMELOT_TELEPORT_TAB), null, null),
 
 	FIRE_GIANTS_WATERFALL_W("Waterfall FGiants W",
-			new WaterfallFireGiantsPreset(
-					WaterfallFireGiantsPreset.REQUIREMENTS,
-					WaterfallFireGiantsPreset.GAMES_NECKLACE,
-					WaterfallFireGiantsPreset.ROPE),
+			new WaterfallFireGiantsPreset(WaterfallFireGiantsPreset.REQUIREMENTS,
+					WaterfallFireGiantsPreset.GAMES_NECKLACE, WaterfallFireGiantsPreset.ROPE),
 			HomeTiles.FIRE_GIANTS_WEST_HOME_TILE, null),
 
 	FIRE_GIANTS_WATERFALL_C("Waterfall FGiants C",
-			new WaterfallFireGiantsPreset(
-					WaterfallFireGiantsPreset.REQUIREMENTS,
-					WaterfallFireGiantsPreset.GAMES_NECKLACE,
-					WaterfallFireGiantsPreset.ROPE),
+			new WaterfallFireGiantsPreset(WaterfallFireGiantsPreset.REQUIREMENTS,
+					WaterfallFireGiantsPreset.GAMES_NECKLACE, WaterfallFireGiantsPreset.ROPE),
 			HomeTiles.FIRE_GIANTS_CENTER_HOME_TILE, null);
 
 	private Preset preset;
@@ -52,8 +43,7 @@ public enum PresetFactory {
 	private RSArea home_area;
 	private String name;
 
-	private PresetFactory(String name, Preset preset, RSTile home_tile,
-			RSArea home_area) {
+	private PresetFactory(String name, Preset preset, RSTile home_tile, RSArea home_area) {
 		this.preset = preset;
 		this.name = name;
 		this.home_tile = home_tile;
@@ -92,12 +82,10 @@ public enum PresetFactory {
 		case ScriptIDs.COMBAT_AIO_LITE:
 			return new PresetFactory[] { PresetFactory.Automatic };
 		case ScriptIDs.ASSUMES_GOT_CRABS:
-			return new PresetFactory[] { RELLEKKA_WEST_ROCK_CRABS,
-					RELLEKKA_EAST_ROCK_CRABS };
+			return new PresetFactory[] { RELLEKKA_WEST_ROCK_CRABS, RELLEKKA_EAST_ROCK_CRABS };
 		default:
-			return new PresetFactory[] { Automatic, RELLEKKA_WEST_ROCK_CRABS,
-					RELLEKKA_EAST_ROCK_CRABS, FIRE_GIANTS_WATERFALL_C,
-					FIRE_GIANTS_WATERFALL_W };
+			return new PresetFactory[] { Automatic, RELLEKKA_WEST_ROCK_CRABS, RELLEKKA_EAST_ROCK_CRABS,
+					FIRE_GIANTS_WATERFALL_C, FIRE_GIANTS_WATERFALL_W };
 		}
 	}
 
@@ -106,6 +94,17 @@ public enum PresetFactory {
 			if (x.toString().equalsIgnoreCase(property))
 				return x;
 		return null;
+	}
+
+	public int[] getRequiredItems() {
+		return getIDs(this.get().getRequiredItems());
+	}
+
+	private int[] getIDs(BankItem... bank_items) {
+		int[] ar = new int[bank_items.length];
+		for (int i = 0; i < ar.length; i++)
+			ar[i] = bank_items[i].getId();
+		return ar;
 	}
 
 	public void addBankItems() {

@@ -7,6 +7,7 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
@@ -15,6 +16,7 @@ import org.tribot.api2007.util.DPathNavigator;
 
 import scripts.CombatAIO.com.base.api.presets.DMethods;
 import scripts.CombatAIO.com.base.api.presets.Preset;
+import scripts.CombatAIO.com.base.api.presets.PresetFactory;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
@@ -38,11 +40,11 @@ public class WaterfallFireGiantsPreset extends Preset {
 
 	private static final int RAFT_ID = 1987;
 
-	private static final RSTile FIRST_ISLAND_INITIAL_TILE = new RSTile(2512,
-			3481);
+	private static final RSTile FIRST_ISLAND_INITIAL_TILE = new RSTile(2512, 3481);
 
-	private static final RSTile SECOND_ISLAND_FIRST_TILE = new RSTile(2513,
-			3468);
+	private static final RSTile SECOND_ISLAND_FIRST_TILE = new RSTile(2513, 3468);
+
+	private static final RSTile INSIDE_LEDGE_TILE = new RSTile(2575, 9861);
 
 	private static final RSTile LEDGE_TILE = new RSTile(2511, 3463);
 
@@ -52,17 +54,17 @@ public class WaterfallFireGiantsPreset extends Preset {
 
 	private static final int LEDGE_ID = 2010;
 
-	public WaterfallFireGiantsPreset(String requirements,
-			BankItem... required_items) {
+	private RSTile CENTER_OUTSIDE_DOOR_TILE = new RSTile(2577, 9882);
+	private RSTile WEST_OUTSIDE_DOOR_TILE = new RSTile(2564, 9880);
+
+	public WaterfallFireGiantsPreset(String requirements, BankItem... required_items) {
 		super(requirements, required_items);
 	}
 
 	@Override
 	public void executeToBank() {
-		new JeweleryTeleport(Jewelery.GAMES_NECKLACE,
-				JEWELERY_TELEPORT_LOCATIONS.BARBARIAN_OUTPOST).operate();
-		WalkingManager.walk(MovementType.TO_BANK,
-				Bank.BARBARIAN_OUTPOST.getTile());
+		new JeweleryTeleport(Jewelery.GAMES_NECKLACE, JEWELERY_TELEPORT_LOCATIONS.BARBARIAN_OUTPOST).operate();
+		WalkingManager.walk(MovementType.TO_BANK, Bank.BARBARIAN_OUTPOST.getTile());
 	}
 
 	@Override
@@ -86,10 +88,11 @@ public class WaterfallFireGiantsPreset extends Preset {
 			return;
 		General.sleep(2000, 3000);
 		Camera.setCameraRotation(General.random(0, 50));
-		DMethods.clickObject(LEDGE_ID, "Open Ledge");
+		clickLedge();
 		General.sleep(3000, 6000);
-		new DPathNavigator().traverse(Dispatcher.get().getPreset()
-				.getHomeTile());
+		Walking.walkTo(Dispatcher.get().getPreset() == PresetFactory.FIRE_GIANTS_WATERFALL_W ? WEST_OUTSIDE_DOOR_TILE
+				: CENTER_OUTSIDE_DOOR_TILE);
+		new DPathNavigator().traverse(Dispatcher.get().getPreset().getHomeTile());
 
 	}
 
@@ -98,8 +101,7 @@ public class WaterfallFireGiantsPreset extends Preset {
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
-				return Player.getPosition().distanceTo(
-						FIRST_ISLAND_INITIAL_TILE) < 3;
+				return Player.getPosition().distanceTo(FIRST_ISLAND_INITIAL_TILE) < 3;
 			}
 		}, 10000);
 	}
@@ -132,8 +134,21 @@ public class WaterfallFireGiantsPreset extends Preset {
 			public boolean active() {
 				return Player.getPosition().equals(LEDGE_TILE);
 			}
-		}, 16000);
+		}, 10000);
 		return true;
+	}
+
+	private boolean clickLedge() {
+		DMethods.clickObject(LEDGE_ID, "Open Ledge");
+		Timing.waitCondition(new Condition() {
+			@Override
+			public boolean active() {
+				return Player.getPosition().distanceTo(INSIDE_LEDGE_TILE) < 10;
+			}
+		}, 5000);
+		if (!Player.getPosition().equals(INSIDE_LEDGE_TILE) && Player.getPosition().equals(LEDGE_TILE))
+			return clickLedge();
+		return Player.getPosition().equals(INSIDE_LEDGE_TILE);
 	}
 
 	private boolean useRopeOnObject(int id) {

@@ -8,9 +8,9 @@ import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Player;
 import org.tribot.api2007.Equipment.SLOTS;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 
@@ -26,7 +26,6 @@ import scripts.CombatAIO.com.base.api.types.enums.MovementType;
 import scripts.CombatAIO.com.base.api.types.enums.Potions;
 import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
-import scripts.CombatAIO.com.base.api.walking.CWalking;
 import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
@@ -52,9 +51,7 @@ public class Banker {
 		if (Dispatcher.get().getCombatTask().isUsingCannon())
 			Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
-			Dispatcher
-					.get()
-					.stop("Stopping script due to needing to bank and being in lite mode");
+			Dispatcher.get().stop("Stopping script due to needing to bank and being in lite mode");
 		}
 		executeBanking(world_hop);
 	}
@@ -70,8 +67,7 @@ public class Banker {
 		Prayer p = (Prayer) Dispatcher.get().get(ValueType.PRAYER).getValue();
 		if (p.isActivated())
 			p.disable();
-		if (Dispatcher.get().getPreset() == PresetFactory.Automatic
-				|| Dispatcher.get().getPreset().get() == null) {
+		if (Dispatcher.get().getPreset() == PresetFactory.Automatic || Dispatcher.get().getPreset().get() == null) {
 			JeweleryTeleport teleport = WalkingManager.walk(MovementType.TO_BANK);
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 				checkAndRemoveGlory();
@@ -92,28 +88,26 @@ public class Banker {
 
 	// TODO DEPOSIT ALL EXCEPT WHAT?
 	private void handleBankWindow(boolean world_hop, JeweleryTeleport teleport) {
-		int[] weapon = ((Weapon) (Dispatcher.get().get(
-				ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getIDs();
+		int[] weapon = ((Weapon) (Dispatcher.get().get(ValueType.SPECIAL_ATTACK_WEAPON).getValue())).getIDs();
 		if (Inventory.getAll().length > 0) {
-			if (weapon[0] == -1
-					&& !((Boolean) Dispatcher.get().get(ValueType.USE_GUTHANS)
-							.getValue()))
+			if (weapon[0] == -1 && !((Boolean) Dispatcher.get().get(ValueType.USE_GUTHANS).getValue()))
 				Banking.depositAll();
 			else
 				Banking.depositAllExcept(ArrayUtil.combineArrays(weapon,
-						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS)
-								.getValue(),
-						(int[]) Dispatcher.get()
-								.get(ValueType.ARMOR_HOLDER_IDS).getValue(),
-						CombatHelper.CANNON_IDS,
-						new int[] { CombatHelper.CANNON_BALL_ID }));
+						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS).getValue(),
+						(int[]) Dispatcher.get().get(ValueType.ARMOR_HOLDER_IDS).getValue(), CombatHelper.CANNON_IDS,
+						new int[] { CombatHelper.CANNON_BALL_ID }, Dispatcher.get().getPreset().getRequiredItems()));
 		}
 
-		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list
-				.size()]), teleport == null ? null : teleport.getJewelery());
+		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list.size()]),
+				teleport == null ? null : teleport.getJewelery(), true);
 		Banking.close();
-		if (withdraw_jewelery
-				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
+		BankItem[] items_failed_to_withdraw = getItemsFailedToWithdraw();
+		if (items_failed_to_withdraw.length > 0) {
+			openBank(false);
+			withdraw(items_failed_to_withdraw, null, false);
+		}
+		if (withdraw_jewelery && Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)
 			CEquipment.equip(teleport.getJewelery().getIDs());
 	}
@@ -136,10 +130,9 @@ public class Banker {
 		return temp_list.toArray(new BankItem[temp_list.size()]);
 	}
 
-	private boolean withdraw(BankItem[] items, Jewelery jewelery) {
-		Banking.withdraw(this.food_amount,
-				((Food) Dispatcher.get().get(ValueType.FOOD).getValue())
-						.getId());
+	private boolean withdraw(BankItem[] items, Jewelery jewelery, boolean food) {
+		if (food)
+			Banking.withdraw(this.food_amount, ((Food) Dispatcher.get().get(ValueType.FOOD).getValue()).getId());
 		for (BankItem x : list) {
 			if (Potions.isPotionId(x.getId()))
 				Banking.withdraw(x.getAmount(), Potions.getAllIds(x.getId()));
@@ -195,12 +188,10 @@ public class Banker {
 	private boolean needToWithdrawJewelery(Jewelery teleport) {
 		switch (teleport) {
 		case GLORY:
-			return Equipment.find(teleport.getIDs()).length == 0
-					&& Inventory.find(teleport.getIDs()).length == 0;
+			return Equipment.find(teleport.getIDs()).length == 0 && Inventory.find(teleport.getIDs()).length == 0;
 		case RING_OF_DUELING:
 		case GAMES_NECKLACE:
-			return Equipment.find(teleport.getIDs()).length == 0
-					&& Inventory.find(teleport.getIDs()).length == 0;
+			return Equipment.find(teleport.getIDs()).length == 0 && Inventory.find(teleport.getIDs()).length == 0;
 		}
 		return false;
 
@@ -210,25 +201,20 @@ public class Banker {
 		if (retry_time > System.currentTimeMillis())
 			return false;
 		Food food = ((Food) Dispatcher.get().get(ValueType.FOOD).getValue());
-		if (food.getId() == -1 && Inventory.isFull()
-				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
+		if (food.getId() == -1 && Inventory.isFull() && Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
 			return true;
 		if (food.getId() == -1)
 			return false;
 		int food_length = Inventory.find(food.getId()).length;
-		if (task.isUsingProtectionPrayer()
-				&& Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
+		if (task.isUsingProtectionPrayer() && Inventory.find(Potions.PRAYER.getPotionsIDs()).length == 0)
 			return true;
-		if (food == Food.BonesToPeaches
-				&& Inventory.find("Bones to peaches").length == 0)
+		if (food == Food.BonesToPeaches && Inventory.find("Bones to peaches").length == 0)
 			return true;
 		else if (food == Food.BonesToPeaches)
 			return false;
-		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue()
-				&& food_length > 0)
+		if ((Boolean) Dispatcher.get().get(ValueType.EAT_FOR_SPACE).getValue() && food_length > 0)
 			return false;
-		return Inventory.isFull()
-				|| (food.getId() != -1 && Inventory.find(food.getId()).length == 0);
+		return Inventory.isFull() || (food.getId() != -1 && Inventory.find(food.getId()).length == 0);
 	}
 
 	public void addBankItem(int id, int amount) {
