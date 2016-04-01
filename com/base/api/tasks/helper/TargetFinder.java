@@ -31,11 +31,9 @@ public class TargetFinder {
 			}
 		}
 		RSCharacter npc = Player.getRSPlayer().getInteractingCharacter();
-		if (npc == null
-				|| !(npc instanceof RSNPC)
-				|| !isAttackable((RSNPC) npc)
-				&& ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
-						.getValue() || PathFinding.canReach(npc, false))) {
+		if (npc == null || !(npc instanceof RSNPC)
+				|| !isAttackable((RSNPC) npc) && ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue()
+						|| PathFinding.canReach(npc, false))) {
 			RSNPC[] mobs = getMonsters(true);
 			if (mobs.length > 0)
 				return mobs;
@@ -46,8 +44,7 @@ public class TargetFinder {
 	}
 
 	public static RSNPC[] getPaintableMonsters() {
-		return (RSNPC[]) Dispatcher.get().get(ValueType.POSSIBLE_MONSTERS)
-				.getValue();
+		return (RSNPC[]) Dispatcher.get().get(ValueType.POSSIBLE_MONSTERS).getValue();
 	}
 
 	public static boolean isBeingSplashed(RSNPC n) {
@@ -58,14 +55,14 @@ public class TargetFinder {
 	}
 
 	private static RSNPC[] getMonsters(boolean reachable) {
-		RSNPC[] npcs = filter_one(
-				NPCs.findNearest((int[]) Dispatcher.get()
-						.get(ValueType.MONSTER_IDS).getValue()), reachable);
+		RSNPC[] npcs = filter_one(NPCs.findNearest((int[]) Dispatcher.get().get(ValueType.MONSTER_IDS).getValue()),
+				reachable);
 		return filter_two(npcs);
 	}
 
 	private static RSNPC[] filter_one(RSNPC[] npcs, boolean reachable) {
 		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
+<<<<<<< Updated upstream:com/base/api/tasks/helper/TargetFinder.java
 		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS)
 				.getValue();
 		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
@@ -91,11 +88,31 @@ public class TargetFinder {
 									potential_target) <= radius * 2 && PathFinding
 									.canReach(potential_target, false)))
 						possible_npcs.add(potential_target);
+=======
+		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue();
+		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue();
+		for (RSNPC x : npcs) {
+			if (x.isInteractingWithMe())
+				if (PathFinding.canReach(x, false))
+					return new RSNPC[] { x };
+			if (home_tile.distanceTo(x) < radius) {
+				if ((Boolean) Dispatcher.get().get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
+						|| (!x.isInCombat() && !isBeingSplashed(x))) {
+					if (x.isInCombat())
+						if (getNPCHPPercent(x) <= 30)
+							continue;
+					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue()) {
+						possible_npcs.add(x);
+						continue;
+					}
+					if (!reachable
+							|| (Player.getPosition().distanceTo(x) <= radius * 2 && PathFinding.canReach(x, false)))
+						possible_npcs.add(x);
+>>>>>>> Stashed changes:com/base/api/tasks/helper/StaticTargetCalculator.java
 				}
 			}
 		}
-		return NPCs.sortByDistance(Player.getPosition(),
-				possible_npcs.toArray(new RSNPC[possible_npcs.size()]));
+		return NPCs.sortByDistance(Player.getPosition(), possible_npcs.toArray(new RSNPC[possible_npcs.size()]));
 	}
 
 	private static int getNPCHPPercent(RSNPC current_tar) {

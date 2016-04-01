@@ -6,13 +6,13 @@ import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.enums.Food;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 
-public class CChangeFoodMove extends CProgressionAction {
+public class CChangeFoodAction extends CProgressionAction {
 
 	private static final long serialVersionUID = -1584008751599697583L;
 	
 	private Food food;
 
-	public CChangeFoodMove(Food food) {
+	public CChangeFoodAction(Food food) {
 		this.food = food;
 	}
 

@@ -14,7 +14,7 @@ public enum CActions {
 			int index = parse(JOptionPane
 					.showInputDialog("Enter the index of the style you wish to switch to. Indexes start at 1"));
 			if (index > 0 && index < 5)
-				return new CAttackStyleChangeMove(index);
+				return new CAttackStyleChangeAction(index);
 			else
 				return null;
 		}
@@ -27,13 +27,18 @@ public enum CActions {
 					"Select a food to change to", JOptionPane.QUESTION_MESSAGE,
 					null);
 			Food food = (Food) jcb.getSelectedItem();
-			return new CChangeFoodMove(food);
+			return new CChangeFoodAction(food);
 		}
 	},
 	STOP_SCRIPT {
 		@Override
+<<<<<<< Updated upstream
 		public CProgressionAction make() {
 			return new CStopScriptMove();
+=======
+		CProgressionAction make() {
+			return new CStopScriptAction();
+>>>>>>> Stashed changes
 		}
 	};
 

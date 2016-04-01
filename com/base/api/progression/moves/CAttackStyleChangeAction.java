@@ -4,13 +4,13 @@ import org.tribot.api2007.Combat;
 
 import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
 
-public class CAttackStyleChangeMove extends CProgressionAction {
+public class CAttackStyleChangeAction extends CProgressionAction {
 
 	private static final long serialVersionUID = 5779749632892926419L;
 
 	private int style;
 
-	public CAttackStyleChangeMove(int style) {
+	public CAttackStyleChangeAction(int style) {
 		this.style = (style - 1);
 	}
 

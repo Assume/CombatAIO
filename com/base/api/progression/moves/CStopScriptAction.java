@@ -3,7 +3,7 @@ package scripts.CombatAIO.com.base.api.progression.moves;
 import scripts.CombatAIO.com.base.api.progression.CProgressionAction;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 
-public class CStopScriptMove extends CProgressionAction {
+public class CStopScriptAction extends CProgressionAction {
 
 	private static final long serialVersionUID = -4277377185464201053L;
 

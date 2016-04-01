@@ -68,7 +68,11 @@ public class Banker {
 		if (p.isActivated())
 			p.disable();
 		if (Dispatcher.get().getPreset() == PresetFactory.Automatic || Dispatcher.get().getPreset().get() == null) {
+<<<<<<< Updated upstream
 			JeweleryTeleport teleport = WalkingManager.walk(MovementType.TO_BANK);
+=======
+			JeweleryTeleport teleport = CWalking.walk(MovementType.TO_BANK);
+>>>>>>> Stashed changes
 			if (teleport != null && teleport.getJewelery() == Jewelery.GLORY)
 				checkAndRemoveGlory();
 			openBank(world_hop);
@@ -93,6 +97,7 @@ public class Banker {
 			if (weapon[0] == -1 && !((Boolean) Dispatcher.get().get(ValueType.USE_GUTHANS).getValue()))
 				Banking.depositAll();
 			else
+<<<<<<< Updated upstream
 				Banking.depositAllExcept(ArrayUtil.combineArrays(weapon,
 						(int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS).getValue(),
 						(int[]) Dispatcher.get().get(ValueType.ARMOR_HOLDER_IDS).getValue(), CombatHelper.CANNON_IDS,
@@ -107,6 +112,17 @@ public class Banker {
 			openBank(false);
 			withdraw(items_failed_to_withdraw, null, false);
 		}
+=======
+				Banking.depositAllExcept(
+						ArrayUtil.combineArrays(weapon, (int[]) Dispatcher.get().get(ValueType.GUTHANS_IDS).getValue(),
+								(int[]) Dispatcher.get().get(ValueType.ARMOR_HOLDER_IDS).getValue(),
+								CombatHelper.CANNON_IDS, new int[] { CombatHelper.CANNON_BALL_ID }));
+		}
+
+		boolean withdraw_jewelery = withdraw(list.toArray(new BankItem[list.size()]),
+				teleport == null ? null : teleport.getJewelery());
+		Banking.close();
+>>>>>>> Stashed changes
 		if (withdraw_jewelery && Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_C
 				&& Dispatcher.get().getPreset() != PresetFactory.FIRE_GIANTS_WATERFALL_W)
 			CEquipment.equip(teleport.getJewelery().getIDs());
@@ -130,9 +146,14 @@ public class Banker {
 		return temp_list.toArray(new BankItem[temp_list.size()]);
 	}
 
+<<<<<<< Updated upstream
 	private boolean withdraw(BankItem[] items, Jewelery jewelery, boolean food) {
 		if (food)
 			Banking.withdraw(this.food_amount, ((Food) Dispatcher.get().get(ValueType.FOOD).getValue()).getId());
+=======
+	private boolean withdraw(BankItem[] items, Jewelery jewelery) {
+		Banking.withdraw(this.food_amount, ((Food) Dispatcher.get().get(ValueType.FOOD).getValue()).getId());
+>>>>>>> Stashed changes
 		for (BankItem x : list) {
 			if (Potions.isPotionId(x.getId()))
 				Banking.withdraw(x.getAmount(), Potions.getAllIds(x.getId()));
