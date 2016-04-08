@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
+
 import org.tribot.api.General;
 import org.tribot.api2007.Player;
 

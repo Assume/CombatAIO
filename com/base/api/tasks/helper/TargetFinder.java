@@ -62,53 +62,25 @@ public class TargetFinder {
 
 	private static RSNPC[] filter_one(RSNPC[] npcs, boolean reachable) {
 		List<RSNPC> possible_npcs = new ArrayList<RSNPC>();
-<<<<<<< Updated upstream:com/base/api/tasks/helper/TargetFinder.java
-		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS)
-				.getValue();
-		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
-				.getValue();
+		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue();
+		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue();
 		for (RSNPC potential_target : npcs) {
 			if (potential_target.isInteractingWithMe())
 				if (PathFinding.canReach(potential_target, false))
 					return new RSNPC[] { potential_target };
 			if (home_tile.distanceTo(potential_target) < radius) {
-				if ((Boolean) Dispatcher.get()
-						.get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
+				if ((Boolean) Dispatcher.get().get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
 						|| (!potential_target.isInCombat() && !isBeingSplashed(potential_target))) {
 					if (potential_target.isInCombat())
 						if (getNPCHPPercent(potential_target) <= 30)
 							continue;
-					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING)
-							.getValue()) {
-						possible_npcs.add(potential_target);
-						continue;
-					}
-					if (!reachable
-							|| (Player.getPosition().distanceTo(
-									potential_target) <= radius * 2 && PathFinding
-									.canReach(potential_target, false)))
-						possible_npcs.add(potential_target);
-=======
-		int radius = (Integer) Dispatcher.get().get(ValueType.COMBAT_RADIUS).getValue();
-		RSTile home_tile = (RSTile) Dispatcher.get().get(ValueType.HOME_TILE).getValue();
-		for (RSNPC x : npcs) {
-			if (x.isInteractingWithMe())
-				if (PathFinding.canReach(x, false))
-					return new RSNPC[] { x };
-			if (home_tile.distanceTo(x) < radius) {
-				if ((Boolean) Dispatcher.get().get(ValueType.ATTACK_MONSTERS_IN_COMBAT).getValue()
-						|| (!x.isInCombat() && !isBeingSplashed(x))) {
-					if (x.isInCombat())
-						if (getNPCHPPercent(x) <= 30)
-							continue;
 					if ((Boolean) Dispatcher.get().get(ValueType.IS_RANGING).getValue()) {
-						possible_npcs.add(x);
+						possible_npcs.add(potential_target);
 						continue;
 					}
-					if (!reachable
-							|| (Player.getPosition().distanceTo(x) <= radius * 2 && PathFinding.canReach(x, false)))
-						possible_npcs.add(x);
->>>>>>> Stashed changes:com/base/api/tasks/helper/StaticTargetCalculator.java
+					if (!reachable || (Player.getPosition().distanceTo(potential_target) <= radius * 2
+							&& PathFinding.canReach(potential_target, false)))
+						possible_npcs.add(potential_target);
 				}
 			}
 		}

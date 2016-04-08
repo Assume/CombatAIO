@@ -9,8 +9,7 @@ public class CStopScriptAction extends CProgressionAction {
 
 	@Override
 	public void execute() {
-		Dispatcher.get().stop(
-				"Script requested to stop through Progression Manager");
+		Dispatcher.get().stop("Script requested to stop through Progression Manager");
 	}
 
 	@Override

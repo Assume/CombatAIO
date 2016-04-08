@@ -23,22 +23,15 @@ public enum CActions {
 		@Override
 		public CProgressionAction make() {
 			JComboBox<Food> jcb = new JComboBox<Food>(Food.values());
-			JOptionPane.showMessageDialog(null, jcb,
-					"Select a food to change to", JOptionPane.QUESTION_MESSAGE,
-					null);
+			JOptionPane.showMessageDialog(null, jcb, "Select a food to change to", JOptionPane.QUESTION_MESSAGE, null);
 			Food food = (Food) jcb.getSelectedItem();
 			return new CChangeFoodAction(food);
 		}
 	},
 	STOP_SCRIPT {
 		@Override
-<<<<<<< Updated upstream
 		public CProgressionAction make() {
-			return new CStopScriptMove();
-=======
-		CProgressionAction make() {
 			return new CStopScriptAction();
->>>>>>> Stashed changes
 		}
 	};
 

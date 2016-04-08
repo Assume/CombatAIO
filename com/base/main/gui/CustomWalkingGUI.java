@@ -89,22 +89,21 @@ public class CustomWalkingGUI extends JFrame {
 		JLabel lblConditions = new JLabel("Conditions");
 		lblConditions.setBounds(324, 231, 77, 14);
 		contentPane.add(lblConditions);
-		// TODO
-		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(
-				DConditionMaker.values());
+
+		// TODO DConditionMaker.values()
+		final JComboBox<DConditionMaker> comboBoxConditions = new JComboBox<DConditionMaker>(DConditionMaker.values());
 		comboBoxConditions.setBounds(324, 421, 191, 20);
 		contentPane.add(comboBoxConditions);
-		// TODO
-		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(
-				DActionMaker.values());
+
+		// TODO DActionMaker.values()
+		final JComboBox<DActionMaker> comboBoxActions = new JComboBox<DActionMaker>(DActionMaker.values());
 		comboBoxActions.setBounds(10, 421, 191, 20);
 		contentPane.add(comboBoxActions);
 
 		JButton btnAddAction = new JButton("Add");
 		btnAddAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DAction ac = ((DActionMaker) comboBoxActions.getSelectedItem())
-						.make();
+				DAction ac = ((DActionMaker) comboBoxActions.getSelectedItem()).make();
 				action_list_model.addElement(ac);
 			}
 		});
@@ -115,8 +114,7 @@ public class CustomWalkingGUI extends JFrame {
 		btnAddCondition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					DCondition ac = ((DConditionMaker) comboBoxConditions
-							.getSelectedItem()).make();
+					DCondition ac = ((DConditionMaker) comboBoxConditions.getSelectedItem()).make();
 					condition_list_model.addElement(ac);
 				} catch (Exception x) {
 					x.printStackTrace();
@@ -133,8 +131,7 @@ public class CustomWalkingGUI extends JFrame {
 					DAction[] actions = new DAction[action_list_model.size()];
 					action_list_model.copyInto(actions);
 
-					DCondition[] conditions = new DCondition[condition_list_model
-							.size()];
+					DCondition[] conditions = new DCondition[condition_list_model.size()];
 					condition_list_model.copyInto(conditions);
 					DHolder full = new DHolder(conditions, actions);
 					complete_list_model.addElement(full);
@@ -154,28 +151,26 @@ public class CustomWalkingGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (center_tile == null) {
-						JOptionPane.showMessageDialog(null,
-								"You must set the center tile");
+						JOptionPane.showMessageDialog(null, "You must set the center tile");
 						return;
 					}
 					if (changed) {
-						String name = JOptionPane
-								.showInputDialog("Enter name for this custom action");
+						String rad = spinner.getValue().toString();
+						if (Integer.parseInt(rad) <= 5)
+							JOptionPane.showInputDialog(
+									"A radius of less than 5 in unlikely to work except in specific cicumstances. \n 15-20 is recommended");
+						String name = JOptionPane.showInputDialog("Enter name for this custom action");
 						if (name == null) {
-							JOptionPane.showMessageDialog(null,
-									"You must enter a name");
+							JOptionPane.showMessageDialog(null, "You must enter a name");
 							return;
 						}
-						DHolder[] holders = new DHolder[complete_list_model
-								.size()];
+						DHolder[] holders = new DHolder[complete_list_model.size()];
 						complete_list_model.copyInto(holders);
 						DFullHolder dfh = new DFullHolder(holders);
 
-						type = (MovementType) combo_box_movement_type
-								.getSelectedItem();
-						String rad = spinner.getValue().toString();
-						WalkingManager.addMovement(type, dfh, center_tile,
-								name, Integer.parseInt(rad));
+						type = (MovementType) combo_box_movement_type.getSelectedItem();
+
+						WalkingManager.addMovement(type, dfh, center_tile, name, Integer.parseInt(rad));
 					}
 					setVisible(false);
 					dispose();
@@ -184,7 +179,7 @@ public class CustomWalkingGUI extends JFrame {
 				}
 			}
 		});
-		btnSave.setBounds(525, 517, 89, 23);
+		btnSave.setBounds(525, 524, 89, 23);
 		contentPane.add(btnSave);
 
 		JButton btnNewButton = new JButton("Remove");
@@ -223,10 +218,10 @@ public class CustomWalkingGUI extends JFrame {
 		});
 		btnRemove.setBounds(525, 222, 89, 23);
 		contentPane.add(btnRemove);
-		// TODO
-		combo_box_movement_type = new JComboBox<MovementType>(
-				MovementType.values());
-		combo_box_movement_type.setBounds(385, 518, 130, 20);
+
+		// TODO MovementType.values()
+		combo_box_movement_type = new JComboBox<MovementType>(MovementType.values());
+		combo_box_movement_type.setBounds(385, 525, 130, 20);
 		contentPane.add(combo_box_movement_type);
 
 		JLabel lblRadius = new JLabel("Radius");
@@ -242,10 +237,10 @@ public class CustomWalkingGUI extends JFrame {
 				changed = true;
 			}
 		});
-		// TODO
-		final JComboBox<String> combo_box_movements = new JComboBox<String>(
-				WalkingManager.getAllNames());
-		combo_box_movements.setBounds(10, 518, 130, 20);
+
+		// TODO WalkingManager.getAllNames()
+		final JComboBox<String> combo_box_movements = new JComboBox<String>(WalkingManager.getAllNames());
+		combo_box_movements.setBounds(10, 525, 261, 20);
 		contentPane.add(combo_box_movements);
 
 		final JLabel lblCenterTile = new JLabel("Center tile: ");
@@ -256,8 +251,7 @@ public class CustomWalkingGUI extends JFrame {
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String name = (String) combo_box_movements
-							.getSelectedItem();
+					String name = (String) combo_box_movements.getSelectedItem();
 					if (name == null)
 						return;
 					CustomMovement x = WalkingManager.getMovementForName(name);
@@ -276,7 +270,7 @@ public class CustomWalkingGUI extends JFrame {
 				}
 			}
 		});
-		btnLoad.setBounds(150, 517, 89, 23);
+		btnLoad.setBounds(281, 524, 89, 23);
 		contentPane.add(btnLoad);
 
 		JButton btnSet = new JButton("Set");

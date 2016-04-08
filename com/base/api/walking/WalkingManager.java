@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.walking;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package scripts.CombatAIO.com.base.api.walking;
 
+
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.WebWalking;
