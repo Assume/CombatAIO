@@ -84,7 +84,8 @@ public class BaseGUI extends JFrame {
 			+ "\r\n\r\nV2.2.0_0: ABCV2 released at level 10. Small changes to paint and backend systems"
 			+ "\r\n\r\nV2.2.0_1: Fixed an NPE"
 			+ "\r\n\r\nV2.2.1_0: Added more conditions for world hopping, improved backend, lowered CPU usage, added more antipoison potions"
-			+ "\r\n\r\nV2.2.1_1: Added Defence as a condition for progression mode";
+			+ "\r\n\r\nV2.2.1_1: Added Defence as a condition for progression mode"
+			+ "\r\n\r\nV2.2.1_2: Fixed an issue where it wouldn't click second screen after a level-up";
 
 	private JPanel contentPane;
 

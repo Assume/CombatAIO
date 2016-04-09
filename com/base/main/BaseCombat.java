@@ -37,10 +37,10 @@ import scripts.api.scriptapi.paint.SkillData;
 import scripts.starfox.api.AntiBan;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
-public class BaseCombat extends Script implements Painting, MousePainting,
-		Arguments, MessageListening07, Ending, EventBlockingOverride {
+public class BaseCombat extends Script
+		implements Painting, MousePainting, Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.2.1_1";
+	public static final String VERSION_NUMBER = "2.2.1_2";
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;
@@ -125,7 +125,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 
 	@Override
 	public void playerMessageReceived(String arg0, String arg1) {
-		Dispatcher.get().setPlayerMessageReceived(true); 
+		Dispatcher.get().setPlayerMessageReceived(true);
 
 	}
 
@@ -134,7 +134,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 		if (arg0 != null)
 			if (arg0.contains("advanced")) {
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
-				General.sleep(600, 700);
+				General.sleep(1500, 3000);
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
 			}
 		if (arg0.contains("decay"))
@@ -154,25 +154,20 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 			Dispatcher.get().getCombatTask().pickupCannon();
 		if (Dispatcher.get().isLiteMode()) {
 			try {
-				Desktop.getDesktop()
-						.browse(new URI(
-								"https://tribot.org/repository/script/id/193-combataio-premium/"));
+				Desktop.getDesktop().browse(new URI("https://tribot.org/repository/script/id/193-combataio-premium/"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
-			JOptionPane
-					.showMessageDialog(null,
-							"If you like this script, please check out CombatAIO Premium");
+			JOptionPane.showMessageDialog(null, "If you like this script, please check out CombatAIO Premium");
 		}
 
 	}
 
 	private static Image getCursor() {
 		try {
-			URL url = new URL(
-					"http://telcontar.net/Misc/screeniecursors/Cursor%20arrow%20white.png");
+			URL url = new URL("http://telcontar.net/Misc/screeniecursors/Cursor%20arrow%20white.png");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("User-Agent",
 					"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1");
@@ -196,8 +191,7 @@ public class BaseCombat extends Script implements Painting, MousePainting,
 
 	@Override
 	public EventBlockingOverride.OVERRIDE_RETURN overrideMouseEvent(MouseEvent e) {
-		if (this.paint_handler != null
-				&& this.paint_handler.isAnyInClick(e.getPoint())) {
+		if (this.paint_handler != null && this.paint_handler.isAnyInClick(e.getPoint())) {
 			if (e.getID() == 500) {
 				e.consume();
 				this.paint_handler.onClick(e.getPoint());
