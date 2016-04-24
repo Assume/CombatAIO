@@ -31,8 +31,8 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.walking.custom.types.CEquipment;
 import scripts.CombatAIO.com.base.main.Dispatcher;
-import scripts.CombatAIO.com.base.main.utils.AntiBan;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.antiban.AntiBan;
+import scripts.api.scriptapi.logging.Logger;
 
 public class CombatHelper {
 

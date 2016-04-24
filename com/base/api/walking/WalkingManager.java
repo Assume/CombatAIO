@@ -19,7 +19,7 @@ import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.walking.types.Teleport;
 import scripts.CombatAIO.com.base.main.Dispatcher;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 
 public class WalkingManager {
 

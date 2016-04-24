@@ -8,7 +8,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.api.tasks.types.Value;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
-import scripts.CombatAIO.com.base.main.utils.AntiBan;
+import scripts.api.scriptapi.antiban.AntiBan;
 
 public class KillTracker extends Threadable {
 

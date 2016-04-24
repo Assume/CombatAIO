@@ -8,7 +8,7 @@ import org.tribot.api2007.types.RSCharacter;
 import scripts.CombatAIO.com.base.api.paint.handler.custom.LootedItemsDisplay;
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.main.Dispatcher;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 import scripts.api.scriptapi.paint.Calculations;
 import scripts.api.scriptapi.paint.PaintHandler;
 import scripts.api.scriptapi.paint.SkillData;

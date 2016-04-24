@@ -3,7 +3,7 @@ package scripts.CombatAIO.com.base.api.tasks.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 
 public abstract class Threadable extends Thread implements Pauseable {
 

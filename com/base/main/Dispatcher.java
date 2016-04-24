@@ -28,7 +28,7 @@ import scripts.CombatAIO.com.base.api.types.enums.Prayer;
 import scripts.CombatAIO.com.base.api.types.enums.Weapon;
 import scripts.CombatAIO.com.base.api.types.enums.WorldHoppingCondition;
 import scripts.CombatAIO.com.base.main.gui.BaseGUI;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 
 public class Dispatcher {
 

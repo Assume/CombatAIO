@@ -9,7 +9,7 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.magic.books.NormalSpell;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 
 public enum Teleport {
 

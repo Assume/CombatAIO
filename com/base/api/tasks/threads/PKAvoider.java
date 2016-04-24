@@ -13,7 +13,7 @@ import org.tribot.api2007.types.RSPlayer;
 import scripts.CombatAIO.com.base.api.tasks.types.PauseType;
 import scripts.CombatAIO.com.base.api.tasks.types.Threadable;
 import scripts.CombatAIO.com.base.main.Dispatcher;
-import scripts.CombatAIO.com.base.main.utils.Logger;
+import scripts.api.scriptapi.logging.Logger;
 
 public class PKAvoider extends Threadable {
 
