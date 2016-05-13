@@ -11,17 +11,20 @@ import scripts.api.scriptapi.paint.paintables.MonsterDisplay;
 
 final class MonsterPaintHandler extends PaintHandler {
 
+	public MonsterPaintHandler(String version) {
+		super(version);
+		// TODO Auto-generated constructor stub
+	}
+
 	private RSNPC current_target;
 	private MonsterDisplay current_target_display;
 
 	@Override
 	public void update(long run_time) {
 		if (this.current_target_display == null)
-			this.current_target_display = new MonsterDisplay(
-					this.current_target, true);
+			this.current_target_display = new MonsterDisplay(this.current_target, true);
 		else if (this.current_target_display.get() != this.current_target)
-			this.current_target_display = new MonsterDisplay(
-					this.current_target, true);
+			this.current_target_display = new MonsterDisplay(this.current_target, true);
 	}
 
 	@Override

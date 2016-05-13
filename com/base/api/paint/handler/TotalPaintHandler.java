@@ -34,10 +34,8 @@ public class TotalPaintHandler extends PaintHandler {
 
 	private DataDisplay abc_logs_data_display;
 
-	private String version;
-
 	public TotalPaintHandler(String version) {
-		this.version = version;
+		super(version);
 
 		this.looted_items_display = new LootedItemsDisplay();
 		this.generic_data_display = new DataDisplay();
@@ -78,7 +76,7 @@ public class TotalPaintHandler extends PaintHandler {
 
 		scripter_panel.addTab(tab_logger);
 
-		this.monster_paint_handler = new MonsterPaintHandler();
+		this.monster_paint_handler = new MonsterPaintHandler(version);
 
 	}
 
@@ -95,23 +93,13 @@ public class TotalPaintHandler extends PaintHandler {
 		int total_profit = PaintData.getProfit();
 		int total_experience = SkillData.getTotalExperienceGained();
 
-		String[] info_array = {
-				"Runtime: " + getFormattedTime(run_time),
-				"Kills: " + kill_count + " ("
-						+ (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
-				"Profit: "
-						+ Calculations.formatNumber(total_profit)
-						+ " ("
-						+ Calculations
-								.formatNumber((int) ((3600000.0 / run_time) * total_profit))
-						+ "/HR)",
-				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": "
-						+ version,
-				"Experience: "
-						+ Calculations.formatNumber(total_experience)
-						+ " ("
-						+ Calculations.formatNumber(Calculations.getPerHour(
-								total_experience, run_time)) + "/HR)" };
+		String[] info_array = { "Runtime: " + getFormattedTime(run_time),
+				"Kills: " + kill_count + " (" + (int) ((3600000.0 / run_time) * kill_count) + "/HR)",
+				"Profit: " + Calculations.formatNumber(total_profit) + " ("
+						+ Calculations.formatNumber((int) ((3600000.0 / run_time) * total_profit)) + "/HR)",
+				"Version" + (PaintData.isLite() ? "(Lite)" : "") + ": " + version,
+				"Experience: " + Calculations.formatNumber(total_experience) + " ("
+						+ Calculations.formatNumber(Calculations.getPerHour(total_experience, run_time)) + "/HR)" };
 		return info_array;
 
 	}
@@ -126,8 +114,7 @@ public class TotalPaintHandler extends PaintHandler {
 	public void update(long run_time) {
 		this.generic_data_display.update(getGenericDataDisplay(run_time));
 		this.looted_items_display.update(PaintData.getLootItems());
-		this.target_health_display.update((RSCharacter) Dispatcher.get()
-				.get(ValueType.CURRENT_TARGET).getValue());
+		this.target_health_display.update((RSCharacter) Dispatcher.get().get(ValueType.CURRENT_TARGET).getValue());
 		this.logs_data_display.update(getLoggerMessages());
 		this.abc_logs_data_display.update(getABCLogs());
 	}
