@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.util.Util;
@@ -75,8 +76,7 @@ public class Items07 {
 	public static void dump() {
 		synchronized (LOCK) {
 			if (getDumpFile() == null) {
-				Downloader.download(dump_url, Util.getWorkingDirectory()
-						.getAbsolutePath() + "/Base", "item_dump.txt");
+				Downloader.download(dump_url, Util.getWorkingDirectory().getAbsolutePath() + "/Base", "item_dump.txt");
 			}
 		}
 	}
@@ -94,8 +94,7 @@ public class Items07 {
 		}
 		ArrayList<String> dumpData = new ArrayList<>();
 		try {
-			BufferedReader br = new BufferedReader(
-					new FileReader(getDumpFile()));
+			BufferedReader br = new BufferedReader(new FileReader(getDumpFile()));
 			String ln;
 			while ((ln = br.readLine()) != null) {
 				dumpData.add(ln);
@@ -123,8 +122,7 @@ public class Items07 {
 			}
 			if (DUMP_DATA.isEmpty()) {
 				try {
-					BufferedReader br = new BufferedReader(new FileReader(
-							getDumpFile()));
+					BufferedReader br = new BufferedReader(new FileReader(getDumpFile()));
 					String ln;
 					while ((ln = br.readLine()) != null) {
 						DUMP_DATA.add(DumpItem.fromString(ln));
@@ -187,8 +185,7 @@ public class Items07 {
 		if (item != null) {
 			RSItemDefinition definition = item.getDefinition();
 			if (definition != null && !definition.isStackable()) {
-				return definition.isNoted() ? item.getID() : definition
-						.getSwitchNoteItemID();
+				return definition.isNoted() ? item.getID() : definition.getSwitchNoteItemID();
 			}
 		}
 		return -1;
@@ -216,8 +213,7 @@ public class Items07 {
 	 */
 	public static int getDefIdUnnoted(RSItemDefinition definition) {
 		if (definition != null) {
-			return definition.isNoted() ? definition.getSwitchNoteItemID()
-					: definition.getID();
+			return definition.isNoted() ? definition.getSwitchNoteItemID() : definition.getID();
 		}
 		return -1;
 	}
@@ -231,10 +227,8 @@ public class Items07 {
 	 *         state. Returns -1 if the item or item definition is null.
 	 */
 	public static int getDefIdNoted(RSItemDefinition definition) {
-		if (definition != null
-				&& (definition.isNoted() || !definition.isStackable())) {
-			return definition.isNoted() ? definition.getID() : definition
-					.getSwitchNoteItemID();
+		if (definition != null && (definition.isNoted() || !definition.isStackable())) {
+			return definition.isNoted() ? definition.getID() : definition.getSwitchNoteItemID();
 		}
 		return -1;
 	}
@@ -311,13 +305,11 @@ public class Items07 {
 	 * @return True if the specified RSItem matches any of the specified ids,
 	 *         false otherwise.
 	 */
-	public static boolean matches(RSItem item, boolean checkCurrentState,
-			int... ids) {
+	public static boolean matches(RSItem item, boolean checkCurrentState, int... ids) {
 		if (item != null && ids != null) {
 			for (int id : ids) {
-				if (getId(item) != -1
-						&& (checkCurrentState ? getId(item) == id
-								: (getIdNoted(item) == id || getIdUnnoted(item) == id))) {
+				if (getId(item) != -1 && (checkCurrentState ? getId(item) == id
+						: (getIdNoted(item) == id || getIdUnnoted(item) == id))) {
 					return true;
 				}
 			}
@@ -368,5 +360,12 @@ public class Items07 {
 			}
 		}
 		return null;
+	}
+
+	public static String[] getActions(RSItem item) {
+		RSItemDefinition def = item.getDefinition();
+		if (def == null)
+			return new String[0];
+		return def.getActions();
 	}
 }

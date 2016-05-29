@@ -13,7 +13,6 @@ final class MonsterPaintHandler extends PaintHandler {
 
 	public MonsterPaintHandler(String version) {
 		super(version);
-		// TODO Auto-generated constructor stub
 	}
 
 	private RSNPC current_target;

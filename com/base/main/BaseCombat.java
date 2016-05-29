@@ -33,8 +33,8 @@ import org.tribot.script.interfaces.Painting;
 import scripts.CombatAIO.com.base.api.paint.handler.PaintData;
 import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.tasks.threads.TrackingUpdater;
+import scripts.api.scriptapi.antiban.AntiBan;
 import scripts.api.scriptapi.paint.SkillData;
-import scripts.starfox.api.AntiBan;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script
@@ -69,7 +69,7 @@ public class BaseCombat extends Script
 		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
-			AntiBan.timedActions(SKILLS.STRENGTH);
+			AntiBan.timedActions();
 			SkillData.updateAll();
 			PaintData.updateAll();
 			this.paint_handler.update(getRunningTime());
