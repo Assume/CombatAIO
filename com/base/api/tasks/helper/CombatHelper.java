@@ -43,11 +43,9 @@ public class CombatHelper {
 	public static final int[] GUTHANS_HELM_IDS = { 4724, 4904, 4905, 4906, 4907 };
 	public static final int[] GUTHANS_BODY_IDS = { 4728, 4916, 4917, 4918, 4919 };
 	public static final int[] GUTHANS_LEGS_IDS = { 4730, 4922, 4923, 4924, 4925 };
-	public static final int[] GUTHANS_WARSPEAR_IDS = { 4726, 4910, 4911, 4912,
-			4913 };
+	public static final int[] GUTHANS_WARSPEAR_IDS = { 4726, 4910, 4911, 4912, 4913 };
 
-	public static final int TRASH_ITEM_IDS[] = { 9978, 10115, 10125, 10127,
-			229, 592 };
+	public static final int TRASH_ITEM_IDS[] = { 9978, 10115, 10125, 10127, 229, 592 };
 
 	public static final int[] CANNON_IDS = { 6, 7, 8, 10, 12 };
 
@@ -105,13 +103,11 @@ public class CombatHelper {
 	public void safeSpotCheck() {
 		if (this.safe_spot_tile != null)
 			if (!Player.getPosition().equals(safe_spot_tile))
-				Walking.walkScreenPath(Walking
-						.generateStraightScreenPath(safe_spot_tile));
+				Walking.walkScreenPath(Walking.generateStraightScreenPath(safe_spot_tile));
 	}
 
 	public void setupCannon() {
-		if (this.use_cannon && Inventory.find(CANNON_IDS).length == 4
-				&& Inventory.find(CANNON_BALL_ID).length > 0) {
+		if (this.use_cannon && Inventory.find(CANNON_IDS).length == 4 && Inventory.find(CANNON_BALL_ID).length > 0) {
 			if (!Player.getPosition().equals(cannon_location)) {
 				Walking.walkTo(cannon_location);
 				while (Player.isMoving())
@@ -144,19 +140,13 @@ public class CombatHelper {
 			return;
 		}
 		if (Game.getSetting(CANNON_IS_FIRING_INDEX) == 0) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-					"calling clickCannon(Fire)");
+			Logger.getLogger().print(Logger.SCRIPTER_ONLY, "calling clickCannon(Fire)");
 			clickCannon("Fire ");
-		} else if (Game.getSetting(CANNON_BALL_AMOUNT_INDEX) <= this.fill_cannon_at) {
-			Logger.getLogger().print(Logger.SCRIPTER_ONLY,
-					"calling clickCannon(Fire)");
-			clickCannon("Fire ");
-			this.fill_cannon_at = General.random(0, 10);
 		}
 	}
 
 	private void clickCannon(String option) {
-		RSObject[] obj = Objects.find(25, CANNON_IDS);
+		RSObject[] obj = Objects.findNearest(25, CANNON_IDS);
 		if (obj.length == 0)
 			return;
 		obj = sortCannon(obj);
@@ -176,8 +166,8 @@ public class CombatHelper {
 		while (flag) {
 			for (j = 0; j < obj.length - 1; j++) {
 				flag = false;
-				if (obj[j].getPosition().distanceTo(cannon_location) < obj[j + 1]
-						.getPosition().distanceTo(cannon_location)) {
+				if (obj[j].getPosition().distanceTo(cannon_location) > obj[j + 1].getPosition()
+						.distanceTo(cannon_location)) {
 					temp = obj[j];
 					obj[j] = obj[j + 1];
 					obj[j + 1] = temp;
@@ -190,13 +180,10 @@ public class CombatHelper {
 
 	public void pickupCannon() {
 		int invin_length = Inventory.getAll().length;
-		RSItem[] food = Inventory.find(((Food) Dispatcher.get()
-				.get(ValueType.FOOD).getValue()).getId());
-		if (Inventory.getAll().length > 24
-				&& (invin_length - food.length) >= 24) {
+		RSItem[] food = Inventory.find(((Food) Dispatcher.get().get(ValueType.FOOD).getValue()).getId());
+		if (Inventory.getAll().length > 24 && (invin_length - food.length) >= 24) {
 			if (!this.eatForSpace(4, food)) {
-				Logger.getLogger()
-						.print("Unable to pickup cannon. You may have to retrieve it from the dwarf");
+				Logger.getLogger().print("Unable to pickup cannon. You may have to retrieve it from the dwarf");
 				return;
 			}
 		}
@@ -204,7 +191,7 @@ public class CombatHelper {
 		Timing.waitCondition(new Condition() {
 			@Override
 			public boolean active() {
-				return Inventory.find(CANNON_IDS).length == 4;
+				return Inventory.find(CANNON_IDS).length >= 4;
 			}
 		}, 5000);
 	}
@@ -213,14 +200,12 @@ public class CombatHelper {
 		long st = System.currentTimeMillis();
 		while (Timing.timeFromMark(st) < 12000 && amount > 0) {
 			if (food.length > 0) {
-				final int total_items_in_inventory = Dispatcher.get()
-						.getLooter().getTotalInventoryCount();
+				final int total_items_in_inventory = Dispatcher.get().getLooter().getTotalInventoryCount();
 				food[0].click("Eat");
 				Timing.waitCondition(new Condition() {
 					@Override
 					public boolean active() {
-						return Dispatcher.get().getLooter()
-								.getTotalInventoryCount() != total_items_in_inventory;
+						return Dispatcher.get().getLooter().getTotalInventoryCount() != total_items_in_inventory;
 					}
 				}, General.random(1200, 2000));
 				amount--;
@@ -231,14 +216,12 @@ public class CombatHelper {
 	}
 
 	public void usePrayer(Prayer flicker_prayer) {
-		if (!flicker_prayer.isActivated()
-				&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0)
+		if (!flicker_prayer.isActivated() && Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0)
 			flicker_prayer.activate();
 	}
 
 	public void useGuthans() {
-		if (this.armor_holder == null && Combat.getHPRatio() <= 50
-				&& !isDegradedGuthansInInventory()) {
+		if (this.armor_holder == null && Combat.getHPRatio() <= 50 && !isDegradedGuthansInInventory()) {
 			this.armor_holder = new ArmorHolder();
 			equipGuthans();
 			return;
@@ -250,20 +233,17 @@ public class CombatHelper {
 	}
 
 	public void equipGuthans() {
-		CEquipment.equip(new int[][] { GUTHANS_HELM_IDS, GUTHANS_BODY_IDS,
-				GUTHANS_LEGS_IDS, GUTHANS_WARSPEAR_IDS });
+		CEquipment.equip(new int[][] { GUTHANS_HELM_IDS, GUTHANS_BODY_IDS, GUTHANS_LEGS_IDS, GUTHANS_WARSPEAR_IDS });
 	}
 
 	public boolean isGuthanDegraded() {
-		return !CEquipment.isEquiped(GUTHANS_BODY_IDS[4] + 1)
-				&& !CEquipment.isEquiped(GUTHANS_HELM_IDS[4] + 1)
-				&& !CEquipment.isEquiped(GUTHANS_LEGS_IDS[4] + 1)
-				&& !CEquipment.isEquiped(GUTHANS_WARSPEAR_IDS[4] + 1);
+		return !CEquipment.isEquiped(GUTHANS_BODY_IDS[4] + 1) && !CEquipment.isEquiped(GUTHANS_HELM_IDS[4] + 1)
+				&& !CEquipment.isEquiped(GUTHANS_LEGS_IDS[4] + 1) && !CEquipment.isEquiped(GUTHANS_WARSPEAR_IDS[4] + 1);
 	}
 
 	public boolean isDegradedGuthansInInventory() {
-		return Inventory.find(GUTHANS_BODY_IDS[4] + 1, GUTHANS_HELM_IDS[4] + 1,
-				GUTHANS_LEGS_IDS[4] + 1, GUTHANS_WARSPEAR_IDS[4] + 1).length > 0;
+		return Inventory.find(GUTHANS_BODY_IDS[4] + 1, GUTHANS_HELM_IDS[4] + 1, GUTHANS_LEGS_IDS[4] + 1,
+				GUTHANS_WARSPEAR_IDS[4] + 1).length > 0;
 	}
 
 	public void checkUse() {
@@ -272,8 +252,7 @@ public class CombatHelper {
 	}
 
 	private void flicker(Prayer prayer) {
-		if (Player.getAnimation() == this.weapon.getAnimationID()
-				&& Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0) {
+		if (Player.getAnimation() == this.weapon.getAnimationID() && Skills.getCurrentLevel(Skills.SKILLS.PRAYER) > 0) {
 			General.sleep(this.weapon.getAttackSpeed());
 			prayer.flicker();
 		}
@@ -283,8 +262,7 @@ public class CombatHelper {
 		if (this.special_attack_weapon == Weapon.NONE)
 			return;
 		if (getSpecialPercent() >= this.special_attack_weapon.getSpecialUsage()
-				&& this.getNPCHPPercent(this.combat_task.getCurrentTarget()
-						.getValue()) >= 30) {
+				&& this.getNPCHPPercent(this.combat_task.getCurrentTarget().getValue()) >= 30) {
 			int wep_id = -1;
 			int shield_id = -1;
 			RSItem temp = Equipment.getItem(SLOTS.WEAPON);
@@ -293,8 +271,7 @@ public class CombatHelper {
 			RSItem temp2 = Equipment.getItem(SLOTS.SHIELD);
 			if (temp2 != null)
 				shield_id = temp2.getID();
-			this.special_attack_weapon.useSpecial(this.combat_task, wep_id,
-					shield_id);
+			this.special_attack_weapon.useSpecial(this.combat_task, wep_id, shield_id);
 		}
 
 	}
@@ -322,28 +299,22 @@ public class CombatHelper {
 	}
 
 	public void setAmmo() {
-		if (this.is_ranging
-				&& !((Boolean) Dispatcher.get()
-						.get(ValueType.USE_TELEKINETIC_GRAB).getValue())) {
+		if (this.is_ranging && !((Boolean) Dispatcher.get().get(ValueType.USE_TELEKINETIC_GRAB).getValue())) {
 			RSItem ammo = Equipment.getItem(SLOTS.ARROW);
 			RSItem knife = Equipment.getItem(SLOTS.WEAPON);
 			if (ammo != null && ammo.getStack() > 1) {
 				this.ammo_id = ammo.getID();
 				RSItemDefinition ammo_def = ammo.getDefinition();
 				if (ammo_def != null)
-					Dispatcher.get().set(
-							ValueType.LOOT_ITEM_NAMES,
-							new Value<String[]>(new String[] { ammo_def
-									.getName() }));
+					Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { ammo_def.getName() }));
 			}
 			if (knife != null && knife.getStack() > 1) {
 				this.knife_id = knife.getID();
 				RSItemDefinition knife_def = knife.getDefinition();
 				if (knife_def != null)
-					Dispatcher.get().set(
-							ValueType.LOOT_ITEM_NAMES,
-							new Value<String[]>(new String[] { knife_def
-									.getName() }));
+					Dispatcher.get().set(ValueType.LOOT_ITEM_NAMES,
+							new Value<String[]>(new String[] { knife_def.getName() }));
 			}
 
 		}
@@ -365,8 +336,7 @@ public class CombatHelper {
 	}
 
 	public boolean isUsingProtectionPrayer() {
-		return prayer == Prayer.PROTECT_FROM_MAGIC
-				|| prayer == Prayer.PROTECT_FROM_MELEE
+		return prayer == Prayer.PROTECT_FROM_MAGIC || prayer == Prayer.PROTECT_FROM_MELEE
 				|| prayer == Prayer.PROTECT_FROM_MISSILES;
 	}
 

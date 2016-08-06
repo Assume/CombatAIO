@@ -226,7 +226,7 @@ public class BaseGUI extends JFrame {
 		tab_two_panel.add(lblNewLabel);
 
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(315, 31, 269, 227);
+		scrollPane_1.setBounds(341, 31, 243, 227);
 		tab_two_panel.add(scrollPane_1);
 
 		table_banking_items = new JTable();
@@ -246,7 +246,7 @@ public class BaseGUI extends JFrame {
 		tab_two_panel.add(lblBankItems);
 
 		JLabel lblLootOverX = new JLabel("Loot over X");
-		lblLootOverX.setBounds(202, 38, 70, 14);
+		lblLootOverX.setBounds(202, 38, 103, 14);
 		tab_two_panel.add(lblLootOverX);
 
 		text_field_loot_over_x = new JTextField();
@@ -261,11 +261,11 @@ public class BaseGUI extends JFrame {
 		tab_two_panel.add(chckbx_wait_for_loot);
 
 		chckbx_loot_in_combat = new JCheckBox("Loot in combat");
-		chckbx_loot_in_combat.setBounds(198, 116, 111, 23);
+		chckbx_loot_in_combat.setBounds(198, 116, 174, 23);
 		tab_two_panel.add(chckbx_loot_in_combat);
 
 		chckbx_telekinetic_grab = new JCheckBox("Telekinetic Grab");
-		chckbx_telekinetic_grab.setBounds(198, 142, 116, 23);
+		chckbx_telekinetic_grab.setBounds(198, 142, 174, 23);
 		tab_two_panel.add(chckbx_telekinetic_grab);
 
 		chckbx_log_when_out_of_food = new JCheckBox("Logout when out of food");
@@ -273,7 +273,7 @@ public class BaseGUI extends JFrame {
 			if (chckbx_log_when_out_of_food.isSelected())
 				JOptionPane.showMessageDialog(null, "Do not use if fighting aggressive monsters");
 		});
-		chckbx_log_when_out_of_food.setBounds(10, 265, 198, 23);
+		chckbx_log_when_out_of_food.setBounds(10, 265, 220, 23);
 		tab_two_panel.add(chckbx_log_when_out_of_food);
 		if (Dispatcher.get().isLiteMode())
 			this.chckbx_telekinetic_grab.setEnabled(false);
@@ -341,7 +341,7 @@ public class BaseGUI extends JFrame {
 			chckbx_guthans.setEnabled(false);
 
 		lblOnlySome = new JLabel("*Only piety and chivalry are supported for flicker");
-		lblOnlySome.setBounds(10, 266, 262, 14);
+		lblOnlySome.setBounds(10, 266, 347, 14);
 		tab_three_panel.add(lblOnlySome);
 
 		chckbx_ranged = new JCheckBox("Ranged/Magic");
@@ -356,7 +356,7 @@ public class BaseGUI extends JFrame {
 			combo_box_special_attack.setEnabled(false);
 
 		lblSpecialAttack = new JLabel("Special Attack");
-		lblSpecialAttack.setBounds(151, 11, 77, 14);
+		lblSpecialAttack.setBounds(151, 11, 121, 14);
 		tab_three_panel.add(lblSpecialAttack);
 
 		lbl_safe_spot = new JLabel("Safe spot: ");
@@ -408,11 +408,11 @@ public class BaseGUI extends JFrame {
 		tab_three_panel.add(btn_cannon_tile);
 
 		chckbx_attack_monsters_in_combat = new JCheckBox("Attack monsters in combat");
-		chckbx_attack_monsters_in_combat.setBounds(131, 110, 176, 23);
+		chckbx_attack_monsters_in_combat.setBounds(131, 110, 238, 23);
 		tab_three_panel.add(chckbx_attack_monsters_in_combat);
 
 		chckbx_bury_bones = new JCheckBox("Bury bones");
-		chckbx_bury_bones.setBounds(10, 110, 97, 23);
+		chckbx_bury_bones.setBounds(10, 110, 121, 23);
 		tab_three_panel.add(chckbx_bury_bones);
 
 		// TODO WorldHoppingCondition.values()
@@ -431,7 +431,7 @@ public class BaseGUI extends JFrame {
 		tab_three_panel.add(combo_box_world_hopping);
 
 		JLabel lblworldhopping = new JLabel("World hopping condition");
-		lblworldhopping.setBounds(10, 210, 153, 14);
+		lblworldhopping.setBounds(10, 210, 218, 14);
 		tab_three_panel.add(lblworldhopping);
 		if (Dispatcher.get().isLiteMode())
 			chckbx_bury_bones.setEnabled(false);
@@ -455,7 +455,7 @@ public class BaseGUI extends JFrame {
 			set();
 			setVisible(false);
 		});
-		btnStart.setBounds(516, 236, 89, 23);
+		btnStart.setBounds(519, 261, 89, 23);
 		tab_one_panel.add(btnStart);
 
 		JButton btnSave = new JButton("Save");
@@ -469,7 +469,7 @@ public class BaseGUI extends JFrame {
 			save(name);
 			saveMovements(name);
 		});
-		btnSave.setBounds(141, 236, 89, 23);
+		btnSave.setBounds(142, 261, 89, 23);
 		tab_one_panel.add(btnSave);
 
 		JButton btnLoad = new JButton("Load");
@@ -484,7 +484,7 @@ public class BaseGUI extends JFrame {
 				x.printStackTrace();
 			}
 		});
-		btnLoad.setBounds(39, 236, 89, 23);
+		btnLoad.setBounds(42, 261, 89, 23);
 		tab_one_panel.add(btnLoad);
 
 		JLabel lblWithdrawAmount = new JLabel("Amount");
@@ -497,7 +497,7 @@ public class BaseGUI extends JFrame {
 		spinner_food.setValue(12);
 
 		combo_box_settings = new JComboBox<String>();
-		combo_box_settings.setBounds(10, 208, 121, 20);
+		combo_box_settings.setBounds(10, 229, 160, 20);
 		tab_one_panel.add(combo_box_settings);
 		combo_box_settings.setModel(this.model_combo_box);
 
@@ -580,7 +580,7 @@ public class BaseGUI extends JFrame {
 		tab_one_panel.add(lblPreset);
 
 		// TODO PresetFactory.getPresetsForScript()
-		combo_box_preset = new JComboBox<PresetFactory>(PresetFactory.getPresetsForScript());
+		combo_box_preset = new JComboBox<PresetFactory>(PresetFactory.values());
 		combo_box_preset.setBounds(10, 148, 121, 20);
 		tab_one_panel.add(combo_box_preset);
 		combo_box_preset.addItemListener(event -> {
@@ -602,7 +602,7 @@ public class BaseGUI extends JFrame {
 		});
 
 		lblProfile = new JLabel("Profile");
-		lblProfile.setBounds(10, 183, 59, 14);
+		lblProfile.setBounds(10, 203, 59, 14);
 		tab_one_panel.add(lblProfile);
 		if (Dispatcher.get().isLiteMode())
 			combo_box_preset.setEnabled(false);
