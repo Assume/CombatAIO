@@ -32,21 +32,17 @@ public class IngameWorldSwitcher {
 
 	private static final int WORLD_INTERFACE_SKIP = 6;
 
-	private static final Rectangle CONTAINING_BOX = new Rectangle(547, 229,
-			190, 204);
+	private static final Rectangle CONTAINING_BOX = new Rectangle(547, 229, 190, 204);
 
-	private static final int[] NON_EXISTANT_WORLDS = new int[] { 307, 315, 323,
-			324, 331, 332, 339, 340, 347, 348, 352, 352, 355, 356, 361, 363,
-			364, 366, 371, 372, 373, 379, 380, 387, 388, 389, 390, 391, 392,
-			352 };
+	private static final int[] NON_EXISTANT_WORLDS = new int[] { 307, 315, 323, 324, 331, 332, 339, 340, 347, 348, 352,
+			352, 355, 356, 361, 363, 364, 366, 371, 372, 373, 379, 380, 387, 388, 389, 390, 391, 392, 352, 311, 320,
+			325, 337, 338, 345, 357, 374, 378 };
 
-	private static final int[] P2P_WORLDS = { 2, 3, 4, 5, 6, 9, 10, 11, 12, 13,
-			14, 17, 18, 19, 20, 22, 27, 28, 29, 30, 33, 34, 36, 38, 41, 42, 43,
-			44, 45, 46, 50, 51, 54, 57, 58, 59, 60, 62, 65, 67, 68, 69, 70, 74,
-			75, 76, 77, 78 };
+	private static final int[] P2P_WORLDS = { 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 22, 27, 28, 29, 30,
+			33, 34, 36, 38, 41, 42, 43, 44, 45, 46, 50, 51, 54, 57, 58, 59, 60, 62, 65, 67, 68, 69, 70, 74, 75, 76, 77,
+			78 };
 
-	private static final int[] F2P_WORLDS = { 1, 8, 16, 26, 35, 81, 82, 83, 84,
-			93, 94 };
+	private static final int[] F2P_WORLDS = { 1, 8, 16, 26, 35, 81, 82, 83, 84, 93, 94 };
 
 	private static RSInterface getWorldInterface(int world) {
 		RSInterface child = Interfaces.get(SWITCHER_PARENT_ID, 7);
@@ -55,8 +51,7 @@ public class IngameWorldSwitcher {
 
 	public static boolean switchToRandomWorld() {
 		if (ArrayUtil.contains(Game.getCurrentWorld() - 300, F2P_WORLDS))
-			return switchWorld(F2P_WORLDS[General.random(0,
-					F2P_WORLDS.length - 1)]);
+			return switchWorld(F2P_WORLDS[General.random(0, F2P_WORLDS.length - 1)]);
 		return switchWorld(P2P_WORLDS[General.random(0, P2P_WORLDS.length - 1)]);
 	}
 
@@ -79,8 +74,7 @@ public class IngameWorldSwitcher {
 		String worldTwoText = worldTwo.getText();
 
 		General.println(worldTwoText);
-		return worldOneText != null && !worldOneText.equals("1")
-				|| worldTwoText != null && !worldTwoText.equals("2");
+		return worldOneText != null && !worldOneText.equals("1") || worldTwoText != null && !worldTwoText.equals("2");
 	}
 
 	public static boolean sortWorlds() {
@@ -97,8 +91,7 @@ public class IngameWorldSwitcher {
 	}
 
 	public static int getInterfaceID(int world) {
-		return ((world - getWorldSkipDifference(world)) * WORLD_INTERFACE_SKIP)
-				- WORLD_INTERFACE_SKIP;
+		return ((world - getWorldSkipDifference(world)) * WORLD_INTERFACE_SKIP) - WORLD_INTERFACE_SKIP;
 	}
 
 	private static int getWorldSkipDifference(int world) {
@@ -111,8 +104,7 @@ public class IngameWorldSwitcher {
 	}
 
 	private static boolean isValidChat(int world) {
-		RSInterface title = Interfaces.get(NPC_CHAT_PARENT_ID,
-				NPC_CHAT_TITLE_CHILD_ID);
+		RSInterface title = Interfaces.get(NPC_CHAT_PARENT_ID, NPC_CHAT_TITLE_CHILD_ID);
 		if (title == null)
 			return false;
 
@@ -135,13 +127,10 @@ public class IngameWorldSwitcher {
 		long start = Timing.currentTimeMillis();
 		isHopping = true;
 
-		while (Timing.timeFromMark(start) < SWITCH_TIMEOUT
-				&& Game.getGameState() != 10
-				&& (Game.getCurrentWorld() != world + 300 || Game
-						.getGameState() != 30) && !Combat.isUnderAttack()) {
+		while (Timing.timeFromMark(start) < SWITCH_TIMEOUT && Game.getGameState() != 10
+				&& (Game.getCurrentWorld() != world + 300 || Game.getGameState() != 30) && !Combat.isUnderAttack()) {
 			String[] options = NPCChat.getOptions();
-			if (options != null && Arrays.asList(options).contains("Yes.")
-					&& isValidChat(world)) {
+			if (options != null && Arrays.asList(options).contains("Yes.") && isValidChat(world)) {
 				Keyboard.typeString("2");
 				Timing.waitCondition(new Condition() {
 					@Override
@@ -157,8 +146,7 @@ public class IngameWorldSwitcher {
 					public boolean active() {
 						General.sleep(50, 100);
 						int state = Game.getGameState();
-						return Game.getCurrentWorld() == world + 300
-								&& (state == 30 || state == 10);
+						return Game.getCurrentWorld() == world + 300 && (state == 30 || state == 10);
 					}
 				}, General.random(7000, 8000))) {
 					isHopping = false;
@@ -176,8 +164,7 @@ public class IngameWorldSwitcher {
 			General.sleep(50, 100);
 		}
 		isHopping = false;
-		return Game.getCurrentWorld() == world + 300
-				&& (Game.getGameState() == 30 || Game.getGameState() == 10)
+		return Game.getCurrentWorld() == world + 300 && (Game.getGameState() == 30 || Game.getGameState() == 10)
 				&& !isOpen();
 	}
 
@@ -309,8 +296,7 @@ public class IngameWorldSwitcher {
 			if (!Interfaces.isInterfaceValid(OPEN_SWITCHER_PARENT_ID))
 				return false;
 
-			RSInterface switcher = Interfaces.get(OPEN_SWITCHER_PARENT_ID,
-					OPEN_SWITCHER_CHILD_ID);
+			RSInterface switcher = Interfaces.get(OPEN_SWITCHER_PARENT_ID, OPEN_SWITCHER_CHILD_ID);
 			if (switcher == null)
 				return false;
 
@@ -329,8 +315,7 @@ public class IngameWorldSwitcher {
 	}
 
 	public static boolean close() {
-		RSInterface close = Interfaces.get(SWITCHER_PARENT_ID,
-				SWITCHER_CLOSE_CHILD_ID);
+		RSInterface close = Interfaces.get(SWITCHER_PARENT_ID, SWITCHER_CLOSE_CHILD_ID);
 		if (close == null)
 			return false;
 

@@ -38,8 +38,10 @@ public class LootItem implements Comparable<LootItem> {
 		this.price = 0;
 		this.amount_looted = 0;
 		char[] ar = name.toLowerCase().toCharArray();
-		ar[0] = Character.toUpperCase(ar[0]);
-		this.name = new String(ar);
+		if (ar.length > 0) {
+			ar[0] = Character.toUpperCase(ar[0]);
+			this.name = new String(ar);
+		}
 		this.alch = alch;
 		this.id = -1;
 		this.icon = null;
@@ -55,8 +57,7 @@ public class LootItem implements Comparable<LootItem> {
 	}
 
 	public int incrementAmountLooted(int by) {
-		if (this.id == (Integer) Dispatcher.get().get(ValueType.AMMO_ID)
-				.getValue())
+		if (this.id == (Integer) Dispatcher.get().get(ValueType.AMMO_ID).getValue())
 			return (this.amount_looted = 0);
 		else
 			return this.amount_looted += by;
@@ -123,16 +124,13 @@ public class LootItem implements Comparable<LootItem> {
 
 	public static int getPrice(int id) {
 		try {
-			URL url = new URL(
-					"https://api.rsbuddy.com/grandExchange?a=guidePrice&i="
-							+ id);
+			URL url = new URL("https://api.rsbuddy.com/grandExchange?a=guidePrice&i=" + id);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("User-Agent",
 					"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1");
 			con.connect();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			List<String> list = new ArrayList<String>();
 			String ln;
 			while ((ln = br.readLine()) != null)

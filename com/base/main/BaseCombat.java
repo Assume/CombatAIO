@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
-import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.util.ThreadSettings;
 import org.tribot.script.Script;
@@ -40,7 +39,7 @@ import scripts.api.scriptapi.paint.SkillData;
 public class BaseCombat extends Script
 		implements Painting, MousePainting, Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.2.1_2";
+	public static final String VERSION_NUMBER = "2.2.1_3";
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;

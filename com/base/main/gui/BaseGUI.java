@@ -85,7 +85,8 @@ public class BaseGUI extends JFrame {
 			+ "\r\n\r\nV2.2.0_1: Fixed an NPE"
 			+ "\r\n\r\nV2.2.1_0: Added more conditions for world hopping, improved backend, lowered CPU usage, added more antipoison potions"
 			+ "\r\n\r\nV2.2.1_1: Added Defence as a condition for progression mode"
-			+ "\r\n\r\nV2.2.1_2: Fixed an issue where it wouldn't click second screen after a level-up";
+			+ "\r\n\r\nV2.2.1_2: Fixed an issue where it wouldn't click second screen after a level-up"
+			+ "\r\n\r\nV2.2.1_3: Fixed formatting issues with the GUI and issues with cannon support";
 
 	private JPanel contentPane;
 
@@ -386,13 +387,13 @@ public class BaseGUI extends JFrame {
 				JOptionPane.showMessageDialog(null, "Please now set a cannon tile");
 		});
 		chckbx_cannon.setBounds(131, 84, 82, 23);
-		tab_three_panel.add(chckbx_cannon);
+		//tab_three_panel.add(chckbx_cannon);
 		if (Dispatcher.get().isLiteMode())
 			chckbx_cannon.setEnabled(false);
 
 		lbl_cannon_tile = new JLabel("Cannon tile: ");
 		lbl_cannon_tile.setBounds(131, 143, 161, 14);
-		tab_three_panel.add(lbl_cannon_tile);
+		//tab_three_panel.add(lbl_cannon_tile);
 
 		JButton btn_cannon_tile = new JButton("Set");
 		btn_cannon_tile.addActionListener(e -> {
@@ -405,7 +406,7 @@ public class BaseGUI extends JFrame {
 				lbl_cannon_tile.setText("Cannon tile: " + cannon_tile.toString());
 		});
 		btn_cannon_tile.setBounds(10, 140, 77, 20);
-		tab_three_panel.add(btn_cannon_tile);
+		//tab_three_panel.add(btn_cannon_tile);
 
 		chckbx_attack_monsters_in_combat = new JCheckBox("Attack monsters in combat");
 		chckbx_attack_monsters_in_combat.setBounds(131, 110, 238, 23);

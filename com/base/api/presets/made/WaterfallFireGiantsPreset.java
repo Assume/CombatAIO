@@ -8,7 +8,6 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
@@ -25,6 +24,7 @@ import scripts.CombatAIO.com.base.api.walking.types.JEWELERY_TELEPORT_LOCATIONS;
 import scripts.CombatAIO.com.base.api.walking.types.Jewelery;
 import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.webwalker_logic.WebWalker;
 
 public class WaterfallFireGiantsPreset extends Preset {
 
@@ -69,7 +69,7 @@ public class WaterfallFireGiantsPreset extends Preset {
 
 	@Override
 	public void executeToMonster() {
-		WebWalking.walkTo(RAFT_TILE_INITIAL);
+		WebWalker.walkTo(RAFT_TILE_INITIAL);
 		new DPathNavigator().traverse(RAFT_TILE);
 		while (Player.isMoving())
 			General.sleep(100);

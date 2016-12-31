@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.tribot.api.General;
-import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
@@ -20,6 +18,8 @@ import scripts.CombatAIO.com.base.api.walking.types.JeweleryTeleport;
 import scripts.CombatAIO.com.base.api.walking.types.Teleport;
 import scripts.CombatAIO.com.base.main.Dispatcher;
 import scripts.api.scriptapi.logging.Logger;
+import scripts.webwalker_logic.WebWalker;
+import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
 
 public class WalkingManager {
 
@@ -90,7 +90,7 @@ public class WalkingManager {
 
 	public static void walk(MovementType type, RSTile end_tile) {
 		while (Player.getPosition().distanceTo(end_tile) >= 10) {
-			WebWalking.walkTo(end_tile, getStoppingCondition(type), 1000);
+			WebWalker.walkTo(end_tile, getStoppingCondition(type));
 			CustomMovement execute = getMovementToExecute(type);
 			if (execute == null)
 				return;
@@ -111,11 +111,13 @@ public class WalkingManager {
 		return null;
 	}
 
-	private static final Condition getStoppingCondition(final MovementType type) {
-		final Condition STOPPING_CONDITION = new Condition() {
+	private static final WalkingCondition getStoppingCondition(final MovementType type) {
+		final WalkingCondition STOPPING_CONDITION = new WalkingCondition() {
 			@Override
-			public boolean active() {
-				return WalkingManager.shouldStop(type);
+			public State action() {
+				if(WalkingManager.shouldStop(type))
+					return State.EXIT_OUT_WALKER_SUCCESS;
+				return State.CONTINUE_WALKER;
 			}
 		};
 		return STOPPING_CONDITION;

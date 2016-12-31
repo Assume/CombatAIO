@@ -6,7 +6,6 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 
@@ -17,6 +16,7 @@ import scripts.CombatAIO.com.base.api.walking.WalkingManager;
 import scripts.CombatAIO.com.base.api.walking.types.Bank;
 import scripts.CombatAIO.com.base.api.walking.types.Teleport;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.webwalker_logic.WebWalker;
 
 public class WaterbirthRockCrabsPreset extends Preset {
 
@@ -76,7 +76,7 @@ public class WaterbirthRockCrabsPreset extends Preset {
 				return Player.getPosition().distanceTo(waterbirth_landing_tile) < 15;
 			}
 		}, 10000);
-		WebWalking.walkTo(Dispatcher.get().getPreset().getHomeTile());
+		WebWalker.walkTo(Dispatcher.get().getPreset().getHomeTile());
 	}
 
 }

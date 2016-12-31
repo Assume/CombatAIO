@@ -7,7 +7,6 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
@@ -18,6 +17,7 @@ import scripts.CombatAIO.com.base.api.tasks.types.ValueType;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterIDs;
 import scripts.CombatAIO.com.base.main.Dispatcher;
+import scripts.webwalker_logic.WebWalker;
 
 public class RockCrabsHelper {
 
@@ -77,8 +77,8 @@ public class RockCrabsHelper {
 	private static final RSTile waterbirth_landing_tile = new RSTile(2547, 3758);
 
 	private static void resetWaterbirth() {
-		WebWalking.walkTo(waterbirth_landing_tile);
-		WebWalking.walkTo((RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
+		WebWalker.walkTo(waterbirth_landing_tile);
+		WebWalker.walkTo((RSTile) Dispatcher.get().get(ValueType.HOME_TILE)
 				.getValue());
 	}
 

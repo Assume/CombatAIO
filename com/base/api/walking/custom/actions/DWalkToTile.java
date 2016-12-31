@@ -1,9 +1,9 @@
 package scripts.CombatAIO.com.base.api.walking.custom.actions;
 
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.walking.custom.types.DAction;
+import scripts.webwalker_logic.WebWalker;
 
 public class DWalkToTile implements DAction {
 
@@ -18,7 +18,7 @@ public class DWalkToTile implements DAction {
 
 	@Override
 	public void execute() {
-		WebWalking.walkTo(new RSTile(x, y));
+		WebWalker.walkTo(new RSTile(x, y));
 	}
 
 	@Override
