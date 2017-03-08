@@ -1,7 +1,10 @@
 package scripts.CombatAIO.com.base.main.utils;
 
 import java.util.ArrayList;
+
 import org.tribot.api2007.types.RSItem;
+
+import scripts.api.scriptapi.generic.Items07;
 
 /**
  * 
