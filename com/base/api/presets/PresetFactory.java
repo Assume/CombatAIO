@@ -5,7 +5,6 @@ import org.tribot.api2007.types.RSTile;
 
 import scripts.CombatAIO.com.base.api.presets.made.WaterbirthRockCrabsPreset;
 import scripts.CombatAIO.com.base.api.presets.made.WaterfallFireGiantsPreset;
-import scripts.CombatAIO.com.base.api.presets.made.WyrvensPreset;
 import scripts.CombatAIO.com.base.api.types.BankItem;
 import scripts.CombatAIO.com.base.api.types.constants.HomeTiles;
 import scripts.CombatAIO.com.base.api.types.constants.MonsterArea;
@@ -16,7 +15,6 @@ public enum PresetFactory {
 
 	Automatic("Automatic", null, null, null),
 
-	WYRVENS_HOUSE_TELEPORT("Wyrvens", new WyrvensPreset(WyrvensPreset.HOUSE_TELEPORT), null, null),
 
 	RELLEKKA_WEST_ROCK_CRABS("Rock Crabs West", null, HomeTiles.ROCK_CRABS_WEST_HOME_TILE,
 			MonsterArea.RELLEKKA_ROCK_CRABS_WEST),
