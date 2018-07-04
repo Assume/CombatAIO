@@ -34,6 +34,7 @@ import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.tasks.threads.TrackingUpdater;
 import scripts.api.scriptapi.antiban.AntiBan;
 import scripts.api.scriptapi.paint.SkillData;
+import scripts.webwalker_logic.WebWalker;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
 public class BaseCombat extends Script
@@ -65,6 +66,8 @@ public class BaseCombat extends Script
 		this.updater.setName("TRACKING UPDATER");
 		this.updater.start();
 		Walking.setWalkingTimeout(5000);
+		if(!Dispatcher.get().isLiteMode())
+			WebWalker.setApiKey("61366db1-dc55-4d9b-b8ff-cf831cd846c6", "EE2F4C0C1A7FE4FD");
 		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
 			Dispatcher.get().checkThreads();
