@@ -120,7 +120,7 @@ public class Looter extends Threadable implements Pauseable {
 				General.sleep(800);
 				continue;
 			}
-			if (target.getHealth() == 0 && target.isInCombat()
+			if (target.getHealthPercent() == 0 && target.isInCombat()
 					&& this.items_known.size() > 1 && this.wait_for_loot) {
 				Logger.getLogger().print(Logger.SCRIPTER_ONLY,
 						"LOOTING_THREAD IS CALLING PAUSE");
@@ -137,7 +137,7 @@ public class Looter extends Threadable implements Pauseable {
 	}
 
 	private void waitForLoot(RSNPC target) {
-		while (target.isValid() && target.getHealth() == 0
+		while (target.isValid() && target.getHealthPercent() == 0
 				&& target.isInCombat())
 			General.sleep(50);
 		General.sleep(150);
@@ -202,19 +202,19 @@ public class Looter extends Threadable implements Pauseable {
 		int ammo_id = (Integer) Dispatcher.get().get(ValueType.AMMO_ID)
 				.getValue();
 		for (RSGroundItem x : items) {
-			LootItem r = this.items_known.get(getRSGroundItemName(x));
+			LootItem loot_item = this.items_known.get(getRSGroundItemName(x));
 			if (!PathFinding.canReach(x, false) && !this.use_tele_grab)
 				continue;
 			if (Player.getPosition().distanceTo(x) > 8)
 				continue;
-			if (r != null) {
-				if (r.getId() == ammo_id && this.use_tele_grab)
+			if (loot_item != null) {
+				if (loot_item.getId() == ammo_id && this.use_tele_grab)
 					continue;
-				if (r.getId() == ammo_id && x.getStack() < 3)
+				if (loot_item.getId() == ammo_id && x.getStack() < 3)
 					continue;
-				if (r.shouldAlwaysLoot())
+				if (loot_item.shouldAlwaysLoot())
 					list.add(x);
-				else if (x.getStack() * r.getPrice() >= this.minimum_price)
+				else if (x.getStack() * loot_item.getPrice() >= this.minimum_price)
 					list.add(x);
 			}
 		}

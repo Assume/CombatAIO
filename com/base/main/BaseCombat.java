@@ -40,7 +40,7 @@ import scripts.webwalker_logic.WebWalker;
 public class BaseCombat extends Script
 		implements Painting, MousePainting, Arguments, MessageListening07, Ending, EventBlockingOverride {
 
-	public static final String VERSION_NUMBER = "2.2.2_0";
+	public static final String VERSION_NUMBER = "2.2.3_0";
 	private TotalPaintHandler paint_handler;
 	private Thread updater;
 	private boolean run = true;

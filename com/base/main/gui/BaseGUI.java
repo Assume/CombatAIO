@@ -64,7 +64,8 @@ public class BaseGUI extends JFrame {
 
 	private static final String CHANGELOG = "Changelog\r\n\r\nV2.0.7_9: Fixed bank withdrawing of potions so that it no longer withdraws the incorrect amount"
 			+ "\r\n\r\nV2.0.8_0: Added the framework for presets. The first two presets have been added; Rellekka West and Rellekka East"
-			+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets" + "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
+			+ "\r\n\r\nV2.0.8_1: Fixed banking for non-presets"
+			+ "\r\n\r\nV2.0.8_2: Fixed picking up cannon on decay"
 			+ "\r\n\r\nV2.0.8_3: Removed Bone2Peaches for lite mode -- was accidentally added"
 			+ "\r\n\r\nV2.0.8_4: Added bury bones for premium subscribers"
 			+ "\r\n\r\nV2.0.8_5: Fixed an issue where profiles wouldn't load"
@@ -86,7 +87,8 @@ public class BaseGUI extends JFrame {
 			+ "\r\n\r\nV2.2.1_0: Added more conditions for world hopping, improved backend, lowered CPU usage, added more antipoison potions"
 			+ "\r\n\r\nV2.2.1_1: Added Defence as a condition for progression mode"
 			+ "\r\n\r\nV2.2.1_2: Fixed an issue where it wouldn't click second screen after a level-up"
-			+ "\r\n\r\nV2.2.1_3: Fixed formatting issues with the GUI and issues with cannon support";
+			+ "\r\n\r\nV2.2.1_3: Fixed formatting issues with the GUI and issues with cannon support"
+			+ "\r\n\r\nV2.2.3_0: A wide range of updates. Including a new private key for DaxWebWalker, an updated World Hopper, and Combat Improvements";
 
 	private JPanel contentPane;
 
