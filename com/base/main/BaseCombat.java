@@ -34,6 +34,8 @@ import scripts.CombatAIO.com.base.api.paint.handler.TotalPaintHandler;
 import scripts.CombatAIO.com.base.api.tasks.threads.TrackingUpdater;
 import scripts.api.scriptapi.antiban.AntiBan;
 import scripts.api.scriptapi.paint.SkillData;
+import scripts.api.scriptapi.utils.listener.ProjectileObserver;
+import scripts.api.scriptapi.utils.listener.cannon.CannonObserver;
 import scripts.webwalker_logic.WebWalker;
 
 @ScriptManifest(authors = { "Assume" }, category = "CombatTesting", name = "BaseAIO")
@@ -48,12 +50,18 @@ public class BaseCombat extends Script
 
 	private Image cursor;
 
+	private CannonObserver cannon_observer = new CannonObserver();
+
+	private ProjectileObserver projectile_observer = new ProjectileObserver();
+
 	public boolean isRunning() {
 		return this.run;
 	}
 
 	@Override
 	public void run() {
+		
+		cannon_observer.addListener(listener);
 		this.cursor = getCursor();
 		ThreadSettings.get().setClickingAPIUseDynamic(true);
 		General.useAntiBanCompliance(true);
@@ -66,7 +74,8 @@ public class BaseCombat extends Script
 		this.updater.setName("TRACKING UPDATER");
 		this.updater.start();
 		Walking.setWalkingTimeout(5000);
-		if(!Dispatcher.get().isLiteMode())
+
+		if (!Dispatcher.get().isLiteMode())
 			WebWalker.setApiKey("61366db1-dc55-4d9b-b8ff-cf831cd846c6", "EE2F4C0C1A7FE4FD");
 		while (Dispatcher.get().shouldRun()) {
 			General.sleep(300);
@@ -139,8 +148,6 @@ public class BaseCombat extends Script
 				General.sleep(1500, 3000);
 				Keyboard.pressKeys(Keyboard.getKeyCode(' '));
 			}
-		if (arg0.contains("decay"))
-			Dispatcher.get().getCombatTask().setCannonDecayed();
 
 	}
 
